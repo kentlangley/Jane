@@ -17,9 +17,9 @@ grade-schooler. Jane is built on the Marble skill map, and the bot writes fresh 
 kid did the day before.
 
 The bot follows **[BOT-SETUP.md](BOT-SETUP.md)**: it asks you a few questions (your child's name, age and grade, and
-where to host), installs Jane, and runs the nightly lesson routine. A one-click bot template link is coming soon.
+where to host), installs Jane, and runs the nightly lesson routine.
 
-<!-- BOT_TEMPLATE_LINK -->
+**Fastest start:** [make a Jane bot from the template](https://x.ai/bot/vZYguWcn-Sy20b1XHNM_V). It comes with the teaching rules, the nightly lesson routine and a first-run setup chat.
 
 ## Philosophy
 
