@@ -10,6 +10,17 @@ linked by 3,221 prerequisite edges.
 > **v0.5.0.** It's a child's learning app, so all personal data is excluded from the repo, and every path has a clear
 > license (see [LICENSING.md](LICENSING.md)). What's next: [Roadmap](#roadmap). Changes: [CHANGELOG.md](CHANGELOG.md).
 
+## Set up with an AI bot
+
+Got Grok Bot? Make a bot named Jane, point it at this repo, and it'll host an adaptive learning program for your
+grade-schooler. Jane is built on the Marble skill map, and the bot writes fresh lessons every night based on how your
+kid did the day before.
+
+The bot follows **[BOT-SETUP.md](BOT-SETUP.md)**: it asks you a few questions (your child's name, age and grade, and
+where to host), installs Jane, and runs the nightly lesson routine. A one-click bot template link is coming soon.
+
+<!-- BOT_TEMPLATE_LINK -->
+
 ## Philosophy
 
 When I (Kent) thought about creating this with Landon, my thought was: here is an incredible taxonomy of knowledge as a
@@ -190,7 +201,8 @@ agent, such as Grok, Claude Code or similar) and have it adapted to your setup. 
   (see [docs/NIGHTLY.md](docs/NIGHTLY.md)). An assistant that has its own computer, like Grok Bot, can run the whole
   nightly cycle there: export, write, validate, publish.
 
-Suggested prompt to paste into your assistant:
+For a bot that hosts Jane and authors the nightly quests end to end, point it at [BOT-SETUP.md](BOT-SETUP.md).
+Or paste this prompt into your assistant:
 
 > Read README.md, INSTALL.md, LESSONS.md and docs/NIGHTLY.md in this repo. Deploy Jane to `<my host: Cloudflare Workers /
 > this computer with npm start / Docker / my VPS>`, creating the storage it needs. Set `LEARNER_NAME` to `<name>`, `LEARNER_AGE` to `<age>` and

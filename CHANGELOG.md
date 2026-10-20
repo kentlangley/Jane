@@ -5,6 +5,12 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+### Docs
+- **[BOT-SETUP.md](BOT-SETUP.md):** a setup guide addressed to an AI assistant bot that a parent points at this repo:
+  what to ask the parent, install and first run for each hosting option, placement and the first quest, the nightly
+  routine (back up, export, refresh or write a quest, validate, verify progress unchanged), the teaching rules,
+  privacy rules and how to report to the parent. The README has a new "Set up with an AI bot" section linking to it.
+
 ## [0.5.0] - 2026-10-20
 
 ### Fixed
