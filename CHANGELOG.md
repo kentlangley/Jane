@@ -17,6 +17,8 @@ Dates are Pacific Time.
 - **Agent-Orchestrated Software (AOS):** ARCHITECTURE.md introduces the term, with Jane as an example and a short
   comparison with SaaS and traditional installed software; the README mentions it. The docs now say the agent may
   host the app but doesn't have to.
+- **Diagram updated for AOS:** the subtitle names Agent-Orchestrated Software, the bot card says it may host Jane or
+  not, and the deploy strip reads "on the bot's computer or anywhere you choose". The Mermaid version matches.
 
 ## [0.5.0] - 2026-10-20
 

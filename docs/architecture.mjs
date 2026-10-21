@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 // Generates docs/architecture.svg, the friendly "how Jane works" diagram in docs/ARCHITECTURE.md.
-//   node docs/architecture.mjs                         plain SVG; text uses Kalam if the viewer has it, else a cursive/sans fallback
+//   node docs/architecture.mjs                         SVG without the font; text uses Kalam if the viewer has it, else a cursive/sans fallback
 //   KALAM_DIR=/path/to/Kalam node docs/architecture.mjs  embeds a subset of the Kalam font (SIL OFL 1.1, Google Fonts) so
 //                                                        it looks the same everywhere (needs fontTools' pyftsubset)
 // The hand-drawn look comes from slightly wobbly outlines (seeded, so the output is stable). All text is real SVG text.
 import fs from 'fs';import path from 'path';import os from 'os';import {execFileSync} from 'child_process';import {fileURLToPath} from 'url';
 const OUT=path.join(path.dirname(fileURLToPath(import.meta.url)),'architecture.svg');
-const W=1200,H=1375;
+const W=1200,H=1405,DY=30; // DY: room for the two-line subtitle; everything below the title shifts down by it
 // ---------- seeded wobble ----------
 let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};const j=(a=1.6)=>(rnd()*2-1)*a;
 const f=n=>Math.round(n*10)/10;
@@ -60,7 +60,9 @@ const C={ink:'#3b2f2a',dayBg:'#FFF6DE',dayLine:'#E8A33D',nightBg:'#ECE9FB',night
 const S=[];const add=s=>S.push(s);
 // ---------- title ----------
 add(text(W/2,52,['How Jane works'],{size:40,weight:700,anchor:'middle'}));
-add(text(W/2,88,['The app teaches by day. A bot plans by night. No AI runs while your kid plays.'],{size:22,anchor:'middle',color:C.brown}));
+add(text(W/2,88,['Agent-Orchestrated Software (AOS): your own agent runs Jane from outside the app.'],{size:22,weight:700,anchor:'middle',color:C.night}));
+add(text(W/2,118,['The app teaches by day. Your agent plans by night. No AI runs while your kid plays.'],{size:20,anchor:'middle',color:C.brown}));
+const TITLE=S.length;
 // ---------- daytime panel ----------
 add(box(20,112,1160,330,{fill:C.dayBg,stroke:C.dayLine,sw:3,r:26}));
 add(I.sun(56,148));add(text(88,157,['Daytime: learning'],{size:28,weight:700,color:'#B5651D'}));
@@ -70,7 +72,7 @@ add(box(45,190,215,225,{fill:'#fff',stroke:C.dayLine}));add(I.kid(152,232));
 add(text(152,290,[{t:'Your kid plays',w:700},'in a browser','(phone, tablet','or laptop)'],{size:19,anchor:'middle'}));
 // app
 add(box(335,190,440,225,{fill:'#fff',stroke:C.dayLine}));add(I.screen(378,226));
-add(text(415,222,[{t:'The Jane app',w:700,s:22}],{size:22}));add(text(415,246,['static UI + engine (plain code)'],{size:17,color:C.brown}));
+add(text(415,222,[{t:'The Jane app',w:700,s:22}],{size:22}));add(text(415,246,['static UI + engine'],{size:17,color:C.brown}));
 add(text(355,282,['• Marble skill graph: 1,590 topics','• placement and inference','• spaced review (1→3→7→21→60 days)','  and review gates in quests','• grading, "I\'m stuck" help, earned medals'],{size:18,lh:1.3}));
 // store
 add(box(860,190,295,225,{fill:'#fff',stroke:C.dayLine}));add(I.db(900,228));
@@ -89,7 +91,7 @@ add(pill(530,497,250,'AI works offline, ahead of time',{fill:'#fff',stroke:C.nig
 // bot
 add(box(45,560,250,270,{fill:'#fff',stroke:C.nightLine}));add(I.bot(170,606));
 add(text(170,660,[{t:'Your Grok Bot',w:700,s:21},'(or any agent that can','run Node scripts on a','schedule)'],{size:17,anchor:'middle'}));
-add(text(60,750,['• its own computer','• a nightly routine','• remembers your kid','  and your rules'],{size:16,lh:1.3,color:C.night}));
+add(text(60,754,['• own computer, nightly routine','• remembers your kid + rules','• may host Jane, or not'],{size:16,lh:1.3,color:C.night}));
 // steps: row 1 L→R (1,2,3), row 2 R→L (4,5,6)
 const SX=[335,598,861],SW=240;
 const step=(n,x,y,h,title,lines)=>{add(box(x,y,SW,h,{fill:'#fff',stroke:C.nightLine,sw:2.2,r:14}));add(badge(x+22,y+24,n,C.nightLine));
@@ -109,8 +111,8 @@ add(arrow([[905,418],[760,556]],{color:C.night,sw:3,dash:'2 8',bend:10}));add(te
 add(arrow([[718,844],[718,860],[1130,860],[1130,418]],{color:C.night,sw:3,bend:0}));
 add(text(1122,470,['new quest'],{size:16,color:C.night,anchor:'end'}));
 // ---------- deploy strip ----------
-add(text(40,926,[{t:'Deploy it your way: the same app everywhere',w:700}],{size:24}));
-add(text(560,926,['(src/worker.js + src/engine.js)'],{size:17,color:C.brown}));
+add(text(40,926,[{t:'Deploy it your way: on the bot\'s computer or anywhere you choose',w:700}],{size:24}));
+add(text(1170,926,['same app everywhere'],{size:17,color:C.brown,anchor:'end'}));
 const dcard=(x,icon,title,lines,stroke,fill)=>{add(box(x,945,265,150,{fill,stroke,sw:2.4}));add(icon(x+38,985));
   add(text(x+72,980,[{t:title,w:700}],{size:19}));add(text(x+16,1028,lines,{size:16,lh:1.3}));};
 dcard(30,I.cloud,'Cloudflare Worker',['+ Workers KV  (./deploy.sh)','free tier, reachable','from anywhere'],C.orange,'#FFF1E3');
@@ -144,10 +146,13 @@ if(KD){const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'kalam-'));const chars=[..
 else console.warn('KALAM_DIR not set: the SVG uses the Kalam font only if the viewer has it installed.');
 const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-labelledby="t d">
 <title id="t">How Jane works</title>
-<desc id="d">Daytime: the child plays in a browser; the Jane app (static UI plus a plain-code engine on the Marble skill graph) grades answers and saves progress to the progress store. No AI runs here. Nighttime, about 1 AM: the parent's bot backs up, exports progress, writes the next quest per LESSONS.md, validates it with publish-lessons.mjs, publishes the content pack and verifies progress is unchanged. The same app deploys to Cloudflare Workers + KV, a Node server with JSON files, or Docker. Another family imports the bot template, their bot reads BOT-SETUP.md and installs their own copy; child data stays in each home.</desc>
+<desc id="d">Agent-Orchestrated Software (AOS): the parent's own agent runs Jane from outside the app. Daytime: the child plays in a browser; the Jane app (static UI plus an engine on the Marble skill graph) grades answers and saves progress to the progress store. No AI runs here. Nighttime, about 1 AM: the parent's bot (which may host Jane, or not) backs up, exports progress, writes the next quest per LESSONS.md, validates it with publish-lessons.mjs, publishes the content pack and verifies progress is unchanged. The same app deploys on the bot's computer or anywhere the parent chooses: Cloudflare Workers + KV, a Node server with JSON files, or Docker. Another family imports the bot template, their bot reads BOT-SETUP.md and installs their own copy; child data stays in each home.</desc>
 <style>${fontCss}text{font-family:"Kalam","Comic Neue","Comic Sans MS","Chalkboard SE",cursive,sans-serif}</style>
 <rect width="${W}" height="${H}" fill="#FFFCF5"/>
-${S.join('\n')}
+${S.slice(0,TITLE).join('\n')}
+<g transform="translate(0,${DY})">
+${S.slice(TITLE).join('\n')}
+</g>
 </svg>
 `;
 fs.writeFileSync(OUT,svg);console.log(`wrote ${path.relative(process.cwd(),OUT)} (${Math.round(svg.length/1024)} KB)`);

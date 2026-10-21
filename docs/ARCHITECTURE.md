@@ -1,6 +1,6 @@
 # How Jane works: an app with no AI inside, and a bot that teaches at night
 
-![How Jane works: the app teaches by day, a bot plans by night](architecture.svg)
+![How Jane works, Agent-Orchestrated Software (AOS): the app teaches by day, your own agent plans by night from outside the app](architecture.svg)
 
 The short version: **the app your kid uses has no AI in it.** Its own code grades answers, schedules reviews and
 plays the current quest. The "brain" that adapts the lessons is an AI assistant bot (in Kent's house, **Grok
@@ -61,7 +61,7 @@ The bot remembers your kid and your rules between nights, and it messages you on
 review not keeping up, a struggle that keeps coming back, a milestone). Setting it up: [BOT-SETUP.md](../BOT-SETUP.md).
 
 ### 🚀 Deploy it your way
-The same code runs everywhere ([INSTALL.md](../INSTALL.md)):
+On the bot's computer or anywhere you choose. The same code runs everywhere ([INSTALL.md](../INSTALL.md)):
 - **Cloudflare Worker + Workers KV** (`./deploy.sh`): free tier, reachable from anywhere.
 - **Standalone Node server** (`npm start`): JSON files in `DATA_DIR` on your own computer.
 - **Docker / Compose** (`docker compose up -d`): data in a volume, restarts on boot, on your home network.
@@ -85,6 +85,9 @@ written and checked before the kid saw it. That makes Jane:
 
 ## Text version (Mermaid)
 ```mermaid
+---
+title: "How Jane works · Agent-Orchestrated Software (AOS): your own agent runs Jane from outside the app"
+---
 flowchart LR
   subgraph DAY["☀️ Daytime: learning (no AI)"]
     K[Kid plays in a browser] -->|answers| A["Jane app<br/>static UI + engine<br/>Marble graph · inference · Leitner review<br/>gates · grading · medals"]
@@ -92,13 +95,13 @@ flowchart LR
     A <-->|progress · log:DATE · lessons:DATE| S[("Progress store<br/>KV or JSON files<br/>in your deployment")]
   end
   subgraph NIGHT["🌙 Nighttime: teaching (~1 AM, offline)"]
-    B["Parent's Grok Bot<br/>(or any agent)<br/>own computer · routine · memory"] --> B1[1 Back up] --> B2[2 Export<br/>read-only] --> B3[3 Write quest<br/>per LESSONS.md] --> B4[4 Validate<br/>publish-lessons.mjs] --> B5[5 Publish<br/>lessons:DATE] --> B6[6 Verify<br/>progress unchanged]
+    B["Parent's Grok Bot<br/>(or any agent)<br/>own computer · routine · memory<br/>may host Jane, or not"] --> B1[1 Back up] --> B2[2 Export<br/>read-only] --> B3[3 Write quest<br/>per LESSONS.md] --> B4[4 Validate<br/>publish-lessons.mjs] --> B5[5 Publish<br/>lessons:DATE] --> B6[6 Verify<br/>progress unchanged]
   end
   S -.->|export| B2
   B5 -->|content pack| S
   P[Parent] -->|/parent report| A
   B -.->|short note, only when it matters| P
-  subgraph DEPLOY["Deploy: same app"]
+  subgraph DEPLOY["Deploy it your way: on the bot's computer or anywhere you choose (same app)"]
     D1[Cloudflare Worker + KV]
     D2[Node server + JSON files]
     D3[Docker / Compose]
