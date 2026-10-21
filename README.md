@@ -21,6 +21,9 @@ where to host), installs Jane, and runs the nightly lesson routine.
 
 **Fastest start:** [make a Jane bot from the template](https://x.ai/bot/vZYguWcn-Sy20b1XHNM_V). It comes with the teaching rules, the nightly lesson routine and a first-run setup chat.
 
+New to the idea of an app with no AI inside and a bot that teaches at night? See the picture in
+**[How Jane works](docs/ARCHITECTURE.md)**.
+
 ## Philosophy
 
 When I (Kent) thought about creating this with Landon, my thought was: here is an incredible taxonomy of knowledge as a

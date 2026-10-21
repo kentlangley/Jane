@@ -2,7 +2,8 @@
 
 **For an AI assistant bot** (for example Grok Bot: a desktop assistant with its own Linux machine, a shell,
 scheduled routines and memory) that a parent pointed at this repo. Follow it to host Jane for their child and write a
-fresh quest every night. People: see [README](README.md) and [INSTALL.md](INSTALL.md).
+fresh quest every night. People: see [README](README.md) and [INSTALL.md](INSTALL.md). The big picture, with a
+diagram: [How Jane works](docs/ARCHITECTURE.md).
 
 ## What you are setting up
 Jane is an adaptive learning web app for grade-school kids (grades 3-6, ages about 8-12), built on the open
