@@ -1,15 +1,16 @@
 # Bot setup guide
 
 **For an AI assistant bot** (for example Grok Bot: a desktop assistant with its own Linux machine, a shell,
-scheduled routines and memory) that a parent pointed at this repo. Follow it to host Jane for their child and write a
-fresh quest every night. People: see [README](README.md) and [INSTALL.md](INSTALL.md). The big picture, with a
-diagram: [How Jane works](docs/ARCHITECTURE.md).
+scheduled routines and memory) that a parent pointed at this repo. Follow it to set up Jane for their child (hosting
+it yourself or on a host the parent chooses) and write a fresh quest every night. People: see [README](README.md) and
+[INSTALL.md](INSTALL.md). The big picture, with a diagram: [How Jane works](docs/ARCHITECTURE.md).
 
 ## What you are setting up
 Jane is an adaptive learning web app for grade-school kids (grades 3-6, ages about 8-12), built on the open
 [Marble Skill Taxonomy](https://github.com/withmarbleapp/os-taxonomy) (1,590 topics). The app runs placement, spaced
-review, review gates and medals by itself. **Your job:** host it, and each night act as the lesson author: read the
-day's progress export and write (or refresh) one quest, offline.
+review, review gates and medals by itself. **Your job:** set it up (host it yourself, or deploy it where the parent
+chooses), and each night act as the lesson author: read the day's progress export and write (or refresh) one quest,
+offline.
 
 **The design rule: never add runtime AI.** Don't add a chatbot, model calls, or text generated while the kid plays,
 and never wire a model into the app. Everything you write is content, written at night, validated by

@@ -12,12 +12,17 @@ linked by 3,221 prerequisite edges.
 
 ## Set up with an AI bot
 
-Got Grok Bot? Make a bot named Jane, point it at this repo, and it'll host an adaptive learning program for your
-grade-schooler. Jane is built on the Marble skill map, and the bot writes fresh lessons every night based on how your
-kid did the day before.
+Got Grok Bot? Make a bot named Jane, point it at this repo, and it'll set up and run an adaptive learning program for
+your grade-schooler. Jane is built on the Marble skill map, and the bot writes fresh lessons every night based on how
+your kid did the day before.
 
 The bot follows **[BOT-SETUP.md](BOT-SETUP.md)**: it asks you a few questions (your child's name, age and grade, and
-where to host), installs Jane, and runs the nightly lesson routine.
+where to host: on the bot's own computer, or somewhere you choose, such as Cloudflare), installs Jane, and runs the
+nightly lesson routine.
+
+Jane is an example of **Agent-Orchestrated Software (AOS)**: your own AI agent adapts the app, writes its content and
+keeps it up to date from outside the app, and may host it but doesn't have to. More in
+[How Jane works → AOS](docs/ARCHITECTURE.md#agent-orchestrated-software-aos).
 
 **Fastest start:** [make a Jane bot from the template](https://x.ai/bot/vZYguWcn-Sy20b1XHNM_V). It comes with the teaching rules, the nightly lesson routine and a first-run setup chat.
 
@@ -204,7 +209,7 @@ agent, such as Grok, Claude Code or similar) and have it adapted to your setup. 
   (see [docs/NIGHTLY.md](docs/NIGHTLY.md)). An assistant that has its own computer, like Grok Bot, can run the whole
   nightly cycle there: export, write, validate, publish.
 
-For a bot that hosts Jane and authors the nightly quests end to end, point it at [BOT-SETUP.md](BOT-SETUP.md).
+For a bot that sets up Jane (hosting it itself, or on a host you choose) and authors the nightly quests end to end, point it at [BOT-SETUP.md](BOT-SETUP.md).
 Or paste this prompt into your assistant:
 
 > Read README.md, INSTALL.md, LESSONS.md and docs/NIGHTLY.md in this repo. Deploy Jane to `<my host: Cloudflare Workers /

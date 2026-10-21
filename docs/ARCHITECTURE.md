@@ -2,10 +2,31 @@
 
 ![How Jane works: the app teaches by day, a bot plans by night](architecture.svg)
 
-The short version: **the app your kid uses has no AI in it.** It is plain code that grades answers, schedules reviews
-and plays the current quest. The "brain" that adapts the lessons is an AI assistant bot (in Kent's house, **Grok
+The short version: **the app your kid uses has no AI in it.** Its own code grades answers, schedules reviews and
+plays the current quest. The "brain" that adapts the lessons is an AI assistant bot (in Kent's house, **Grok
 Bot**) that works **offline, once a night**: it reads how your kid did, writes the next quest, and hands it to the app
-through a validator. The bot can get smarter over time without the app changing at all.
+through a validator. The bot can get smarter over time without the app changing at all. The bot may also host the
+app, but it doesn't have to.
+
+## Agent-Orchestrated Software (AOS)
+Kent's name for this way of building and sharing software:
+
+> **Agent-Orchestrated Software (AOS):** software whose adaptation, content, and upkeep are orchestrated by the user's
+> own AI agent, working from outside the app. The agent may host the app, but doesn't have to. The app can include AI
+> of its own, but doesn't need to.
+
+**Jane is an example.** Jane happens to have no AI inside. The parent's own agent (Grok Bot, or any agent that can run
+Node scripts on a schedule) reads the day's progress and writes the next quest offline each night, then publishes it
+through the app's validator. The agent may also host Jane on its own computer, or Jane can run somewhere the parent
+chooses (Cloudflare, a home computer, Docker) while the agent just does the nightly work.
+
+| | AOS | SaaS | Traditional installed software |
+|---|---|---|---|
+| **Where it runs** | Wherever you choose: your agent's computer, your own machine or a cloud account you own | The vendor's servers | Your own device |
+| **Who adapts and improves it** | Your own AI agent, from outside the app (the code's authors still ship updates) | The vendor, the same for everyone | The vendor, through new versions |
+| **Where the data lives** | In your own deployment | On the vendor's servers | On your device |
+| **How it's distributed** | Open code plus an agent template or recipe (here: [BOT-SETUP.md](../BOT-SETUP.md)) | Sign up for an account | Installer, download or app store |
+| **Cost model** | Your hosting (often a free tier) plus the agent you already use | Subscription, per seat or ads | One-time purchase or license |
 
 ## The parts
 
@@ -17,8 +38,8 @@ through a validator. The bot can get smarter over time without the app changing 
   [Marble Skill Taxonomy](https://github.com/withmarbleapp/os-taxonomy): 1,590 topics linked by prerequisites. With
   that graph it places the kid, infers skills from harder ones they got right, schedules spaced review in Leitner boxes
   (1 → 3 → 7 → 21 → 60 days), runs 🗝️ review gates inside quests, grades answers (including the "I'm stuck" hint →
-  worked example → skip help) and awards medals that have to be earned. Everything is deterministic: the same input
-  gives the same behavior.
+  worked example → skip help) and awards medals that have to be earned. Every rule is written down in the code, so
+  the same answers always lead to the same behavior.
 - **The progress store** holds three kinds of keys: `progress` (the kid's one record), `log:DATE` (that day's answers)
   and `lessons:DATE` (quest packs). It is Workers KV on Cloudflare, or one JSON file per key in `DATA_DIR` on Node and
   Docker. It lives only in your own deployment.
