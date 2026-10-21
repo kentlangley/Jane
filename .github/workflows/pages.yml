@@ -1,0 +1,31 @@
+# Publish the friendly guide (site/) to GitHub Pages. No build step: the site is hand-written HTML/CSS.
+# The architecture diagram is copied in from docs/ so there is only one copy in the repo.
+name: Pages
+on:
+  push:
+    branches: [main]
+    paths: ["site/**", "docs/architecture.svg", ".github/workflows/pages.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Add the diagram
+        run: cp docs/architecture.svg site/architecture.svg
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v5

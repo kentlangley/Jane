@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAQ & credits · Jane, the friendly guide</title>
+<meta name="description" content="Common questions about Jane, plus credits and licenses.">
+<link rel="stylesheet" href="style.css">
+<link rel="preload" href="fonts/kalam-bold.woff" as="font" type="font/woff" crossorigin>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="index.html"><svg viewBox="-26 -26 52 52" aria-hidden="true" focusable="false"><g stroke="#E8912D" stroke-width="3" stroke-linecap="round"><circle r="11" fill="#FFC94A"/><line x1="16" y1="0" x2="22" y2="0"/><line x1="-16" y1="0" x2="-22" y2="0"/><line x1="0" y1="16" x2="0" y2="22"/><line x1="0" y1="-16" x2="0" y2="-22"/><line x1="11.3" y1="11.3" x2="15.6" y2="15.6"/><line x1="-11.3" y1="-11.3" x2="-15.6" y2="-15.6"/><line x1="11.3" y1="-11.3" x2="15.6" y2="-15.6"/><line x1="-11.3" y1="11.3" x2="-15.6" y2="15.6"/></g></svg>Jane</a>
+    <nav aria-label="Guide pages"><ul><li><a href="index.html">Home</a></li><li><a href="how-it-works.html">How it works</a></li><li><a href="a-day.html">A day for your kid</a></li><li><a href="get-started.html">Get started</a></li><li><a href="privacy.html">Privacy &amp; safety</a></li><li><a href="faq.html" aria-current="page">FAQ &amp; credits</a></li></ul></nav>
+  </div>
+</header>
+<main id="main">
+<h1>FAQ &amp; credits</h1>
+
+<h2>Questions</h2>
+<details><summary>Is an AI talking to my kid?</summary>
+<p>No. The app has no AI in it. Your agent writes quests at night, ahead of time, and Jane checks them before your
+kid can see them. During play, nothing is sent to an AI.</p></details>
+<details><summary>Where does my kid's data live?</summary>
+<p>Only in your own setup: your Cloudflare account, or a folder or Docker volume on your computer. Your agent keeps
+backups and nightly exports on its own computer. Nothing goes into the public code repo.</p></details>
+<details><summary>Do I need Grok Bot?</summary>
+<p>No. Any AI agent that can run small Node.js programs on a schedule can follow
+<a href="https://github.com/kentlangley/Jane/blob/main/BOT-SETUP.md">BOT-SETUP.md</a>. You can also write quests yourself; the
+<a href="https://github.com/kentlangley/Jane/blob/main/docs/NIGHTLY.md">nightly guide</a> shows how.</p></details>
+<details><summary>Does the agent have to run Jane on its own computer?</summary>
+<p>No. It can, or Jane can run somewhere you choose (Cloudflare, a home computer, Docker) while the agent just does
+the nightly work.</p></details>
+<details><summary>What does it cost?</summary>
+<p>Jane is free and open source. It runs on Cloudflare's free plan or on a computer you already have. The only other
+cost is whatever AI agent you already use.</p></details>
+<details><summary>What ages is it for?</summary>
+<p>Grades 3 to 6, about ages 8 to 12. You set your kid's age and grade, and Jane aims its questions there.</p></details>
+<details><summary>What if the agent skips a night?</summary>
+<p>Jane keeps working. The current quest stays, and the app falls back to its built-in questions, math practice and
+reviews.</p></details>
+<details><summary>Can I see what my kid will be shown?</summary>
+<p>Yes. Every quest is a readable file, and the parent report lists every answer. There's also a sandbox mode for
+trying things without touching the real progress.</p></details>
+<details><summary>Can more than one kid use it?</summary>
+<p>Today each Jane setup is for one kid. Support for more than one learner is on the roadmap; for now, set up a
+separate copy for each kid.</p></details>
+<details><summary>What is Agent-Orchestrated Software?</summary>
+<p>Kent Langley's name for software that your own AI agent adapts, fills with content and keeps up to date from
+outside the app. See <a href="how-it-works.html">How it works</a>.</p></details>
+
+<h2 id="credits">Credits</h2>
+<p>Jane was designed by <strong>Kent Langley and Landon</strong>, and developed with <strong>Grok Bot</strong>, an AI
+assistant, from their feedback on what was fun, what was confusing and what was too hard.</p>
+
+<h2>Licenses</h2>
+<p>Different parts of Jane have different licenses. The full map is in <a href="https://github.com/kentlangley/Jane/blob/main/LICENSING.md">LICENSING.md</a>.</p>
+<div class="table-wrap">
+<table>
+  <thead><tr><th scope="col">What</th><th scope="col">License</th><th scope="col">Copyright / attribution</th></tr></thead>
+  <tbody>
+    <tr><td>App code: the Worker, engine, kid app, parent report, prototype, scripts, Docker files</td><td>MIT</td><td>© 2026 Kent Langley and Landon</td></tr>
+    <tr><td>The Marble Skill Taxonomy v1 (<code>data/marble/</code>), unchanged</td><td>Database: ODbL 1.0. Marble-authored text: CC BY-SA 4.0</td><td>© Generative Spark, Inc. (Marble)</td></tr>
+    <tr><td>Kid-friendly questions and the glossary, adapted from the taxonomy</td><td>Database: ODbL 1.0. Text: CC BY-SA 4.0</td><td>Adapted by Kent Langley and Landon from the Marble Skill Taxonomy (© Generative Spark, Inc.)</td></tr>
+    <tr><td>The bundled taxonomy and glossary files built from that data</td><td>ODbL 1.0 (database), CC BY-SA 4.0 (text)</td><td>Marble (upstream) + Kent Langley and Landon (adapters)</td></tr>
+    <tr><td>Lesson packs, quests, LESSONS.md, the docs and this guide</td><td>CC BY-SA 4.0</td><td>© 2026 Kent Langley and Landon</td></tr>
+    <tr><td>This site's stylesheet</td><td>MIT</td><td>© 2026 Kent Langley and Landon</td></tr>
+    <tr><td>Kalam font used for headings (a subset is included)</td><td>SIL Open Font License 1.1 (<a href="fonts/OFL.txt">license</a>)</td><td>© 2014 Indian Type Foundry</td></tr>
+  </tbody>
+</table>
+</div>
+<p>The app also bundles small open-source UI libraries: Motion (MIT), Floating UI (MIT), canvas-confetti (ISC) and
+AutoAnimate (MIT).</p>
+<p><strong>Required attribution</strong> for anything that uses the taxonomy:</p>
+<blockquote class="def">Marble Skill Taxonomy (v1) · © Generative Spark, Inc. (Marble) · https://withmarble.com ·
+licensed under ODbL 1.0 (database) and CC BY-SA 4.0 (content).</blockquote>
+<p>What share-alike means here: if you change the data, it stays ODbL 1.0 (text CC BY-SA 4.0); if you adapt lesson
+packs, quests or the docs, share them under CC BY-SA 4.0; the code is MIT, so use it however you like and keep the
+copyright notice.</p>
+</main>
+<footer class="site-footer">
+  <div class="bar">
+    <p>Jane is open source: <a href="https://github.com/kentlangley/Jane">github.com/kentlangley/Jane</a>. Code: MIT. This guide: CC BY-SA 4.0. Details on the <a href="faq.html#credits">credits</a> page.</p>
+    <p>Marble Skill Taxonomy (v1) · © Generative Spark, Inc. (Marble) · <a href="https://withmarble.com">https://withmarble.com</a> · licensed under ODbL 1.0 (database) and CC BY-SA 4.0 (content).</p>
+    <p>No trackers, no cookies, no outside scripts on this site.</p>
+  </div>
+</footer>
+</body>
+</html>

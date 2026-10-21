@@ -1,5 +1,8 @@
 # Jane
 
+**[Read the friendly guide](https://kentlangley.github.io/Jane/)**: what Jane is, how it works and how to start,
+written for parents and curious readers.
+
 **Jane** is a friendly, adaptive learning app for kids, designed around ages ~8-12 (upper elementary) and named after its tutor character.
 The learner's name, target age and grade are settings.
 It runs as a single Cloudflare Worker with static assets and Workers KV, or as a standalone Node server (or Docker

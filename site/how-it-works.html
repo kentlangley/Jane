@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How it works · Jane, the friendly guide</title>
+<meta name="description" content="Jane is Agent-Orchestrated Software: the app teaches by day, and your own AI agent plans the next quest by night, from outside the app.">
+<link rel="stylesheet" href="style.css">
+<link rel="preload" href="fonts/kalam-bold.woff" as="font" type="font/woff" crossorigin>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="index.html"><svg viewBox="-26 -26 52 52" aria-hidden="true" focusable="false"><g stroke="#E8912D" stroke-width="3" stroke-linecap="round"><circle r="11" fill="#FFC94A"/><line x1="16" y1="0" x2="22" y2="0"/><line x1="-16" y1="0" x2="-22" y2="0"/><line x1="0" y1="16" x2="0" y2="22"/><line x1="0" y1="-16" x2="0" y2="-22"/><line x1="11.3" y1="11.3" x2="15.6" y2="15.6"/><line x1="-11.3" y1="-11.3" x2="-15.6" y2="-15.6"/><line x1="11.3" y1="-11.3" x2="15.6" y2="-15.6"/><line x1="-11.3" y1="11.3" x2="-15.6" y2="15.6"/></g></svg>Jane</a>
+    <nav aria-label="Guide pages"><ul><li><a href="index.html">Home</a></li><li><a href="how-it-works.html" aria-current="page">How it works</a></li><li><a href="a-day.html">A day for your kid</a></li><li><a href="get-started.html">Get started</a></li><li><a href="privacy.html">Privacy &amp; safety</a></li><li><a href="faq.html">FAQ &amp; credits</a></li></ul></nav>
+  </div>
+</header>
+<main id="main">
+<h1>How Jane works</h1>
+<p class="lead">Jane splits the job in two. The app teaches your kid during the day. Your own AI agent plans the next
+lesson at night. The agent works from <em>outside</em> the app, so there is no AI inside Jane talking to your kid.</p>
+
+<h2>Agent-Orchestrated Software (AOS)</h2>
+<p>Kent Langley's name for this way of building and sharing software:</p>
+<blockquote class="def"><strong>Agent-Orchestrated Software (AOS):</strong> software whose adaptation, content, and
+upkeep are orchestrated by the user's own AI agent, working from outside the app. The agent may host the app, but
+doesn't have to. The app can include AI of its own, but doesn't need to.</blockquote>
+<p>Jane is an example. Jane happens to have no AI inside. Your agent (Grok Bot, or any agent that can run small
+programs on a schedule) reads the day's progress and writes the next quest offline each night. It may also run Jane
+on its own computer, or Jane can live somewhere you choose while the agent just does the nightly work.</p>
+
+<section class="panel day" aria-labelledby="day">
+  <h2 id="day">Daytime: learning <span class="tag">no AI here</span></h2>
+  <ul>
+    <li><strong>Your kid plays in a web browser</strong> on a phone, tablet or laptop.</li>
+    <li><strong>The Jane app</strong> checks each answer, gives hints, picks the next question, schedules reviews and
+    hands out medals. It follows rules written into its own code, so it's fast and predictable, and the same answers
+    always lead to the same thing.</li>
+    <li><strong>Progress is saved</strong> in storage that belongs to your setup: your Cloudflare account, or a folder
+    on your own computer.</li>
+  </ul>
+</section>
+
+<section class="panel night" aria-labelledby="night">
+  <h2 id="night">Nighttime: teaching <span class="tag">about 1 AM</span></h2>
+  <p>A scheduled routine on your agent's computer does six steps:</p>
+  <ol class="steps">
+    <li><strong>Back up</strong> your kid's progress.</li>
+    <li><strong>Read the day:</strong> answers, struggles, strengths, what's ready to learn next and what's due for review.</li>
+    <li><strong>Write the next quest</strong> following Jane's teaching rules, or freshen up the parts of today's quest
+    your kid hasn't reached yet.</li>
+    <li><strong>Check it.</strong> Jane's validator refuses a quest that breaks the rules: too long, testing something
+    that wasn't taught, or changing a quest that's already finished.</li>
+    <li><strong>Publish it,</strong> so it's waiting in the morning.</li>
+    <li><strong>Double-check</strong> that your kid's progress wasn't changed.</li>
+  </ol>
+  <p>Your agent only messages you when something matters: a problem, review falling behind, a struggle that keeps
+  coming back, or a milestone.</p>
+</section>
+
+<figure>
+  <a href="architecture.svg"><img src="architecture.svg" width="1200" height="1405" loading="lazy"
+    alt="Diagram: How Jane works, an example of Agent-Orchestrated Software. Daytime, learning: your kid plays in a browser; the Jane app (a web page plus Jane's own engine on the Marble skill map of 1,590 topics) checks answers, picks the next question and saves progress in a progress store that lives only in your deployment. No AI runs here. Nighttime, about 1 AM: your Grok Bot or any agent, which may host Jane or not, backs up the progress, reads an export of the day, writes the next quest, checks it with Jane's validator, publishes it, and checks that the progress record did not change. Jane can run on Cloudflare, on a Node server or in Docker, on the bot's computer or anywhere you choose. You see a read-only parent report. Another family can make their own copy from the bot template; kid data stays in each home."></a>
+  <figcaption>How Jane works. Tap the picture to open it full size.</figcaption>
+</figure>
+
+<h2>Run it where you like</h2>
+<p>It's the same app everywhere, on the agent's computer or anywhere you choose:</p>
+<div class="cards">
+  <div class="card warn"><h3>Cloudflare</h3><p>A free Cloudflare account. Reachable from anywhere.</p></div>
+  <div class="card green"><h3>A home computer</h3><p>Any computer with Node.js. Progress is a folder of files.</p></div>
+  <div class="card night"><h3>Docker</h3><p>One command, restarts on its own, keeps data in a Docker volume.</p></div>
+</div>
+<p>You, the parent, open the <strong>parent report</strong> (<code>/parent</code>): a calm, read-only page with
+progress, quests, reviews and every answer.</p>
+
+<h2>Why build it this way?</h2>
+<div class="cards">
+  <div class="card"><h3>Cheap</h3><p>No AI charges per question. Jane runs on a free tier or any computer.</p></div>
+  <div class="card"><h3>Private</h3><p>Your kid's answers stay in your setup, and no AI sees them while they play.</p></div>
+  <div class="card"><h3>Keeps working</h3><p>Playing never calls an AI or outside service. If the agent skips a
+  night, Jane falls back to its built-in questions and reviews.</p></div>
+  <div class="card"><h3>Predictable for kids</h3><p>Jane only shows what was written and checked ahead of time. No
+  surprises, no off-topic chats.</p></div>
+  <div class="card"><h3>Smarter agent, same app</h3><p>When your agent gets better, the lessons get better, without
+  changing the app.</p></div>
+</div>
+
+<h2>How AOS compares</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th scope="col"></th><th scope="col">AOS (like Jane)</th><th scope="col">Online service (SaaS)</th><th scope="col">Traditional installed software</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Where it runs</th><td>Wherever you choose: your agent's computer, your own machine or a cloud account you own</td><td>The company's servers</td><td>Your own device</td></tr>
+    <tr><th scope="row">Who adapts and improves it</th><td>Your own AI agent, from outside the app (the code's authors still ship updates)</td><td>The company, the same for everyone</td><td>The company, through new versions</td></tr>
+    <tr><th scope="row">Where your data lives</th><td>In your own setup</td><td>On the company's servers</td><td>On your device</td></tr>
+    <tr><th scope="row">How you get it</th><td>Open code plus a recipe your agent follows (a bot template or a setup guide)</td><td>Sign up for an account</td><td>Installer, download or app store</td></tr>
+    <tr><th scope="row">What it costs</th><td>Your hosting (often free) plus the agent you already use</td><td>Subscription, per seat or ads</td><td>One-time purchase or license</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="note">The technical version of this page: <a href="https://github.com/kentlangley/Jane/blob/main/docs/ARCHITECTURE.md">docs/ARCHITECTURE.md</a> and
+<a href="https://github.com/kentlangley/Jane/blob/main/docs/NIGHTLY.md">docs/NIGHTLY.md</a>.</p>
+</main>
+<footer class="site-footer">
+  <div class="bar">
+    <p>Jane is open source: <a href="https://github.com/kentlangley/Jane">github.com/kentlangley/Jane</a>. Code: MIT. This guide: CC BY-SA 4.0. Details on the <a href="faq.html#credits">credits</a> page.</p>
+    <p>Marble Skill Taxonomy (v1) · © Generative Spark, Inc. (Marble) · <a href="https://withmarble.com">https://withmarble.com</a> · licensed under ODbL 1.0 (database) and CC BY-SA 4.0 (content).</p>
+    <p>No trackers, no cookies, no outside scripts on this site.</p>
+  </div>
+</footer>
+</body>
+</html>

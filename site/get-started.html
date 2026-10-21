@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get started · Jane, the friendly guide</title>
+<meta name="description" content="Three ways to start Jane: the Grok Bot template, pointing your own AI agent at the repo, or running it yourself with Docker, Node or Cloudflare.">
+<link rel="stylesheet" href="style.css">
+<link rel="preload" href="fonts/kalam-bold.woff" as="font" type="font/woff" crossorigin>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="index.html"><svg viewBox="-26 -26 52 52" aria-hidden="true" focusable="false"><g stroke="#E8912D" stroke-width="3" stroke-linecap="round"><circle r="11" fill="#FFC94A"/><line x1="16" y1="0" x2="22" y2="0"/><line x1="-16" y1="0" x2="-22" y2="0"/><line x1="0" y1="16" x2="0" y2="22"/><line x1="0" y1="-16" x2="0" y2="-22"/><line x1="11.3" y1="11.3" x2="15.6" y2="15.6"/><line x1="-11.3" y1="-11.3" x2="-15.6" y2="-15.6"/><line x1="11.3" y1="-11.3" x2="15.6" y2="-15.6"/><line x1="-11.3" y1="11.3" x2="-15.6" y2="15.6"/></g></svg>Jane</a>
+    <nav aria-label="Guide pages"><ul><li><a href="index.html">Home</a></li><li><a href="how-it-works.html">How it works</a></li><li><a href="a-day.html">A day for your kid</a></li><li><a href="get-started.html" aria-current="page">Get started</a></li><li><a href="privacy.html">Privacy &amp; safety</a></li><li><a href="faq.html">FAQ &amp; credits</a></li></ul></nav>
+  </div>
+</header>
+<main id="main">
+<h1>Get started</h1>
+<p class="lead">Pick the path that fits you. All three set up the same app.</p>
+
+<section class="panel night" aria-labelledby="p1">
+  <h2 id="p1">1. The easy way: the Jane bot template</h2>
+  <p>If you use Grok Bot, this is the fastest start. The template comes with the teaching rules, the nightly lesson
+  routine and a first-run setup chat.</p>
+  <ol class="steps">
+    <li>Open the template and make your Jane bot: <a href="https://x.ai/bot/vZYguWcn-Sy20b1XHNM_V">make a Jane bot</a>.</li>
+    <li>Answer its questions one at a time: your kid's first name or nickname, age and grade, where Jane should run
+    (on the bot's own computer or somewhere you choose, like Cloudflare), how your kid will reach it, and your time zone.</li>
+    <li>It installs Jane and sends you two links: one for your kid and one for the parent report.</li>
+    <li>Have your kid play a first session (10 to 15 minutes). That night the bot writes the first quest.</li>
+  </ol>
+  <p class="btns"><a class="btn primary" href="https://x.ai/bot/vZYguWcn-Sy20b1XHNM_V">Make a Jane bot</a></p>
+</section>
+
+<section class="panel day" aria-labelledby="p2">
+  <h2 id="p2">2. Point your own AI agent at the repo</h2>
+  <p>Any agent that can run small Node.js programs on a schedule can do this. The repo has a guide written just for
+  the agent, <a href="https://github.com/kentlangley/Jane/blob/main/BOT-SETUP.md">BOT-SETUP.md</a>. Tell your agent something like:</p>
+  <blockquote class="def">Read BOT-SETUP.md in github.com/kentlangley/Jane and set up Jane for my kid. Ask me your
+  questions one at a time, and only message me at night if something needs my attention.</blockquote>
+</section>
+
+<section aria-labelledby="p3">
+  <h2 id="p3">3. Do it yourself</h2>
+  <p>For folks comfortable with a terminal. You'll need <a href="https://nodejs.org/">Node.js 22</a> or newer (or
+  Docker). Full details are in <a href="https://github.com/kentlangley/Jane/blob/main/INSTALL.md">INSTALL.md</a>.</p>
+  <div class="cards stack">
+    <div class="card night"><h3>Docker</h3>
+      <p>Set your kid's nickname, age and grade in <code>docker-compose.yml</code>, then:</p>
+      <pre><code>git clone https://github.com/kentlangley/Jane.git jane
+cd jane
+docker compose up -d</code></pre>
+      <p>Open <code>http://localhost:8787</code>.</p></div>
+    <div class="card green"><h3>Node on your computer</h3>
+      <pre><code>git clone https://github.com/kentlangley/Jane.git jane
+cd jane
+npm install
+LEARNER_NAME=Sam npm start</code></pre>
+      <p>Open <code>http://localhost:8787</code>. Add <code>LEARNER_AGE</code> and <code>LEARNER_GRADE</code> too.</p></div>
+    <div class="card warn"><h3>Cloudflare (free plan)</h3>
+      <p>Create a storage space called <code>JANE_KV</code>, copy <code>wrangler.toml.example</code> to
+      <code>wrangler.toml</code>, fill in your own IDs (that file stays off GitHub), then run <code>./deploy.sh</code>.
+      Step by step: <a href="https://github.com/kentlangley/Jane/blob/main/INSTALL.md#c-cloudflare-workers--kv">INSTALL.md, option C</a>.</p></div>
+  </div>
+  <p>Then each night, you (or a helper) run the nightly cycle: export the day, write a quest, check it, publish it.
+  It's explained in <a href="https://github.com/kentlangley/Jane/blob/main/docs/NIGHTLY.md">How the nightly cycle works</a>. If you skip a night, Jane keeps
+  working with its built-in questions and reviews.</p>
+</section>
+
+<h2>Docs for technical folks</h2>
+<ul>
+  <li><a href="https://github.com/kentlangley/Jane/blob/main/README.md">README</a>: the project overview.</li>
+  <li><a href="https://github.com/kentlangley/Jane/blob/main/INSTALL.md">INSTALL.md</a>: Node, Docker and Cloudflare, step by step.</li>
+  <li><a href="https://github.com/kentlangley/Jane/blob/main/BOT-SETUP.md">BOT-SETUP.md</a>: the guide for your AI agent.</li>
+  <li><a href="https://github.com/kentlangley/Jane/blob/main/docs/NIGHTLY.md">docs/NIGHTLY.md</a>: the nightly cycle.</li>
+  <li><a href="https://github.com/kentlangley/Jane/blob/main/LESSONS.md">LESSONS.md</a>: how quests are written and checked.</li>
+  <li><a href="https://github.com/kentlangley/Jane/blob/main/docs/ARCHITECTURE.md">docs/ARCHITECTURE.md</a>: the architecture and the AOS idea.</li>
+  <li><a href="https://github.com/kentlangley/Jane/blob/main/CHANGELOG.md">CHANGELOG.md</a>: what changed in each version.</li>
+</ul>
+</main>
+<footer class="site-footer">
+  <div class="bar">
+    <p>Jane is open source: <a href="https://github.com/kentlangley/Jane">github.com/kentlangley/Jane</a>. Code: MIT. This guide: CC BY-SA 4.0. Details on the <a href="faq.html#credits">credits</a> page.</p>
+    <p>Marble Skill Taxonomy (v1) · © Generative Spark, Inc. (Marble) · <a href="https://withmarble.com">https://withmarble.com</a> · licensed under ODbL 1.0 (database) and CC BY-SA 4.0 (content).</p>
+    <p>No trackers, no cookies, no outside scripts on this site.</p>
+  </div>
+</footer>
+</body>
+</html>

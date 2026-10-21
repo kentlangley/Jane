@@ -39,3 +39,5 @@ prototype/node_modules/
 prototype/package-lock.json
 .DS_Store
 public/vendor/
+# --- docs site: the diagram is copied in from docs/ by the Pages workflow ---
+site/architecture.svg

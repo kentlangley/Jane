@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home · Jane, the friendly guide</title>
+<meta name="description" content="Jane is a free, friendly learning app for kids in grades 3 to 6. Your own AI agent writes a fresh quest every night from how your kid did.">
+<link rel="stylesheet" href="style.css">
+<link rel="preload" href="fonts/kalam-bold.woff" as="font" type="font/woff" crossorigin>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="index.html"><svg viewBox="-26 -26 52 52" aria-hidden="true" focusable="false"><g stroke="#E8912D" stroke-width="3" stroke-linecap="round"><circle r="11" fill="#FFC94A"/><line x1="16" y1="0" x2="22" y2="0"/><line x1="-16" y1="0" x2="-22" y2="0"/><line x1="0" y1="16" x2="0" y2="22"/><line x1="0" y1="-16" x2="0" y2="-22"/><line x1="11.3" y1="11.3" x2="15.6" y2="15.6"/><line x1="-11.3" y1="-11.3" x2="-15.6" y2="-15.6"/><line x1="11.3" y1="-11.3" x2="15.6" y2="-15.6"/><line x1="-11.3" y1="11.3" x2="-15.6" y2="15.6"/></g></svg>Jane</a>
+    <nav aria-label="Guide pages"><ul><li><a href="index.html" aria-current="page">Home</a></li><li><a href="how-it-works.html">How it works</a></li><li><a href="a-day.html">A day for your kid</a></li><li><a href="get-started.html">Get started</a></li><li><a href="privacy.html">Privacy &amp; safety</a></li><li><a href="faq.html">FAQ &amp; credits</a></li></ul></nav>
+  </div>
+</header>
+<main id="main">
+<section class="hero">
+  <div>
+    <h1>Jane: a learning buddy that plans a new adventure every night</h1>
+    <p class="lead">Jane is a free, friendly learning app for kids in grades 3 to 6 (about ages 8 to 12). Your kid plays a
+    short quest in a web browser. Overnight, your own AI agent looks at how it went and writes the next one.</p>
+    <p>No account to sign up for, no ads, and no AI chatting with your kid. Jane runs in your own setup, and your kid's
+    progress stays there.</p>
+  </div>
+  <div class="pitch">
+    <h2 style="margin-top:0">Got Grok Bot?</h2>
+    <p>Make a bot named Jane, point it at this repo, and it'll set up and run an adaptive learning program for your
+    grade-schooler. Jane is built on the Marble skill map, and the bot writes fresh lessons every night based on how
+    your kid did the day before.</p>
+    <div class="btns">
+      <a class="btn primary" href="https://x.ai/bot/vZYguWcn-Sy20b1XHNM_V">Make a Jane bot</a>
+      <a class="btn" href="https://github.com/kentlangley/Jane">See the code on GitHub</a>
+    </div>
+    <p class="note">Not using Grok Bot? Any AI agent that can run small programs on a schedule can do it, or you can
+    run Jane yourself. See <a href="get-started.html">Get started</a>.</p>
+  </div>
+</section>
+
+<h2>What your kid gets</h2>
+<div class="cards">
+  <div class="card"><h3>Short quests</h3><p>About 8 minutes a day: a story, a few stops along the way, and a boss
+  battle at the end, with a medal to win.</p></div>
+  <div class="card"><h3>Teaching first</h3><p>New ideas start with a quick lesson and an example, then practice with
+  hints, and only then the real questions.</p></div>
+  <div class="card"><h3>Help when stuck</h3><p>An "I'm stuck" button gives a hint, then a worked example, then a
+  free skip. Nobody loses a heart for asking.</p></div>
+  <div class="card"><h3>Things come back at the right time</h3><p>Skills your kid learned come back a day, a few
+  days, a week and a month later, so they stick.</p></div>
+  <div class="card"><h3>Medals that mean something</h3><p>Medals are earned by getting questions right on the first
+  try, never just by clicking through.</p></div>
+  <div class="card"><h3>Lessons that adapt</h3><p>Each night the next quest goes deeper where your kid struggled,
+  stretches where they shine and visits something new.</p></div>
+</div>
+
+<h2>The big idea in one picture</h2>
+<p>The app your kid uses has no AI inside it. The "brain" that adapts the lessons is your own AI agent, and it works
+from the outside, at night, while everyone sleeps. We call this <strong>Agent-Orchestrated Software</strong>.
+<a href="how-it-works.html">Here's how it works.</a></p>
+<figure>
+  <a href="architecture.svg"><img src="architecture.svg" width="1200" height="1405" loading="lazy"
+    alt="Diagram: How Jane works, an example of Agent-Orchestrated Software. Daytime, learning: your kid plays in a browser; the Jane app (a web page plus Jane's own engine on the Marble skill map of 1,590 topics) checks answers, picks the next question and saves progress in a progress store that lives only in your deployment. No AI runs here. Nighttime, about 1 AM: your Grok Bot or any agent, which may host Jane or not, backs up the progress, reads an export of the day, writes the next quest, checks it with Jane's validator, publishes it, and checks that the progress record did not change. Jane can run on Cloudflare, on a Node server or in Docker, on the bot's computer or anywhere you choose. You see a read-only parent report. Another family can make their own copy from the bot template; kid data stays in each home."></a>
+  <figcaption>How Jane works. Tap the picture to open it full size.</figcaption>
+</figure>
+
+<h2>Built on a map of what kids learn</h2>
+<p>Jane uses the open <a href="https://github.com/withmarbleapp/os-taxonomy">Marble Skill Taxonomy</a>: 1,590
+small topics across 8 subjects (math, science, English, history, personal and social development, life skills,
+computing, and learning to learn), connected by 3,221 "learn this first" links. That map tells Jane where your kid
+is, what comes next and what to review.</p>
+
+<h2>Why "Jane"?</h2>
+<p>The friendly tutor is named after Jane, the AI companion and teacher in Orson Scott Card's <em>Speaker for the
+Dead</em>. It's just a nod to the books; the project has no connection to the author or his publishers.</p>
+</main>
+<footer class="site-footer">
+  <div class="bar">
+    <p>Jane is open source: <a href="https://github.com/kentlangley/Jane">github.com/kentlangley/Jane</a>. Code: MIT. This guide: CC BY-SA 4.0. Details on the <a href="faq.html#credits">credits</a> page.</p>
+    <p>Marble Skill Taxonomy (v1) · © Generative Spark, Inc. (Marble) · <a href="https://withmarble.com">https://withmarble.com</a> · licensed under ODbL 1.0 (database) and CC BY-SA 4.0 (content).</p>
+    <p>No trackers, no cookies, no outside scripts on this site.</p>
+  </div>
+</footer>
+</body>
+</html>

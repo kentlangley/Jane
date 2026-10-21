@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy & safety · Jane, the friendly guide</title>
+<meta name="description" content="How Jane keeps your kid safe and your data private: no AI talking to your kid, data stays in your own setup, never in the code repository.">
+<link rel="stylesheet" href="style.css">
+<link rel="preload" href="fonts/kalam-bold.woff" as="font" type="font/woff" crossorigin>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="index.html"><svg viewBox="-26 -26 52 52" aria-hidden="true" focusable="false"><g stroke="#E8912D" stroke-width="3" stroke-linecap="round"><circle r="11" fill="#FFC94A"/><line x1="16" y1="0" x2="22" y2="0"/><line x1="-16" y1="0" x2="-22" y2="0"/><line x1="0" y1="16" x2="0" y2="22"/><line x1="0" y1="-16" x2="0" y2="-22"/><line x1="11.3" y1="11.3" x2="15.6" y2="15.6"/><line x1="-11.3" y1="-11.3" x2="-15.6" y2="-15.6"/><line x1="11.3" y1="-11.3" x2="15.6" y2="-15.6"/><line x1="-11.3" y1="11.3" x2="-15.6" y2="15.6"/></g></svg>Jane</a>
+    <nav aria-label="Guide pages"><ul><li><a href="index.html">Home</a></li><li><a href="how-it-works.html">How it works</a></li><li><a href="a-day.html">A day for your kid</a></li><li><a href="get-started.html">Get started</a></li><li><a href="privacy.html" aria-current="page">Privacy &amp; safety</a></li><li><a href="faq.html">FAQ &amp; credits</a></li></ul></nav>
+  </div>
+</header>
+<main id="main">
+<h1>Privacy &amp; safety</h1>
+<p class="lead">Jane is a kids' app, so it's built to keep things simple, private and predictable.</p>
+
+<div class="cards">
+  <div class="card green"><h3>No AI talking to your kid</h3><p>Nothing in the app calls an AI. Every question, hint
+  and line Jane says was written ahead of time and checked before your kid could see it.</p></div>
+  <div class="card green"><h3>Data stays in your setup</h3><p>Progress and answers are stored only where you run Jane:
+  your Cloudflare account, or a folder or Docker volume on your own computer.</p></div>
+  <div class="card green"><h3>Never in the code repo</h3><p>Kid data, backups, nightly exports, real quests, passwords
+  and account IDs are all kept out of the public code. The project's rules forbid committing them.</p></div>
+  <div class="card warn"><h3>The parent page has no passcode yet</h3><p>Anyone who can reach your Jane can open
+  <code>/parent</code>. Don't put Jane on the open internet without some kind of access control.</p></div>
+</div>
+
+<h2>What gets stored</h2>
+<ul>
+  <li>Your kid's first name or nickname, target age and grade (settings you choose; a nickname is fine).</li>
+  <li>One progress record: which topics are learned, reviews, medals and quests.</li>
+  <li>A log of each day's answers (and the words your kid looked up), and the quests your agent published.</li>
+</ul>
+<p>That's it. Jane has no accounts, no ads and no tracking. This guide site has no trackers or cookies either.</p>
+
+<h2>Who sees what</h2>
+<ul>
+  <li><strong>Your kid</strong> sees the app.</li>
+  <li><strong>You</strong> see the parent report.</li>
+  <li><strong>Your AI agent</strong> reads a nightly export of the progress to write the next quest, and keeps backups
+  on its own computer. Pick an agent you trust with that, and it never needs to share the data anywhere else.</li>
+</ul>
+
+<h2>Reaching Jane safely</h2>
+<ul>
+  <li><strong>On a home computer or Docker:</strong> by default only that computer can open Jane. To use it from a
+  tablet, open it up to your home network only.</li>
+  <li><strong>On your agent's computer:</strong> it's usually not on your home network, so use a private connection
+  (like a VPN or a private tunnel) rather than a public link.</li>
+  <li><strong>On Cloudflare:</strong> the address is public, so keep in mind the parent page has no passcode yet.</li>
+</ul>
+
+<h2>Safety nets</h2>
+<ul>
+  <li>Progress is backed up before every update and every nightly change.</li>
+  <li>A finished quest can never be changed, and the parts of a quest your kid already reached stay as they were.</li>
+  <li>A quest that breaks the teaching rules is rejected before it reaches your kid.</li>
+</ul>
+</main>
+<footer class="site-footer">
+  <div class="bar">
+    <p>Jane is open source: <a href="https://github.com/kentlangley/Jane">github.com/kentlangley/Jane</a>. Code: MIT. This guide: CC BY-SA 4.0. Details on the <a href="faq.html#credits">credits</a> page.</p>
+    <p>Marble Skill Taxonomy (v1) · © Generative Spark, Inc. (Marble) · <a href="https://withmarble.com">https://withmarble.com</a> · licensed under ODbL 1.0 (database) and CC BY-SA 4.0 (content).</p>
+    <p>No trackers, no cookies, no outside scripts on this site.</p>
+  </div>
+</footer>
+</body>
+</html>

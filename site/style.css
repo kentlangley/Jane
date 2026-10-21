@@ -1,0 +1,87 @@
+/* Jane's friendly guide. Hand-written CSS, no framework. Colours match docs/architecture.svg. */
+@font-face{font-family:"Kalam";font-weight:400;font-display:swap;src:url(fonts/kalam-regular.woff) format("woff")}
+@font-face{font-family:"Kalam";font-weight:700;font-display:swap;src:url(fonts/kalam-bold.woff) format("woff")}
+:root{--bg:#FFFCF5;--ink:#3b2f2a;--brown:#6b4f3a;--day:#FFF6DE;--dayline:#E8A33D;--dayink:#9a520f;--night:#ECE9FB;--nightline:#7B6FD6;
+  --nightink:#4a3f8f;--green:#3f6b44;--greenbg:#E7F4E8;--orange:#D9772B;--card:#fff;--radius:18px;--max:68rem}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:1.075rem/1.65 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+h1,h2,h3,.brand,.btn,.tag{font-family:"Kalam","Comic Neue","Comic Sans MS","Chalkboard SE",cursive,sans-serif}
+h1,h2,h3{line-height:1.2;margin:1.6em 0 .5em}
+h1{font-size:clamp(2.1rem,5vw,3.1rem);margin-top:.4em}
+h2{font-size:clamp(1.55rem,3.4vw,2.1rem)}
+h3{font-size:1.4rem}
+p,ul,ol{margin:0 0 1em}
+li{margin:.25em 0}
+a{color:var(--nightink);text-underline-offset:3px}
+a:hover{color:#2e2672}
+:focus-visible{outline:3px solid var(--orange);outline-offset:3px;border-radius:6px}
+img{max-width:100%;height:auto}
+code{font:.92em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#f4ece0;padding:.1em .35em;border-radius:6px}
+pre{background:#2f2622;color:#fff6e8;padding:1em 1.1em;border-radius:14px;overflow-x:auto;font-size:.92rem;line-height:1.5}
+pre code{background:none;padding:0;color:inherit}
+.skip{position:absolute;left:-999px;top:0;background:#fff;padding:.5em 1em;z-index:10}
+.skip:focus{left:1em;top:1em}
+/* header + nav */
+.site-header{background:#fff7e6;border-bottom:3px solid var(--dayline)}
+.bar{max-width:var(--max);margin:0 auto;padding:.7rem 1.25rem;display:flex;flex-wrap:wrap;align-items:center;gap:.4rem 1.5rem}
+.brand{font-size:1.7rem;font-weight:700;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:.45rem}
+.brand svg{width:34px;height:34px}
+nav ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.2rem .35rem}
+nav a{display:block;padding:.3rem .7rem;border-radius:999px;text-decoration:none;color:var(--brown);font-weight:600;font-size:.98rem}
+nav a:hover{background:var(--day)}
+nav a[aria-current="page"]{background:var(--dayline);color:#2b1d10}
+main{max-width:var(--max);margin:0 auto;padding:1rem 1.25rem 3rem}
+.narrow{max-width:46rem}
+.lead{font-size:1.22rem;color:var(--brown)}
+/* blocks */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:2rem;align-items:center;margin-top:1rem}
+.hero .pitch{background:var(--night);border:3px solid var(--nightline);border-radius:26px;padding:1.4rem 1.5rem}
+.hero .pitch p{margin-bottom:.8em}
+.btns{display:flex;flex-wrap:wrap;gap:.7rem;margin:1rem 0 .3rem}
+.btn{display:inline-block;padding:.55rem 1.15rem;border-radius:999px;font-size:1.2rem;font-weight:700;text-decoration:none;border:3px solid var(--ink);color:var(--ink);background:#fff;box-shadow:3px 3px 0 var(--ink)}
+.btn.primary{background:#FFC94A}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink);color:var(--ink)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(18rem,1fr));gap:1.1rem;margin:1.2rem 0}
+.card{background:var(--card);border:2.5px solid var(--dayline);border-radius:var(--radius);padding:1.1rem 1.2rem}
+.card h3{margin-top:.1em}
+.card p:last-child,.card ul:last-child{margin-bottom:0}
+.card.night{border-color:var(--nightline)}
+.card.green{border-color:#6aa36f;background:var(--greenbg)}
+.card.warn{border-color:var(--orange);background:#FFF1E3}
+.panel{border-radius:26px;padding:1.2rem 1.5rem 1.3rem;margin:1.4rem 0;border:3px solid}
+.panel.day{background:var(--day);border-color:var(--dayline)}
+.panel.night{background:var(--night);border-color:var(--nightline)}
+.panel h2{margin-top:.2em}
+.panel.day h2{color:var(--dayink)}
+.panel.night h2{color:var(--nightink)}
+.tag{display:inline-block;font-size:1rem;padding:.1rem .7rem;border-radius:999px;background:#fff;border:2px solid currentColor;margin-left:.3rem;vertical-align:middle}
+.steps{counter-reset:s;list-style:none;padding:0}
+.steps>li{counter-increment:s;position:relative;padding-left:2.7rem;margin:.75rem 0}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:.05rem;width:2rem;height:2rem;border-radius:50%;background:var(--nightline);color:#fff;font:700 1.05rem/2rem "Kalam",cursive;text-align:center}
+.def{font-size:1.18rem;background:#fff;border-left:6px solid var(--nightline);border-radius:0 16px 16px 0;padding:1rem 1.3rem;margin:1.2rem 0}
+figure{margin:1.5rem 0}
+figure img{display:block;margin:0 auto;border-radius:16px;border:2px solid #eadbc4;background:#FFFCF5}
+figcaption{text-align:center;color:var(--brown);font-size:.95rem;margin-top:.5rem}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.98rem;background:#fff;border-radius:14px;overflow:hidden}
+th,td{border:1.5px solid #eadbc4;padding:.55rem .7rem;text-align:left;vertical-align:top}
+thead th{background:var(--day)}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.table-wrap table{min-width:36rem}
+.cards.stack{grid-template-columns:1fr}
+details{background:#fff;border:2px solid #eadbc4;border-radius:14px;padding:.7rem 1rem;margin:.7rem 0}
+summary{cursor:pointer;font-weight:700;font-size:1.08rem}
+details[open] summary{margin-bottom:.4rem}
+.note{color:var(--brown);font-size:.95rem}
+.site-footer{border-top:3px solid var(--dayline);background:#fff7e6;color:var(--brown);font-size:.93rem}
+.site-footer .bar{display:block;padding:1.2rem 1.25rem}
+.site-footer p{margin:.3em 0}
+@media (max-width:760px){
+  .hero{grid-template-columns:1fr}
+  body{font-size:1.02rem}
+  .bar{gap:.3rem}
+  nav ul{gap:0 .1rem}
+  nav a{padding:.15rem .5rem;font-size:.93rem}
+  .brand{font-size:1.5rem}
+}
+@media (prefers-reduced-motion:reduce){.btn:hover{transform:none}}
