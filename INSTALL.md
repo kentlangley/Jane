@@ -28,6 +28,7 @@ LEARNER_NAME=Sam npm start  # builds, then serves http://localhost:8787  (parent
 | `LEARNER_NAME` | `Explorer` | First name or nickname shown in the app |
 | `LEARNER_AGE` | `10` | Target age for placement and topic choice (designed for ~8-12) |
 | `LEARNER_GRADE` | `upper elementary` | Label for the parent report and pack warnings |
+| `HIDE_REGIONS` | (empty) | Build-time: leave region-specific topics out, e.g. `AU` ([BOT-SETUP → 1](BOT-SETUP.md#1-ask-the-parent-one-question-at-a-time)). Rebuild after changing; Docker: `--build-arg HIDE_REGIONS=AU` |
 | `PORT` | `8787` | Port to listen on |
 | `HOST` | `127.0.0.1` | Interface to listen on. Use `0.0.0.0` to reach it from a tablet on your home network (the parent page has no passcode yet) |
 | `DATA_DIR` | `./local-data` | Where progress, answer logs and lesson packs are stored (one JSON file per key; gitignored) |

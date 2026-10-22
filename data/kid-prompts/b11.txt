@@ -121,7 +121,7 @@ mt_nrXT7pDpG6|Fixing a class sentence, what goes at the end?|A full stop|A capit
 mt_61Pa4Eksva|On a playground plan, the swings are at the top (north). To reach them, walk…|North|South|West
 mt_ejht12jhm2|On a map grid, "B3" means…|Column B, row 3|3 B's in a row|Page 3, box B
 mt_QVUW4olzHP|Which is the biggest scale?|Your country|Your town|Your street
-mt_Juxx4n-8mu|Which country is Australia's closest neighbour to the north?|Papua New Guinea|Canada|Brazil
+mt_Juxx4n-8mu|On a map, the countries right next to yours are its…|Neighbours|Capitals|Continents
 mt_fXE9t2ETGx|On a picture map of your classroom, a tiny drawing of a desk shows…|Where the desk is|How heavy the desk is|Who sits there
 mt_w4cUnN_SsQ|What part of a map explains what the symbols mean?|The key|The title|The border
 mt_PJZf6WGfzl|How many states does Australia have?|6|8|50

@@ -8,6 +8,10 @@ For every item, the engine picks a topic (inside a started quest: review gates b
 stages; otherwise an occasional spaced review → today's pack topics, interleaved with placement diagnostics →
 frontier topics), then chooses content in this order:
 
+Topics the household hides (`HIDE_REGIONS`, e.g. Australia-specific topics; BOT-SETUP.md) are not in `public/tax.json`:
+they never appear in the export's frontier, and `publish-lessons.mjs` rejects a pack that names one. Never plan around them.
+
+
 1. **Today's pack**: the next unanswered question for that topic (the intro card is shown before the topic's first question).
 2. **Procedural math generators** (fractions, decimals/percents, ×/÷, +/−, place value...) for Mathematics topics. A generator always wins over a kid MCQ for the topics it matches, so a math topic whose matching generator would ask the wrong kind of question stays pending.
 3. **Kid MCQ**: a precomputed 3-option question for the topic (`kq`/`ka`/`kw` in `public/tax.json`, sourced

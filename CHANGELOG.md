@@ -6,6 +6,13 @@ Dates are Pacific Time.
 ## [Unreleased]
 
 ### Added
+- **Household region filter** (`HIDE_REGIONS`): `data/regions/AU.txt` tags 26 topics whose content is specifically
+  Australian (Australian Curriculum-only, and about Australian history, government, money, symbols, literature or
+  First Nations Australians' Country). Every topic still plays by default. A household that sets `HIDE_REGIONS="AU"`
+  (env, Docker build arg, or `[vars]` in `wrangler.toml`) gets a build without them: they are left out like pending
+  topics, the prerequisite graph is reconnected around them, they leave the progress total, and medal tiers do not
+  change. Progress and medals already earned on them are kept and still listed. `export-progress.mjs` and
+  `publish-lessons.mjs` check that `public/tax.json` was built with the configured setting and reject hidden topics.
 - **Kid prompts for the new Marble topics** ([#39](https://github.com/kentlangley/Jane/issues/39)): 316 new
   `mt_id|question|right|wrong1|wrong2` lines in `data/kid-prompts/b11.txt`, and 11 math topics made playable through the
   existing generators (they fit: adding and subtracting within 20, sharing and grouping, halves/quarters/eighths, place

@@ -1,0 +1,32 @@
+# AU: topics whose content is specifically Australian (aligned only to the Australian Curriculum v9, and about
+# Australian places, history, government, money, symbols, literature or First Nations Australians' Country). They play
+# by default; a household that sets HIDE_REGIONS="AU" leaves them out of the app (lib-regions.mjs, BOT-SETUP.md).
+# Topics that only use Australia as an example of a general skill (e.g. "neighbouring countries", "dollars and
+# cents", "places in the Asia region") are not tagged.
+# Format: mt_id  # subject > domain > name — why it is region-specific
+mt_PJZf6WGfzl  # Geography > Places & Environments > Australia's states and territories — Australian states, territories and capitals
+mt_axrs4Gfdm9  # Geography > Places & Environments > Connections to Country across Australia — First Nations Australians' connections to Country across Australia
+mt_kt3K54xUPu  # Geography > Places & Environments > First Nations Countries of Australia — map of the First Nations Countries of Australia
+mt_KQRxnwElNc  # Geography > Places & Environments > Caring for Country — First Nations Australians' custodianship of Country
+mt_l-3JUgI80b  # Geography > Places & Environments > Our school's Country — the First Nations Country an Australian school is on
+mt_pK6QkcKxZT  # Geography > Places & Environments > First Nations and local Country — First Nations Australians and the local Country
+mt_CdB3nZHkEA  # History > Family & Community History > National days and commemorations — Australia Day, Anzac Day, NAIDOC Week, National Sorry Day
+mt_Am6mmH2X0s  # History > Modern History > Contact and invasion — the First Fleet and First Nations Australians
+mt_JNzgBlNkx0  # History > Modern History > Life in the first colony — the first British colony at Sydney Cove
+mt_OqDYMyw39G  # History > Modern History > Why Britain colonised in 1788 — why Britain colonised Australia in 1788
+mt_E8IfrMksV0  # History > Modern History > Impact of the colonies — impact of the British colonies in Australia
+mt__25ZZdiEZd  # History > Modern History > Significant people in a colony — a significant person in an Australian colony
+mt_e0I0OSxNFc  # History > Modern History > Why new colonies began — Australian colonies founded after 1800
+mt_a0yi2vpoUn  # History > Modern History > Changing rights in the 1900s — Australian rights and citizenship after Federation
+mt_QayfDN4rTB  # History > Modern History > Federation and the Constitution — Australia's Federation in 1901 and its Constitution
+mt_4GyMkXpZRW  # History > Modern History > Migration stories since 1901 — migration to Australia since Federation
+mt_Mk_Bup-vsr  # Personal & Social Development > Empathy & Social Awareness > Australian national symbols — Australian flags, coat of arms, golden wattle and anthem
+mt_oqrqjd9jm9  # Personal & Social Development > Empathy & Social Awareness > Diverse First Nations peoples — Aboriginal and Torres Strait Islander peoples and languages
+mt_KDIuiKzYTt  # Personal & Social Development > Responsible Decision-Making > Australia's democracy and elections — Australian elections: secret ballot, compulsory voting
+mt_n51zr0RFt4  # Personal & Social Development > Responsible Decision-Making > How Australia's government works — Australia's Parliament, Governor-General and High Court
+mt_f62To2mA0B  # Personal & Social Development > Responsible Decision-Making > Three levels of government — federal, state/territory and local government in Australia
+mt_FSLJbKkryb  # Mathematics > Measurement > Australian coins and simple purchases — Australian coins and notes
+mt_oMkQQ2O-ML  # Mathematics > Measurement > Discounts, GST and balances — Australia's 10% GST
+mt_S2dCRbxdvM  # Science > Scientific Inquiry > Permission to investigate on Country — permissions from Traditional Owners for investigating on Country
+mt__sYpBrdzcp  # English > Reading Comprehension > Sharing ideas about Australian stories — stories by Australian and First Nations Australian authors
+mt_Pp_pizml7n  # English > Reading Comprehension > Australian stories: words and pictures — stories by Australian and First Nations Australian authors
