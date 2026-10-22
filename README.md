@@ -243,6 +243,8 @@ See [CHANGELOG.md](CHANGELOG.md) for what's shipped.
   quest session, and a `reviewHealth` note that tells "not played yet" from "broken".
 
 **Next**
+- **Marble teaching research:** use the taxonomy's new misconceptions, teaching approaches and check-understanding
+  items in nightly quests ([review](docs/MARBLE-TEACHING-RESEARCH-REVIEW.md), tracking [#44](https://github.com/kentlangley/Jane/issues/44)).
 - **Generated Learn-it cards for non-math topics** (today Play mode generates them for math; packs cover the rest).
 
 **Later**
