@@ -73,7 +73,7 @@ add(text(152,290,[{t:'Your kid plays',w:700},'in a browser','(phone, tablet','or
 // app
 add(box(335,190,440,225,{fill:'#fff',stroke:C.dayLine}));add(I.screen(378,226));
 add(text(415,222,[{t:'The Jane app',w:700,s:22}],{size:22}));add(text(415,246,['static UI + engine'],{size:17,color:C.brown}));
-add(text(355,282,['• Marble skill graph: 1,590 topics','• placement and inference','• spaced review (1→3→7→21→60 days)','  and review gates in quests','• grading, "I\'m stuck" help, earned medals'],{size:18,lh:1.3}));
+add(text(355,282,['• Marble skill graph: 1,916 topics','• placement and inference','• spaced review (1→3→7→21→60 days)','  and review gates in quests','• grading, "I\'m stuck" help, earned medals'],{size:18,lh:1.3}));
 // store
 add(box(860,190,295,225,{fill:'#fff',stroke:C.dayLine}));add(I.db(900,228));
 add(text(932,228,[{t:'Progress store',w:700,s:22}],{size:22}));

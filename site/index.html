@@ -61,14 +61,15 @@ from the outside, at night, while everyone sleeps. We call this <strong>Agent-Or
 <a href="how-it-works.html">Here's how it works.</a></p>
 <figure>
   <a href="architecture.svg"><img src="architecture.svg" width="1200" height="1405" loading="lazy"
-    alt="Diagram: How Jane works, an example of Agent-Orchestrated Software. Daytime, learning: your kid plays in a browser; the Jane app (a web page plus Jane's own engine on the Marble skill map of 1,590 topics) checks answers, picks the next question and saves progress in a progress store that lives only in your deployment. No AI runs here. Nighttime, about 1 AM: your Grok Bot or any agent, which may host Jane or not, backs up the progress, reads an export of the day, writes the next quest, checks it with Jane's validator, publishes it, and checks that the progress record did not change. Jane can run on Cloudflare, on a Node server or in Docker, on the bot's computer or anywhere you choose. You see a read-only parent report. Another family can make their own copy from the bot template; kid data stays in each home."></a>
+    alt="Diagram: How Jane works, an example of Agent-Orchestrated Software. Daytime, learning: your kid plays in a browser; the Jane app (a web page plus Jane's own engine on the Marble skill map of 1,916 topics) checks answers, picks the next question and saves progress in a progress store that lives only in your deployment. No AI runs here. Nighttime, about 1 AM: your Grok Bot or any agent, which may host Jane or not, backs up the progress, reads an export of the day, writes the next quest, checks it with Jane's validator, publishes it, and checks that the progress record did not change. Jane can run on Cloudflare, on a Node server or in Docker, on the bot's computer or anywhere you choose. You see a read-only parent report. Another family can make their own copy from the bot template; kid data stays in each home."></a>
   <figcaption>How Jane works. Tap the picture to open it full size.</figcaption>
 </figure>
 
 <h2>Built on a map of what kids learn</h2>
-<p>Jane uses the open <a href="https://github.com/withmarbleapp/os-taxonomy">Marble Skill Taxonomy</a>: 1,590
-small topics across 8 subjects (math, science, English, history, personal and social development, life skills,
-computing, and learning to learn), connected by 3,221 "learn this first" links. That map tells Jane where your kid
+<p>Jane uses the open <a href="https://github.com/withmarbleapp/os-taxonomy">Marble Skill Taxonomy</a>: 1,930
+small topics across 9 subjects (math, science, English, history, geography, personal and social development, life
+skills, computing, and learning to learn), connected by 4,102 "learn this first" links. Jane plays 1,916 of them; the
+rest are held back until they have a good kid question. That map tells Jane where your kid
 is, what comes next and what to review.</p>
 
 <h2>Why "Jane"?</h2>

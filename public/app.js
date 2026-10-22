@@ -146,7 +146,7 @@ function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const vb=zo
  TAX.topics.forEach((t,i)=>{if(zoomed&&t.subject!==zoomed)return;const c=codes[i],[x,y]=pos[i];const rr=c==='x'?rad*.8:rad;
   G[c]+=`<circle class="tp ${c}" data-i="${i}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rr.toFixed(2)}"/>`;
   if(zoomed&&(c==='m'||c==='v'))fl.push(`<path d="M${x.toFixed(1)} ${(y-rr).toFixed(1)} v${(-rad*2.6).toFixed(1)} l${(rad*1.6).toFixed(1)} ${(rad*.6).toFixed(1)} l${(-rad*1.6).toFixed(1)} ${(rad*.6).toFixed(1)}" fill="${c==='v'?'#ff6d00':'#ffc400'}" stroke="#5d4037" stroke-width="${(rad/6).toFixed(2)}"/>`);});
- // one group per state: one filter / one animation per group keeps 1,590 nodes cheap on phones
+ // one group per state: one filter / one animation per group keeps ~1,900 nodes cheap on phones
  s+=`<g class="nodes" stroke-width="${(rad/4).toFixed(2)}"><g class="g-x" fill="#cfd8dc" stroke="#eceff1">${G.x}</g><g class="g-l" fill="${COL.l}" stroke="#fff">${G.l}</g><g class="g-r" fill="${COL.r}" stroke="#fff">${G.r}</g>
  <g class="g-m" fill="${COL.m}" stroke="#fff8e1" filter="url(#glow)">${G.m}</g><g class="g-v" fill="${COL.v}" stroke="#fff">${G.v}</g><g pointer-events="none">${fl.join('')}</g></g>`;
  // fog over locked land (world view only)

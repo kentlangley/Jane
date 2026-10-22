@@ -3,8 +3,8 @@ import {test} from 'node:test';import assert from 'node:assert/strict';import {e
 import {loadEngine,ROOT,tmpDir} from './helpers.mjs';import {coverage} from '../src/coverage.js';
 const {E,g}=await loadEngine();const now=Date.parse('2026-02-02T18:00:00Z');const sub=(c,n)=>c.subjects.find(s=>s.name===n);
 const math=g.topics.filter(t=>t.subject==='Mathematics');const dom=math[0].domain;const other=math.find(t=>t.domain!==dom);
-test('blank learner: Mathematics 0/12 and Science 0/19 seen',()=>{const c=coverage(E.blank(),g,[],{age:10,now});
-  assert.deepEqual([sub(c,'Mathematics').seen,sub(c,'Mathematics').total],[0,12]);assert.deepEqual([sub(c,'Science').seen,sub(c,'Science').total],[0,19]);
+test('blank learner: Mathematics 0/12 and Science 0/20 seen (slice 3 adds Design & Technology), Geography 0/2',()=>{const c=coverage(E.blank(),g,[],{age:10,now});
+  assert.deepEqual([sub(c,'Mathematics').seen,sub(c,'Mathematics').total],[0,12]);assert.deepEqual([sub(c,'Science').seen,sub(c,'Science').total],[0,20]);assert.deepEqual([sub(c,'Geography').seen,sub(c,'Geography').total],[0,2]);
   assert.equal(c.untouched.length,c.total);assert.equal(c.untouched[0].subject,'Mathematics','math first');});
 test('a directly mastered topic in one math area → Mathematics 1/12; an inferred-only topic does not count',()=>{const S=E.blank();
   S.ts[math[0].id]={st:'mastered',how:'direct',c:2,conf:.9,box:0,due:now+864e5};S.ts[other.id]={st:'mastered',how:'inferred',conf:.6,box:2,due:now+30*864e5};

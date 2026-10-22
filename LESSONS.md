@@ -9,9 +9,9 @@ stages; otherwise an occasional spaced review → today's pack topics, interleav
 frontier topics), then chooses content in this order:
 
 1. **Today's pack**: the next unanswered question for that topic (the intro card is shown before the topic's first question).
-2. **Procedural math generators** (fractions, decimals/percents, ×/÷, +/−, place value...) for Mathematics topics.
+2. **Procedural math generators** (fractions, decimals/percents, ×/÷, +/−, place value...) for Mathematics topics. A generator always wins over a kid MCQ for the topics it matches, so a math topic whose matching generator would ask the wrong kind of question stays pending.
 3. **Kid MCQ**: a precomputed 3-option question for the topic (`kq`/`ka`/`kw` in `public/tax.json`, sourced
-   from `data/kid-prompts/b*.txt`, one line per topic: `mt_id|question|right|wrong1|wrong2`, joined by topic id). Every playable non-generator topic has one; topics listed in `data/kid-prompts/PENDING.txt` are not playable yet (not in `public/tax.json`, so not in the export's frontier and not accepted by `publish-lessons.mjs`).
+   from `data/kid-prompts/b*.txt`, one line per topic: `mt_id|question|right|wrong1|wrong2`, joined by topic id). Every playable non-generator topic has one; topics listed in `data/kid-prompts/PENDING.txt` (each with the reason it is held back) are not playable yet (not in `public/tax.json`, so not in the export's frontier and not accepted by `publish-lessons.mjs`).
 4. **Self-check** (last resort): the topic's short `self` prompt, answered "Got it! / Sort of / Not yet".
    The raw Marble `assessmentPrompt` and `evidence` are never shown to the learner.
 
@@ -48,7 +48,7 @@ counts as shown directly (`verified`). Miss: it goes back to learning and the gu
 spot-check never awards a medal. The export's `unverifiedInferred` counts the inferred skills not checked yet.
 
 ## Coverage (explore new areas)
-An **area** is a Marble domain (12 in Mathematics, 19 in Science, and so on). An area is **seen** when it has at least
+An **area** is a Marble domain (12 in Mathematics, 20 in Science, 2 in Geography, and so on). An area is **seen** when it has at least
 1 graded answer (not a self-check) in the exported days, or a topic shown directly with at least 1 correct answer.
 Inferred-only topics don't count. The export's `coverage` lists, per subject, how many areas are seen, and for every
 untouched area (`coverage.untouched`, math and science first) up to 3 ready **starter** topics closest to the target

@@ -1,0 +1,316 @@
+mt_eNJ99tRb3p|You built a game program. Before sharing it, you should…|Test it with planned test cases|Hope it works|Delete the variables
+mt_nfGAtwqSvP|"If space key pressed, then jump." The space key is the program's…|Input|Output|Loop
+mt_iqmt8wL26h|"If it is raining, take an umbrella" is a…|Decision|Repeat|Bug
+mt_6XbAmdmjDb|Your sprite must step 10 times. The shortest program uses a…|Repeat loop|10 start buttons|Bigger sprite
+mt_sPV503BQnI|In a block program, what makes the blocks begin to run?|A start event, like "when flag clicked"|The last block|The color of the blocks
+mt_5UtPmgdoQ9|Your program does something you didn't expect. That's called a…|Bug|Loop|Sprite
+mt_YZOjP8KHsM|In a game, what keeps track of your score as it changes?|A variable|A sprite costume|The background
+mt_sHMpam8zcd|Inside a computer, a photo is stored as…|Lots of numbers|Tiny paintings|Real paper
+mt_WQiVj8gIRs|In binary, computers use only two digits. Which?|0 and 1|1 and 2|0 and 9
+mt_Q57cnsiKsB|How do you know your app meets its design goals?|Try it and check each goal|Ask if it looks cool|Count its colors
+mt_5CcwPYEafI|"As a player, I want a pause button, so that I can take breaks." This is a…|User story|Bug report|Password
+mt_9qF97kGhvq|Before building an app, a good first step is to…|Sketch the screens and steps|Pick a font only|Start typing random code
+mt_WoBE0CZWGg|A good app screen for everyone should be…|Easy to read and consistent|Packed with tiny buttons|Different on every page
+mt_MXxVMCr7_4|Judging a new app, which question matters most?|Who might be left out or harmed?|Is the logo shiny?|Is it the newest?
+mt_QpK9BpUO__|An app for a classmate who can't read yet should use…|Pictures and sounds|Long paragraphs|Tiny text
+mt_9fyI5B1U_V|Testers found your design confusing. Best next step?|Change it and test again|Ignore them|Start a new project
+mt_OKCmMGWczX|Your class keeps forgetting library day. A digital fix could be…|A calendar reminder|A louder bell|A new library
+mt_EfF81YvgXV|Which design goal can you actually measure?|Loads in under 3 seconds|Looks awesome|Feels nice
+mt_Hft-0nxZvB|A device that connects your home computers to the internet is a…|Router|Monitor|Printer cable
+mt_SZrMv3YAky|On a tablet, which one is software?|A drawing app|The screen|The camera
+mt_el7qeUK-Cd|When you send a photo online, it travels as…|Small packets of data|One giant piece|A letter in the mail
+mt_GKL5Usnd11|Which computer part does the "thinking" and follows instructions?|Processor (CPU)|Battery|Speaker
+mt_o0vTMl8vj5|A keyboard is an input. Which one is an output?|Speakers|Mouse|Microphone
+mt_kV441n9SLg|You want a paper copy of your story. Which device do you need?|Printer|Scanner|Headphones
+mt_YfbfIdljWd|Which takes longest to send to a friend?|A long video|A short text|A small emoji
+mt_r5rwyP8zRU|You need to add up a list of costs. The best tool is a…|Spreadsheet|Drawing app|Video editor
+mt_JI0Iv01hCT|In a shared document, how do you suggest a change kindly?|Add a comment|Delete their work|Type in all caps
+mt_d6BsiDtFjP|Your group project needs to track who does what. Use a…|Shared task board|Secret notebook|Single sticky note
+mt_XeT37rd69f|Which file name helps you find your work later?|Volcano report 2026|asdfgh|Untitled 37
+mt_mqMPlNMIEN|A classmate posts a drawing to the class page. A good comment is…|"I love the colors!"|"That's ugly."|Nothing, ever
+mt_ic4dmtTZlw|When an app saves your photo online, it…|Can be seen and kept by others|Vanishes every night by itself|Turns into a paper copy
+mt_gNDkyx19tk|Which one is personal information about you?|Your home address|Your favorite planet in space|The color of the sky
+mt_0sR1xhrn7W|When you finish using your school account, you should…|Log out|Leave it open|Share your password
+mt_y8-x0P5P9R|Which is the best password?|PurpleTiger!Jumps7|password|Your birthday
+mt_0XHRJ49akv|You delete a post. Could it still exist online?|Yes, it may have been copied|No, it's gone forever|Only on Mondays
+mt_h_XQsdIavD|Making a class survey, you should collect…|Only the data you need|Everyone's home address|Secret passwords
+mt_pWaBywSX9V|Why use a different password for each account?|One leak won't unlock them all|It looks fancy|Computers like variety
+mt_qOv8OP8z2G|In a game account, which detail is risky to show everyone?|Your real location|Your avatar's hat|Your high score
+mt_QwCjG9Pexc|Sam and Mia share one dog. Which is right?|Sam and Mia's dog|Sam's and Mia dog|Sams and Mias dog
+mt_lC0gkyimcr|Which book title is written correctly?|The Cat in the Hat|the cat in the hat|THE cat In The hat
+mt_39Yyr1KG7F|In "She whispered the answer," the verb is a…|Saying verb|Thinking verb|Doing verb about running
+mt_G7jhJrOD2P|"Ali has a red bike. Max has a blue one." What does "one" stand for?|Bike|Max|Red
+mt_T0jF7ylSvV|Change to reported speech: Tom said, "I am tired."|Tom said that he was tired.|Tom said, I am tired.|"Tom is tired," said I.
+mt_wtbCz5hBdw|Which is a simple sentence with just one idea?|The dog barked.|The dog barked and the cat ran.|I ran because I was late.
+mt_VRZawp3oFZ|When you write fast, the most important thing is that it's…|Still easy to read|As tiny as possible|In capital letters
+mt_So_5wBv8fI|Your writing is fast but messy. What should you work on?|Forming each letter clearly|Writing even faster|Using only capitals
+mt_oVnNR1lVv6|Change the first sound in "cat" to /h/. What word?|Hat|Cot|Cap
+mt_xvKvxDXdJj|How many words in "I like big dogs"?|4|3|5
+mt_-nj-DnW4uU|Which word starts with the blend "st"?|Stop|Shop|Sock
+mt_7DEMuNxUTh|How many sounds in "frog"?|4|3|2
+mt_v9qTyarbgE|Take the /p/ out of "spin." What word is left?|Sin|Pin|Spit
+mt_j89i4u2fKr|Which one has alliteration?|Silly snakes slide|The big red bus|A cat and a dog
+mt_dgheXIYAD-|Which word starts with three consonant sounds?|String|Sting|Ring
+mt_Pp_pizml7n|In a picture book, how does the illustrator help tell the story?|Pictures show characters and setting|They write the page numbers|They pick the price
+mt__evtvKA25j|A story that teaches facts about frogs is…|An informative narrative|A persuasive letter|A shopping list
+mt_VJEQ32O0Ae|"Buy Zoom Shoes! Run faster today!" This text's purpose is to…|Persuade|Entertain with a story|Give instructions
+mt__CFtXgDaEL|On a news website, a link lets you…|Jump to another page|Print a newspaper|Change the font forever
+mt_qdd0t4Sj6A|A story is set on a stormy island. How might the setting affect the characters?|They may feel scared or stuck|It has no effect at all|They turn into birds
+mt_ix4nIsZzS3|Why can readers in different places see one story differently?|Their own culture shapes how they read|The words change in each country|Only one reader can be right
+mt_ORlMNVV4FL|In a comic, putting the panels in a new order would change…|The meaning of the story|The paper size|Nothing
+mt_oX753JF2Ub|A film shows only a character's face, very big. That shot is a…|Close-up|Long shot|Map view
+mt_q2jwCeUZ9s|A recount of your weekend tells events…|In the order they happened|In random order|Only the ending
+mt_yIk_4o0MOa|A science procedure is usually written as…|Numbered steps|A rhyming poem|A love letter
+mt__PcuXj7_I1|On a website, the "home" button takes you to…|The main page|The last page you read|Your bedroom
+mt_RNYNrRMqKL|"The tiny kitten shivered in the cold rain." Picturing this helps you…|Understand how the kitten feels|Count the pages|Skip the next part
+mt_VitRPAsDik|An old ad says "Smoking is good for you!" This shows the ad was made…|When people believed different things|By doctors who studied it last week|To warn people about smoking
+mt_YrDlg_J4kQ|To find which page talks about sharks, check the…|Index|Cover picture|Last sentence
+mt_w5sIW_-T_J|On a reading app, how do you usually turn to the next page?|Swipe or tap the arrow|Shake the tablet|Close the app
+mt_fruAJ2RaRT|Comparing a 1950s ad and a new ad for the same toy, you'd likely notice…|Different words and pictures|Exactly the same thing|Neither has words
+mt_f7RadQGOnQ|"The wind whispered through the trees" uses…|Personification|A math fact|A question
+mt_qUKddG0UYv|A labelled diagram in a science book is there to…|Give facts|Tell a made-up story|Decorate the page
+mt_GbisjfWodT|Telling what a story was mostly about is called…|Summarising|Spelling|Drawing
+mt_hvmqr1qcTU|"I used to be a baker, but I couldn't make enough dough." This joke is a…|Pun|Simile|Fact
+mt_7-N8TmQUsB|A story mentions horse carts and candles. It's probably set…|Long ago|In the future|On the Moon
+mt_pxIoWWZy8L|On a screen, you read text…|Top to bottom, left to right|Bottom to top|Right to left only
+mt_7xt5pXdVvl|An author always uses twist endings and funny narrators. That's their…|Style|Index|Glossary
+mt_ty63-JSHTC|"Buzz," "crash," and "sizzle" are examples of…|Onomatopoeia|Rhymes|Questions
+mt_OTFABm2xdf|When you clap along to a nursery rhyme, you're keeping the…|Beat|Spelling|Title
+mt_M-S5oQhxYa|A safety poster for 5-year-olds should use…|Simple words and big pictures|Long technical words|Tiny print
+mt_JcLwbDGGvJ|A poem and a fact report are both about bees. How do they differ?|The poem shares feelings; the report, facts|The report rhymes; the poem has facts|They're exactly the same kind of text
+mt__sYpBrdzcp|A story reminds you of your own family trip. That's called…|Making a connection|Skimming|Copying
+mt_BGMS9We5w9|Stories from many cultures have a clever trickster character. This shows…|Similar storylines appear around the world|Only one country tells stories|Stories never repeat
+mt_uQI6mhU6hW|Looking quickly for one date in a long article is called…|Scanning|Summarising|Rhyming
+mt_mSpJK-rKW_|"The silver snake slid silently." Why use all those s sounds?|To sound quiet and sneaky|To fill space|By accident
+mt_Sg-jC5f9L6|A good speech usually ends with a…|Conclusion that sums up|Brand-new topic|Random joke only
+mt_5zTlbDWkDI|A recipe usually starts with a goal, then…|Ingredients, then steps|The ending, then a rhyme|Steps, then a story
+mt_UcmVDMgFGX|Reading a story set in another country helps you…|Learn how others live|Forget your own life|Read faster
+mt_nePS3LNvBy|A poster saying "Join the reading club!" is trying to…|Persuade you|Tell a fairy tale|Teach math
+mt_sQYvGbYD1I|Which one is a text?|A stop sign|A rock|A cloud
+mt_rKwE6w2V6G|A text talks about sending letters by telegram. When was it likely written?|Long ago|Last year|Next year
+mt_vC-_ESyMut|While watching a nature video, which question helps you understand it?|What is the main message?|How long is the video file?|What color is the remote?
+mt_E2iv1E6klO|Picturing a complex science explanation in your head helps you…|Understand and compare the ideas|Skip the hard words|Read it upside down
+mt_2jksKpNzeF|Making a mental movie of a story helps you judge…|Whether the details make sense|How much the book costs|What font the book uses
+mt_TffvIu6VgG|What helps a chant hang together and be easy to remember?|Repeated lines and rhymes|Very long words|No rhythm at all
+mt_HF1t82HCJu|A recipe is a text that…|Tells you what to do|Tells a fairy tale|Tells a joke
+mt_JWjSZNk1Qy|A book with big pictures and few words is probably for…|Young children|Doctors|Scientists
+mt_vPmPulZtJG|"The old man grumbled and stomped away." The words show he is…|Grumpy|Cheerful|Sleepy
+mt_dALEWRHXnZ|"Would you like a cookie?" This is…|An offer|A command|An exclamation
+mt_r-BgS-lqTe|Your friend gives instructions you don't understand. What should you do?|Ask them to explain again|Guess and hope|Walk away
+mt_mpzmwTktqF|How would you greet your school principal?|"Good morning, Ms. Lee."|"Yo, what's up?"|"Hey, buddy!"
+mt_2_fB4LuVwc|Playing shopkeeper, what might you say?|"How can I help you?"|"Go to bed!"|"Pass the ball!"
+mt_k0-aLFge4X|Which phrase helps build a friendship?|"Let's work together!"|"Go away."|"That's your problem."
+mt_bJyOTtP0b6|Writing to the mayor, your language should be…|More formal|Full of slang|All emojis
+mt_gBK8uXQlQW|In a talk about volcanoes, which word is most precise?|Magma|Stuff|Hot thing
+mt_cIxLOPS1Hc|In a presentation, every fact and picture should…|Support your main idea|Be random|Be about something else
+mt_PsQdUQBw0D|Which is a fact, not an opinion?|Dogs have four legs.|Dogs are the best pets.|Cats are boring.
+mt_1m4J4KOjPy|A short talk needs an opening, details, and a…|Conclusion|Price tag|Secret
+mt__q8ln4Lvf7|In a talk about the heart, which is a technical word?|Ventricle|Thingy|Big part
+mt_MIA4wfENUm|"I've told you a million times!" is an example of…|Hyperbole|A fact|A question
+mt__3hJj0H4HF|In math, "volume" means space inside. In music, "volume" means…|How loud it is|How fast it is|How old it is
+mt_NTAc_EMeHZ|You loved a book's talking-animal hero. In your own story, you could…|Create your own talking animal|Copy the whole book|Never write about animals
+mt_9V8Z386RDx|Changing "The Three Little Pigs" so it happens in space changes the…|Setting|Title page only|Author
+mt_78-pnKfzmv|A slideshow about rainforests should mix text with…|Pictures that help explain|Lots of random memes|Nothing, just text
+mt_sxcE47yOvd|A story hints early that a storm is coming later. That's…|Foreshadowing|Flashback|A glossary
+mt_KpBg1_T_84|Which line rhymes with "The cat sat on a mat"?|And wore a funny hat|And ran to the store|And barked at the dog
+mt_AHXePdicRf|A poster about the water cycle works best with a…|Labelled diagram|Blank page|Photo of your shoe
+mt_cB_j7towTD|Making your own version of a repeating-pattern book, you'd…|Keep the pattern, change the words|Remove all the patterns|Copy it word for word
+mt_cGzd5z56FB|When retelling a story, you should keep the…|Main events in order|Same page numbers|Book's price
+mt_DcSMuVWgKU|"The moon was a silver coin" is a…|Metaphor|Simile|Fact
+mt_nrXT7pDpG6|Fixing a class sentence, what goes at the end?|A full stop|A capital letter|A comma
+mt_61Pa4Eksva|On a playground plan, the swings are at the top (north). To reach them, walk…|North|South|West
+mt_ejht12jhm2|On a map grid, "B3" means…|Column B, row 3|3 B's in a row|Page 3, box B
+mt_QVUW4olzHP|Which is the biggest scale?|Your country|Your town|Your street
+mt_Juxx4n-8mu|Which country is Australia's closest neighbour to the north?|Papua New Guinea|Canada|Brazil
+mt_fXE9t2ETGx|On a picture map of your classroom, a tiny drawing of a desk shows…|Where the desk is|How heavy the desk is|Who sits there
+mt_w4cUnN_SsQ|What part of a map explains what the symbols mean?|The key|The title|The border
+mt_PJZf6WGfzl|How many states does Australia have?|6|8|50
+mt_KQRxnwElNc|First Nations rangers use careful "cultural burning" to…|Care for land and stop big fires|Clear space for new malls|Scare animals out of parks
+mt_svBtqePrBP|Volunteers pick up litter in a park. They are…|Caring for a place|Changing the seasons|Building a city
+mt_r_ja_V9Q70|A rainforest, a farm and a bridge. Which is a natural feature?|The rainforest|The farm|The bridge
+mt_axrs4Gfdm9|First Nations peoples connect to their land through…|Culture, stories and seasons|Shopping malls and roads|Highways and airports
+mt_kt3K54xUPu|Before 1788, Australia was made up of…|Many First Nations Countries|One empty land with no people|A single kingdom with one king
+mt_VIUF5Vspbg|Raising fish in ponds or tanks for food is called…|Aquaculture|Forestry|Mining
+mt_DxSbKzl-C-|Which plant is grown to make clothes?|Cotton|Carrots|Wheat
+mt_n3ojDXoaqC|A country sells wheat to other countries. This connection is…|Trade|Migration|Weather
+mt_hoc__Jx3sa|Why grow tomatoes in a greenhouse?|To control warmth and protect them|To hide them|Because sunlight hurts all plants
+mt_9wfokahWw6|Which helps a town prepare for floods?|Levees and flood warnings|Building houses in the river|Removing all the drains
+mt_cUpJvBD1YA|Which is a managed feature?|A farm field|A mountain|A river
+mt_ZY38c705Ce|Building a dam on a river changes the place by…|Creating a lake|Making the river disappear everywhere|Changing the season
+mt_lyxrFwNUqE|Which country is in Asia?|Japan|Mexico|Egypt
+mt_BYl4sds1SM|Which product comes from sheep?|Wool|Eggs|Honey
+mt_5zPXTvZTcX|What can make a place special to you?|Memories of being there|How tall its buildings are|Being shown on TV
+mt_bFK6owxsmi|Why do animals need forests and rivers?|For food, water and shelter|To look pretty|They don't need them
+mt_zbEcwd40uv|Which is a celebration many families share?|A birthday|A Tuesday|Bedtime
+mt__F_i67waLN|When your grandparents were kids, they most likely played with…|Board games and balls|Smartphones and tablets|Video calls and apps
+mt_pBvABgZo5O|Old family photos help you learn…|How families have changed|Tomorrow's weather|Math facts
+mt_wlhg-ivMh6|A new railway station opens in town. A likely effect is…|More people move there|The town disappears|Nobody travels
+mt_2qc_Kq63Le|Why might an old town hall be important to a community?|It holds stories and memories of the past|It's the newest building|It sells snacks
+mt_0O4mXv3asF|Your mom's mom is your…|Grandmother|Aunt|Cousin
+mt_CdB3nZHkEA|Anzac Day in Australia remembers…|Soldiers who served in wars|The first day of school|A sports final
+mt_MVlTa0XKgo|Before phones, how did people send messages far away?|Letters and telegrams|Text messages|Video chats
+mt_mRU4H9-fgb|On a timeline, each event needs a date and…|A short note about it|A color only|A rhyme
+mt_3itytx4K1v|On a picture timeline, which goes first?|Baby photo|School photo|Grown-up photo
+mt_x08z0N0HX8|You find an old iron. A good history question is…|Who used it and how?|Is it shiny?|Can I eat it?
+mt_196Gb4q6a5|"Long ago, people washed clothes by hand." This sentence is about the…|Past|Future|Present only
+mt_69w5GVudJl|Put in order: you learn to walk, you start school, you're born. What's first?|You're born|You start school|You learn to walk
+mt_a0yi2vpoUn|In 1902, a big change in Australia let many women…|Vote in national elections|Become kings|Stop paying for food
+mt_Am6mmH2X0s|Why do many First Nations Australians call 1788 an invasion?|Their lands were taken|It was a big holiday|Nobody lived there before
+mt_QayfDN4rTB|In 1901, Australia's colonies joined to form one nation. This is called…|Federation|Invasion|Migration
+mt_E8IfrMksV0|How did British colonies affect First Nations Australians?|They lost land and many lives|Nothing changed|They all moved to Britain
+mt_JNzgBlNkx0|Many people who arrived at Sydney Cove in 1788 were…|Convicts|Tourists|Astronauts
+mt_4GyMkXpZRW|After World War II, many migrants came to Australia looking for…|Safety and work|Snow|Dinosaurs
+mt__25ZZdiEZd|Studying a famous colonist, you'd want to know…|What they did and why it mattered|Their favorite color|Their shoe size
+mt_OqDYMyw39G|One reason Britain sent convicts to Australia was that…|British prisons were overcrowded|Australia asked for them|They needed tourists
+mt_e0I0OSxNFc|Why did new colonies like Swan River start after 1800?|To claim land for farms and trade|To build big theme parks|Ships got lost by accident
+mt_yDQmYTrrzP|A farmer's tractor is which kind of resource?|Capital|Natural|Human
+mt_k6_dUr_oH6|When cutting food, the "claw grip" keeps your…|Fingertips safe|Knife clean|Food warm
+mt_NbkUKcOlEX|Why do cut apples turn brown?|They react with air|They get cold|They get sad
+mt_EWiY8-opdd|Before you help cook, the first thing to do is…|Wash your hands|Taste everything|Turn on the TV
+mt_F62VTeHB4-|Which is a healthy snack you could make?|Apple slices and cheese|A bag of candy|A can of soda
+mt_QeKWt4BZn3|Start at 3 and keep doubling: 3, 6, 12, … What comes next?|24|15|18
+mt_W3VOAuFwVw|5, 9, 13, 17, … What's the rule?|Add 4|Add 5|Double it
+mt_nx4a3kH-59|Rule: if a number is even, halve it; else add 1. Start at 7. Next?|8|3.5|14
+mt_ZjIFGc6zPW|Pattern: ★●●★●●★●●. What's the repeating part?|★●●|★●|●●★●
+mt_zQfWqImxva|Start at 4. Add 5 until the number is over 20. Where do you stop?|24|20|19
+mt_0ZDouU664X|Why count 80 beans in groups of ten?|It's faster and easier to check|It makes there be more beans|Groups of ten look prettier
+mt_BK5xwkrD5C|A ten frame has 5 dots in the top row and 2 below. How many?|7|5|52
+mt_t9BICauBSI|A die shows ⚃ (four dots in a square). Without counting one by one, how many?|4|5|3
+mt_ZfpeI1CFyP|Data: 2, 4, 6. The mean is 4. What's the mean distance from the mean?|About 1.33|4|0
+mt_8VjmxR1yfw|In a box plot, the line inside the box shows the…|Median|Maximum|Mode
+mt_QpJydot2Kh|To compare how many kids picked each pet, the best display is a…|Bar graph|Line graph|Map
+mt_ebQURBOsM5|To answer "What's our class's favorite fruit?" you should…|Survey your classmates|Guess|Ask one friend
+mt_yrvYKSwSRZ|An online survey form is handy because it…|Collects answers into a table for you|Picks the answers itself|Draws pictures
+mt_mn765HbXi1|Comparing two classes' test scores on side-by-side graphs, both should use…|The same scale|Different colors only|Different scales
+mt_TiFjjvBMaY|Most values bunch on the left with a long tail to the right. The shape is…|Skewed|Symmetric|Flat
+mt__yvsKKp3TS|A tally chart and a bar graph show the same votes. What's the same?|The votes for each choice|The pictures they use|The colors they use
+mt_km4V6d5IAh|Random samples: Group A median 9, Group B median 4, similar spread. Best guess?|A is generally higher|They're exactly equal|B is generally higher
+mt_Y6JmLjnfRP|What's the first step of a statistical investigation?|Pose a question|Draw the graph|Write the conclusion
+mt_8IsaoMPvod|A bar graph's axis starts at 90, not 0. This can make differences look…|Bigger than they are|Smaller than they are|Exactly right
+mt_X53txVXOcG|You tally favorite colors on a tablet. To compare them, show them as a…|Bar graph|Paragraph|Clock
+mt_OwYms2tB1L|A dot plot has two separate clumps of dots. That feature is called…|Clusters|Skew|Outlier
+mt_JRzXQl9M7c|On a dot plot, three dots above 7 means…|The value 7 appears 3 times|7 people scored 3|There are 7 values in all
+mt_fQ9Rw10fss|In a random sample of 50 students, 10 walk to school. Estimate for 500 students?|About 100|Exactly 10|About 50
+mt_kxeuXm6EyC|After making a graph of your survey, the last step is to…|Answer your question with it|Throw the graph away|Make up some new data
+mt_oderfUBZPw|Unlike a bar graph, a histogram's bars…|Touch with no gaps|Are always red|Show words
+mt_A2hKhHXgL5|Two dot plots barely overlap. The groups are…|Clearly different|The same|Impossible to compare
+mt_x7V1qrkiqH|Three random samples from the same jar give 30%, 34% and 28% red. Why different?|Samples vary by chance|Someone cheated|The jar changed color
+mt_HlNSurPVDp|A line graph shows a plant: 2 cm on Monday, 8 cm on Friday. How much did it grow?|6 cm|10 cm|4 cm
+mt_SHVyE1CLUa|You want to know if kids sleep less on weekends. What do you plan first?|What data to collect and how|The graph colors|The final answer
+mt_4zgPzc6yu5|To learn what all students think, you only ask the soccer team. That sample is…|Biased|Random|Perfect
+mt_KCS9GbZgU_|The interquartile range is…|Upper quartile − lower quartile|Biggest value − smallest value|The median of all the data
+mt_O-U263ukg1|Your survey question was confusing. What should you do?|Fix the question, ask again|Keep the confusing data|Guess the answers instead
+mt_iykH2P5oFq|Which is a statistical question?|How tall are kids in our school?|How tall am I right now?|What is 5 + 5?
+mt_QHT16CrFO-|In a spreadsheet of favorite sports, the mode is…|The sport picked most often|The last sport listed|The total number of sports
+mt_6gpryAnpoZ|A dot plot has 12 dots. How many observations (n)?|12|1|The tallest stack
+mt_tuEnyrp5Ia|A good data summary includes the number of values, the units, the centre and the…|Spread|Font|Author's age
+mt_SK7WntVZ6y|A house drawing is a square with a triangle on top. These are…|Familiar shapes combined|One circle|Random lines
+mt_h02-C8PRrj|Slice a cylinder parallel to its base. Each slice is a…|Circle the same size|Smaller circle each time|Square
+mt_NM5I3yN-Q6|How many times does a square match itself in one full turn?|4|2|1
+mt_h7zVgCDVmx|Points (2, 1) and (2, 6) are corners of a shape. How long is that side?|5 units|8 units|4 units
+mt_LBT-9jz7kR|An angle bigger than a straight angle but less than a full turn is…|Reflex|Acute|Right
+mt_Sij9ByyHq6|A cube has 2 cm edges. Its surface area?|24 cm²|8 cm²|12 cm²
+mt_61Nhj8W78f|Shapes that fit together with no gaps or overlaps make a…|Tessellation|Hexagon|Net
+mt_RdfzwInyAj|After sliding a triangle across the screen, what stays the same?|Its sides and angles|Its position|Its place on the screen
+mt_4bc3EAxhlY|Can a triangle have sides 2 cm, 3 cm and 10 cm?|No, the short sides can't reach|Yes, any lengths work|Only if it's a right triangle
+mt_mN4Ye_vtR7|Why are wheels shaped like circles?|Curved edges roll smoothly|Circles are cheaper|Squares are too pretty
+mt_FVVSQR9vGg|A calculator shows 4.5 after adding prices in dollars. That means…|$4.50|$4.05|45 cents
+mt_ish_uH8vZe|A calculator says 48 × 21 = 10,080. You estimate about 1,000. Most likely…|A key was pressed wrong|Calculators are always right|Estimates don't matter
+mt_i2-QaXbyzB|To find the area of an odd-shaped polygon, you can…|Split it into simpler shapes|Count how many corners it has|Measure just its longest side
+mt_FSLJbKkryb|A bigger coin is always worth more. True?|No, size doesn't show value|Yes, always|Only for gold coins
+mt_Qe2PsFmSAH|500 g for $4 or 1 kg for $7. Which is the better buy?|1 kg for $7|500 g for $4|Same price per gram
+mt_bnwHo5wfCD|Jar A fills a cup twice, Jar B fills it three times. Which holds more?|Jar B|Jar A|They're the same
+mt_oMkQQ2O-ML|A $40 game is 25% off. The sale price?|$30|$15|$35
+mt_9L5qyBYmg-|How many cents are in $3.45?|345c|3.45c|34c
+mt_5bmrA-0pBi|You buy items for $2.95, $4.10 and $2.90. About how much in total?|About $10|About $5|About $100
+mt_8cs4YPkp23|3 pencils cost $2 each. You pay with $10. Your change?|$4|$6|$8
+mt_MgsDabdnr1|The minute hand points to the 3. It's…|Quarter past|Quarter to|Half past
+mt_SOM6Imm2sO|A pencil ends halfway between the 7 cm and 8 cm marks. Its length?|7.5 cm|7 cm|8.5 cm
+mt_5J2quSTspi|On a Roman-numeral clock, the hour hand points to IX. What hour is that?|9|11|4
+mt_e7tLi9SCIE|You measure a desk in paper clips, then hand spans. Which count is bigger?|Paper clips|Hand spans|They're the same
+mt_mMDpLugX2X|A spreadsheet adds 10% tax to a $20 price. The total?|$22|$30|$20.10
+mt_tegkuJA5gM|A net of a cube is made of how many squares?|6|4|8
+mt_tVvZVWO5d6|Today is Monday the 3rd. What date is next Monday?|The 10th|The 4th|The 9th
+mt_dlg6i-Lw0I|You flip a coin twice. Does the first flip change the second?|No, they're independent|Yes, always|Only if it's heads
+mt_aCwj2PCoRV|A fair spinner has 4 equal colors. The probability of red is…|1/4|1/2|4
+mt_nzdtOLXWWa|To simulate a 50-50 chance, which device works?|A coin|A die with one red side|A calendar
+mt_8DT3LXwwH-|As you flip a coin more and more times, the fraction of heads gets closer to…|1/2|0|1
+mt_CUJr8L5_Wn|A map scale doubles every length. What happens to areas?|They become 4 times bigger|They double|They stay the same
+mt_Mk_Bup-vsr|Which flower is Australia's national floral emblem?|Golden wattle|Red rose|Tulip
+mt_oqrqjd9jm9|Before 1788, about how many First Nations languages were spoken in Australia?|More than 250|Just 1|About 5
+mt_O12GEyNwSi|An ad only ever shows girls cooking and boys fixing cars. This is a…|Gender stereotype|Fact about everyone|Science result
+mt_x3DJWIEHBq|Why does belonging to a team or club matter?|It helps you feel included|It doesn't matter at all|It makes you famous
+mt_urxvHF8Vds|"Dance is just for girls," a boy hears. Stereotypes like that can…|Stop people trying things|Make dancing easier to learn|Help everyone choose fairly
+mt_1kdEZRLyaZ|Diwali, the festival of lights, is celebrated by many…|Hindus|Astronauts|Penguins
+mt_sh1Mq-mshx|You want to use your friend's markers. What should you do first?|Ask if you can borrow them|Just take them|Hide them
+mt_-WhvVTsKV-|You asked to borrow a ball and your friend said no. What's respectful?|Accept the answer|Take it anyway|Keep asking until they give in
+mt_L8y31QOR6s|Someone wants to hold your new toy, and you'd rather not. What can you say?|"No thanks, not right now."|Nothing, just cry|Grab it and run
+mt_7b8EHUBoxd|You told a trusted adult about a problem, but nothing changed. Now…|Keep telling until you get help|Give up and stay quiet|Keep it a secret forever
+mt_hkIbGmuH7D|When do you need permission before posting a photo online?|When other people are in it|Never|Only on weekends
+mt_KDIuiKzYTt|In Australia's elections, adult citizens…|Must vote|Can never vote|Vote only once in life
+mt_g8gJIsDxmj|Neighbours want a safer crossing near school. A good action is a…|Petition to the council|Secret wish|Loud argument
+mt_DRNXFr0ds6|A skull and crossbones on a bottle means…|Poison, don't touch|Pirate treasure|Free candy
+mt_wudskBtVQc|A poster says "Wash your hands!" What's its purpose?|To keep people healthy|To sell soap only|To decorate the wall
+mt_Amojd_oviu|Which is the most reliable health information?|A government health website|A random video|An ad for candy
+mt_n51zr0RFt4|Who leads Australia's government?|The Prime Minister|The President|The Mayor
+mt_JumBNYAiA_|Your park has too much litter. Which plan helps most?|Add bins and organize a clean-up|Close the park forever|Ignore it
+mt_OTrQJVRRJ6|"Drink Super Juice and be a sports star!" This ad mainly wants to…|Sell you something|Give health facts|Tell a story
+mt_OzdI2-ZoXX|Which is a law, not just a family rule?|Wearing a seatbelt in a car|No phones at dinner|Bedtime at 8
+mt_Udv6pH1nRh|A stranger in a game asks you for a photo. What should you do?|Block them and tell an adult|Send the photo|Keep it a secret
+mt_f62To2mA0B|Which level of government usually collects your trash?|Local council|Federal|The United Nations
+mt_blzW9Z8J7-|Which service is usually run by a local council?|Parks and libraries|The army|Passports
+mt_IiWjd0377Z|Who usually makes the rules at your school?|The principal and school leaders|The bus driver|The lunchbox maker
+mt_tF6XuKIq8_|Why do people volunteer in their community?|To help others and belong|Because they must|To get rich
+mt_nHvYYrhoM7|What makes you special?|Your likes and strengths|Only the shoes you wear|Nothing about you
+mt_a0_W_oIEQg|You lost a big game but practised and got better. This shows…|Setbacks can make you stronger|Losing means quitting|Practice never helps
+mt_ij20XUbMHg|Your friend always helps others. That's a quality called…|Kindness|Laziness|Rudeness
+mt_dXP_wBLIwU|Which can shape who you become?|Family, friends and places you live|Only your hair color|Nothing at all
+mt_-beOa1AO6W|You're moving to a new school. A good way to cope is to…|Talk about it and plan|Hide how you feel|Refuse to go
+mt_DnvWzDjoD8|Designing a playground, engineers must balance safety, cost and…|What kids need|The weather tomorrow|Their favorite song
+mt_Re97rQJx_e|Which tool is best for cutting a small piece of wood safely?|A junior hacksaw|Safety scissors|A plastic spoon
+mt_FtCLISvSGw|To join two pieces of card so they can still turn, use a…|Split pin|Glue stick|Paper clip
+mt_qKHfQjgNMk|Who designs buildings?|Architects|Pilots|Chefs
+mt_eFj9uWaPMI|A pedestrian crossing was designed to…|Help people cross safely|Decorate the road|Slow down birds
+mt_cOJhDeLkPo|Using recycled materials in a design is about…|Sustainability|Speed|Color
+mt_rSjwQLqLXH|A saw with fine teeth is best for…|Smooth, careful cuts|Very fast rough cuts|Cutting paper
+mt_TrISKhznZt|Before building a toy car, you test different wheels to find…|Which works best|Which is prettiest|Which is cheapest only
+mt_xvHpeB03k5|How should you carry scissors?|Closed, pointing down|Open, pointing up|Spinning
+mt_aGuP78tRMo|Before using a hot glue gun, a good safety step is…|Setting up a stand to rest it on|Holding the metal tip|Working as fast as you can
+mt_K1jLX9FXdl|Making a model with a partner, you should first…|Agree on the steps and who does each|Each build different things|Start without talking
+mt_4fK8Bb8Tr_|A project plan should list materials, tools, time and…|Cost|Your favorite food|Jokes
+mt_hE05udHee7|Making a birdhouse, which step comes first?|Measuring the wood|Painting it|Hanging it up
+mt_Q2Zj3L8u9C|A lunchbox was designed to…|Carry food safely|Look scary|Hold shoes
+mt_-Sk53QkyS0|Why trial different joins before making the final product?|To find which is strongest|To waste time|To make it heavier
+mt_8NYqAhHCa-|A river slowly carving a canyon over millions of years is…|Erosion|Melting|Evaporation
+mt_wH4t4TH0Yw|Which property tells how easy a mineral is to scratch?|Hardness|Color|Smell
+mt_MRCnuYwnFQ|Testing if light affects plant growth, what must stay the same?|Water and soil|The amount of light|Nothing
+mt_RhlY8jeu7Q|You put a cold spoon in hot soup. What happens to the spoon?|It gets warmer|It gets colder|It stays the same
+mt_Dg5lQZFpav|Which object will roll best?|A ball|A block|A book
+mt_mYujFoIsVG|You break a chocolate bar into pieces. The pieces are…|Still chocolate|A new material|Water
+mt_RdIBKLbgyp|What makes ice melt?|Adding heat|Removing heat|Shaking it
+mt_i8AGTuk4fJ|Which material is natural, not made by people?|Wool|Nylon|Plastic
+mt_fQHBicp1Rf|Labels and notes on a design drawing help others…|Understand your ideas|Color it in|Ignore it
+mt_jIUuqbJJRb|Your results differ from your friend's. What's a good next step?|Ask why and test again|Say they're wrong|Copy their results
+mt_3l9OJkjksw|Which choice reduces waste in a design?|Reusing old boxes|Using new plastic every time|Throwing extras away
+mt_CBXBu5e4Iv|A drawing that shows all the parts of a toy pulled apart is an…|Exploded view|Map|Pie chart
+mt_LADBSIowuS|Two groups got different results. What should you check first?|Whether both tests were fair|Who is louder|Which group is bigger
+mt_vLLyGZQ2AM|Your class got different results from another class. A likely reason is…|They used a different method|Science is random|One class is smarter
+mt_MRQcEvyPJv|You predicted the ice would melt in the sun, and it did. Your prediction was…|Correct|Wrong|Not tested
+mt_P2nm-qVnvd|A drawing app helps you share design ideas because you can…|Easily change and show them|Make them smell|Make them real instantly
+mt_0MI9ybM3j_|After finishing a project, a good question to ask is…|What could we do better?|Who should we blame?|Why did we even bother?
+mt_K5Zqgu7rzp|In science class, what should you never do with an unknown substance?|Taste it|Tell an adult about it|Look at it
+mt_tlfSqLFm_Y|Birds at the feeder doubled this week. Does that alone explain why?|No, you need more evidence|Yes, always|Birds can't be counted
+mt_VLBf624ElK|Your team must agree on what makes the design good. These are…|Design criteria|Secrets|Bugs
+mt_E-E8z9ZZOz|To find a pattern in plant heights, it helps to put them in a…|Table, in order|Pile|Song
+mt_S2dCRbxdvM|Before collecting samples at a park or beach, you should…|Check the rules and ask permission|Take whatever you want|Go at night
+mt_v5pOal_23d|Planning a test with hot water, you list hazards and…|Ways to stay safe|Snacks|Guesses
+mt_TTH2ouwyTW|Before starting an experiment, you should…|Read and follow the safety steps|Mix everything together|Skip the instructions
+mt_q2MKwlPl_u|Why do scientists share their data?|So others can check it|To show off to friends|They never share data
+mt_AigeWFgWIo|Which design is most sustainable?|One you can take apart and reuse|One you throw away after a day|One that uses lots of energy
+mt_fKAq8aOfhD|To share what you found in an experiment, you could make a…|Poster with a short report|Secret code nobody reads|Silent dance
+mt_89qLyvE70d|Using a glass thermometer, you should…|Handle it gently and keep it upright|Shake it hard|Use it to stir paint
+mt_nZaqNZaN0V|What causes Earth's seasons?|Earth's tilt as it orbits the sun|Earth getting closer to the sun|Clouds
+mt_GtL2PVfRYP|A bright "star" slowly changes position over weeks. It's probably a…|Planet|Cloud|Plane
+mt_vbbxnY7ZDT|When you sneeze, you should cover it with…|Your elbow or a tissue|Your bare hand, then touch things|Nothing
+mt_2eVg4Tt5r0|Going out in strong sun, a healthy habit is to…|Wear a hat and sunscreen|Skip water|Stay out all day
+mt_zIcYzrrO0Z|When you pluck a guitar string, the sound comes from…|The string vibrating|The color of the guitar|The air staying still
