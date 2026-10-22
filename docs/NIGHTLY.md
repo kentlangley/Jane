@@ -96,9 +96,11 @@ There is only one quest at a time. The routine reads `quests.nextStep`:
 - **Kid voice.** Talk to the kid as "you", 15 words or fewer, fun, and write `{name}` instead of a real name.
 - **Creative answers.** Open questions use `creative` (any sensible answer is celebrated) or broad `acceptedAnswers`.
 - **Terms.** Define new words in the pack's `terms`, and reuse words the kid looked up.
-- **Research (optional).** For Science and Mathematics topics, `research.briefs` (or `npm run research -- <topicId>`)
-  lists the learn constraints, common misconceptions, error patterns with next moves and prerequisites to re-teach.
-  Adapt them and don't paste them.
+- **Researched stages.** For Science and Mathematics topics, use `research.briefs` (or `npm run research -- <topicId>`):
+  the learn card follows an activity's intended insight, the hint targets the top misconception, the stuck help follows
+  best practice, one wrong choice per mc is a tagged `"misconception"` with its next move in the explanation (optional
+  per-choice `"feedback"`), and needsSupport topics drop to the re-teach prerequisite. Rules in LESSONS.md "Researched
+  stages". The publisher warns about these; it doesn't fail. Adapt, never paste.
 - Start from [`packs/examples/example-quest.json`](../packs/examples/example-quest.json). Real packs
   (`packs/*.json`) are gitignored because they are written from a real child's answers.
 

@@ -52,6 +52,9 @@ if(REFRESH){try{PREV=kvGet('lessons:'+pack.date);}catch{}if(!PREV?.quest){consol
   for(let i=0;i<RR;i++){const a=PREV.topics[i],b=(pack.topics||[])[i];if(JSON.stringify(a)!==JSON.stringify(b))bad.push(`stage ${i+1} "${a.stage?.name||a.topicId}" ${b?'changed':'is missing'}`);}
   if(bad.length){console.error(`⛔ refresh of ${pack.date} touches what the learner already reached (stages 1-${RR} and the quest block are locked). Nothing was written:\n  `+bad.join('\n  ')+`\n   Copy stages 1-${RR} unchanged from the stored pack and change only stages ${RR+1}+.`);process.exit(SIX);}
   if(!refreshArg)console.warn(`ℹ️  ${pack.date} is the quest in progress: treating this as --refresh (stages 1-${RR} locked).`);}
+// Researched Math/Science stages (LESSONS.md "Researched stages"): warnings only. research.mjs and the research file are
+// offline-only (not in the Docker image); without them these checks are skipped.
+let RS=null;try{const R=await import('./research.mjs');if(R.researchAvailable())RS=R;}catch{}
 const tax=loadTax(),byId=Object.fromEntries(tax.topics.map(t=>[t.id,t])),errs=[],warns=[];checkRegionFilter(tax,DIR);const hiddenIds=new Set((tax.hidden?.topics||[]).map(t=>t.id));
 const unknownTopic=id=>hiddenIds.has(id)?`topic "${id}" is hidden in this household (HIDE_REGIONS=${tax.hidden.regions.join(',')}); pick another topic`:`unknown Marble topic id "${id}"`;const E=(p,m)=>errs.push(`${p}: ${m}`),W=(p,m)=>warns.push(`${p}: ${m}`);
 const str=(v,p,req=true)=>{if(v==null||v===''){if(req)E(p,'required string');return false;}if(typeof v!=='string'){E(p,'must be a string');return false;}return true;};
@@ -89,6 +92,14 @@ const mastered=id=>PROG?.ts?.[id]?.st==='mastered';
 const stageDone=t=>!!PROG&&(t.questions||[]).every((q,j)=>CARDS.includes(q.type)||PROG.packSeen?.[`${pack.date}:${t.topicId}:${j}`]);
 const tooHard=a=>/\.\d{4,}/.test(String(a))||/\d\.\d+\s*%/.test(String(a)); // past thousandths, or a decimal percent: too hard for a boss
 function steps(v,P,req){if(v==null){if(req)E(P,'guided practice needs "steps": 1-4 short strings shown before answering');return;}if(!Array.isArray(v)||!v.length||v.length>6||!v.every(x=>typeof x==='string'&&x.trim()))E(P,'1-6 non-empty strings');else v.forEach((x,k)=>{if(wc(x)>18)W(`${P}[${k}]`,`${wc(x)} words (steps ≤ 18)`);});}
+// Optional on choice questions: "misconception": the wrong choice that comes from a listed research misconception, and
+// "feedback": {"<wrong choice>": "short reply the app shows when that choice is picked"} (in place of the generic hint).
+const choiceQs={}; // stage index → [{misconception}] for the researched-stage check below
+function choiceExtras(q,Qp,ch){const wrong=ch.filter(c=>c!==String(q.answer));(choiceQs[Qp.replace(/\.questions.*/,'')]??=[]).push(q);
+  if(q.misconception!=null&&!(typeof q.misconception==='string'&&wrong.includes(q.misconception)))E(Qp+'.misconception','must be one of the wrong choices (the one that comes from a misconception)');
+  if(q.feedback!=null){if(typeof q.feedback!=='object'||Array.isArray(q.feedback)){E(Qp+'.feedback','object {"<wrong choice>": "short reply"}');return;}
+    for(const [k,v] of Object.entries(q.feedback)){const P=`${Qp}.feedback[${JSON.stringify(k)}]`;if(!wrong.includes(k))E(P,'keys must be wrong choices of this question');
+      if(typeof v!=='string'||!v.trim())E(P,'needs a short reply string');else{if(wc(v)>20)W(P,`${wc(v)} words (feedback ≤ 20)`);if(third(v))W(P,YOU);}}}}
 const taught=new Set();
 const seen=new Set();let nq=0,nGraded=0,nReview=0,nDeep=0,nCards=0;const typesUsed=new Set();
 (pack.topics||[]).forEach((t,i)=>{const P=`topics[${i}]`,tp=byId[t.topicId];if(!tp)E(P+'.topicId',unknownTopic(t.topicId));if(seen.has(t.topicId))E(P+'.topicId','duplicate');seen.add(t.topicId);
@@ -122,12 +133,13 @@ const seen=new Set();let nq=0,nGraded=0,nReview=0,nDeep=0,nCards=0;const typesUs
     if(CARDS.includes(q.type)){str(q.title,Qp+'.title');str(q.body,Qp+'.body');str(q.emoji,Qp+'.emoji',false);if(wc(q.body)>30)W(Qp+'.body',`${wc(q.body)} words (cards: ≤ 30)`);if(third(q.body))W(Qp+'.body',YOU);return;}
     str(q.prompt,Qp+'.prompt');str(q.hint,Qp+'.hint');str(q.explanation,Qp+'.explanation');
     if(wc(q.prompt)>15)W(Qp+'.prompt',`${wc(q.prompt)} words (max 15)`);if(third(q.prompt))W(Qp+'.prompt',YOU);
-    const ans=q.answer;const need=()=>{if(ans==null||ans===''){E(Qp+'.answer','required');return false;}return true;};
+    if((q.feedback!=null||q.misconception!=null)&&!['mc','picture','blank'].includes(q.type))E(Qp,'"feedback" and "misconception" are for mc, picture and blank-with-choices questions');
+        const ans=q.answer;const need=()=>{if(ans==null||ans===''){E(Qp+'.answer','required');return false;}return true;};
     switch(q.type){
-     case 'mc':if(need()&&strs(q.choices,Qp+'.choices',2,6)&&!q.choices.includes(String(ans)))E(Qp+'.answer','must exactly match one of choices');if(q.choices?.length>3)W(Qp+'.choices','use 3 options');break;
-     case 'blank':if(!/_{3,}/.test(q.prompt||''))E(Qp+'.prompt','fill-in-the-blank prompt needs ___');if(!q.choices){acc(q,Qp);if(!q.creative)openEnded(q,Qp);}if(need()&&q.choices&&strs(q.choices,Qp+'.choices',2,4)&&!q.choices.includes(String(ans)))E(Qp+'.answer','must exactly match one of choices');break;
+     case 'mc':if(need()&&strs(q.choices,Qp+'.choices',2,6)&&!q.choices.includes(String(ans)))E(Qp+'.answer','must exactly match one of choices');if(q.choices?.length>3)W(Qp+'.choices','use 3 options');choiceExtras(q,Qp,q.choices);break;
+     case 'blank':if(!/_{3,}/.test(q.prompt||''))E(Qp+'.prompt','fill-in-the-blank prompt needs ___');if(!q.choices){acc(q,Qp);if(!q.creative)openEnded(q,Qp);}if(need()&&q.choices&&strs(q.choices,Qp+'.choices',2,4)&&!q.choices.includes(String(ans)))E(Qp+'.answer','must exactly match one of choices');if(q.choices)choiceExtras(q,Qp,q.choices);break;
      case 'picture':if(!Array.isArray(q.choices)||q.choices.length<2||q.choices.length>4||!q.choices.every(c=>c&&typeof c.label==='string'&&typeof c.pic==='string'))E(Qp+'.choices','2-4 {label, pic} (pic = emoji or <svg>)');
-       else{q.choices.forEach((c,k)=>scene(c.pic,`${Qp}.choices[${k}].pic`));if(need()&&!q.choices.some(c=>c.label===ans))E(Qp+'.answer','must equal one choice label');}break;
+       else{q.choices.forEach((c,k)=>scene(c.pic,`${Qp}.choices[${k}].pic`));if(need()&&!q.choices.some(c=>c.label===ans))E(Qp+'.answer','must equal one choice label');choiceExtras(q,Qp,q.choices.map(c=>c.label));}break;
      case 'numeric':if(need()&&!/^-?\d*\.?\d+(\s*\/\s*\d+)?\s*%?$/.test(String(ans).trim()))E(Qp+'.answer','numeric answer like 12, 0.75, 3/8 or 27%');if(q.tolerance!=null&&!(q.tolerance>=0))E(Qp+'.tolerance','non-negative number');
        // answer form (LESSONS.md "Answer form"): the prompt, the optional "form" and the answer must agree
        if(q.form!=null&&!EN.FORMS.includes(q.form))E(Qp+'.form',EN.FORMS.join('|'));
@@ -146,6 +158,15 @@ const seen=new Set();let nq=0,nGraded=0,nReview=0,nDeep=0,nCards=0;const typesUs
      case 'numberline':if(!num(q.min)||!num(q.max)||!(q.max>q.min))E(Qp,'numeric min < max required');else{if(q.step!=null&&!(q.step>0))E(Qp+'.step','> 0');const a=parseNum(ans);if(!need()||isNaN(a))E(Qp+'.answer','number');else if(a<q.min||a>q.max)E(Qp+'.answer','must be on the line');
        else if(q.step&&Math.abs(Math.round((a-q.min)/q.step)*q.step+q.min-a)>1e-9)E(Qp+'.answer','must land on a step');if((q.max-q.min)/(q.step||1)>40)W(Qp,'more than 40 steps is hard to drag on a phone');}break;
      case 'fracbar':if(!Number.isInteger(q.parts)||q.parts<2||q.parts>12)E(Qp+'.parts','integer 2-12');else if(need()){const a=parseNum(ans);if(isNaN(a)||a<0||a>1)E(Qp+'.answer','fraction 0-1 like 3/4');else if(Math.abs(Math.round(a*q.parts)-a*q.parts)>1e-9)E(Qp+'.answer',`can't be shaded with ${q.parts} parts`);}break;}});});
+// Researched stages (warnings): an mc/picture/blank-choice question needs a wrong choice from a misconception, and a
+// stage on a topic the learner got stuck on should scaffold down to a prerequisite the research says to re-teach.
+let nResearched=0;
+if(RS)(pack.topics||[]).forEach((t,i)=>{if(i<RR||!byId[t.topicId])return;const d=RS.briefData(t.topicId);if(!d.research)return;nResearched++;const P=`topics[${i}]`;
+  const cq=choiceQs[P]||[];const hint=`see npm run research -- ${t.topicId}`;
+  if(cq.length&&!cq.some(q=>q.misconception))W(P,`researched stage "${byId[t.topicId].name}": no choice question has a wrong choice from a listed misconception. Make one wrong choice the misconception, tag it "misconception": "<that choice>", and use its next move in the explanation (${hint})`);
+  const sp=PROG?.support?.[t.topicId];if(sp&&(sp.stuck||sp.skipped)){const re=[...new Set(d.errorPatterns.map(e=>e.reteach).filter(x=>x&&x.status==='playable').map(x=>x.id))];
+    const inPack=new Set((pack.topics||[]).flatMap(x=>[x.topicId,...(x.teaches||[]),...(x.questions||[]).map(q=>q.skill)]));
+    if(re.length&&!re.some(id=>inPack.has(id)))W(P,`"${byId[t.topicId].name}" needs support (the learner got stuck): scaffold down to a prerequisite to re-teach first, e.g. ${re.slice(0,2).map(id=>`${id} "${byId[id]?.name||id}"`).join(' or ')} (an earlier stage, "teaches" or a question "skill")`);}});
 // Quest budget (LESSONS.md "Keep it short"): ≤ 16 graded pack questions + ≤ 4 review-gate items the app adds = ~20 answers, ~8 min; 4-6 stages, max 7.
 const MAX_GRADED=16,MAX_STAGES=7,estMin=Math.round((nGraded*25+nCards*10)/6)/10;
 if(Q&&nGraded>MAX_GRADED)E('size',`${nGraded} graded questions: too long (max ${MAX_GRADED}; the app adds up to 4 review-gate items, ~20 answers ≈ 8 min). Trim stages`);
@@ -165,6 +186,6 @@ if(warns.length)console.warn(`⚠️  ${warns.length} warning(s) (see LESSONS.md
 if(errs.length){console.error(`❌ ${errs.length} problem(s) in ${file}:\n  `+errs.join('\n  '));process.exit(1);}
 if(Q&&!REFRESH&&!force&&PROG){const A=activeQuests(PROG,pack.date).filter(d=>kvList('lessons:'+d).length);
   if(A.length){console.error(`⛔ quest ${A[0]} is in progress (one quest at a time). Not publishing a new quest: it would only wait hidden.\n   Refresh its unreached stages instead: node publish-lessons.mjs <pack.json> --refresh --date ${A[0]}   (see LESSONS.md "Refreshing the current quest")`);process.exit(3);}}
-const sum=`${REFRESH?`refresh: stages 1-${RR} locked, ${pack.topics.length-RR} remaining, `:''}${pack.topics.length} ${Q?'stages':'topics'}, ${nq} items (~${estMin} min, ${nGraded} graded${nReview?`, ${nReview} in review stages`:''}, review via gates, ${nDeep} deep dive${nDeep===1?'':'s'}${newAreas?`, new areas: ${newAreas.length}${newAreas.length?` (${newAreas.map(a=>a.replace('|',' / ')).join(', ')})`:''}`:''}), formats: ${[...typesUsed].join(', ')}`;
+const sum=`${REFRESH?`refresh: stages 1-${RR} locked, ${pack.topics.length-RR} remaining, `:''}${pack.topics.length} ${Q?'stages':'topics'}, ${nq} items (~${estMin} min, ${nGraded} graded${nReview?`, ${nReview} in review stages`:''}, review via gates, ${nDeep} deep dive${nDeep===1?'':'s'}${RS?`, ${nResearched} researched stage${nResearched===1?'':'s'}`:''}${newAreas?`, new areas: ${newAreas.length}${newAreas.length?` (${newAreas.map(a=>a.replace('|',' / ')).join(', ')})`:''}`:''}), formats: ${[...typesUsed].join(', ')}`;
 if(dry){console.log(`✅ valid${Q?` quest "${Q.title}"`:''}: ${sum} for ${pack.date} (dry run, nothing written)`);process.exit(0);}
 kvPut('lessons:'+pack.date,pack);console.log(`✅ published${LOCAL?' (local)':''} lessons:${pack.date}${Q?` quest "${Q.title}"`:''}: ${sum}`);

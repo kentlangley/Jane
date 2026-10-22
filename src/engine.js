@@ -157,8 +157,14 @@ function selfCheck(g,id){const t=g.byId[id];
 // interactive pack formats -> internal item. Answers stay server-side; the client only gets what it must render.
 const shuf=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
 const shufNot=a=>{if(a.length<2)return[...a];let b;do b=shuf(a);while(b.join('|')===a.join('|'));return b;};
+// optional per-wrong-choice feedback on mc / picture / blank-with-choices: {"<wrong choice>": "short reply"} (LESSONS.md
+// "Researched stages"). Kept server-side like the answer (publicItem never sends it); unknown keys are ignored.
+function choiceFeedback(q){const f=q.feedback,ch=q.type==='picture'?(q.choices||[]).map(c=>c?.label):q.choices;
+  if(!f||typeof f!=='object'||!Array.isArray(ch))return undefined;const o={};for(const [k,v] of Object.entries(f))if(typeof v==='string'&&v.trim()&&ch.includes(k)&&k!==String(q.answer))o[k]=v.trim();
+  return Object.keys(o).length?o:undefined;}
+const fbFor=(it,a)=>it.feedback?.[String(a??'').trim()];
 function packItem(pq,q){const graded=pq.t.questions.filter(x=>!CARD.includes(x.type)&&!x._skip).length;
-  const it={kind:'pack',packN:graded,deep:!!pq.t.deepDive,packReview:!!pq.t.review,ptype:q.type,q:q.prompt,hint:q.hint,explain:q.explanation,packKey:pq.key,format:q.format||pq.t.format,scene:q.scene,tpl:q.template,stage:'main',guided:q.guided||undefined,steps:q.steps,example:q.example};
+  const it={kind:'pack',packN:graded,deep:!!pq.t.deepDive,packReview:!!pq.t.review,ptype:q.type,q:q.prompt,hint:q.hint,explain:q.explanation,feedback:choiceFeedback(q),packKey:pq.key,format:q.format||pq.t.format,scene:q.scene,tpl:q.template,stage:'main',guided:q.guided||undefined,steps:q.steps,example:q.example};
   if(q.guided&&!q.format)it.format='guided';
   switch(q.type){
    case 'mc':return{...it,type:'mc',choices:q.choices,answer:q.answer};
@@ -380,10 +386,11 @@ function submit0(S,g,answer,now){const it=S.current;if(!it)return{error:'no item
     if(it.bonus){it.stage='bonus';it.tries=0;r.bonus=it.bonus.q;r.jane+=' Want a bonus challenge?';}else{r.done=true;S.current=null;}
     return finish(S,r,ev);}
   it.tries++;S.streak=0;if(it.format==='boss')rec.bossRun=0;
-  if(it.tries===1){r.retry=true;r.hint=it.hint;r.correct=false;r.jane=`${pick(comfort)} Here's a hint: ${it.hint}`;return finish(S,r,ev);}
+  const fb=fbFor(it,answer);if(fb)logE.feedback=true;
+  if(it.tries===1){r.retry=true;r.hint=fb||it.hint;r.correct=false;r.jane=fb?`${pick(comfort)} ${fb}`:`${pick(comfort)} Here's a hint: ${it.hint}`;return finish(S,r,ev);}
   rec.streak=0;rec.last=now;r.correct=false;r.reveal=it.answer;
   if(it.kind==='pack'){/* learning moment: show the answer kindly, small points, no big penalty */rec.learn=(rec.learn||0)+1;S.points+=2;r.learningMoment=true;logE.learningMoment=true;
-    r.jane=`Learning moment! 🌱 The answer is "${String(it.answer).replace(/\|/g," → ")}". ${it.explain} +2 points for sticking with it! 💪`;}
+    r.jane=`Learning moment! 🌱 ${fb?fb+' ':''}The answer is "${String(it.answer).replace(/\|/g," → ")}". ${it.explain} +2 points for sticking with it! 💪`;}
   else{rec.w++;r.jane=`Let me show you how: ${it.explain} You'll get the next one! 💪`;}
   const sp=sup(S,it.topicId);if(it.kind==='math'){(sp.avoid??=[]).push({q:it.q,until:now+DAY});sp.avoid=sp.avoid.filter(x=>x.until>now).slice(-8);} // no same-question loops
   if(it.guided){guidedDone(S,it);r.guided=true;}
