@@ -12,6 +12,7 @@
     "start": "node build.mjs && node server/index.mjs",
     "serve": "node server/index.mjs",
     "build": "node build.mjs",
+    "research": "node research.mjs",
     "dev": "node build.mjs && wrangler dev",
     "test": "node --test test/*.test.mjs",
     "deploy": "./deploy.sh",

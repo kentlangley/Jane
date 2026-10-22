@@ -182,6 +182,21 @@ Run `node export-progress.mjs` and read `weakSpots` first. Then:
    "Coverage"), rotating subjects with math and science first, using one of the listed `starters`. The publisher
    prints "new areas: N" and **warns** (never fails) when a quest adds no untouched area while some are left.
 
+## Research briefs (optional tool)
+Marble's teaching research (`data/marble/teaching-research.json`, Science and Mathematics only) can help when you plan
+a stage. It stays offline: never in the app, `public/` or the Docker image.
+```bash
+npm run research -- mt_ML5t7n2-U8          # or: node research.mjs <topicId> [<topicId> …] [--json] [--all]
+```
+This prints a short brief, under 6,000 characters. It starts with the **learn constraints** (follow them), then the
+learn summary, the top misconceptions, the error patterns (how each shows up, the next move and a prerequisite to
+re-teach, with its title), the diagnostic and response levels, the key activities and pedagogy's best practices.
+Where pedagogy or assess say something a learn constraint forbids, the brief drops it and lists it under
+"⚠ learn vs pedagogy/assess". Other topics, English for example, print "no research". Pending or hidden-region topics
+print a notice and no brief, because they can't go in a pack. The nightly export carries the same briefs in compact
+form under `research` (see "Nightly loop"). The research is agent-authored and has not been tested with learners, so
+adapt it in the kid's voice and never paste it. Using it is optional for now.
+
 ## Writing style (required for every pack)
 Jane talks **to** the learner, never about them. Every prompt must be:
 - **Second person**: "you / your" ("Your $40 game is 50% off…"), never "Can Sam…", "{name} is…" or "he/she".
@@ -337,7 +352,8 @@ The export contains `weakSpots` (per topic and per domain over the last 7 days, 
 needed a `hints`, final `misses`, `slow` answers > 30 s, `failedReviews`, `unsure` self-checks, a `weakScore`, plus
 `goDeeper` suggestions with easier prerequisite steps and `strengths` with `stretchTo` topics), `summary` (counts per state and subject), `stats`, `todayLog` (every answer plus `mastered`,
 `inferred` and `demoted` events), `learnedToday`, `frontier` (ready and learning topics, closest to the target age (`LEARNER_AGE`) first,
-with full topic details, prerequisites and unlocks), `reviewDue`, `reviewHealth` (see rule 4), and the raw `progress` record.
+with full topic details, prerequisites and unlocks; `research: true` when a research brief exists), `research` (compact briefs for
+the needsSupport, goDeeper, quest-refresh, stretch and top frontier topics; see "Research briefs"), `reviewDue`, `reviewHealth` (see rule 4), and the raw `progress` record.
 Write tomorrow's quest from `weakSpots` and `frontier` (the gates handle `reviewDue`) using the rules above, dry-run, fix every warning, then publish it.
 
 Both scripts call the repo's `wrangler` (Node 22; a portable Node in `~/.local/node-v22.20.0-linux-x64` is used if present), read the account and KV ids from `wrangler.toml`, and need `CLOUDFLARE_API_TOKEN` set in the environment (never commit it).

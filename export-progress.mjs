@@ -71,6 +71,16 @@ const activeList=A.map(qinfo).filter(Boolean),cur=LQ.current&&!LQ.newQuest?qinfo
 // REFRESH starts from a copy of the stored pack (LESSONS.md "Refreshing the current quest"): exports/quest-<date>.json
 if(cur){cur.packFile=path.join(path.dirname(out),`quest-${cur.date}.json`);fs.mkdirSync(path.dirname(cur.packFile),{recursive:true});fs.writeFileSync(cur.packFile,JSON.stringify(kvGet('lessons:'+cur.date),null,1));}
 reviewHealth.gatesAhead=A.reduce((a,d)=>{const p=kvGet('lessons:'+d);return a+(p?.quest?E.questInfo(S,g,p).gates.filter(x=>x.state==='locked').length:0);},0); // stage gates not reached yet in active quests
+// ---------- teaching research (offline authoring input; research.mjs, LESSONS.md "Research briefs") ----------
+// Compact briefs for the topics tonight's pack is most likely to touch; frontier entries with research get research:true.
+// research.mjs and the research file are not in the Docker image: then the section says so and the export goes on.
+let research={tool:'npm run research -- <topicId>',available:false,note:'research.mjs not available here'};
+try{const R=await import('./research.mjs');
+  research=R.nightlyResearch([['needsSupport',needsSupport.map(x=>x.topicId)],['goDeeper',goDeeper.map(x=>x.topicId)],
+    ['questRefresh',(cur?.refreshableStages||[]).map(s=>s.topicId)],['stretch',strengths.flatMap(s=>s.stretchTo.map(t=>t.id))],
+    ['frontier',frontier.filter(t=>R.briefData(t.id).research).slice(0,12).map(t=>t.id)]]);
+  if(research.available)for(const t of frontier)if(R.briefData(t.id).research)t.research=true;
+}catch(e){research.note=`research briefs skipped: ${e.message}`;}
 const quests={current:cur,queued:LQ.queued,active:activeList.length,list:activeList,completed:Object.entries(S.quests||{}).filter(([,q])=>q.done).map(([d])=>d),
   nextStep:cur?`REFRESH: quest ${cur.date} ("${cur.title}", ${cur.pct}% done) is in progress. Do not publish a new quest. Copy ${cur.packFile} to packs/quest-${cur.date}.json, keep "date", "quest" and stages 1-${cur.reachedStages} unchanged, rewrite stages ${cur.reachedStages+1}+ (${cur.refreshableStages.length} now) from tonight's export, then: node publish-lessons.mjs packs/quest-${cur.date}.json --refresh --date ${cur.date} --dry-run (and again without --dry-run)`
     :'NEW QUEST: no quest in progress. Write tomorrow\'s quest and publish it normally.'};
@@ -85,8 +95,9 @@ const res={exportedAt:new Date(now).toISOString(),date,timezone:'America/Los_Ang
   quests,termsLookedUp,weakSpots,todayLog:log,learnedToday:log.filter(l=>l.event==='mastered'),
   // household region filter (HIDE_REGIONS): these topics are not in the app, the frontier or the totals; progress on them is kept
   hiddenRegions:{regions:hiddenRegions,topics:Object.keys(g.hidden).length,mastered:Object.keys(g.hidden).filter(id=>S.ts[id]?.st==='mastered').length,medals:(S.medals||[]).filter(m=>g.hidden[m.id]).length},
-  frontier,reviewDue,progress:S};
+  research,frontier,reviewDue,progress:S};
 fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,E.withName(JSON.stringify({learner:L,...res},null,1),JSON.stringify(L.name).slice(1,-1)));
+console.log(`  📚 research briefs: ${research.available?`${Object.keys(research.briefs).length} attached, ${research.pointers.length} more as pointers (npm run research -- <topicId>)`:research.note}`);
 if(hiddenRegions.length)console.log(`  🌏 hidden regions: ${hiddenRegions.join(',')} (${res.hiddenRegions.topics} topics left out of the app and this export; never put them in a pack)`);
 console.log(`  🗺️ quests: ${quests.nextStep}`);if(termsLookedUp.length)console.log(`  📘 looked up: ${termsLookedUp.slice(0,10).map(t=>t.term+'×'+t.count).join(', ')}`);
 for(const x of goDeeper)console.log(`  🔎 go deeper${x.needsSupport?' (GENTLE, the kid got stuck)':''}: ${x.name} (${x.domain}): ${x.why}`);for(const x of strengths)console.log(`  💪 strength: ${x.domain} → stretch to ${x.stretchTo.map(t=>t.name).join(', ')||'(nothing ready)'}`);

@@ -42,7 +42,14 @@ The export includes:
 - **`termsLookedUp`**: glossary words the kid tapped.
 - **`quests`**: the `current` quest (with `reachedStages`, `lockedStages`, `refreshableStages`), `queued` packs and
   `nextStep`: `REFRESH: …` (a quest is in progress) or `NEW QUEST: …`.
-- **`frontier`**: ready and learning topics, closest to the target age first.
+- **`frontier`**: ready and learning topics, closest to the target age first (`research: true` when a research
+  brief exists).
+- **`research`**: compact teaching-research briefs (at most 24 and about 48 KB, roughly a 6% larger export) for the
+  topics tonight's pack is most likely to touch, in this order: `needsSupport`, `goDeeper`, the current quest's
+  refreshable stages, `stretchTo` topics, then the 12 closest frontier topics that have research. Each brief says why it
+  was picked (`for`). Anything over the limit is listed in `pointers`. For the full brief, run
+  `npm run research -- <topicId>` (LESSONS.md "Research briefs"). Pending and hidden-region topics never get one. Where
+  the research file isn't there (the Docker image), the section says `available: false` and the export carries on.
 - **`reviewDue`**: mastered topics whose spaced review is due (the gates serve them; don't write review stages).
 - **`coverage`**: per subject, areas (Marble domains) seen out of total; `coverage.untouched` lists the unseen
   areas (math and science first) with up to 3 `starters` near the target age.
@@ -89,6 +96,9 @@ There is only one quest at a time. The routine reads `quests.nextStep`:
 - **Kid voice.** Talk to the kid as "you", 15 words or fewer, fun, and write `{name}` instead of a real name.
 - **Creative answers.** Open questions use `creative` (any sensible answer is celebrated) or broad `acceptedAnswers`.
 - **Terms.** Define new words in the pack's `terms`, and reuse words the kid looked up.
+- **Research (optional).** For Science and Mathematics topics, `research.briefs` (or `npm run research -- <topicId>`)
+  lists the learn constraints, common misconceptions, error patterns with next moves and prerequisites to re-teach.
+  Adapt them and don't paste them.
 - Start from [`packs/examples/example-quest.json`](../packs/examples/example-quest.json). Real packs
   (`packs/*.json`) are gitignored because they are written from a real child's answers.
 
