@@ -45,11 +45,11 @@ mt_1VSfm9yiLn|8 kids like red, 3 like blue. How many more like red?|5|11|3
 mt_VhBH8wrFC6|In a bar graph, the tallest bar shows the…|Most|Least|Middle
 mt_ChjMU2GDJa|A bar graph shows 12 dogs and 7 cats. Total?|19|5|20
 mt_r8XnXwRA6g|Each ☺ = 2 kids. ☺☺☺ means…|6 kids|3 kids|5 kids
-mt_H6LlpWgEYS|Bars show 25 apples and 15 pears. Difference?|10|40|5
+mt_H6LlpWgEYS|A line graph shows 25 apples on Monday and 15 on Tuesday. How many fewer on Tuesday?|10|40|5
 mt_Cqm8iy48UI|A table shows Monday 8, Tuesday 5. Which day had more?|Monday|Tuesday|Same
 mt_fmm-P17Vka|The value that appears most often is the…|Mode|Mean|Range
 mt_Cg8VPguS_V|Mean of 2, 4, 6?|4|6|12
-mt_bESTSBB0wK|A line graph is best for showing…|Change over time|Favorite colors|Shapes
+mt_bESTSBB0wK|A pie chart of 20 kids: half the circle is soccer. How many chose soccer?|10|2|20
 mt_XSXnTQoQ4l|Scores 5, 7, 9: what's the range?|4|9|21
 mt_eKJG-0eC6D|A frequency table shows…|How often things happen|The weather|Colors
 mt_BdAeZJUOir|A scatter graph plots…|Two sets of data as dots|Only one number|Words

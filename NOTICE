@@ -4,9 +4,13 @@ Copyright (c) 2026 Kent Langley and Landon
 This product includes the Marble Skill Taxonomy (v1):
   Marble Skill Taxonomy (v1) · © Generative Spark, Inc. (Marble) · https://withmarble.com
   · licensed under ODbL 1.0 (database) and CC BY-SA 4.0 (content).
-  Source: https://github.com/withmarbleapp/os-taxonomy
+  Source: https://github.com/withmarbleapp/os-taxonomy, commit a8719737ff86ef7940ba5feca11940de1204103e
+  (see data/marble/UPSTREAM).
   Included unchanged in data/marble/ with its LICENSE (ODbL 1.0), LICENSE-CONTENT (CC BY-SA 4.0),
-  PROVENANCE.md and CITATION.cff.
+  PROVENANCE.md and CITATION.cff, including Marble's teaching research (data/marble/teaching-research.json and
+  archived-teaching-research.json: agent-authored teaching approaches, misconceptions and assessment guidance,
+  © Generative Spark, Inc. (Marble), ODbL 1.0 / CC BY-SA 4.0). It is used offline by the lesson author and is
+  not shipped in the app. Third-party works cited in it keep their own terms (see data/marble/PROVENANCE.md).
 
 UI libraries bundled into public/vendor/ui.js by build.mjs (pinned in package.json; full texts are generated at
 public/vendor/THIRD-PARTY-LICENSES.txt and served at /vendor/THIRD-PARTY-LICENSES.txt):
@@ -21,8 +25,12 @@ Topics in topics.json link to curriculum standard codes. Their upstream notices 
     School Officers.
   - NGSS is a registered trademark of WestEd. Neither WestEd nor the lead states and partners that developed the
     Next Generation Science Standards were involved in the production of this product, and do not endorse it.
+    This notice also applies to NGSS references in the teaching research.
+  - Australian Curriculum codes: © Australian Curriculum, Assessment and Reporting Authority (ACARA) 2009 to
+    present, CC BY 4.0. ACARA does not endorse this product. (Codes only; no curriculum text is included.)
 
-Derived data (data/kid-prompts/, data/glossary.txt, and the generated public/tax.json and public/glossary.json)
+Derived data (data/kid-prompts/, data/glossary.txt, data/topic-aliases.json, and the generated public/tax.json and
+public/glossary.json)
 is adapted from the Marble Skill Taxonomy by Kent Langley and Landon: database under ODbL 1.0, text under
 CC BY-SA 4.0.
 

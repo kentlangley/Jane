@@ -60,7 +60,6 @@ mt_DLcEzmmj2r|A ribbon is 50 cm. You cut 18 cm. How much is left?|32 cm|68 cm|38
 mt_6oxQPNLHNv|A rope 2 m plus a rope 75 cm is…|2 m 75 cm|77 cm|2.075 m
 mt_xWg0lI_gG4|A 12-inch ruler vs a 7-inch pencil: difference?|5 inches|19 inches|7 inches
 mt_4emC463IyW|Practice starts 3:00, ends 4:30. How long?|1 hour 30 min|30 min|2 hours
-mt_3XJkeIn6J6|About how long is lunch?|30 minutes|30 seconds|30 hours
 mt_OzRZ89GrQW|About how tall is a door?|2 meters|2 centimeters|20 meters
 mt_6_O6THdEDK|A toy costs $3.40. You pay $5. Change?|$1.60|$2.60|$1.40
 mt_3tz3Otap5j|How many quarters make $1?|4|2|10
@@ -86,7 +85,7 @@ mt_GzcJEVkNRn|Rectangle 6 m by 4 m. Area?|24 m²|20 m²|10 m²
 mt_6xNmQLzuqm|A unit square has area of…|1 square unit|4 units|0
 mt_Zks8xyInSG|How many grams in a kilogram?|1,000|100|10
 mt_eiB3-6pu6a|Room 5 m by 4 m. Perimeter?|18 m|20 m|9 m
-mt_NSC3LT_-ch|A box fits about 1,000 sugar cubes. That's an estimate of its…|Volume|Weight only|Color
+mt_NSC3LT_-ch|A big water bottle holds about…|1 litre|1 millilitre|1 kilogram
 mt_42QD6nYjiZ|A line plot shows each measurement as an…|X above a number line|A pie slice|A word
 mt_p6MhZJYYPN|1 inch is about…|2.5 cm|10 cm|1 cm
 mt_n0AlyLQwC9|An L-shape: sides 4, 2, 2, 3, 6, 5. Perimeter?|22|20|18

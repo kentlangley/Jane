@@ -11,7 +11,7 @@ frontier topics), then chooses content in this order:
 1. **Today's pack**: the next unanswered question for that topic (the intro card is shown before the topic's first question).
 2. **Procedural math generators** (fractions, decimals/percents, ×/÷, +/−, place value...) for Mathematics topics.
 3. **Kid MCQ**: a precomputed 3-option question for the topic (`kq`/`ka`/`kw` in `public/tax.json`, sourced
-   from `data/kid-prompts/b*.txt`, one line per topic: `mt_id|question|right|wrong1|wrong2`, joined by topic id). All 1,344 non-generator topics have one.
+   from `data/kid-prompts/b*.txt`, one line per topic: `mt_id|question|right|wrong1|wrong2`, joined by topic id). Every playable non-generator topic has one; topics listed in `data/kid-prompts/PENDING.txt` are not playable yet (not in `public/tax.json`, so not in the export's frontier and not accepted by `publish-lessons.mjs`).
 4. **Self-check** (last resort): the topic's short `self` prompt, answered "Got it! / Sort of / Not yet".
    The raw Marble `assessmentPrompt` and `evidence` are never shown to the learner.
 

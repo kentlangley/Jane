@@ -2,7 +2,7 @@
 
 An open, structured taxonomy of **what children learn** across the primary/elementary years — decomposed into fine-grained "micro-topics", wired into a prerequisite graph, and aligned to national curriculum standards. Produced by [Marble](https://withmarble.com).
 
-> **Version:** `v1` · **Topics:** 1,590 · **Prerequisite edges:** 3,221 · **Subjects:** 8
+> **Version:** `v1` · **Topics:** 1,930 · **Prerequisite edges:** 4,102 · **Subjects:** 9
 
 ## See it
 
@@ -15,22 +15,24 @@ Every dot is a micro-topic, colored by subject; height is age; each thread is a 
 
 Most curriculum data is either a flat list of standards or locked inside a product. This dataset is a **connected graph of learning**:
 
-- **1,590 micro-topics** — a single, teachable idea (e.g. *"Building sentences"*, *"Apparent brightness of stars"*), each with a plain-language description, mastery **evidence** criteria, a type (conceptual / procedural / representational / language / meta), a subject + domain, and an approximate age range.
-- **3,221 prerequisite dependencies** — a directed acyclic graph: *"topic X depends on prerequisite Y"*, each edge tagged `hard`/`soft` and carrying a one-line **reason**.
+- **1,930 micro-topics** — a single, teachable idea (e.g. *"Building sentences"*, *"Apparent brightness of stars"*), each with a plain-language description, mastery **evidence** criteria, a type (conceptual / procedural / representational / language / meta), a subject + domain, and an approximate age range.
+- **4,102 prerequisite dependencies** — a directed acyclic graph: *"topic X depends on prerequisite Y"*, each edge tagged `hard`/`soft` and carrying a one-line **reason**.
 - **Curriculum alignment** — each micro-topic links to the standards it was distilled from (NGSS, Common Core, the UK National Curriculum, and more).
-- **Domain clusters** — 183 parent-friendly one-paragraph summaries per (subject, domain, age band).
+- **Teaching research** — 1,049 records covering Science and Mathematics topics: teaching approaches, concrete learning activities, feedback, assessment guidance and linked sources. Coverage is partial; the other 881 topics have no research in this release.
+- **Domain clusters** — 176 parent-friendly one-paragraph summaries per (subject, domain, age band).
 
 ### Subjects
 
 | Subject | Topics |
 |---|---:|
-| Science | 547 |
-| Mathematics | 503 |
-| English | 286 |
-| History | 90 |
-| Personal & Social Development | 88 |
-| Life Skills | 37 |
-| Computing | 21 |
+| Science | 595 |
+| Mathematics | 587 |
+| English | 368 |
+| History | 112 |
+| Geography | 25 |
+| Personal & Social Development | 124 |
+| Life Skills | 42 |
+| Computing | 59 |
 | Learning to Learn | 18 |
 
 ## Files
@@ -43,7 +45,85 @@ All data lives in [`data/`](data/) as UTF-8 JSON. See [`schema/`](schema/) for J
 | [`data/dependencies.json`](data/dependencies.json) | Prerequisite **edges** (`topicId` depends on `prerequisiteId`). |
 | [`data/curriculum-standards.json`](data/curriculum-standards.json) | The source curriculum standards, grouped by curriculum. |
 | [`data/clusters.json`](data/clusters.json) | Parent-friendly domain summaries. |
+| [`data/teaching-research.json`](data/teaching-research.json) | Teaching research joined by `topicId`, with explicit coverage and publication notes (~24 MB). |
+| [`data/archived-teaching-research.json`](data/archived-teaching-research.json) | Historical guidance for merged or refocused topics, with original records and current topic associations. |
 | [`data/manifest.json`](data/manifest.json) | Counts, per-subject breakdown, per-file checksums. |
+
+The standards catalogue includes **620 Australian Curriculum v9 Foundation–Year 6
+content descriptions** (`acara-v9`), bringing it to **8 sources / 3,881 standards**.
+The catalogue spans English, Mathematics, Science, HASS, Health and Physical
+Education, Digital Technologies, and Design and Technologies. All **593 content
+descriptions in the agreed scope are fully covered**, as recorded in the
+[scope coverage summary](reports/acara-v9-scope-coverage.md). Health coverage
+targets the Personal, social and community health strand; the 27 PE standards
+are excluded. Arts, Languages, elaborations and achievement standards are outside
+this contribution. This is coverage of the listed learning areas, not the entire
+Australian Curriculum.
+
+Australian Mathematics has 442 topic alignments across 325 topics. All 139
+Foundation–Year 6 content descriptions are fully covered in the
+[coverage report](reports/acara-v9-maths-coverage.md), following gap authoring and
+review of practical work, virtual materials, digital tools and Australian currency.
+
+Australian English has 630 topic alignments across 267 topics. All
+189 Foundation–Year 6 content descriptions are fully covered in the
+[coverage report](reports/acara-v9-english-coverage.md), following gap authoring
+and review of Australian literature, phonics, comprehension, digital texts,
+multimodal creation and spoken presentations. This batch adds 82 English topics.
+
+Australian Science has 245 topic alignments across 131 topics. All
+77 Foundation–Year 6 content descriptions are fully covered in the
+[coverage report](reports/acara-v9-science-coverage.md), following gap authoring
+and review of practical investigations, measurements, data, scientific
+communication and Australian contexts. This batch adds 24 Science topics.
+
+Australian HASS (Humanities and Social Sciences) has 210 topic alignments across
+124 topics. All 89 Foundation–Year 6 content descriptions are fully covered
+in the [coverage report](reports/acara-v9-hass-coverage.md). HASS is a curriculum
+grouping mapped onto the shared History, Geography, Personal & Social Development
+and Life Skills subjects. The [authoring review](reports/acara-v9-hass-authoring-review.md)
+records the reuse, topic splits and subject/domain decisions.
+
+Selected Australian Health content has 117 topic alignments across 79 topics.
+All 32 Foundation–Year 6 Personal, social and community health standards are fully
+covered in the [coverage report](reports/acara-v9-health-coverage.md).
+The [authoring review](reports/acara-v9-health-authoring-review.md) records reuse,
+practical evidence and review corrections. Health uses the existing Personal &
+Social Development and Science subjects. The 27 PE standards remain excluded;
+these figures do not represent full Health and Physical Education coverage.
+
+Australian Digital Technologies has 93 topic alignments across 74
+topics. All 38 Foundation–Year 6 content descriptions are fully covered in the
+[coverage report](reports/acara-v9-digital-technologies-coverage.md).
+The [authoring review](reports/acara-v9-digital-technologies-authoring-review.md)
+records reuse and domain decisions. Computing now includes shared domains for
+digital systems, data, programming, digital design, collaboration and privacy.
+
+Australian Design and Technologies has 111 topic alignments across 78
+topics. All 29 Foundation–Year 6 content descriptions are fully covered in the
+[coverage report](reports/acara-v9-design-technologies-coverage.md).
+The [authoring review](reports/acara-v9-design-technologies-authoring-review.md)
+records shared-subject placement, reuse and the final factual corrections.
+Physical making uses Science; food preparation uses Life Skills; food and fibre
+production uses Geography.
+
+See [PROVENANCE.md](PROVENANCE.md) for sources and attribution.
+
+### Adding curricula
+
+Curricula map onto one shared taxonomy. Keep subjects and domains consistent
+across countries; a curriculum's learning-area labels do not create separate
+subject trees.
+
+- Reuse a topic when it teaches the same concept or skill, and extend it where
+  needed to cover another curriculum's requirements.
+- Reuse existing domains before adding a distinct new domain. Keep names
+  consistent and avoid parallel country-specific domain trees.
+- Keep each topic focused on a teachable concept or skill. A standard can link
+  to several topics; its bundled requirements need not become one topic.
+- Add country-specific topics where the knowledge genuinely differs, such as a
+  country's history or constitutional arrangements. Use shared topics for common
+  concepts and skills, with local examples where useful.
 
 ### A topic
 
@@ -80,6 +160,71 @@ All data lives in [`data/`](data/) as UTF-8 JSON. See [`schema/`](schema/) for J
 
 `topicId` **depends on** `prerequisiteId`. Reverse the edge to get "unlocks".
 
+## Teaching research
+
+[`data/teaching-research.json`](data/teaching-research.json) adds **how a topic
+might be taught** to the graph of what children learn. It covers **547 Science**
+and **502 Mathematics** topics. `coverage.missingTopicIds` and per-subject counts
+make the **881 topics without research** explicit; absence is not a judgement
+about whether a topic can be taught.
+
+[`archived-teaching-research.json`](data/archived-teaching-research.json) preserves two historical records excluded from active coverage after a topic merge and a change in learning scope. Each entry includes the original topic and research record, its archive reason, and related current topic IDs. The archive also records the assessment prerequisite reference redirected after the merge.
+
+The active `teaching-research.json` file has `schemaVersion: 1` and taxonomy `version: "v1"`. Each `records[]`
+entry joins `topics.json` through `topicId` and contains:
+
+| Field | Meaning |
+|---|---|
+| `pedagogy` | Original teaching summary, practices, representations and misconceptions. |
+| `learn` | Portable learning guidance (`schemaVersion: 2`): a summary, activities, educational constraints and review notes. |
+| `learn.activities[]` | Learner actions, intended insight, feedback, rationale and supporting source claims. No product artifact types or fit rankings. |
+| `assess` | Original diagnostic/task, response levels, error patterns and next teaching moves; nullable in the public interface. |
+| `sources` | Claim, named source, optional URL and the original author's verification flag. |
+| `confidence` | Original authoring confidence; not an independent quality score. |
+| `provenance` | Original authoring model and source record timestamps. The update timestamp also reflects the learning-guidance rewrite. |
+| `publicationNotes` | Paths and curriculum codes for text omitted under the codes-only publication policy. |
+
+`sourceClaims` exactly match `sources[].claim` after publication transformations.
+A source may support a general principle or curriculum alignment; this does not
+mean the proposed activity was tested. Some activities have no directly linked
+source claim.
+
+These records were agent-authored. The learning guidance was rewritten for
+portability, checked by a separate factual critic, and sampled by a second agent.
+Most original pedagogy and assessment were retained and may contain claims that
+the updated guidance qualifies; chart-specific alignment repairs after #30 are
+recorded in the affected learning-guidance review notes; read the constraints and review notes alongside
+them. Sources were **not re-fetched or re-verified** for the initial publication;
+later nutrition-guide checks are recorded in the affected review notes. Historical
+`verified: true` and `confidence: "high"` are not new evidence ratings. Activities
+are research-informed proposals, **not empirically validated interventions**.
+
+Nutrition terminology corrections in [#63](https://github.com/withmarbleapp/os-taxonomy/pull/63)
+update the existing Animal Nutrition, Balanced Diet & Food Groups, and Nutrients
+in a Healthy Diet guidance, activities and assessment to distinguish nutrients
+from food groups. Balanced-plate activities use food groups in a local guide;
+the records retain their identities. See the
+[review note](reports/acara-v9-design-technologies-authoring-review.md#teaching-guidance-correction-after-pr-review).
+
+Some original research quoted restricted curriculum standards. Matched passages
+are replaced with inline curriculum references, including inside citation claims;
+all transformed paths are listed in `publicationNotes`. This is a conservative
+mechanical omission pass, not comprehensive rights clearance. Consult the linked
+upstream sources for their wording and terms. See [PROVENANCE.md](PROVENANCE.md).
+
+After the chart split in [#30](https://github.com/withmarbleapp/os-taxonomy/pull/30),
+`mt_bESTSBB0wK` covers pie charts, `mt_H6LlpWgEYS` covers earlier line-graph
+problem-solving, and `mt_HlNSurPVDp` has a separate construction-and-interpretation
+record. The new record adapts existing graph research; it is not a fresh
+literature review, and all reused source-verification flags are false. Its
+assessment requires a complete constructed graph. The later grouped-charts
+assessment routes graph-choice errors to data presentation and sector-angle
+errors to pie charts.
+
+The file is bound to the exact `topics.json` bytes through `topicFileSha256`.
+Regenerate the research projection when the canonical topic file changes, even
+when topic IDs remain stable.
+
 ## Using it
 
 Pure data — no runtime, no dependencies. Load the JSON and go.
@@ -94,11 +239,60 @@ const prereqs = deps.dependencies
   .map(d => byId.get(d.prerequisiteId).name);
 ```
 
-Validate structure + referential integrity:
+Join teaching guidance to a topic:
+
+```js
+import research from './data/teaching-research.json' with { type: 'json' };
+
+const guidanceByTopic = new Map(research.records.map(r => [r.topicId, r]));
+const guidance = guidanceByTopic.get('mt_N8CpN1EJrP'); // undefined: English is not covered yet
+const activities = guidance?.learn.activities ?? [];
+```
+
+Validate structure, research coverage, evidence links and checksums:
 
 ```bash
 node scripts/validate.mjs
+node --test scripts/teaching-research.test.mjs
 ```
+
+## Marble Builder
+
+The [`marble-builder` agent skill](.agents/skills/marble-builder/SKILL.md)
+helps turn a child's age and a user-confirmed goal into a standalone HTML
+learning experience that works offline by default. It uses topic prerequisites
+and available teaching research,
+develops a targeted research brief when needed, and agrees a concept with you
+before building. Experiences use visual interactions, scaffolding, UI-assessed
+transfer tasks and optional extensions. Spatial topics use Three.js with direct
+scene manipulation and a crafted cel-shaded look with flat colors and black
+outlines. Visual simulations must meet a beauty, craft and polish bar as well as
+work correctly. The public skill includes Marble-derived UI tokens, tactile
+controls refined in Moon Visit and Sky Colour Explorer, and the openly licensed
+Baloo 2 font, with one title and one instruction
+visible at a time: a small top-left title and a large, prominent instruction or
+explanation, plus concise button labels paired with icons. [Water Lab](https://withmarble.com/water-lab) is the visual quality
+reference. The agent renders, inspects and iterates
+in the browser rather than stopping at the first working HTML file.
+
+The skill includes [five runnable examples with readable source, key-state
+screenshots and design notes](.agents/skills/marble-builder/references/examples.md):
+Moon Visit, Sky Colour Explorer, Hidden Cubes, Bee Builder and Otter Forest. The notes explain
+what to borrow and where each prototype has limits or exceptions.
+
+Optional connected LLM mode requires explicit author approval and a learning goal
+whose open-ended reasoning or text production cannot be adequately supported
+locally. That mode requires internet and a separate account connection; ChatGPT
+plan usage is a preview option for eligible local/open-source integrations.
+
+In Codex, open this repository and invoke `$marble-builder`, for example:
+
+> Use $marble-builder to help my 8-year-old understand why equivalent
+> fractions represent the same quantity.
+
+Other agents can follow the linked `SKILL.md` directly. No Marble account or
+hosting is required. New reusable teaching research can optionally be proposed
+as a separate PR, with no child-specific information included.
 
 ## License
 
@@ -107,7 +301,8 @@ This dataset is **multi-licensed** — read this before you use or redistribute 
 | Layer | License |
 |---|---|
 | **The database** — the collection, structure, IDs, topic↔topic and topic↔standard relationships | [**ODbL 1.0**](LICENSE) — free for research **and** commercial use, **attribution** required, **share-alike** (derivative *databases* must stay open under ODbL). |
-| **The textual content Marble authored** — topic `description`/`name`/`evidence`/`assessmentPrompt`, dependency `reason`s, cluster `summary`s | [**CC BY-SA 4.0**](LICENSE-CONTENT) — same spirit: attribution + share-alike. |
+| **The textual content Marble authored** — topic `description`/`name`/`evidence`/`assessmentPrompt`, dependency `reason`s, cluster `summary`s, original teaching-research prose | [**CC BY-SA 4.0**](LICENSE-CONTENT) — same spirit: attribution + share-alike. |
+| **Marble-authored learning examples** — application source, original artwork, captures and design notes | [**CC BY-SA 4.0**](LICENSE-CONTENT). Bundled Three.js and Baloo 2 retain their separate MIT and OFL licenses and notices. |
 | **`curriculum-standards.json`** — extracted from third-party frameworks | **Not** Marble's to relicense. Each source is under **its own upstream license** — see [**PROVENANCE.md**](PROVENANCE.md). |
 
 **Why share-alike + still commercial-friendly:** ODbL distinguishes a *derivative database* (extend/modify the taxonomy → must stay open) from a *produced work* (use it inside a product, model, or app → stays yours). So you can build a commercial product on this without open-sourcing your product; you only owe back improvements to the *taxonomy itself*.
