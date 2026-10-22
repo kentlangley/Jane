@@ -152,6 +152,10 @@ const OPEN=['Hey {name}! ','Quick one! ','Ooh, try this! ','Your turn! ',''];
 function opener(q){const o=pick(OPEN);return o&&q.split(' ').length+o.split(' ').length-1<=15?o+q:q;}
 function kidMcq(g,id){const t=g.byId[id];if(!t.kq)return null;const ch=[t.ka,...t.kw].sort(()=>Math.random()-.5);
   return{kind:'quiz',type:'mc',q:opener(t.kq),base:t.kq,choices:ch,answer:t.ka,hint:`Think it through. Which one makes the most sense?`,explain:`It's "${t.ka}".`};}
+// check-understanding item (data/checks, slice 6): a kid-voice mc written from the research's two-tier assessment.
+// Review gates and spot-checks prefer it over the kid prompt; the "why" tier, when present, is the explanation.
+function checkItem(g,id){const t=g.byId[id],c=t?.ck;if(!c)return null;const ch=shuf([c.a,...c.w]);
+  return{kind:'quiz',type:'mc',ptype:'check',check:true,q:c.q,base:c.q,choices:ch,answer:c.a,hint:'Read every choice. Which one really fits the idea?',explain:c.y?`It's "${c.a}": ${c.y.a.replace(/^./,x=>x.toLowerCase())}.`:`It's "${c.a}".`};}
 function selfCheck(g,id){const t=g.byId[id];
   return{kind:'self',type:'self',q:t.self||`Hey {name}! Could you explain ${t.sn||t.name}?`,choices:['👍 Got it!','🤔 Sort of','🌱 Not yet']};}
 // interactive pack formats -> internal item. Answers stay server-side; the client only gets what it must render.
@@ -198,6 +202,9 @@ export function buildItem(S,g,id,mode,pack,now){const t=g.byId[id],r=S.ts[id];le
       it={kind:'pack',type:'card',card:'powerup',q:'Boss ahead! Here\'s your power-up',title:'Boss ahead! Here\'s your power-up',body:powerText(pack,pq.t),emoji:'🔋',packKey:pk,format:'card'};
     else it=packItem(pq,q);
     if(!S.packSeen[`${pack.date}:${id}:intro`]){it.intro=pq.t.intro;S.packSeen[`${pack.date}:${id}:intro`]=1;}}
+  // review (gates, Play review): a check item replaces the kid prompt; on a generator topic it is used for spot-checks
+  // of an inferred skill (unverified), where a conceptual check says more than one more sum
+  else if(mode==='review'&&t.ck&&(!kindFor(t)||unverified(S,id))){it=checkItem(g,id);bossOk=false;}
   else if(kindFor(t)){const k=kindFor(t),T=S.teach?.[id];
     let lvl=mode==='review'?Math.max(2,(r?.lvl||4)-1):mode==='diagnostic'?(t.ageRangeStart>=10?4:3):(r?.lvl||(t.ageRangeStart>=10?3:2));
     // teach before test: a new or shaky skill gets a Learn-it card (idea + worked example), then 2 guided practice items

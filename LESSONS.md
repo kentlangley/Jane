@@ -223,6 +223,21 @@ When a stage's topic has a research brief, use the brief to plan the stage (the 
  "hint":"Tops: 1 × 1. Bottoms: 3 × 2.","explanation":"Cut the half into 3 equal parts: each is 1/6 of the whole. No common denominator needed."}
 ```
 
+## Check-understanding items (gates, spot-checks and the boss finale)
+`data/checks/checks.txt` holds short kid-voice check items keyed by topic id. They were written offline from the
+research's two-tier and interpret/translate assessments, and the wrong choices come from its misconceptions. Raw
+assessment text is never shown to the kid.
+- **The app uses them by itself.** Review gates and spot-checks serve a topic's check item instead of its kid prompt. On
+  a generator topic (like fractions or decimals), only a spot-check of an inferred skill uses it. You don't schedule them.
+- **Boss finale (optional).** A boss may end with a two-tier pair: an mc with `"twoTier": "answer"`, then an mc with
+  `"twoTier": "why"` (the reason). `npm run research -- <topicId> --check` prints the pair, ready to paste, for a topic
+  that has one. Use the boss topic's own item, or one for a skill taught earlier in the quest. The fair-boss rules
+  still apply. The pair must be the last two questions of the boss stage, and the publisher fails it anywhere else.
+  Performance-task checks (build, draw or explain) belong in guided stages, not the boss.
+- **New items** go in `data/checks/checks.txt`: `mt_id|question|right|wrong1|wrong2[|why right|why wrong1|why wrong2]`.
+  Keep the question at 15 words or fewer, choices at 12 or fewer, use "you", and never paste adult assessment text
+  (`npm test` checks this). Pending and hidden-region topics are skipped by the build.
+
 ## Writing style (required for every pack)
 Jane talks **to** the learner, never about them. Every prompt must be:
 - **Second person**: "you / your" ("Your $40 game is 50% off…"), never "Can Sam…", "{name} is…" or "he/she".

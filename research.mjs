@@ -141,9 +141,20 @@ export function nightlyResearch(groups,{maxBriefs=NIGHTLY_MAX_BRIEFS,maxChars=NI
     const b={for:why[id],...briefCompact(id)},n=JSON.stringify(b).length;
     if(Object.keys(sec.briefs).length<maxBriefs&&used+n<=maxChars){sec.briefs[id]=b;used+=n;}else sec.pointers.push({id,title:d.title,for:why[id]});}
   return sec;}
+// ---------- check-understanding items (data/checks, slice 6) ----------
+// {q,a,w,y?} for a topic, or null; checkPair(id) = the two-tier boss finale as pack questions (answer, then why).
+export function checkItem(id){const dir=path.join(DIR,'data/checks');if(!fs.existsSync(dir))return null;
+  for(const f of fs.readdirSync(dir).filter(f=>f.endsWith('.txt')))for(const l of fs.readFileSync(path.join(dir,f),'utf8').split('\n')){const p=l.split('|').map(x=>x.trim());
+    if(p[0]===id&&!l.startsWith('#'))return{q:p[1],a:p[2],w:[p[3],p[4]],...(p.length===8?{y:{a:p[5],w:[p[6],p[7]]}}:{})};}
+  return null;}
+export function checkPair(id){const c=checkItem(id);if(!c)return null;
+  const a={type:'mc',twoTier:'answer',prompt:c.q,choices:[c.a,...c.w],answer:c.a,misconception:c.w[0],hint:'Think about what really happens.',explanation:c.y?`${c.a}: ${c.y.a}.`:`It's ${c.a}.`};
+  if(!c.y)return[a];
+  return[a,{type:'mc',twoTier:'why',prompt:'Why is that right?',choices:[c.y.a,...c.y.w],answer:c.y.a,misconception:c.y.w[0],hint:'Which reason explains it?',explanation:`${c.y.a}.`}];}
 // ---------- CLI ----------
 if(process.argv[1]&&fileURLToPath(import.meta.url)===path.resolve(process.argv[1])){
   const args=process.argv.slice(2),ids=args.filter(a=>!a.startsWith('--'));
-  if(!ids.length){console.error('usage: node research.mjs <topicId> [<topicId> …] [--json] [--all]');process.exit(2);}
+  if(!ids.length){console.error('usage: node research.mjs <topicId> [<topicId> …] [--json] [--all] [--check]');process.exit(2);}
+  if(args.includes('--check')){for(const id of ids){const p=checkPair(id);console.log(p?JSON.stringify(p,null,1):`${id}: no check item (data/checks)`);}process.exit(0);}
   for(const id of ids){if(args.includes('--json'))console.log(JSON.stringify(briefCompact(id),null,1));else console.log(briefText(id,{all:args.includes('--all')}));if(ids.length>1)console.log('');}
   if(ids.some(id=>!topicStatus(id).known))process.exit(1);}
