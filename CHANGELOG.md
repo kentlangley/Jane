@@ -6,6 +6,16 @@ Dates are Pacific Time.
 ## [Unreleased]
 
 ### Added
+- **Check-understanding items** ([#42](https://github.com/kentlangley/Jane/issues/42)): `data/checks/checks.txt` has 106
+  kid-voice items for Math and Science topics, written offline from the two-tier and interpret/translate assessments,
+  with wrong choices taken from the misconceptions. They cover the topics closest to a learner's review
+  queue, spot-checks and frontier first; the rest are a follow-up. `build.mjs` validates them and attaches them to
+  playable topics (`ck`), skipping pending and hidden-region topics.
+  - **In the app:** review gates and spot-checks prefer them over the kid prompt; on generator topics they're used only
+    to spot-check inferred skills. The "why" tier becomes the explanation, and the log records `qtype: "check"`.
+  - **Progress:** stored progress, medals, gate choice and quest stages are unchanged.
+  - **Bosses:** a boss may end with a two-tier "answer + why" pair (`"twoTier"`); `npm run research -- <id> --check`
+    prints one.
 - **Research in nightly authoring** ([#41](https://github.com/kentlangley/Jane/issues/41)): LESSONS.md "Researched
   stages" rules for Math and Science stages whose topic has research. `publish-lessons.mjs` warns, but never fails, when
   a researched stage has no wrong choice tagged `"misconception"`, or when a topic the learner got stuck on has no

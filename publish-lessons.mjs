@@ -112,6 +112,13 @@ const seen=new Set();let nq=0,nGraded=0,nReview=0,nDeep=0,nCards=0;const typesUs
   const graded=qs.filter(q=>!CARDS.includes(q.type)).length;if(!graded)E(P+'.questions','needs at least one graded question (not only cards)');
   if(Q&&t.format==='boss'&&graded&&graded<3)E(P,`boss stage needs ≥ 3 graded questions (has ${graded}): a legendary medal means a real boss fight`);
   if(i>=RR){if(t.review)nReview+=graded;nGraded+=graded;nq+=qs.length;nCards+=qs.length-graded;} // refresh: the budget counts the remaining stages
+  // two-tier "answer + why" finale (LESSONS.md "Check-understanding items"): a boss may END with an mc answer and an mc
+  // reason ("twoTier": "answer" then "why"), e.g. from data/checks (npm run research -- <id> --check). Fair-boss rules still apply.
+  {const tt=qs.map((q,j)=>[q.twoTier,j]).filter(([v])=>v!=null);
+   for(const [v,j] of tt){const Qp=`${P}.questions[${j}]`;if(!['answer','why'].includes(v))E(Qp+'.twoTier','"answer" or "why"');else if(qs[j].type!=='mc')E(Qp+'.twoTier','two-tier items are mc questions');}
+   if(tt.length){const last=qs.length-1;
+     if(t.format!=='boss')E(P,'"twoTier" items are for the boss finale (use a guided or graded stage for other checks)');
+     else if(tt.length!==2||qs[last]?.twoTier!=='why'||qs[last-1]?.twoTier!=='answer')E(P,'a two-tier finale is exactly two questions at the end of the boss: "twoTier": "answer", then "twoTier": "why"');}}
   if(t.deepDive){nDeep++;if(graded<3)E(P,`deep dive needs ≥ 3 graded questions (has ${graded})`);if(graded>4)W(P,`deep dive has ${graded} graded questions (aim 3-4 to keep quests short)`);if(!qs.some(q=>q.type==='why'||q.type==='learn'))E(P,'deep dive needs a "why" or "learn" card');
     if(new Set(qs.map(q=>q.type).filter(x=>!CARDS.includes(x))).size<3)W(P,'deep dive: mix at least 3 question types');}
   if(tp&&tp.ageRangeStart<LRN.age-2)W(P,`"${tp.name}" starts at age ${tp.ageRangeStart}: below the target level (${LRN.grade}, ~age ${LRN.age})`);

@@ -1,0 +1,112 @@
+# Check-understanding items (slice 6, #42), keyed by Marble topic id. Offline-authored from the two_tier and
+# interpret_translate assessments in data/marble/teaching-research.json, rewritten for kids: never raw assess text.
+# One line per topic:  mt_id|question|right|wrong1|wrong2[|why right|why wrong1|why wrong2]
+# The wrong choices come from the research's error patterns (misconceptions). The optional "why" tier is the reason
+# (two-tier items): the app shows the right reason in its explanation, and a quest boss may end with the pair.
+# Review gates and spot-checks prefer these over the kid prompt. Pending and hidden-region topics are skipped by build.mjs.
+mt_ehC1wsdmUz|A candle burns in a sealed jar on a scale. The reading…|Stays the same|Goes down|Goes up|The wax turns into gases that stay in the jar|Burnt wax is gone forever|Gas weighs nothing
+mt_5l7iGkf1Tp|Which is true about the Sun, Earth and Moon?|The Moon circles Earth; Earth circles the Sun|The Sun circles the Earth|The Moon circles the Sun on its own|Earth is a planet, and planets orbit the Sun|Sunrise proves the Sun moves around us|The Moon is a small planet
+mt_URTJbS3hhs|Owls eat voles and shrews. If all the voles vanish, owls…|Eat more shrews and get by|All die right away|Are not affected at all|In a web, animals have more than one food|Losing one food always wipes out the hunter|Owls only ever eat voles
+mt_V2lNzEex_a|A puddle dries up in the sun. Where did the water go?|Into the air as water vapor|It's gone for good|It all soaked into the ground|Heat turns water into an invisible gas|Sunshine destroys water|Water vapor is the same as a cloud
+mt_v9uYnIY5-B|A star is 4 light-years away. A light-year measures…|Distance|Time|Brightness|It's how far light travels in one year|It's how many years a star shines|It's how bright a star looks
+mt_6xNmQLzuqm|A 3-by-4 block or a 1-by-10 strip: which has more area?|The 3-by-4 block|The 1-by-10 strip|They're the same|It covers 12 squares; the strip covers 10|The strip is longer, so it's bigger|Both are made of squares
+mt_uoTBeyMhGm|Which way does a comet's tail point?|Away from the Sun|Always behind the comet|Toward the Sun|Sunlight and solar wind push the gas away|It's smoke left behind|The Sun pulls the tail in
+mt_ylruY6VhOf|Is one tiny particle of copper orange and shiny?|No, only lots together look like that|Yes, it's a tiny bit of copper|No, the stuff between particles is orange|Color and shine come from many particles together|Each particle has all of copper's features|Particles are made of smaller copper bits
+mt_ZhKuYCbXz1|Why does the Sun look brighter than every other star?|It's the closest star to us|It's the biggest star|It's the most powerful star|Close lights look brighter than far ones|Bright always means big|Far starlight gets used up on the way
+mt_i2F1nWxJjv|A filled dot at −2 with an arrow pointing right. Which is it?|x ≥ −2|x > −2|x ≤ −2
+mt_1PAWhRhpdg|What is 4 ÷ 1/5?|20|0.8|4/5|Each whole holds 5 fifths, so 4 × 5|Dividing always makes numbers smaller|Just divide 4 by the bottom number, 5
+mt_ifPDOYvUqm|What is 1/3 ÷ 4?|1/12|4/3|1/7|Split each third into 4 parts: twelfths|Dividing by a fraction makes it bigger|Add the 4 to the bottom number
+mt_xq3YHZ2zeR|A circle's radius is 4.5 cm. What is its diameter?|9 cm|2.25 cm|4.5 cm|A diameter is two radii, end to end|A diameter is half the radius|Radius and diameter are the same
+mt_oDlduFnemk|A point is 2 across and 4 up. How do you write it?|(2, 4)|(4, 2)|(2 + 4)|Across comes first, then up|Up comes first, then across|The order doesn't matter
+mt_MJZA90uc6H|3-by-4 and 2-by-6 rectangles both have area 12. Their perimeters are…|Different: 14 cm and 16 cm|The same, since the area is the same|The same, because the sides balance out
+mt_xhoOWnhtHq|What is the greatest common factor of 24 and 36?|12|72|6|12 divides both, and nothing bigger does|72 is a multiple of both, so it's the factor|6 divides both, so it's the highest
+mt_X5cypSGoGU|What is 2 + 3 × 4²?|50|146|26|Square first, then multiply, then add|Always work left to right|4² means 4 × 2
+mt_EDgw64OmfA|How does the 4 in 0.04 compare to the 4 in 0.4?|It's worth 10 times less|They're worth the same|It's worth more|Each place to the right is a tenth of the last|A 4 is a 4 anywhere|Longer decimals are bigger
+mt_RWUY7_IXvw|Which is the greater number: −8 or −3?|−3|−8|They're equal|−3 is closer to zero, further right|8 is bigger than 3|Farther from zero means bigger
+mt_mqQ-DtH5m-|Archaeopteryx had feathers AND teeth. What does that show?|Birds came from dinosaurs|It was just a weird one-off|All feathered dinosaurs could fly|Many fossils show the same mix of features|One odd fossil proves nothing|Feathers only grow for flying
+mt_0_K-GrKQpd|In a stack of rock layers, which layer formed first?|The bottom layer|The top layer|The middle layer
+mt_0ajzcoKAKw|A fallen tree rots away. What happens to its stuff?|Decomposers return it to the soil|It disappears into nothing|Decomposers eat it and keep it|New plants can use those soil nutrients|Rotting destroys matter|Decomposers only clean up mess
+mt_BOG5zRYtQz|Only 10% of grass energy reaches the rabbit. The other 90%…|Leaves as heat, movement and waste|Is destroyed|Turns into more grass|Energy is never destroyed, only passed on|Energy gets used up and vanishes|Rabbits store all of it
+mt_2_YoprauaJ|Rubbing gives a rod a negative charge. The cloth becomes…|Positively charged|Neutral, with no charge|Negatively charged too|Electrons moved from the cloth to the rod|Rubbing makes brand-new charge|Both things get the same charge
+mt_OUv-QXmW7_|On a distance-time graph, a flat line means the cyclist is…|Stopped|Riding on flat ground|Going fastest|Distance stays the same while time passes|Flat line means flat road|The highest line means the fastest
+mt_b6kZgqolEd|Why can you squash air in a syringe but not water?|Air particles have space between them|Air particles shrink when squeezed|Water particles are bigger|Pushing closes the gaps between gas particles|Squeezing makes each particle smaller|Liquids have no particles
+mt_VfA4xo4kUv|Are you and a tree made of cells?|Yes, all living things are|No, only tiny living things are|Only trees are|Cells are too small to see without a microscope|Big things aren't made of cells|You can see cells on your hand
+mt_sDmrVCfzqt|Which part of food gives you most of your energy?|Carbohydrates and fats|Vitamins|Protein|Vitamins help your body work, not fuel it|Vitamins are packed with energy|Protein is your main fuel
+mt_rbY77m8_s1|Why must an X-ray telescope go into space?|Our air blocks X-rays|To get a closer view|Space is darker|X-rays never reach the ground|A tall mountain would work fine|X-ray pictures are just made up
+mt_4V-vYhFUcm|What makes a crescent Moon look like a crescent?|We see only a little of its sunlit half|Earth's shadow covers most of it|A cloud of dust blocks part of it|The Sun always lights half the Moon|The Moon makes its own light|A crescent is a small eclipse
+mt_33RrpbceZE|Neptune is far from the Sun. Its year is…|Much longer than ours|About the same as ours|Shorter than ours|Farther planets travel a much bigger path|Every planet takes about a year|Farther planets move faster
+mt_4K1dr204Hi|What is 3/8 as a decimal?|0.375|2.67|0.38|Divide the top by the bottom: 3 ÷ 8|Divide the big number by the small one|3/8 is 3 and 8 joined with a point
+mt_4Km38F4L-6|3 chocolate bars shared equally by 4 kids. Each gets…|3/4 of a bar|1 1/3 bars|Nothing, it can't be shared|A fraction means dividing: 3 ÷ 4|You can't share 3 among 4|3/4 just means 3 out of 4 pieces
+mt_4WaKWECpcv|Which means "add 8 and 7, then multiply by 2"?|(8 + 7) × 2|8 + 7 × 2|8 × 2 + 7
+mt_9QzSnn8m80|Start at 4 on a number line and add −7. Where do you land?|−3|11|3
+mt_FspV_imUGK|A cost graph goes through (3, 6). What does that point say?|3 pounds cost $6|6 pounds cost $3|It costs $3 per pound
+mt_gx6KQK5-Kx|A whole square is cut into 3 columns and 4 rows. One tile is…|1/12|1/7|1/4
+mt_i9rJbuFO3p|There are 4 times as many cats (c) as dogs (d). Which fits?|c = 4d|4c = d|c + 4 = d
+mt_jHgRQ4hR0g|What is 8 + 2 × 5?|18|50|15|Multiply before you add|Always work left to right|Add first because it comes first
+mt_liIW336odh|Which is true?|All squares are rectangles|All rectangles are squares|A square is not a rectangle|A square has every rectangle feature, plus equal sides|Rectangles are just stretched squares|Squares and rectangles share nothing
+mt_lNGpnILM5C|In 4.378, what is the 7 worth?|7 hundredths|7|7 thousandths|It's in the second place after the point|Digits after the point are whole numbers|It comes later, so it's worth more
+mt_PsylzZ9lHW|Which is the smallest: −3, 1/2 or 2.75?|−3|1/2|2.75|It's the farthest left, below zero|Fractions are always smallest|Ignore the minus sign
+mt_sUVeVXzRuq|A 6 kg rock goes to the Moon. What changes?|Only its weight|Only its mass|Both mass and weight|Weight is gravity's pull; mass is the stuff in it|Lighter means there's less of it|Mass and weight are the same thing
+mt_uDJY0X0hgo|Which is true?|0.75 = 3/4|0.75 > 3/4|0.75 < 3/4
+mt_VKW8lOcFaw|Without working it out: 3/4 × 7 is…|Less than 7|More than 7|Exactly 7|You take only part of 7, since 3/4 < 1|Multiplying always makes things bigger|Multiplying never changes a number
+mt_VUQNveSYjQ|Someone says 138 ÷ 6 = 23. Which check works best?|Work out 23 × 6|Do 138 ÷ 6 again|Work out 138 × 6|Multiplying undoes dividing|Doing it twice proves it|Any times sum checks it
+mt_xAf2bu9wYK|45 minutes as a fraction of 2 hours is…|3/8|45/2|8/3|First make both minutes: 45 of 120|Just use the numbers you see|Put the bigger number on top
+mt_z5iwdZyeDr|Six students (S) for every teacher (T). Which equation fits?|S = 6T|6S = T|S + 6 = T
+mt_09sySPqM9Z|Is 7/4 a real number?|Yes, it's seven quarters|No, the top can't be bigger|Yes, and it's close to 7|It lands between 1 and 2 on the line|A fraction must be less than 1|7/4 is near 7 on a number line
+mt_5mIcmKRCgA|A phone plan: $15 a month plus 20¢ a minute. Double minutes, double bill?|No|Yes|Only for short calls|The $15 part stays the same, so it can't double|Twice the minutes always means twice the cost|Doubling minutes halves the bill
+mt_8H2kO4k2B9|A diamond has 4 equal sides but uneven angles. Is it regular?|No|Yes|Only if it's big|Regular needs equal sides AND equal angles|Equal sides are enough|Regular means neat-looking
+mt_ae-cHHFR76|The Sun looks brightest. Is it the most powerful star?|No, it's just the closest|Yes, the most powerful|Yes, the biggest one|Many far-off stars give off more light|Brighter-looking always means stronger|All stars are the same distance away
+mt_AvrQauS_zX|Drop a heavy stone and a light stone together. Which lands first?|About the same time|The heavy stone|The light stone|Gravity speeds both up at the same rate|Gravity pulls heavy things down faster|Light things are faster
+mt_ebPelt-qAl|Which equals 2/3?|4/6|3/4|2/6|Multiply top and bottom by the same number|Add 1 to the top and the bottom|Change just the bottom number
+mt_ePXg_XyCKU|$20 shared in the ratio 3:2 makes 5 equal blocks. One block is…|$4|$10|$6
+mt_FHIAv6dfhU|Is 97 a prime number?|Yes: only 1 and 97 divide it|No: 97 is too big to be prime|Yes: every odd number is prime
+mt_Ge4Wtg6QMM|Are all metals magnetic?|No, only some, like iron|Yes, every metal|No metals are magnetic|Copper and aluminum don't stick to magnets|Being magnetic makes it a metal|Magnets only pull plastic
+mt_kdWoAel3Zl|How do you write 25 thousandths as a decimal?|0.025|0.25|0.0025|A zero holds the empty tenths place|Just put a point before 25|Put two zeros before 25
+mt_M8UQTURODF|A museum shows a colorful feathered dinosaur. What do fossils tell us?|Its bones and feathers, not exact colors|Its exact colors|Nothing about its looks|Color is mostly a careful guess|Fossils keep every color|Artists make it all up
+mt_Mf-T-fYRLX|Salt is stirred into water until you can't see it. The salt is…|Still there, dissolved|Gone for good|Melted into water|You could taste it or dry the water away|You can't see it, so it's gone|Water melts salt like ice
+mt_oLjz18CxDg|Astronauts float on the Space Station. Is there gravity up there?|Yes, they're falling around Earth|No, there's no gravity in space|No, they're too high up|Gravity keeps pulling them around in orbit|Space has no gravity at all|Floating means no force at all
+mt_QHKqckBdAk|How did one asteroid strike end dinosaurs worldwide?|Dust blocked sunlight, so food ran out|It crushed every dinosaur|It burned the whole Earth at once|Without sunlight, plants died, then animals starved|The crash hit every place at once|Only the impact itself mattered
+mt_QqG6IdmTSE|Compare the 3 in 300 and the 3 in 3,000.|The 3 in 3,000 is 10 times bigger|It's 2,700 bigger|They're the same, both are 3|One place left is worth ten times more|Subtract to compare them|A 3 is a 3 anywhere
+mt_rbPioPELM1|Vinegar and baking soda fizz. Can you get them back?|No, a new substance was made|Yes, just separate them|Yes, let the bubbles boil off|The fizzing gas is a sign of a new substance|They're only mixed together|Bubbles mean it's boiling
+mt_T8JGTJ-oNI|Are birds related to dinosaurs?|Yes, birds are living dinosaurs|No, all dinosaurs died out|No, birds have feathers|Fossils show dinosaurs with feathers|Birds came from no dinosaur at all|Feathers first grew for flying
+mt_U4cIBXVug4|Red tower: 4 cubes. Blue is 4 times as tall. Blue is…|16 cubes|8 cubes|4 cubes|4 times means 4 copies of red|4 times means 4 more|4 times means the same
+mt_UKmtuAsSLN|Which change can be undone?|Ice melting into water|Bread turning into toast|An egg being fried|Melting makes no new substance|Anything heated can't be undone|Toast can turn back into bread
+mt_WBdHkc2HTf|On a distance-time graph, the faster runner has the…|Steeper line|Higher line|Longer line|Steeper means more distance each second|Higher up always means faster|A steep line is a hill
+mt_yK51ZnKA8m|Pairs (2, 6), (3, 9) and (5, 15). So y is…|3 times x|4 more than x|2/8 of x|y ÷ x is always 3|The first pair differs by 4|Use the first pair only
+mt_ZM9mhHsyYZ|Jo says "50% is always 50." Is Jo right?|No, 50% means half of the whole|Yes, 50% is 50|Only for money|50% of 20 is 10|Percent means the same number|50% means 1/50
+mt_AYzE1EAvI0|Is 4/4 equal to 1?|Yes|No, it's a bit less|No, it's more than 1|Four quarters make one whole|Fractions are always less than 1|The 4s cancel to make 0
+mt_doX1BhmFgk|10 hundredths is the same as…|1 tenth|1 hundredth|10 wholes|Ten hundredths fill one tenth|Hundredths are bigger than tenths|Tenths and hundredths never match
+mt_DRlbMok2lT|What is 1/4 as a decimal?|0.25|0.4|0.14|A quarter of 100 squares is 25|Copy the 4 after the point|Copy the 1 and the 4
+mt_Ep7TDFuYUa|Which sixths fraction sits at the same point as 2/3?|4/6|3/6|2/6
+mt_GDG9_SZmsO|Use a times fact: 32 ÷ 8 = ?|4|8|24|8 × 4 = 32, so the missing factor is 4|Pick the number you see in the fact|Subtract 8 from 32
+mt_gtTl3R5buH|4 baskets with 6 eggs each. Which fits?|4 × 6|4 + 6|6 − 4|It's 4 groups of 6|Just add the numbers you see|Take the small number away
+mt_h0CVtqI2xo|Two angles open the same, but one has longer arms. Which is bigger?|They're the same size|The longer-armed one|The shorter-armed one|Angle size is the turn, not the arm length|Longer lines mean bigger angles|Short arms make a wider angle
+mt_i5_HnoFOYw|A square has corners at (1,1), (1,4) and (5,4). The fourth is…|(5, 1)|(1, 5)|(4, 1)
+mt_jBQS-CicNn|In (2, 4), what does the 2 tell you?|Go 2 across|Go 2 up|Go 2 down|The first number is across, the second is up|Up always comes first|Either order means the same point
+mt_jY7uf0Cb7o|In 3,452, what is the 4 worth?|400|4|40|It's in the hundreds place|A digit is worth just itself|It's in the tens place
+mt_k7GOtslF-x|A book rests still on a table. Are any forces on it?|Yes, balanced forces|No forces at all|Only gravity|Gravity pulls down, the table pushes up|Still things have no forces|Nothing pushes back on the book
+mt_Lb2ZnMdkYR|8 × 5 = 40. So 8 × 7 is…|56|42|47|8 × 7 is 8 × 5 plus 8 × 2|Just add 2 to 40|Add 7 to 40
+mt_loYPGHJ8lm|A circuit has a gap where the switch is open. Does the bulb light?|No, the loop is broken|Yes, the bulb is still there|Only a little bit
+mt_ndGqFPWyen|Same bar: 3/4 shaded or 3/6 shaded. Which is more?|3/4|3/6|They're the same|Sixths are smaller pieces than quarters|6 is bigger than 4|Both have 3 pieces
+mt_NoB20kVa4w|A 0-to-1 line has 6 equal parts. A dot sits on the 4th mark. It's…|4/6|4/7|6/4
+mt_nZkL5-XjRX|Which list has ALL the factor pairs of 24?|1×24, 2×12, 3×8, 4×6|1×24, 2×12, 4×6|2×12, 3×8, 6×4, 8×3|Work up from 1 until the pairs meet|Stop when you find a few|3×8 and 8×3 are different pairs
+mt_oB-L8EVdIP|Lettuce → slug → frog → heron. If frogs vanish, slugs…|Increase|Decrease|Stay the same|Fewer frogs means fewer slugs get eaten|Everything in a chain goes down together|Slugs eat frogs
+mt_Qkewo5M3_c|On a hot day, puddle water evaporates. Where does it go?|Into the air as vapor|It vanishes for good|Down into the Earth's core|It can come back as rain later|Evaporated water stops existing|Only seas can evaporate
+mt_TqDq6jyOmL|How do you write 7/100 as a decimal?|0.07|0.7|7.100|Hundredths are the second place after the point|Put the 7 right after the point|Write the top and bottom with a point
+mt_uVaS12lN1i|A bird eats a caterpillar. Which way does the arrow point?|Caterpillar → bird|Bird → caterpillar|No arrow is needed|Arrows show food going to the eater|Arrows point at what gets eaten|Arrows only link plants
+mt_Xt1cRqaBOW|Is a square also a rectangle?|Yes|No|Only if it's tilted|It has 4 right angles and equal opposite sides|Rectangles need 2 long and 2 short sides|Squares and rectangles are different families
+mt_YQkUdIHO8L|Sand pours like water. Is sand a liquid?|No, it's lots of tiny solid grains|Yes, it pours|Yes, it takes the bucket's shape|Each grain keeps its own shape|Anything that pours is a liquid|Sand is a gas
+mt_1LFVPjdGg-|A caterpillar eats a leaf. Which way does the food-chain arrow point?|Leaf → caterpillar|Caterpillar → leaf|Both ways|The arrow follows the energy to the eater|The arrow points at the food|Leaves eat caterpillars
+mt_8gy7uxRlF6|Bundle ten tens together. How many ones is that?|100|10|20|Ten groups of ten make a hundred|Count the sticks, not their value|Ten and ten is twenty
+mt_aPBzD28_mT|In 706, what does the 0 tell you?|There are no tens|Nothing at all|There are no hundreds|The 0 keeps the 7 in the hundreds place|706 is the same as 76|Zeros never matter
+mt_AVk2EmSULC|Why isn't Pluto called a planet anymore?|Scientists changed what counts as a planet|It was destroyed|It flew out of the solar system|It's still out there circling the Sun|Pluto blew up in 2006|There are nine planets
+mt_B1zj1RwQ3a|An array has 3 rows of 4 dots. Which sum fits?|4 + 4 + 4|3 + 4|3 + 3|Each of the 3 rows has 4|Add the row number and the row size|Count the rows only
+mt_E1wR8IfCV6|Can a dog make its own food by sitting in the sun?|No, it must eat food|Yes, like a plant|Only on hot days|Only plants make food from sunlight|Sunshine feeds every living thing|Dogs get energy from warm fur
+mt_EXlmTURK_o|How many seconds are in one and a half minutes?|90|130|150|60 + 30 = 90|A minute is 100 seconds|Half a minute is 50 seconds
+mt_FbDKeLfBCo|Two equal bars: 2/3 shaded and 4/6 shaded. Which is more?|They're the same|4/6|2/3|Each third splits into two sixths|More pieces means more chocolate|Different numbers mean different amounts
+mt_fhqVdj4BYr|A puddle dries up. Could that water fall as rain again?|Yes, it can|No, it's gone for good|Only if it snows|Vapor rises, cools and forms clouds|Heat destroys water|Clouds are made of smoke
+mt_htAYR-iCFF|In a liquid, the particles are…|Close together but jumbled|Far apart like a gas|Locked in neat rows|Liquids flow because particles slide past each other|Liquid particles are bigger|There's air between liquid particles
+mt_IhWzO4sQPg|What is a cloud made of?|Tiny water droplets|Cotton-like fluff|Smoke|Water vapor cools and turns into droplets|Clouds are fluffy stuff, not water|The cloud is invisible vapor
+mt_Kr3IyA6m-O|Where does 3/4 go on a 0-to-4 number line?|Just before 1|Between 3 and 4|At 3
+mt_lcf8lx-LkZ|A magnet pulls a paperclip across a gap. That's a…|Non-contact force|Contact force|Push from the air|Magnetism works across a distance|Something invisible must be touching|Magnets need air to pull
+mt_MFfYcnv6Tv|A right angle is tilted on its side. Is it still a right angle?|Yes|No|Only if the lines are long|It's still a quarter turn|Right angles must look like an L|Tilting changes the angle
