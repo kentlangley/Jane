@@ -124,6 +124,21 @@ The research stays offline: it is read by the nightly author and never shipped t
    two-tier assessments, for review gates and boss fights.
 7. [#43](https://github.com/kentlangley/Jane/issues/43) Credits and licensing for the new material.
 
+### What we learned using it (Jane v0.6.0)
+
+- **Misconceptions make good wrong choices.** Each one comes with a "next move", so the wrong choice and the reply to
+  a kid who picks it can be written together. The nightly author now does this for every researched stage.
+- **Assessment items are written for adults.** Many two-tier and interpret/translate items are instructions to a
+  teacher ("Ask: …", "watch whether …", "the child should …"), so they can't be shown as they are. We rewrote them by hand
+  into short kid-voice multiple-choice checks with an optional "why" tier. That is slow, so v0.6.0 ships 106 items for the topics nearest
+  a learner's review queue and frontier, and tracks the rest in [#51](https://github.com/kentlangley/Jane/issues/51).
+  Performance tasks (build, draw or explain) don't turn into a multiple-choice check at all.
+- **Finding contradictions by matching text is noisy.** Matching `learn` warnings ("don't say 'X'") against the older
+  `pedagogy`/`assess` text flagged quoted vocabulary and passages that only mention a phrase. Only strongly worded
+  warnings of at least two words were reliable enough to act on. A structured marker (suggestion 4 below) would remove the guesswork.
+- **Some content is regional.** A few topics are specific to one country (for example, Australian places, history or money). We added a
+  household region filter. A region tag in the data would help other apps do the same.
+
 ## Feedback and questions for Marble
 
 All of these are suggestions from one small downstream user; please take what's useful.
@@ -148,6 +163,8 @@ All of these are suggestions from one small downstream user; please take what's 
 8. **Research for the 340 new topics.** Even a short `assess` block (diagnostic plus error patterns) would be valuable.
 9. **A slim build.** A research file without `provenance`, `sources` text and `publicationNotes`, or one file per
    subject, would be easier to vendor than one 24 MB file.
+10. **A kid-facing check item.** A short student-voice version of each two-tier item, kept separate from the
+   teacher guidance, would save every downstream app from rewriting them by hand.
 
 Thanks again for publishing all of this openly. We'll share anything we learn from using it.
 

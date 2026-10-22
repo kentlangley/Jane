@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "If you use Jane or its derived data, please cite it as below, and cite the Marble Skill Taxonomy it builds on."
 title: "Jane: an adaptive learning app built on the Marble Skill Taxonomy"
 type: software
-version: "0.5.0"
-date-released: "2026-10-20"
+version: "0.6.0"
+date-released: "2026-10-22"
 authors:
   - family-names: "Langley"
     given-names: "Kent"
