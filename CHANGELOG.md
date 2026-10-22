@@ -5,6 +5,28 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+### Added
+- **Household region filter** (`HIDE_REGIONS`): `data/regions/AU.txt` tags 26 topics whose content is specifically
+  Australian (Australian Curriculum-only, and about Australian history, government, money, symbols, literature or
+  First Nations Australians' Country). Every topic still plays by default. A household that sets `HIDE_REGIONS="AU"`
+  (env, Docker build arg, or `[vars]` in `wrangler.toml`) gets a build without them: they are left out like pending
+  topics, the prerequisite graph is reconnected around them, they leave the progress total, and medal tiers do not
+  change. Progress and medals already earned on them are kept and still listed. `export-progress.mjs` and
+  `publish-lessons.mjs` check that `public/tax.json` was built with the configured setting and reject hidden topics.
+- **Kid prompts for the new Marble topics** ([#39](https://github.com/kentlangley/Jane/issues/39)): 316 new
+  `mt_id|question|right|wrong1|wrong2` lines in `data/kid-prompts/b11.txt`, and 11 math topics made playable through the
+  existing generators (they fit: adding and subtracting within 20, sharing and grouping, halves/quarters/eighths, place
+  value to 1000). The app now plays 1,916 of the 1,930 upstream topics, linked by 4,081 prerequisite edges.
+  - **Still pending (14), each with its reason in `PENDING.txt`:** 6 math topics whose matching generator would ask the
+    wrong kind of question (fractions of time, volume with fraction edges, odd/even rules, calculator use, factor
+    algorithms, estimating decimal products); 6 body-safety, consent and puberty topics that belong in a conversation with
+    a parent rather than a 3-choice quiz; 2 topics that need local knowledge (the First Nations Country of the
+    learner's own school and area).
+  - **New areas:** Geography (Maps & Spatial Skills, Places & Environments) and new domains in Computing, History, Life
+    Skills and Science (Design & Technology) get icons; coverage for a blank learner now counts 66 areas (Science 20).
+  - **Medal tiers:** the ancestor-count percentiles move from gold ≥ 31 / silver ≥ 9 to gold ≥ 34 / silver ≥ 10.
+    Medals already earned keep their stored tier.
+
 ### Changed
 - **Marble Skill Taxonomy updated to os-taxonomy `a871973`** ([#38](https://github.com/kentlangley/Jane/issues/38)):
   `data/marble/` is the pinned upstream commit (`data/marble/UPSTREAM`), byte-identical, now including Marble's

@@ -9,7 +9,7 @@
 // it would only wait queued): --refresh it instead. A refresh keeps every reached stage and the quest block byte-identical
 // and may change, add or drop the stages after them; the size budget applies to those remaining stages.
 // Catch-up boosts are retired (exit 1); the app still honours a boost:<date> key published before v0.5.
-import fs from 'fs';import {kvPut,kvGet,kvList,loadTax,activeQuests,questReached,learnerConfig,LOCAL} from './lib-cli.mjs';import * as EN from './src/engine.js';import {coverage,seenAreas} from './src/coverage.js';
+import fs from 'fs';import {kvPut,kvGet,kvList,loadTax,activeQuests,questReached,learnerConfig,LOCAL,DIR} from './lib-cli.mjs';import {checkRegionFilter} from './lib-regions.mjs';import * as EN from './src/engine.js';import {coverage,seenAreas} from './src/coverage.js';
 // Learner settings from wrangler.toml [vars]. Packs may write {name}; the app fills it in. Prompts must talk to the learner as "you".
 EN.configure(learnerConfig());const LRN=EN.learner();
 const NAMES=[LRN.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'\\{name\\}','the learner'].join('|');
@@ -52,7 +52,8 @@ if(REFRESH){try{PREV=kvGet('lessons:'+pack.date);}catch{}if(!PREV?.quest){consol
   for(let i=0;i<RR;i++){const a=PREV.topics[i],b=(pack.topics||[])[i];if(JSON.stringify(a)!==JSON.stringify(b))bad.push(`stage ${i+1} "${a.stage?.name||a.topicId}" ${b?'changed':'is missing'}`);}
   if(bad.length){console.error(`⛔ refresh of ${pack.date} touches what the learner already reached (stages 1-${RR} and the quest block are locked). Nothing was written:\n  `+bad.join('\n  ')+`\n   Copy stages 1-${RR} unchanged from the stored pack and change only stages ${RR+1}+.`);process.exit(SIX);}
   if(!refreshArg)console.warn(`ℹ️  ${pack.date} is the quest in progress: treating this as --refresh (stages 1-${RR} locked).`);}
-const tax=loadTax(),byId=Object.fromEntries(tax.topics.map(t=>[t.id,t])),errs=[],warns=[];const E=(p,m)=>errs.push(`${p}: ${m}`),W=(p,m)=>warns.push(`${p}: ${m}`);
+const tax=loadTax(),byId=Object.fromEntries(tax.topics.map(t=>[t.id,t])),errs=[],warns=[];checkRegionFilter(tax,DIR);const hiddenIds=new Set((tax.hidden?.topics||[]).map(t=>t.id));
+const unknownTopic=id=>hiddenIds.has(id)?`topic "${id}" is hidden in this household (HIDE_REGIONS=${tax.hidden.regions.join(',')}); pick another topic`:`unknown Marble topic id "${id}"`;const E=(p,m)=>errs.push(`${p}: ${m}`),W=(p,m)=>warns.push(`${p}: ${m}`);
 const str=(v,p,req=true)=>{if(v==null||v===''){if(req)E(p,'required string');return false;}if(typeof v!=='string'){E(p,'must be a string');return false;}return true;};
 const strs=(a,p,min,max)=>{if(!Array.isArray(a)||a.length<min||a.length>max||!a.every(x=>typeof x==='string'&&x.trim())){E(p,`${min}-${max} non-empty strings`);return false;}if(new Set(a).size!==a.length)E(p,'items must be unique');return true;};
 const num=v=>typeof v==='number'&&isFinite(v);const wc=x=>String(x||'').trim().split(/\s+/).filter(Boolean).length;
@@ -90,7 +91,7 @@ const tooHard=a=>/\.\d{4,}/.test(String(a))||/\d\.\d+\s*%/.test(String(a)); // p
 function steps(v,P,req){if(v==null){if(req)E(P,'guided practice needs "steps": 1-4 short strings shown before answering');return;}if(!Array.isArray(v)||!v.length||v.length>6||!v.every(x=>typeof x==='string'&&x.trim()))E(P,'1-6 non-empty strings');else v.forEach((x,k)=>{if(wc(x)>18)W(`${P}[${k}]`,`${wc(x)} words (steps ≤ 18)`);});}
 const taught=new Set();
 const seen=new Set();let nq=0,nGraded=0,nReview=0,nDeep=0,nCards=0;const typesUsed=new Set();
-(pack.topics||[]).forEach((t,i)=>{const P=`topics[${i}]`,tp=byId[t.topicId];if(!tp)E(P+'.topicId',`unknown Marble topic id "${t.topicId}"`);if(seen.has(t.topicId))E(P+'.topicId','duplicate');seen.add(t.topicId);
+(pack.topics||[]).forEach((t,i)=>{const P=`topics[${i}]`,tp=byId[t.topicId];if(!tp)E(P+'.topicId',unknownTopic(t.topicId));if(seen.has(t.topicId))E(P+'.topicId','duplicate');seen.add(t.topicId);
   if(t.format&&!FORMATS.includes(t.format))E(P+'.format','one of '+FORMATS.join('|'));
   if(t.intro){str(t.intro.title,P+'.intro.title');str(t.intro.story,P+'.intro.story');str(t.intro.emoji,P+'.intro.emoji',false);if(wc(t.intro.story)>25)W(P+'.intro.story',`${wc(t.intro.story)} words (aim ≤ 25)`);}
   if(t.teaches!=null&&!(Array.isArray(t.teaches)&&t.teaches.every(x=>byId[x])))E(P+'.teaches','array of Marble topic ids this stage teaches or practises (for a later boss)');
@@ -113,7 +114,7 @@ const seen=new Set();let nq=0,nGraded=0,nReview=0,nDeep=0,nCards=0;const typesUs
       if(fg>=0&&!qs[fg].guided)E(`${P}.questions[${fg}]`,'new skill: the first graded question must be guided practice ("guided": true with "steps")');}}
   if(!t.review&&qs.some(q=>q.type==='learn'||q.type==='why')&&qs.some(q=>q.guided)){taught.add(t.topicId);for(const x of t.teaches||[])taught.add(x);}
   qs.forEach((q,j)=>{const Qp=`${P}.questions[${j}]`;typesUsed.add(q.type);
-    if(q.skill!=null&&!byId[q.skill])E(Qp+'.skill','unknown Marble topic id');if(q.guided!=null&&typeof q.guided!=='boolean')E(Qp+'.guided','true|false');
+    if(q.skill!=null&&!byId[q.skill])E(Qp+'.skill',unknownTopic(q.skill));if(q.guided!=null&&typeof q.guided!=='boolean')E(Qp+'.guided','true|false');
     if(!CARDS.includes(q.type))steps(q.steps,Qp+'.steps',!!q.guided);
     if(q.example!=null&&(typeof q.example!=='object'||!q.example.prompt))E(Qp+'.example','{prompt, steps: [...]} (a similar solved problem for the stuck help)');else if(q.example)steps(q.example.steps,Qp+'.example.steps',true);
     if(q.type==='learn'){str(q.title,Qp+'.title');str(q.body,Qp+'.body');if(wc(q.body)>30)W(Qp+'.body',`${wc(q.body)} words (cards: ≤ 30)`);if(!q.example)W(Qp+'.example','learn card: add one worked example {prompt, steps}');return;}if(!TYPES.includes(q.type)){E(Qp+'.type',TYPES.join('|'));return;}

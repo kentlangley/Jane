@@ -7,16 +7,17 @@ const lines=files.flatMap(f=>fs.readFileSync(path.join(DIR,f),'utf8').split('\n'
 const topics=JSON.parse(fs.readFileSync(path.join(ROOT,'data/marble/topics.json'),'utf8')).topics,ids=new Set(topics.map(t=>t.id));
 const tax=JSON.parse(fs.readFileSync(path.join(ROOT,'public/tax.json'),'utf8'));
 // a scratch copy of the build inputs (node_modules linked) so build.mjs can run on modified data without touching the repo
-function scratch(){const d=tmpDir('jane-kid-');for(const p of['build.mjs','migrate-kid-prompts.mjs','prototype/server.js','vendor/entry.mjs','data'])fs.cpSync(path.join(ROOT,p),path.join(d,p),{recursive:true});
+function scratch(){const d=tmpDir('jane-kid-');for(const p of['build.mjs','lib-regions.mjs','migrate-kid-prompts.mjs','prototype/server.js','vendor/entry.mjs','data'])fs.cpSync(path.join(ROOT,p),path.join(d,p),{recursive:true});
   for(const p of['src','public'])fs.mkdirSync(path.join(d,p),{recursive:true});fs.symlinkSync(path.join(ROOT,'node_modules'),path.join(d,'node_modules'));return d;}
-const run=(d,f,args=[])=>spawnSync(process.execPath,[f,...args],{cwd:d,encoding:'utf8'});
+// scratch builds use the same region filter as this checkout's tax.json
+const run=(d,f,args=[])=>spawnSync(process.execPath,[f,...args],{cwd:d,encoding:'utf8',env:{...process.env,HIDE_REGIONS:(tax.hidden?.regions||[]).join(',')}});
 
 test('every kid prompt line is mt_id|question|right|wrong1|wrong2 for a known topic, one per topic',()=>{
-  assert.equal(lines.length,tax.topics.filter(t=>t.kq).length,'one line per prompted topic');const seen=new Set();
+  const hid=new Set((tax.hidden?.topics||[]).map(t=>t.id));assert.equal(lines.filter(x=>!hid.has(x.p[0])).length,tax.topics.filter(t=>t.kq).length,'one line per prompted topic (hidden-region topics keep theirs)');const seen=new Set();
   for(const {f,l,p} of lines){assert.equal(p.length,5,`${f}: ${l}`);assert.match(p[0],/^mt_[\w-]+$/,`${f}: not id-keyed: ${l}`);
     assert.ok(ids.has(p[0]),`${f}: unknown topic ${p[0]}`);assert.ok(!seen.has(p[0]),`${f}: duplicate ${p[0]}`);seen.add(p[0]);}});
 test('the built tax.json carries each prompt on the topic it names',()=>{const by=new Map(tax.topics.map(t=>[t.id,t]));
-  for(const {p} of lines){const t=by.get(p[0]);assert.deepEqual([t.kq,t.ka,...t.kw],p.slice(1).map(x=>x.trim()),p[0]);}});
+  for(const {p} of lines){const t=by.get(p[0]);if(!t&&(tax.hidden?.topics||[]).some(h=>h.id===p[0]))continue;assert.deepEqual([t.kq,t.ka,...t.kw],p.slice(1).map(x=>x.trim()),p[0]);}});
 test('a reordered topics.json gives every topic the same prompt (position-independent)',()=>{const d=scratch();
   try{const f=path.join(d,'data/marble/topics.json'),j=JSON.parse(fs.readFileSync(f,'utf8'));j.topics.reverse();fs.writeFileSync(f,JSON.stringify(j));
     const r=run(d,'build.mjs');assert.equal(r.status,0,r.stderr);const out=JSON.parse(fs.readFileSync(path.join(d,'public/tax.json'),'utf8'));

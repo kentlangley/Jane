@@ -9,14 +9,16 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --ignore-scripts --no-audit --no-fund
 COPY . .
-RUN node build.mjs
+# Household region filter (BOT-SETUP.md): e.g. docker compose build --build-arg HIDE_REGIONS=AU
+ARG HIDE_REGIONS=""
+RUN HIDE_REGIONS="$HIDE_REGIONS" node build.mjs
 
 # --- runtime: plain Node, no npm dependencies, non-root, read-only app files
 FROM node:22-alpine
 ENV NODE_ENV=production HOST=0.0.0.0 PORT=8787 DATA_DIR=/data STORAGE=file
 WORKDIR /app
 COPY --from=build /app/package.json /app/LICENSE /app/LICENSING.md /app/NOTICE /app/CHANGELOG.md /app/LESSONS.md ./
-COPY --from=build /app/lib-cli.mjs /app/export-progress.mjs /app/publish-lessons.mjs /app/backup-progress.mjs /app/migrate-medals.mjs ./
+COPY --from=build /app/lib-cli.mjs /app/lib-regions.mjs /app/export-progress.mjs /app/publish-lessons.mjs /app/backup-progress.mjs /app/migrate-medals.mjs ./
 COPY --from=build /app/server ./server
 COPY --from=build /app/src ./src
 COPY --from=build /app/public ./public

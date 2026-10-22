@@ -18,7 +18,9 @@ export function graph(TAX){const byId={},pre={},post={};for(const t of TAX.topic
   const depth={};const dd=id=>depth[id]??=(depth[id]=0,1+Math.max(0,...pre[id].filter(e=>byId[e.id].domain===byId[id].domain).map(e=>dd(e.id))));
   const ends={};for(const t of TAX.topics)if(!post[t.id].some(e=>byId[e.id].domain===t.domain))(ends[t.subject+'|'+t.domain]??=[]).push(t.id);
   const boss=new Set(Object.values(ends).flatMap(a=>a.filter(id=>dd(id)>=3).sort((a,b)=>dd(b)-dd(a)).slice(0,2)));
-  return{topics:TAX.topics,byId,pre,post,boss,aliases:TAX.aliases||{}};}
+  // topics a household hides (HIDE_REGIONS, lib-regions.mjs) are not in the graph; their small records only let medals earned on them still list
+  const hidden={};for(const t of TAX.hidden?.topics||[])if(!byId[t.id])hidden[t.id]=t;
+  return{topics:TAX.topics,byId,pre,post,boss,aliases:TAX.aliases||{},hidden};}
 export const blank=()=>({v:2,name:NAME,points:0,stars:0,streak:0,bestStreak:0,solved:0,badges:[],medals:[],firstDone:false,ts:{},current:null,
   focus:null,placement:{done:false,asked:0,per:{},queue:[]},sinceReview:0,sinceChoice:0,recent:[],packSeen:{},itemsServed:0});
 export function migrate(old,g){if(old&&old.v===2){if(!old.medals)backfillMedals(old,g);upgrade(old,g);return old;}const S=blank();if(!old)return S;
@@ -55,8 +57,8 @@ export function trophies(S,g){const M=[...dedupeBy(S.medals,m=>m.id).map(m=>meda
   ...dedupeBy(S.questMedals,q=>q.date).map(q=>({id:'quest:'+q.date,tier:'quest',at:q.at,name:q.name,ic:q.emoji,subject:'Quest',domain:q.title,why:`finishing the quest "${q.title}"`}))].sort((a,b)=>b.at-a.at);
   const counts={};M.forEach(m=>counts[m.tier]=(counts[m.tier]||0)+1);return{medals:M,counts};}
 // medals: one per directly-mastered topic (not inferred, not self-rated); boss wins are legendary
-export function tierOf(g,id,boss){return boss?'legendary':g.byId[id]?.tier||'bronze';}
-function backfillMedals(S,g){S.medals=[];for(const [id,r] of Object.entries(S.ts))if(r.st==='mastered'&&r.how==='direct'&&g.byId[id])S.medals.push({id,tier:tierOf(g,id,false),at:r.at||Date.now()});S.medals.sort((a,b)=>a.at-b.at);}
+export function tierOf(g,id,boss){return boss?'legendary':(g.byId[id]||g.hidden?.[id])?.tier||'bronze';}
+function backfillMedals(S,g){S.medals=[];for(const [id,r] of Object.entries(S.ts))if(r.st==='mastered'&&r.how==='direct'&&(g.byId[id]||g.hidden?.[id]))S.medals.push({id,tier:tierOf(g,id,false),at:r.at||Date.now()});S.medals.sort((a,b)=>a.at-b.at);}
 // honest medals (LESSONS.md "Mastery and medals"): mastery needs ≥ 2 first-try correct graded answers, a medal ≥ 3.
 // A self-check never counts. A repeated identical question counts at most once per Pacific day. Guided practice doesn't count.
 export const MASTERY_MIN=2,MEDAL_MIN=3,BOSS_LEGEND=3;
@@ -429,7 +431,7 @@ export function choose(S,g,c,pack,now){const cur=S.focus&&g.byId[S.focus];let ms
   if(id)S.focus=id;S.current=null;return{jane:msg};}
 export function publicItem(it,g){if(!it)return null;const t=g.byId[it.topicId];const b=it.stage==='bonus';
   return{id:it.id,topicId:it.topicId,topic:{name:t.sn||t.name,subject:t.subject,domain:t.domain,ic:t.ic},q:b?it.bonus.q:it.q,type:b?'input':it.type,choices:b?null:it.choices,vis:it.vis,ptype:it.ptype,creative:it.creative,placeholder:it.placeholder,pics:it.pics,items:it.items,left:it.left,right:it.right,statements:it.statements,line:it.line,parts:it.parts,blank:it.blank,card:it.card,body:it.body,emoji:it.emoji,scene:it.scene,tpl:it.tpl,mini:it.mini,stage:it.stage,mode:it.mode,format:b?'bonus':it.format,intro:b?null:it.intro,timed:b?null:it.timed,boss:it.boss,level:it.lvl,issued:it.issued,title:it.title,example:it.example,guided:b?undefined:it.guided,steps:b||!it.guided?undefined:it.steps,requeued:it.requeued,gate:it.gate?{n:it.gate.n,of:it.gate.of,k:it.gate.k,spot:!!it.spot,warm:!!it.gate.warm}:undefined,help:helpFor(it)};}
-export function medalInfo(m,g){const t=g.byId[m.id];if(!t)return null;return{id:m.id,tier:m.tier,at:m.at,boss:!!m.boss,name:t.sn||t.name,ic:t.ic,subject:t.subject,domain:t.domain,why:t.kq?`${t.kq} → ${t.ka}`:t.self};}
+export function medalInfo(m,g){const t=g.byId[m.id]||g.hidden?.[m.id];if(!t)return null;return{id:m.id,tier:m.tier,at:m.at,boss:!!m.boss,name:t.sn||t.name,ic:t.ic,subject:t.subject,domain:t.domain,why:t.kq?`${t.kq} → ${t.ka}`:t.self};}
 // upgrade an in-flight old-style self-check (raw assessmentPrompt) to the kid-friendly item, keeping its mode
 export function refresh(S,g,pack,now){const c=S.current;if(c&&c.kind==='self'&&/Yes, I can/.test(c.choices?.[0]||'')&&g.byId[c.topicId]){S.current=buildItem(S,g,c.topicId,c.mode,pack,now);return true;}return false;}
 

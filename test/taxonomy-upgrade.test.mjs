@@ -11,6 +11,8 @@ const PIN='a8719737ff86ef7940ba5feca11940de1204103e';
 const upstream=J(path.join(M,'topics.json')).topics,manifest=J(path.join(M,'manifest.json'));
 const aliases=J(path.join(ROOT,'data/topic-aliases.json')).aliases;
 const pending=new Set(fs.readFileSync(path.join(ROOT,'data/kid-prompts/PENDING.txt'),'utf8').split('\n').map(l=>l.replace(/#.*/,'').trim()).filter(Boolean));
+// topics this checkout's household hides (HIDE_REGIONS, lib-regions.mjs) are left out like pending ones
+const hidden=new Set(Object.keys(g.hidden||{}));const away=id=>pending.has(id)||hidden.has(id);
 const resolve=id=>g.byId[id]?id:g.byId[aliases[id]]?aliases[id]:null;
 const mastered=S=>Object.values(S.ts).filter(r=>r.st==='mastered').length;
 const copy=o=>JSON.parse(JSON.stringify(o));
@@ -31,10 +33,10 @@ test('teaching research stays offline: nothing of it under public/ or in tax.jso
   const tax=fs.readFileSync(path.join(ROOT,'public/tax.json'),'utf8');for(const k of['"pedagogy"','"commonMisconceptions"','"errorPatterns"','"learn":{'])assert.ok(!tax.includes(k),k);
   assert.ok(tax.length<3e6,'tax.json stays small');});
 
-test('every upstream topic is either playable or explicitly pending; pending topics are not in the app',()=>{
+test('every upstream topic is either playable, explicitly pending or hidden by the household; neither is in the app',()=>{
   const ids=new Set(upstream.map(t=>t.id));for(const id of pending)assert.ok(ids.has(id),'pending id exists upstream: '+id);
-  assert.equal(g.topics.length+pending.size,upstream.length);for(const t of g.topics){assert.ok(!pending.has(t.id));assert.ok(t.kq||t.self,t.id);}
-  for(const id of pending)assert.equal(g.byId[id],undefined);});
+  assert.equal(g.topics.length+pending.size+hidden.size,upstream.length);for(const id of hidden)assert.ok(!pending.has(id));for(const t of g.topics){assert.ok(!away(t.id));assert.ok(t.kq||t.self,t.id);}
+  for(const id of [...pending,...hidden])assert.equal(g.byId[id],undefined);});
 
 test('the app graph only names playable topics, stays acyclic, and keeps every upstream prerequisite path',()=>{
   const deps=J(path.join(M,'dependencies.json')).dependencies;
@@ -42,7 +44,7 @@ test('the app graph only names playable topics, stays acyclic, and keeps every u
   const anc=new Map();const up=id=>{if(anc.has(id))return anc.get(id);anc.set(id,null);const s=new Set();for(const e of g.pre[id]){assert.notEqual(anc.get(e.id),null,'cycle at '+e.id);s.add(e.id);for(const x of up(e.id))s.add(x);}anc.set(id,s);return s;};
   // upstream paths between two playable topics (possibly through pending ones) are still paths in the app graph
   const upPre={};for(const d of deps)(upPre[d.topicId]??=[]).push(d.prerequisiteId);
-  for(const t of g.topics){const seen=new Set(),st=[...(upPre[t.id]||[])];while(st.length){const p=st.pop();if(seen.has(p))continue;seen.add(p);if(pending.has(p))st.push(...(upPre[p]||[]));else assert.ok(up(t.id).has(p),`${t.id} lost prerequisite ${p}`);}}});
+  for(const t of g.topics){const seen=new Set(),st=[...(upPre[t.id]||[])];while(st.length){const p=st.pop();if(seen.has(p))continue;seen.add(p);if(away(p))st.push(...(upPre[p]||[]));else assert.ok(up(t.id).has(p),`${t.id} lost prerequisite ${p}`);}}});
 
 test('aliases point from removed ids to playable topics',()=>{const ids=new Set(upstream.map(t=>t.id));
   assert.deepEqual(aliases,{'mt_3XJkeIn6J6':'mt_UNzojLkNdm'});for(const [a,b] of Object.entries(aliases)){assert.ok(!ids.has(a));assert.ok(g.byId[b]);}

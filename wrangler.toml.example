@@ -19,3 +19,4 @@ id = "<YOUR_KV_NAMESPACE_ID>"               # from: npx wrangler kv namespace cr
 LEARNER_NAME = "Explorer"            # first name or nickname; kid-facing text uses {name} and this fills it in
 LEARNER_AGE = "10"                   # target age for placement and topic choice (designed for ~8-12)
 LEARNER_GRADE = "upper elementary"   # label used in the parent report and lesson-pack warnings
+# HIDE_REGIONS = "AU"                # optional: leave region-specific topics out (data/regions/*.txt; BOT-SETUP.md)

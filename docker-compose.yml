@@ -2,7 +2,10 @@
 # Progress, answer logs, lesson packs, backups and exports live in the "jane-data" volume.
 services:
   jane:
-    build: .
+    build:
+      context: .
+      args:
+        HIDE_REGIONS: ""                 # e.g. "AU" leaves Australia-specific topics out (BOT-SETUP.md); rebuild after changing
     image: jane:0.5.0
     restart: unless-stopped
     environment:

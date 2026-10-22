@@ -8,7 +8,7 @@ The learner's name, target age and grade are settings.
 It runs as a single Cloudflare Worker with static assets and Workers KV, or as a standalone Node server (or Docker
 container) with file-based storage, and it is built on the open
 [Marble Skill Taxonomy](https://github.com/withmarbleapp/os-taxonomy): 1,930 micro-topics across 9 subjects,
-linked by 4,102 prerequisite edges (the app plays 1,589 of them today; the newest are waiting for kid prompts, [#39](https://github.com/kentlangley/Jane/issues/39)).
+linked by 4,102 prerequisite edges (the app plays 1,916 of them; 14 are held back with a reason in `data/kid-prompts/PENDING.txt`).
 
 > **v0.5.0.** It's a child's learning app, so all personal data is excluded from the repo, and every path has a clear
 > license (see [LICENSING.md](LICENSING.md)). What's next: [Roadmap](#roadmap). Changes: [CHANGELOG.md](CHANGELOG.md).

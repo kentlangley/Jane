@@ -30,6 +30,15 @@ and never wire a model into the app. Everything you write is content, written at
    expose the app on the open internet without access control. With C, the `workers.dev` URL is public: tell the
    parent that, as above.
 6. **The parent's time zone**, for the nightly routine. (The app's day boundaries are always Pacific Time.)
+7. **Region-specific topics (optional).** Some Marble topics are about one country: `data/regions/AU.txt` lists the
+   Australian ones (Federation, Anzac Day, First Nations Countries, Australian government, coins and GST, ...). They
+   play by default. If the family would rather not see them, set `HIDE_REGIONS = "AU"` under `[vars]` in
+   `wrangler.toml` (C) or the `HIDE_REGIONS` build arg / env var (A/B), then rebuild (`npm run build`; with Docker
+   `docker compose build`) and redeploy. Hidden topics leave the app the same way pending ones do: not in Play,
+   quests, gates, spot-checks, the export's frontier or the progress total, and `publish-lessons.mjs` rejects them.
+   Progress and medals already earned on them are kept. `export-progress.mjs` and `publish-lessons.mjs` stop with
+   "Run: npm run build" if `public/tax.json` was built with a different setting, so the nightly author never sees a
+   hidden topic. To tag another region, add `data/regions/<CODE>.txt` (same format) in a pull request.
 
 Keep the answers in your memory, not in the repo.
 
