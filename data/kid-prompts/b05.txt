@@ -1,139 +1,139 @@
-1117|Why does a frog live near a pond?|It needs water|It hates trees|For the view
-1118|Which helps nature?|Recycling|Littering|Wasting water
-1119|Why do polar bears live in the Arctic?|Their bodies suit the cold|They like snowmen|They're lost
-1120|Where does a fish live?|In water|In a tree|Underground
-1121|Which one was NEVER alive?|A rock|A leaf|A bone
-1122|Which animal might you see in a backyard?|A robin|A penguin|A camel
-1123|In "grass → rabbit → fox," what does the rabbit eat?|Grass|Fox|Nothing
-1124|Why do zebras live in herds?|Safety from predators|They're bored|To share homework
-1125|A pond dries up. What happens to the frogs?|They must move or may die|They grow wings|Nothing
-1126|A classification key helps you…|Identify living things|Lock doors|Bake cakes
-1127|An animal that eats other animals is a…|Predator|Producer|Plant
-1128|In a food chain, where does the energy start?|The Sun|The fox|The rock
-1129|Which group is a whale in?|Mammals|Fish|Birds
-1130|Which hurts the environment?|Pollution|Planting trees|Recycling
-1131|In a food web, arrows point to…|The animal doing the eating|The food|Nowhere
-1132|Which animal goes through metamorphosis?|Frog|Dog|Cow
-1133|How do many plants make new plants?|Seeds|Eggs|Puppies
-1134|Which is a vertebrate (has a backbone)?|Snake|Worm|Jellyfish
-1135|How can a town protect its water?|Stop pollution|Dump trash|Waste it
-1136|Why is a bat a mammal, not a bird?|It has fur and feeds milk|It flies|It's black
-1137|What breaks down dead leaves into soil?|Decomposers like fungi|Rocks|Clouds
-1138|Why are there fewer foxes than rabbits?|Energy is lost up the chain|Foxes are shy|Rabbits are faster
-1139|If all the bees vanished, what would happen?|Many plants couldn't make seeds|Nothing|More honey
-1140|What do bees carry from flower to flower?|Pollen|Water|Leaves
-1141|Water vapor cools into clouds. That's…|Condensation|Evaporation|Freezing
-1142|Why is a forest with many species stronger?|It recovers better from changes|It's prettier|It's not
-1143|Where are genes found?|In DNA|In hair gel|In bones only
-1144|What is one clue for evolution?|Fossils|Clouds|Rainbows
-1145|What can happen if a place changes too fast?|Species may go extinct|Animals get superpowers|Nothing
-1146|A mutation is a…|Random change in DNA|Cold|Type of food
-1147|Natural selection means animals that fit best…|Survive and have babies|Always die|Change colors daily
-1148|As oceans warm, some fish…|Move to cooler water|Grow legs|Stop swimming
-1149|Plants take in carbon dioxide during…|Photosynthesis|Sleeping|Raining
-1150|Why do top predators get the most poison from food chains?|It builds up as they eat|They drink it|They breathe it
-1151|Why do dogs look so different from each other?|Variation in genes|Magic|Paint
-1152|Brown eyes are dominant. A parent with brown eyes can have a kid with…|Brown or blue eyes|Only green|Purple eyes
-1230|Which word describes a rubber ball?|Bouncy|Brittle|See-through
-1231|Which two are both made of metal?|Spoon and key|Spoon and pencil|Key and sock
-1232|What's a window usually made of?|Glass|Paper|Wool
-1233|A chair is made of wood. Which is the material?|Wood|Chair|Leg
-1234|Water is a liquid. Ice is a…|Solid|Gas|Liquid
-1235|How can you change a lump of clay's shape?|Squash or roll it|Freeze it|Look at it
-1236|Which is best for a raincoat?|Plastic|Paper|Cotton balls
-1237|Ice turning into water is called…|Melting|Freezing|Boiling
-1238|To sort materials, you can test if they're…|Magnetic|Happy|Tasty
-1239|In a particle diagram of a solid, dots are…|Packed tightly|Far apart|Missing
-1240|What happens to chocolate in the hot sun?|It melts|It freezes|It boils
-1241|You build a house from LEGO, then take it apart. Can you rebuild?|Yes, with the same pieces|No, never|Only a car
-1242|Testing which cloth is most waterproof, you should…|Use the same amount of water each|Use different water|Guess
-1243|Puddles dry up because water…|Evaporates|Freezes|Sinks
-1244|Air is a…|Gas|Solid|Liquid
-1245|Which conducts electricity?|Copper wire|Wood|Plastic
-1246|Sugar stirred in water makes a…|Solution|Solid|Gas
-1247|Baking a cake is…|Irreversible|Reversible|Not a change
-1248|A material that lets light through is…|Transparent|Opaque|Magnetic
-1249|Melting ice is reversible because…|You can refreeze it|It's gone forever|It turns to wood
-1250|How can you separate sand from water?|Filter it|Stir it|Freeze it
-1251|50 g salt + 200 g water. Total after mixing?|250 g|200 g|150 g
-1252|Everything is made of tiny…|Particles|Bubbles|Pixels
-1253|Water (H₂O) is a…|Compound|Element|Atom only
-1254|Ice turning straight into gas is called…|Sublimation|Melting|Condensing
-1255|Metals are usually…|Shiny and conduct heat|Soft and see-through|Bad conductors
-1256|Burning paper is a…|Chemical change|Physical change|No change
-1257|Salt water is a…|Mixture|Pure substance|Element
-1258|To get salt back from salt water, you…|Evaporate the water|Filter it|Freeze it
-1259|Why can gases be squeezed?|Particles are far apart|Particles are glued|They're solid
-1260|How is the periodic table organized?|By elements' properties|By color|Randomly
-1261|Acid + metal often makes…|Hydrogen gas and a salt|Pizza|Ice
-1262|Lemon juice is an…|Acid|Alkali|Neutral
-1263|Which gas makes up most of the air?|Nitrogen|Oxygen|Carbon dioxide
-1264|Why recycle metals?|They're finite resources|They grow back fast|No reason
-1265|A reaction that gives off heat is…|Exothermic|Endothermic|Frozen
-1266|Which metal reacts most strongly?|Potassium|Gold|Copper
-1267|Rock made from cooled lava is…|Igneous|Sedimentary|Metamorphic
-1268|Burning fuel is a…|Combustion reaction|Freezing reaction|Melting
-1269|Which is a polymer?|Plastic|Glass|Clay
-1297|Which animal has feathers?|Bird|Fish|Frog
-1298|Which body part do you smell with?|Nose|Elbow|Knee
-1299|Which is a tree?|Oak|Daisy|Grass
-1300|A cow eats only plants. It's a…|Herbivore|Carnivore|Omnivore
-1301|Which is a sign of being alive?|Growing|Being shiny|Being heavy
-1302|A frog is an…|Amphibian|Insect|Mammal
-1303|Which plant part soaks up water from soil?|Roots|Petals|Flowers
-1304|What do all living things need?|Water|Toys|Phones
-1305|A baby frog is called a…|Tadpole|Cub|Calf
-1306|Kittens look like their…|Parents|Rocks|Dogs
-1307|What does a seed need to start growing?|Water and warmth|Darkness only|Candy
-1308|A plant kept in a dark closet will…|Grow weak and pale|Grow faster|Turn blue
-1309|An animal with a backbone is a…|Vertebrate|Invertebrate|Plant
-1310|Which gives you protein?|Eggs|Candy|Soda
-1311|Butterfly life cycle order:|Egg, caterpillar, chrysalis, butterfly|Butterfly, egg, chrysalis|Caterpillar, butterfly, egg
-1312|What does a flower's bright color do?|Attract bees|Scare rain|Nothing
-1313|Do all animals have the same life cycle?|No, they differ|Yes, all the same|Only birds
-1314|How do dandelion seeds travel?|Blown by the wind|By car|They walk
-1315|What protects your brain?|Your skull|Your knee|Your hair
-1316|Celery in colored water turns colored because…|Water travels up the stem|Magic|It's painted
-1317|A plant on a sunny windowsill vs. a dark shelf: which grows better?|Sunny windowsill|Dark shelf|Same
-1318|Why do camels have humps?|Store fat for energy|For riding|To look cool
-1319|Eye color you get from parents is…|Inherited|Learned|Chosen
-1320|Puppies often look like their parents because of…|Inherited traits|Food|Weather
-1321|Where does food go after you swallow?|Your stomach|Your lungs|Your heart
-1322|Which trait is learned, not inherited?|Riding a bike|Eye color|Hair color
-1323|Which teeth are best for biting?|Incisors|Molars|Wisdom teeth
-1324|White rabbits in snow are…|Harder for foxes to spot|Easier to spot|Always cold
-1325|What happens to people as they get very old?|Hair may go gray|They shrink to babies|Nothing
-1326|Your heart and blood vessels form the…|Circulatory system|Digestive system|Skeleton
-1327|You touch something hot and pull away. What sent the signal?|Your nerves and brain|Your hair|Your toes
-1328|Why do cacti have spines?|Protection and saving water|Decoration|To catch fish
-1329|What keeps you healthy?|Good food, exercise, and sleep|Only candy|No sleep
-1330|Where did the energy in your sandwich first come from?|The Sun|The fridge|The store
-1331|Animals change over many generations. That's…|Evolution|Weather|Hibernation
-1332|What carries nutrients around your body?|Blood|Bones|Hair
-1333|A tree's wood mostly comes from…|Air and water|Soil only|Rocks
-1334|What pumps blood around your body?|Your heart|Your lungs|Your stomach
-1335|Running burns more energy than…|Sitting|Sprinting|Swimming fast
-1336|Cells → tissues → organs → …|Organ systems|Atoms|Rocks
-1337|What tool lets you see cells?|A microscope|A telescope|A ruler
-1338|Not eating enough fruit can cause…|Missing vitamins|More energy|Superpowers
-1339|Where does most digestion happen?|Small intestine|Lungs|Brain
-1340|What connects muscles to bones?|Tendons|Hair|Teeth
-1341|When your biceps pull, your triceps…|Relax|Also pull|Disappear
-1342|Which food gives you quick energy?|Carbohydrates like bread|Water|Salt
-1343|What's the control center of a cell?|The nucleus|The wall|The skin
-1344|What do plants make during photosynthesis?|Sugar and oxygen|Plastic|Rocks
-1345|Which has a cell wall?|Plant cells|Animal cells|Both never
-1346|Bacteria are made of how many cells?|One|A million|None
-1347|How many bones in an adult body?|About 206|About 20|About 2,000
-1348|Using a microscope, start with…|The lowest zoom|The highest zoom|No light
-1349|What does your body use oxygen for?|Releasing energy from food|Growing hair only|Nothing
-1350|After a sprint your muscles burn because…|They're working without enough oxygen|You're cold|You're hungry
-1351|When you're hot, your body…|Sweats to cool down|Shivers|Freezes
-1352|Where does oxygen enter your blood?|In your lungs|In your stomach|In your feet
-1353|Good bacteria in your gut help you…|Digest food|Grow taller|See better
-1354|How many chambers does the human heart have?|4|2|6
-1355|Why does a smell spread across a room?|Particles spread out|Air stops|It doesn't
-1356|How do human babies grow before birth?|Inside the mother|In an egg on a nest|In a garden
-1357|What helps your body fight germs?|Your immune system|Your hair|Your toenails
-1358|Which part of a flower makes pollen?|The stamen|The root|The leaf
-1359|How does alcohol affect the brain?|It slows it down|Makes it smarter|Nothing
+mt_e6PP4ip39V|Why does a frog live near a pond?|It needs water|It hates trees|For the view
+mt_deexfCHU9m|Which helps nature?|Recycling|Littering|Wasting water
+mt_cM8YS6NXqi|Why do polar bears live in the Arctic?|Their bodies suit the cold|They like snowmen|They're lost
+mt_Fw0bbM1e_g|Where does a fish live?|In water|In a tree|Underground
+mt_Sa48W7KXB5|Which one was NEVER alive?|A rock|A leaf|A bone
+mt_ppENoD8vf1|Which animal might you see in a backyard?|A robin|A penguin|A camel
+mt_EygMHKs8Ed|In "grass → rabbit → fox," what does the rabbit eat?|Grass|Fox|Nothing
+mt_i4bDqjyglj|Why do zebras live in herds?|Safety from predators|They're bored|To share homework
+mt_Wyd-l-6H7G|A pond dries up. What happens to the frogs?|They must move or may die|They grow wings|Nothing
+mt_brgde1Vx0P|A classification key helps you…|Identify living things|Lock doors|Bake cakes
+mt_M7XhBBzYof|An animal that eats other animals is a…|Predator|Producer|Plant
+mt_oB-L8EVdIP|In a food chain, where does the energy start?|The Sun|The fox|The rock
+mt_AylKwhbDWM|Which group is a whale in?|Mammals|Fish|Birds
+mt_YB0qF5KX9C|Which hurts the environment?|Pollution|Planting trees|Recycling
+mt_uVaS12lN1i|In a food web, arrows point to…|The animal doing the eating|The food|Nowhere
+mt_A1Xfu5p5KT|Which animal goes through metamorphosis?|Frog|Dog|Cow
+mt_yNWt3GQBNp|How do many plants make new plants?|Seeds|Eggs|Puppies
+mt_IY3KwGLZgk|Which is a vertebrate (has a backbone)?|Snake|Worm|Jellyfish
+mt_7e-lG7YOWa|How can a town protect its water?|Stop pollution|Dump trash|Waste it
+mt_B8lX8OCzGu|Why is a bat a mammal, not a bird?|It has fur and feeds milk|It flies|It's black
+mt_0ajzcoKAKw|What breaks down dead leaves into soil?|Decomposers like fungi|Rocks|Clouds
+mt_BOG5zRYtQz|Why are there fewer foxes than rabbits?|Energy is lost up the chain|Foxes are shy|Rabbits are faster
+mt_URTJbS3hhs|If all the bees vanished, what would happen?|Many plants couldn't make seeds|Nothing|More honey
+mt_wWpa5fFDZP|What do bees carry from flower to flower?|Pollen|Water|Leaves
+mt_V2lNzEex_a|Water vapor cools into clouds. That's…|Condensation|Evaporation|Freezing
+mt_xSs0xAd6i1|Why is a forest with many species stronger?|It recovers better from changes|It's prettier|It's not
+mt_6aJUzBYGNs|Where are genes found?|In DNA|In hair gel|In bones only
+mt_ohUnzoI_nx|What is one clue for evolution?|Fossils|Clouds|Rainbows
+mt_-r3B4FQyX3|What can happen if a place changes too fast?|Species may go extinct|Animals get superpowers|Nothing
+mt_rOqo-8GeKt|A mutation is a…|Random change in DNA|Cold|Type of food
+mt_FuVEZ1Ac9s|Natural selection means animals that fit best…|Survive and have babies|Always die|Change colors daily
+mt_JSUGQ5Repv|As oceans warm, some fish…|Move to cooler water|Grow legs|Stop swimming
+mt_Be1A88GUpu|Plants take in carbon dioxide during…|Photosynthesis|Sleeping|Raining
+mt_YvCgDM0Scg|Why do top predators get the most poison from food chains?|It builds up as they eat|They drink it|They breathe it
+mt_k1HXbEwG8f|Why do dogs look so different from each other?|Variation in genes|Magic|Paint
+mt_o7FJPDsHiW|Brown eyes are dominant. A parent with brown eyes can have a kid with…|Brown or blue eyes|Only green|Purple eyes
+mt_auVZZEuXjs|Which word describes a rubber ball?|Bouncy|Brittle|See-through
+mt_SwaNNdm_Ks|Which two are both made of metal?|Spoon and key|Spoon and pencil|Key and sock
+mt_ZAJvTcroFO|What's a window usually made of?|Glass|Paper|Wool
+mt_5r47Pvstyn|A chair is made of wood. Which is the material?|Wood|Chair|Leg
+mt_1JFUNQDwAJ|Water is a liquid. Ice is a…|Solid|Gas|Liquid
+mt_wf-SJhZ1kC|How can you change a lump of clay's shape?|Squash or roll it|Freeze it|Look at it
+mt_rTn43s8RNX|Which is best for a raincoat?|Plastic|Paper|Cotton balls
+mt_ahSqW_kK1b|Ice turning into water is called…|Melting|Freezing|Boiling
+mt_zHnOGwHIEz|To sort materials, you can test if they're…|Magnetic|Happy|Tasty
+mt_htAYR-iCFF|In a particle diagram of a solid, dots are…|Packed tightly|Far apart|Missing
+mt_Pl-nsjYGZ3|What happens to chocolate in the hot sun?|It melts|It freezes|It boils
+mt_GQpqoR5YOc|You build a house from LEGO, then take it apart. Can you rebuild?|Yes, with the same pieces|No, never|Only a car
+mt_e3-_toGuWf|Testing which cloth is most waterproof, you should…|Use the same amount of water each|Use different water|Guess
+mt_Qkewo5M3_c|Puddles dry up because water…|Evaporates|Freezes|Sinks
+mt_YQkUdIHO8L|Air is a…|Gas|Solid|Liquid
+mt_Ge4Wtg6QMM|Which conducts electricity?|Copper wire|Wood|Plastic
+mt_Mf-T-fYRLX|Sugar stirred in water makes a…|Solution|Solid|Gas
+mt_rbPioPELM1|Baking a cake is…|Irreversible|Reversible|Not a change
+mt_MVovx37Xct|A material that lets light through is…|Transparent|Opaque|Magnetic
+mt_UKmtuAsSLN|Melting ice is reversible because…|You can refreeze it|It's gone forever|It turns to wood
+mt_2b6CB0w3Yx|How can you separate sand from water?|Filter it|Stir it|Freeze it
+mt_ehC1wsdmUz|50 g salt + 200 g water. Total after mixing?|250 g|200 g|150 g
+mt_ylruY6VhOf|Everything is made of tiny…|Particles|Bubbles|Pixels
+mt_Z_Wu_77ybI|Water (H₂O) is a…|Compound|Element|Atom only
+mt_CyV7crZ8hl|Ice turning straight into gas is called…|Sublimation|Melting|Condensing
+mt_Sc_SorJhXW|Metals are usually…|Shiny and conduct heat|Soft and see-through|Bad conductors
+mt_1hgck6ucII|Burning paper is a…|Chemical change|Physical change|No change
+mt_MBTVB-E-S7|Salt water is a…|Mixture|Pure substance|Element
+mt_U_tJvy3cbB|To get salt back from salt water, you…|Evaporate the water|Filter it|Freeze it
+mt_b6kZgqolEd|Why can gases be squeezed?|Particles are far apart|Particles are glued|They're solid
+mt_wfEfQuHOG-|How is the periodic table organized?|By elements' properties|By color|Randomly
+mt_QKRYLwaOU8|Acid + metal often makes…|Hydrogen gas and a salt|Pizza|Ice
+mt_AN2kJE6I0s|Lemon juice is an…|Acid|Alkali|Neutral
+mt_mTpV-0rtkO|Which gas makes up most of the air?|Nitrogen|Oxygen|Carbon dioxide
+mt_0e5rZxbAeR|Why recycle metals?|They're finite resources|They grow back fast|No reason
+mt_UoqUPI_uNz|A reaction that gives off heat is…|Exothermic|Endothermic|Frozen
+mt_zsYW61cn_q|Which metal reacts most strongly?|Potassium|Gold|Copper
+mt_NckKLZ3uCE|Rock made from cooled lava is…|Igneous|Sedimentary|Metamorphic
+mt_v0K6GRi4ZL|Burning fuel is a…|Combustion reaction|Freezing reaction|Melting
+mt_w83U-_noVR|Which is a polymer?|Plastic|Glass|Clay
+mt_fDoE-pL6Jv|Which animal has feathers?|Bird|Fish|Frog
+mt_83gRQ9OPkc|Which body part do you smell with?|Nose|Elbow|Knee
+mt_j7cer_Nmor|Which is a tree?|Oak|Daisy|Grass
+mt_13CtLTcWUB|A cow eats only plants. It's a…|Herbivore|Carnivore|Omnivore
+mt_zexbopQjG0|Which is a sign of being alive?|Growing|Being shiny|Being heavy
+mt_zVLOm6U7bh|A frog is an…|Amphibian|Insect|Mammal
+mt_xT6jPzyj92|Which plant part soaks up water from soil?|Roots|Petals|Flowers
+mt_L1469gt34A|What do all living things need?|Water|Toys|Phones
+mt_oR6dwRj2Ll|A baby frog is called a…|Tadpole|Cub|Calf
+mt_cEzX5r7kp0|Kittens look like their…|Parents|Rocks|Dogs
+mt_0B64gfJf7j|What does a seed need to start growing?|Water and warmth|Darkness only|Candy
+mt_3v0VNkwquK|A plant kept in a dark closet will…|Grow weak and pale|Grow faster|Turn blue
+mt_1J5fwxNDxL|An animal with a backbone is a…|Vertebrate|Invertebrate|Plant
+mt_E1wR8IfCV6|Which gives you protein?|Eggs|Candy|Soda
+mt_7EqhgErJyU|Butterfly life cycle order:|Egg, caterpillar, chrysalis, butterfly|Butterfly, egg, chrysalis|Caterpillar, butterfly, egg
+mt_6xsEXxKdUX|What does a flower's bright color do?|Attract bees|Scare rain|Nothing
+mt_4IVWRAZoNC|Do all animals have the same life cycle?|No, they differ|Yes, all the same|Only birds
+mt_WNBHZ1d94L|How do dandelion seeds travel?|Blown by the wind|By car|They walk
+mt_g4YSiOCS8g|What protects your brain?|Your skull|Your knee|Your hair
+mt_GF6L7J4MNN|Celery in colored water turns colored because…|Water travels up the stem|Magic|It's painted
+mt_lutxvMlkwS|A plant on a sunny windowsill vs. a dark shelf: which grows better?|Sunny windowsill|Dark shelf|Same
+mt_LRzjbo1Fn6|Why do camels have humps?|Store fat for energy|For riding|To look cool
+mt_h4abSktujo|Eye color you get from parents is…|Inherited|Learned|Chosen
+mt_1wxwg782yX|Puppies often look like their parents because of…|Inherited traits|Food|Weather
+mt_Ruk2-lyGPZ|Where does food go after you swallow?|Your stomach|Your lungs|Your heart
+mt_Tls5qJ4p0L|Which trait is learned, not inherited?|Riding a bike|Eye color|Hair color
+mt_DbXWivdJFB|Which teeth are best for biting?|Incisors|Molars|Wisdom teeth
+mt_UR5LvBeyF1|White rabbits in snow are…|Harder for foxes to spot|Easier to spot|Always cold
+mt_OSfCeIeBak|What happens to people as they get very old?|Hair may go gray|They shrink to babies|Nothing
+mt_K8DJzqbksM|Your heart and blood vessels form the…|Circulatory system|Digestive system|Skeleton
+mt_IzlVK0Eony|You touch something hot and pull away. What sent the signal?|Your nerves and brain|Your hair|Your toes
+mt_8VA40Tumth|Why do cacti have spines?|Protection and saving water|Decoration|To catch fish
+mt_2x-EwdBsgl|What keeps you healthy?|Good food, exercise, and sleep|Only candy|No sleep
+mt_PYPs2yD2sn|Where did the energy in your sandwich first come from?|The Sun|The fridge|The store
+mt_lWqmKn5Jvr|Animals change over many generations. That's…|Evolution|Weather|Hibernation
+mt_YSyjTZfjvv|What carries nutrients around your body?|Blood|Bones|Hair
+mt_3-ii06P4YS|A tree's wood mostly comes from…|Air and water|Soil only|Rocks
+mt_BX4D8cCFtQ|What pumps blood around your body?|Your heart|Your lungs|Your stomach
+mt_83KkBCtVyR|Running burns more energy than…|Sitting|Sprinting|Swimming fast
+mt_7hB8s5eOP1|Cells → tissues → organs → …|Organ systems|Atoms|Rocks
+mt_VfA4xo4kUv|What tool lets you see cells?|A microscope|A telescope|A ruler
+mt_NZHFcEtTyI|Not eating enough fruit can cause…|Missing vitamins|More energy|Superpowers
+mt_0NlbulkB5P|Where does most digestion happen?|Small intestine|Lungs|Brain
+mt_yefw2CQT4x|What connects muscles to bones?|Tendons|Hair|Teeth
+mt_lm0usBAF53|When your biceps pull, your triceps…|Relax|Also pull|Disappear
+mt_sDmrVCfzqt|Which food gives you quick energy?|Carbohydrates like bread|Water|Salt
+mt_bABr-c2DfV|What's the control center of a cell?|The nucleus|The wall|The skin
+mt_zM5vu31jgl|What do plants make during photosynthesis?|Sugar and oxygen|Plastic|Rocks
+mt_fhqBH9scsU|Which has a cell wall?|Plant cells|Animal cells|Both never
+mt_g9RcQOhU5d|Bacteria are made of how many cells?|One|A million|None
+mt_Qkl46lyris|How many bones in an adult body?|About 206|About 20|About 2,000
+mt_lMLeNLDRO8|Using a microscope, start with…|The lowest zoom|The highest zoom|No light
+mt_mquPi2IP-J|What does your body use oxygen for?|Releasing energy from food|Growing hair only|Nothing
+mt_TKZefYXaVS|After a sprint your muscles burn because…|They're working without enough oxygen|You're cold|You're hungry
+mt_zaXr5wcJD2|When you're hot, your body…|Sweats to cool down|Shivers|Freezes
+mt_V9SQS9gLFw|Where does oxygen enter your blood?|In your lungs|In your stomach|In your feet
+mt_fCvmdI6xGO|Good bacteria in your gut help you…|Digest food|Grow taller|See better
+mt_TR2oTy9c2M|How many chambers does the human heart have?|4|2|6
+mt_i80I-1MLP2|Why does a smell spread across a room?|Particles spread out|Air stops|It doesn't
+mt_tQkCzRcWG7|How do human babies grow before birth?|Inside the mother|In an egg on a nest|In a garden
+mt_1VIE8FlZvL|What helps your body fight germs?|Your immune system|Your hair|Your toenails
+mt_ck57CDFGet|Which part of a flower makes pollen?|The stamen|The root|The leaf
+mt_2R3xRpYhMa|How does alcohol affect the brain?|It slows it down|Makes it smarter|Nothing

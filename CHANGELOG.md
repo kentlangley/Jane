@@ -5,6 +5,14 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+### Changed
+- **Kid prompts are keyed by topic id** ([#37](https://github.com/kentlangley/Jane/issues/37)): `data/kid-prompts/b*.txt`
+  lines are now `mt_id|question|right|wrong1|wrong2` instead of `index|…` (the topic's position in
+  `data/marble/topics.json`), so a reordered or extended taxonomy keeps every question on its own topic. `build.mjs`
+  joins by id and fails on index-style, unknown or duplicate lines. The one-time converter
+  `migrate-kid-prompts.mjs` refuses to run on any `topics.json` other than the release the indexes were written for.
+  Build output is unchanged: `public/tax.json` is byte-identical (sha256 `317c4a30…e45e3d1`).
+
 ### Docs
 - **[BOT-SETUP.md](BOT-SETUP.md):** a setup guide addressed to an AI assistant bot that a parent points at this repo:
   what to ask the parent, install and first run for each hosting option, placement and the first quest, the nightly

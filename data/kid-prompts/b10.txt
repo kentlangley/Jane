@@ -1,25 +1,25 @@
-1535|How could you send a secret signal across a dark yard?|Flash a flashlight code|Whisper very quietly|Wave in the dark
-1536|Why can't you see in a totally dark room?|There's no light|Your eyes are off|It's too quiet
-1537|Sound is made by things that…|Vibrate|Glow|Freeze
-1538|Light can't pass through a wooden door. It's…|Opaque|Transparent|Translucent
-1539|Pluck a rubber band. What makes the sound?|It vibrates|It gets hot|It glows
-1540|A shadow forms when an object…|Blocks light|Makes light|Reflects sound
-1541|Why wear sunglasses on a bright day?|To protect your eyes|To see in the dark|For hearing
-1542|A mirror works by…|Reflecting light|Making light|Soaking up light
-1543|A short guitar string makes a…|Higher pitch|Lower pitch|No sound
-1544|Walking away from music, it sounds…|Quieter|Louder|The same
-1545|Can sound travel through a wall?|Yes, through materials|No, never|Only through glass
-1546|Hitting a drum harder makes it…|Louder|Quieter|Higher
-1547|You see a tree because light…|Bounces off it into your eyes|Comes from your eyes|Isn't needed
-1548|Morse code uses dots and dashes to…|Send messages|Make music|Measure light
-1549|The top of a wave is called the…|Crest|Trough|Bottom
-1550|A wave moves energy, not…|Water along with it|Energy|Anything
-1551|Why can't you see around a corner?|Light travels in straight lines|Light bends always|Corners are dark
-1552|Can sound travel in space?|No, there's no air|Yes, easily|Only loudly
-1553|A straw looks bent in water because of…|Refraction|Reflection|Magnetism
-1554|The height of a wave is its…|Amplitude|Wavelength|Speed
-1555|A prism splits white light into…|A rainbow of colors|Darkness|Sound
-1556|In a ray diagram, light is drawn as…|Straight lines with arrows|Circles|Wavy dots
-1557|A magnifying glass makes things look…|Bigger|Smaller|Upside-down always
-1558|Which travel fastest of all?|Light and radio waves|Sound waves|Ocean waves
-1559|Black clothes get hot in sun because they…|Absorb light|Reflect all light|Make light
+mt_ZL9qVVnpwN|How could you send a secret signal across a dark yard?|Flash a flashlight code|Whisper very quietly|Wave in the dark
+mt_4i-FKXDDXh|Why can't you see in a totally dark room?|There's no light|Your eyes are off|It's too quiet
+mt_YPSx5pbpVl|Sound is made by things that…|Vibrate|Glow|Freeze
+mt_p6frRFuxS6|Light can't pass through a wooden door. It's…|Opaque|Transparent|Translucent
+mt_VBl1T1sFCM|Pluck a rubber band. What makes the sound?|It vibrates|It gets hot|It glows
+mt_Oru08pKlxd|A shadow forms when an object…|Blocks light|Makes light|Reflects sound
+mt_3yuqKww2tU|Why wear sunglasses on a bright day?|To protect your eyes|To see in the dark|For hearing
+mt_gLy3ZgZWiN|A mirror works by…|Reflecting light|Making light|Soaking up light
+mt_KTSoXcO7OL|A short guitar string makes a…|Higher pitch|Lower pitch|No sound
+mt_Pau0aqLNgp|Walking away from music, it sounds…|Quieter|Louder|The same
+mt_ydtcIBwHB9|Can sound travel through a wall?|Yes, through materials|No, never|Only through glass
+mt__00ZSLnB7p|Hitting a drum harder makes it…|Louder|Quieter|Higher
+mt_6w2g7aoPgz|You see a tree because light…|Bounces off it into your eyes|Comes from your eyes|Isn't needed
+mt_n5_Jt4ExUd|Morse code uses dots and dashes to…|Send messages|Make music|Measure light
+mt_SFOSbVnrJ8|The top of a wave is called the…|Crest|Trough|Bottom
+mt_ph4xZVMiVq|A wave moves energy, not…|Water along with it|Energy|Anything
+mt_qZro923zvz|Why can't you see around a corner?|Light travels in straight lines|Light bends always|Corners are dark
+mt_DQk9oDE7gr|Can sound travel in space?|No, there's no air|Yes, easily|Only loudly
+mt_PifbJOuXrG|A straw looks bent in water because of…|Refraction|Reflection|Magnetism
+mt_LxK9OKZQZX|The height of a wave is its…|Amplitude|Wavelength|Speed
+mt_qzGADV-NGe|A prism splits white light into…|A rainbow of colors|Darkness|Sound
+mt_-2VNlwAR5z|In a ray diagram, light is drawn as…|Straight lines with arrows|Circles|Wavy dots
+mt_FVERuBoCD1|A magnifying glass makes things look…|Bigger|Smaller|Upside-down always
+mt_XSp-S0wter|Which travel fastest of all?|Light and radio waves|Sound waves|Ocean waves
+mt_w5HzPpOUmj|Black clothes get hot in sun because they…|Absorb light|Reflect all light|Make light
