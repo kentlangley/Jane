@@ -17,6 +17,14 @@ For encumbered sources we ship only the **standard code** (e.g. `1-ESS1-1`) and 
 - **Required notice:** *"Contains public sector information licensed under the Open Government Licence v3.0."*
 - **We ship:** full standard text.
 
+### 🟢 `acara-v9` — Australian Curriculum, Version 9 (Foundation–Year 6) — **full text**
+- **Publisher / rights:** © Australian Curriculum, Assessment and Reporting Authority (ACARA) 2009 to present, unless otherwise indicated.
+- **License:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), under [ACARA's copyright and reuse terms](https://www.acara.edu.au/contact-us/copyright).
+- **We ship:** 620 content descriptions across English, Mathematics, Science, HASS, Health and Physical Education, Digital Technologies, and Design and Technologies. This contribution excludes Arts, Languages, elaborations and achievement standards.
+- **Source and verification:** based on 614 records contributed by [curiousape-ai in PR #7](https://github.com/withmarbleapp/os-taxonomy/pull/7), using the [reproducible ACARA DOCX parser](https://github.com/curiousape-ai/acara-v9-f6-json). On 20 October 2026, a check of every row in ACARA's seven official curriculum-content DOCX downloads corrected five Foundation Science inquiry strands and recovered six omitted standards (five Year 4 HASS skills and one Foundation Design and Technologies standard), giving 620 records. Codes, descriptions, subjects, learning areas, strands and year levels were verified before import into Marble and export here. The DOCX strand heading for `AC9TDEFP01` is blank; its classification as Processes and production skills is an explicit override confirmed against the [published Scootle curriculum record](https://www.scootle.edu.au/ec/search?accContentId=AC9TDEFP01). Marble retains the input JSON, source-document URLs and SHA-256 hashes alongside the import script. The export adds agent-compatible subject, title and taxonomy fields while retaining the source fields. No candidate topic alignments are included.
+
+**ACARA attribution notice:** © Australian Curriculum, Assessment and Reporting Authority (ACARA) 2009 to present, unless otherwise indicated. This material was downloaded from the ACARA website (https://www.australiancurriculum.edu.au/) (accessed 20 October 2026) and was modified only to normalize whitespace and render equation fractions as text. The material is licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). ACARA does not endorse any product that uses ACARA material or make any representations as to the quality of such products. Any product that uses material published on this website should not be taken to be affiliated with ACARA or have the sponsorship or approval of ACARA. It is up to each person to make their own assessment of the product.
+
 ### 🟡 `ccss-ela`, `ccss-math` — Common Core State Standards — **full text**
 - **Publisher / rights:** © 2010 National Governors Association Center for Best Practices (NGA Center) and Council of Chief State School Officers (CCSSO).
 - **License:** the CCSS Public License grants *"a limited, non-exclusive, royalty-free license to copy, publish, distribute, and display the Common Core State Standards **for purposes that support the Common Core State Standards Initiative**."* This is **purpose-limited**, and it does **not** clearly grant derivative-work or sublicensing rights — so the CCSS-derived records remain under the CCSS Public License, **not** ODbL.
@@ -38,6 +46,36 @@ For encumbered sources we ship only the **standard code** (e.g. `1-ESS1-1`) and 
 - **Publisher / rights:** © International Baccalaureate Organization (IBO).
 - **License:** IB content is copyrighted and IBO is protective of it; redistribution requires explicit IB permission. This is the most restrictive source.
 - **We ship:** codes/keys only. Do not ship full text without IB permission.
+
+## Teaching-research publication
+
+`data/teaching-research.json` contains Marble's agent-authored teaching research
+and activity proposals under the database/content licences described in README.
+References to third-party studies, books and curricula do not transfer ownership
+of those works or replace their upstream terms. The licences cover Marble's own
+contributions, not third-party material.
+
+The original research sometimes repeated the wording of codes-only curricula.
+The publication export omits passages matching eight or more consecutive words
+of those frameworks' stored text, ignoring case and punctuation. Each omission
+is marked inline with curriculum codes and logged by JSON path in
+`publicationNotes.omittedCurriculumText`. The same transformation is applied to
+citation claims and activity sourceClaims to keep those links exact. Common Core
+cross-references embedded in NGSS records are not included in the omission index;
+they retain the independent Common Core terms described above.
+
+This mechanical pass is conservative and is not comprehensive rights clearance.
+Shorter excerpts or paraphrases may remain. Follow the upstream links and terms
+when reusing source material; do not treat the research layer as a redistribution
+of the full frameworks. The existing NGSS trademark notice above also applies
+to NGSS references in teaching research.
+
+Original source verification flags and confidence values were preserved in the
+initial publication, without re-fetching sources. Later nutrition corrections
+record specific healthy-eating-guide checks in the affected research records.
+A curriculum citation is evidence of alignment rather than an evaluated teaching
+intervention. Read the file-level notes and individual learning-guidance review
+notes before using an activity.
 
 ## Changing what ships
 

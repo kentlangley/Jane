@@ -1,0 +1,531 @@
+{
+  "schemaVersion": 1,
+  "version": "v1",
+  "archivedAt": "2026-10-20T15:21:48.021Z",
+  "source": {
+    "commit": "26c4ae7775c5c8ef39d381d3680da9e6c350635e",
+    "file": "data/teaching-research.json",
+    "sha256": "6e68ff8a67e02b41f5d5f42005dc918a2ffed9cb0315f1365aa4c2c187073ca0"
+  },
+  "notes": [
+    "Historical teaching guidance for merged or refocused topics. Original topic content, research and authoring provenance are preserved unchanged.",
+    "relatedTopicIds identify the current learning associated with each archive entry. These historical records are excluded from active teaching-research coverage.",
+    "The refocused capacity topic now teaches capacity estimation; its previous assessment tested counting unit cubes. Current guidance for that revised topic awaits a fresh authoring pass."
+  ],
+  "activeReferenceRepairs": [
+    {
+      "researchTopicId": "mt_4emC463IyW",
+      "path": "assess.errorPatterns[1].reteachPrerequisiteId",
+      "from": "mt_3XJkeIn6J6",
+      "to": "mt_UNzojLkNdm"
+    }
+  ],
+  "records": [
+    {
+      "originalTopicId": "mt_3XJkeIn6J6",
+      "reason": "topic_merged",
+      "relatedTopicIds": [
+        "mt_UNzojLkNdm"
+      ],
+      "topic": {
+        "id": "mt_3XJkeIn6J6",
+        "type": "PROCEDURAL",
+        "subject": "Mathematics",
+        "domain": "Measurement",
+        "name": "Estimating answers (age 7+)",
+        "description": "Estimate and read time with increasing accuracy to the nearest minute; record and compare time in terms of seconds, minutes, and hours",
+        "ageRangeStart": 7,
+        "ageRangeEnd": 8,
+        "centrality": 0.04900662251655629,
+        "evidence": [
+          "Read an analogue clock to the nearest minute",
+          "Estimate how long an activity takes in minutes or seconds",
+          "Compare two durations and determine which is longer"
+        ],
+        "assessmentPrompt": "If a TV show starts at 5:17 p.m. and ends at 5:43 p.m., can {{name}} work out how long it lasted — and express that in minutes?",
+        "standards": [
+          "uk-nc-2013:Ma/KS2/Y3/M/5"
+        ]
+      },
+      "research": {
+        "topicId": "mt_3XJkeIn6J6",
+        "pedagogy": {
+          "summary": "Children read an analogue clock to the exact minute AND develop a felt sense of how long seconds, minutes and hours are — estimating durations and comparing them, recording time in each unit. The estimation and comparison strands carry the documented difficulties: children count seconds far too fast, so estimates are wildly short, and they compare bare numbers ignoring units ('30 seconds is longer than 20 minutes because 30 > 20'). Choosing a sensible unit for an event is also hard.",
+          "bestPractices": [
+            "Pair precise reading (count on from the last five) with hands-on estimation ('put your hand up when you think a minute has passed') checked against a real stopwatch",
+            "Calibrate seconds vs minutes physically so the child FEELS the difference in scale",
+            "Always compare durations in a COMMON unit; make the units explicit before comparing sizes",
+            "Match events to sensible units (a blink = seconds, a lesson = minutes/an hour)",
+            "Use a stopwatch to connect estimate -> measured value -> comparison"
+          ],
+          "keyRepresentations": [
+            "Analogue clock with a minute scale (reading on)",
+            "Stopwatch / timer for estimating and measuring",
+            "A bar or number line to compare durations in a common unit",
+            "Everyday events sorted by their natural unit"
+          ],
+          "commonMisconceptions": [
+            "Counts seconds in the head too quickly, so estimates are badly short",
+            "Compares numbers without reference to units (30 seconds > 20 minutes because 30 > 20)",
+            "Chooses the wrong unit for an event (seconds for a lesson, hours for a blink)",
+            "Thinks a later finish time means a longer duration (carried from earlier duration confusion)",
+            "Reads to the nearest minute by counting single minutes from the 12"
+          ]
+        },
+        "learn": {
+          "summary": "Year 3 children (age 7–8) learn to read an analogue clock to the nearest minute AND build a felt sense of how long seconds, minutes and hours actually are — estimating real durations, comparing them, and choosing sensible units for events. The hard parts are: estimating (children tend to count seconds in their head far too fast, so estimates come out wildly short), comparing (they compare bare numbers while ignoring units, e.g. '30 seconds is longer than 20 minutes because 30 > 20'), and selecting an appropriate unit for an event. Precise reading should be paired with hands-on calibration against a real timer and with comparisons laid out in a common unit.",
+          "activities": [
+            {
+              "title": "Tap when you think the time has passed — then reveal the real elapsed time",
+              "feedback": [
+                "If the child tapped at ~10 seconds for 30 seconds: 'Had a whole 30 seconds really gone? Let's check the stopwatch — you tapped early. Try counting one-Mississippi, two-Mississippi.'",
+                "When the estimate lands in a sensible range (not at ~10 seconds): 'That's much closer to a real 30 seconds.'",
+                "Frame this as rehearsing a steady pace, not a concept to re-explain."
+              ],
+              "rationale": "The too-fast internal counter is a felt performance skill; a live estimate-then-reveal loop against a real measured value makes the error visible and gives immediate calibration feedback. White Rose documents the 'put your hand up when you think a minute/40 seconds has passed' activity checked against a stopwatch. A stopwatch is one way to supply the measured value; an adult timing by hand serves the same purpose.",
+              "sourceClaims": [
+                "White Rose Y3 Time (Steps 10-12) documents that when estimating children often count seconds in their head too quickly, and when comparing they compare numbers without reference to units ('30 seconds is longer than 20 minutes because 30 > 20') and find it hard to choose the correct unit for an event; the recommended activity is 'put your hand up when you think a minute/40 seconds has passed' checked against a stopwatch.",
+                "Year 3 pupils should 'estimate and read time with increasing accuracy to the nearest minute; record and compare time in terms of seconds, minutes and hours'."
+              ],
+              "learnerActions": [
+                "Close your eyes (or watch a blank screen) and tap/raise a hand when you think 30 seconds has passed.",
+                "Compare the moment you tapped with the real elapsed time measured on a stopwatch or timer.",
+                "Notice the gap between your tap and the real time — many children tap early for a 30-second estimate because they count too fast in their head, so check whether that happened for you.",
+                "Try again, practising a steady 'one-Mississippi' counting pace, and re-estimate to see if your tap gets closer.",
+                "Repeat for a minute and for 40 seconds."
+              ],
+              "intendedInsight": "My internal counting can run faster than real seconds; estimating duration is a felt skill I can calibrate against a real timer by checking my tap against the measured time."
+            },
+            {
+              "title": "Compare two durations on one common-unit scale",
+              "feedback": [
+                "If the child picks 30 seconds: 'How many seconds are in 20 minutes? Convert both to seconds, then compare — 20 minutes is 1200 seconds, so 20 minutes is longer.'",
+                "For 90s vs 2 minutes: 'Is 90 seconds longer or shorter than 2 minutes? 90 is bigger than 2, but is a second bigger than a minute? Convert: 2 minutes = 120 seconds, so 2 minutes is longer.'",
+                "Reinforce: don't compare numbers without their units; make the units explicit before comparing sizes."
+              ],
+              "rationale": "Children apply whole-number reasoning to time and treat quantities as bare counting numbers; laying both durations on a single common-unit scale makes the unit explicit and visible so size can be compared fairly. The dragging-onto-a-shared-line interaction is an optional mechanism; a drawn bar or number line on paper serves the same purpose.",
+              "sourceClaims": [
+                "Children apply discrete whole-number reasoning to time and struggle to coordinate its non-standard groupings, so they treat time quantities like ordinary counting numbers rather than reasoning about the units — consistent with comparing 30 and 20 without regard to seconds vs minutes.",
+                "White Rose Y3 Time (Steps 10-12) documents that when estimating children often count seconds in their head too quickly, and when comparing they compare numbers without reference to units ('30 seconds is longer than 20 minutes because 30 > 20') and find it hard to choose the correct unit for an event; the recommended activity is 'put your hand up when you think a minute/40 seconds has passed' checked against a stopwatch."
+              ],
+              "learnerActions": [
+                "Take two durations, '30 seconds' and '20 minutes', and place them as bars onto ONE shared number line marked in a common unit (e.g. seconds).",
+                "See that 20 minutes = 1200 seconds towers over the 30-second sliver.",
+                "State which is longer and say WHY: a minute is 60 seconds, so 20 minutes is 1200 seconds, which is longer than 30 seconds even though 20 is less than 30.",
+                "Try more pairs, including a tricky one: 90 seconds vs 2 minutes (90 > 2, but 90s < 120s, so 2 minutes is longer)."
+              ],
+              "intendedInsight": "Durations can only be compared fairly when expressed in the same unit; the bare number alone does not tell you which is longer."
+            },
+            {
+              "title": "Read an analogue clock to the exact minute by counting on from the last five",
+              "feedback": [
+                "If the child taps round the dial one minute at a time from the 12: 'Which five has the hand just passed? Start there and count on.'",
+                "When they count on from 35: 'Good — 35 plus 3 more is 38.'",
+                "Rehearse with the fives marked so the anchor is easy to find."
+              ],
+              "rationale": "Counting single minutes from the 12 is slow and error-prone; anchoring on the last five-minute mark the hand has passed and counting on supports accurate reading to the nearest minute, a statutory Year 3 expectation. The counting-on method is drawn from the scheme-of-learning pedagogy rather than quoted verbatim from a source claim.",
+              "sourceClaims": [
+                "Year 3 pupils should 'estimate and read time with increasing accuracy to the nearest minute; record and compare time in terms of seconds, minutes and hours'."
+              ],
+              "learnerActions": [
+                "Look at a clock showing 2:38.",
+                "Find which five the minute hand has just passed (the 35).",
+                "Count on from there to the exact minute (+3 to reach 38).",
+                "Read the time to the nearest minute and explain the counting-on method.",
+                "Rehearse with the five-minute marks shown on the clock face."
+              ],
+              "intendedInsight": "Reading to the exact minute is efficient when I anchor on the last five and count on, rather than counting single minutes from the 12."
+            },
+            {
+              "title": "Match events to sensible units using benchmarks",
+              "feedback": [
+                "If the child says lunch takes '30 seconds' or '5 hours': 'Think of your benchmark — a minute is about a short song. Is lunch closer to a clap, a song, or a whole lesson?'",
+                "When a sensible unit is chosen (e.g. minutes for lunch): 'Yes — lunch is many minutes, not seconds.'",
+                "A sorting activity can check and build this classification but does not itself produce the felt sense of a duration — pair it with the timed estimation work."
+              ],
+              "rationale": "Choosing the correct unit is documented as hard; building concrete referents gives children something to compare each event against instead of guessing.",
+              "sourceClaims": [
+                "White Rose Y3 Time (Steps 10-12) documents that when estimating children often count seconds in their head too quickly, and when comparing they compare numbers without reference to units ('30 seconds is longer than 20 minutes because 30 > 20') and find it hard to choose the correct unit for an event; the recommended activity is 'put your hand up when you think a minute/40 seconds has passed' checked against a stopwatch.",
+                "Year 3 pupils should 'estimate and read time with increasing accuracy to the nearest minute; record and compare time in terms of seconds, minutes and hours'."
+              ],
+              "learnerActions": [
+                "Anchor each unit to a familiar benchmark: a second ≈ one clap, a minute ≈ a short song, an hour ≈ a lesson.",
+                "Sort everyday events against these benchmarks (a blink, brushing teeth, eating lunch, sleeping overnight).",
+                "Choose whether each event is best measured in seconds, minutes or hours, and justify by comparing to the benchmark.",
+                "Catch mismatches such as 'lunch takes 30 seconds' or 'a blink takes hours'."
+              ],
+              "intendedInsight": "Each unit has a felt size; I pick the unit for an event by comparing it to a benchmark I know."
+            },
+            {
+              "title": "Sequence and compare durations",
+              "feedback": [
+                "If a sequence is ordered by bare number (placing 90 seconds as the longest, above 2 minutes and even 1 hour): 'Convert to the same unit first — 90 seconds vs 120 seconds for 2 minutes, and 3600 seconds for an hour.'",
+                "For the comparison item, ask the child to say WHY, not just pick an answer.",
+                "Accept converting to a common unit, or unit-size reasoning only when the number of larger units is at least as big as the number of smaller units (e.g. 20 minutes vs 30 seconds); for pairs like 90 seconds vs 1 minute, require conversion."
+              ],
+              "rationale": "Ordering and 'which is longer' items with mixed units are discriminating checks that reveal whether a child reasons about units or just the numbers. A recognition/selection or ordering format can be used for checking, but should follow the hands-on estimation and common-unit comparison work rather than replace it, since selecting a correct answer does not by itself elicit the felt calibration of estimating against a timer.",
+              "sourceClaims": [
+                "Year 3 pupils should 'estimate and read time with increasing accuracy to the nearest minute; record and compare time in terms of seconds, minutes and hours'."
+              ],
+              "learnerActions": [
+                "Put a set of durations in order from shortest to longest: 90 seconds, 1 minute, 1 hour, 2 minutes (correct order: 1 minute, 90 seconds, 2 minutes, 1 hour).",
+                "Answer 'which is longer, 30 seconds or 20 minutes?' and explain the reasoning in units.",
+                "Match a list of events to their natural unit.",
+                "Estimate how long brushing teeth takes using a slider or spoken estimate, then check against a timer."
+              ],
+              "intendedInsight": "I can order and compare durations reliably by converting to a common unit and reasoning about unit size."
+            }
+          ],
+          "constraints": [
+            "Reading, estimating and comparing are distinct strands — cover all three; precise reading alone does not address the estimation and comparison difficulties that carry the misconceptions.",
+            "A static 'how long does X take' poster can list useful benchmarks but cannot run the estimate-then-check calibration loop; use it as a reference, not as the estimation activity.",
+            "A character or spoken prompt can ask the child to estimate and compare, but needs a real timer alongside it for the too-fast-counter feedback to be felt.",
+            "The estimation error is a felt performance skill to rehearse against a real timer, not a concept to reteach by explanation.",
+            "Always make units explicit before comparing durations; never present a comparison item that rewards comparing bare numbers without their units, and never list the unit-blind answer (30 seconds longer than 20 minutes) as a correct option.",
+            "Recognition/selection and ordering items check whether a child reasons in units but do not by themselves elicit the felt calibration of estimating against a timer; pair them with hands-on estimation.",
+            "The dragging/common-unit-line and tap-to-reveal interactions are illustrative mechanisms; equivalent work with a stopwatch and a drawn number line on paper achieves the same objective."
+          ],
+          "reviewNotes": [
+            "This is an agent semantic rewrite of saved teaching research without fresh source verification; sources were not re-fetched. Activities are research-informed proposals, not validated interventions.",
+            "The legacy row claims '3D adds nothing' and that the errors are 'correctable only by a live feedback loop'; these are catalog-fit judgements, not established necessity claims. They have been softened to affordance-based statements (a real timer makes the estimation error felt; a static poster cannot run the loop; a sort checks classification but does not elicit the felt duration).",
+            "Self-audit of arithmetic/examples: 2:38 read as count-on from 35 (+3) is correct; 20 minutes = 1200 seconds is correct; 90 seconds vs 2 minutes = 120 seconds is correct (90s < 120s, so 2 minutes is longer); 1 hour = 3600 seconds; sequence order 1 minute (60s) < 90 seconds < 2 minutes (120s) < 1 hour (3600s) — all retained as learner-facing examples.",
+            "The 'count on from the last five' reading method and the 'discriminating check' framing come from the row pedagogy/White Rose scheme, not from a verbatim sources[].claim; the retained National Curriculum claim supports the objective of reading/comparing to the nearest minute, not the specific technique.",
+            "The 'later finish time means longer duration' misconception is noted in the original pedagogy as carried from earlier duration work; it is not directly targeted by these activities and may need a separate duration-difference activity if observed."
+          ],
+          "schemaVersion": 2
+        },
+        "assess": {
+          "method": "performance_task",
+          "poeTask": null,
+          "probeDeeper": [
+            "'You said 30 seconds is longer — how many seconds are in 20 minutes? Now which is longer?' (forces a common unit)",
+            "'When you put your hand up, had a whole minute really gone? Let's check on the stopwatch.'",
+            "'Would you measure how long you sleep in seconds, minutes or hours? Why?'",
+            "'Is 90 seconds longer or shorter than 2 minutes?' (90 > 2 but 90s < 120s — counterexample)"
+          ],
+          "correctAnswer": "Reads 2:38 by counting on from 35 (+3); estimates 30 seconds within a sensible range (not tapping at around 10 seconds); says 20 minutes is longer than 30 seconds BECAUSE minutes are bigger units (converting or reasoning about unit size); picks minutes for lunch.",
+          "errorPatterns": [
+            {
+              "kind": "misconception",
+              "pattern": "Compares durations by the bare number, ignoring units ('30 seconds is longer than 20 minutes because 30 > 20')",
+              "nextMove": "Make the units explicit before comparing — convert both to the same unit or lay them on one number line so the child sees 20 minutes = 1200 seconds; never compare numbers without their units.",
+              "distractor": null,
+              "revealedBy": "On the comparison item picks 30 seconds; compares magnitudes without converting to a common unit",
+              "reteachPrerequisiteId": "mt_6XCURuNwPw"
+            },
+            {
+              "kind": "performance",
+              "pattern": "Counts seconds far too quickly, so time estimates are wildly short",
+              "nextMove": "Scaffold: calibrate against a real stopwatch, practising a steady 'one-Mississippi' pace and re-estimating; this is a felt skill to rehearse, not a concept to reteach.",
+              "distractor": null,
+              "revealedBy": "Puts a hand up at around 10 seconds for a 30-second estimate",
+              "reteachPrerequisiteId": null
+            },
+            {
+              "kind": "misconception",
+              "pattern": "Chooses an inappropriate unit for an event (seconds for a lesson, hours for a blink)",
+              "nextMove": "Build referents — anchor each unit to a familiar benchmark (a second = one clap, a minute = a short song, an hour = a lesson) and sort events against them.",
+              "distractor": null,
+              "revealedBy": "Says lunch takes '30 seconds' or '5 hours'",
+              "reteachPrerequisiteId": null
+            },
+            {
+              "kind": "performance",
+              "pattern": "Reads to the nearest minute by counting single minutes from the 12 rather than counting on from the last five",
+              "nextMove": "Scaffold 'which five has the hand just passed? count on'; rehearse with the fives marked on the clock.",
+              "distractor": null,
+              "revealedBy": "Taps round the dial one minute at a time on the reading item",
+              "reteachPrerequisiteId": "mt_4m8BimI4G5"
+            }
+          ],
+          "responseLevels": {
+            "gap": "Reads by counting single minutes; estimates wildly (counts too fast); compares durations by the bare number, ignoring units.",
+            "full": "Reads to the exact minute, estimates short durations sensibly against a benchmark, and compares durations by converting to a common unit / reasoning about unit size, choosing appropriate units for events.",
+            "partial": "Reads to the nearest minute and estimates roughly, but is caught comparing across units (30s vs 20min) or picking a sensible unit for unfamiliar events."
+          },
+          "diagnosticPrompt": "Set estimating, reading and comparing tasks and WATCH: (1) Analogue clock at 2:38: 'Read this to the nearest minute and show me how.' (2) 'Close your eyes and put your hand up when you think 30 seconds has gone' — time it. (3) 'Which is longer — 30 seconds or 20 minutes? How do you know?' and 'About how long does it take to eat lunch — seconds, minutes or hours?' Watch the reading method, how far off the estimate is, and whether they reason about UNITS rather than just the numbers.",
+          "whatMakesItDiscriminate": "The '30 seconds vs 20 minutes' item is the classic unit-blind comparison probe: a child comparing bare numbers picks 30 seconds, a child reasoning about units picks 20 minutes. The eyes-closed estimate exposes the too-fast internal counter directly rather than by self-report."
+        },
+        "sources": [
+          {
+            "claim": "Year 3 pupils should 'estimate and read time with increasing accuracy to the nearest minute; record and compare time in terms of seconds, minutes and hours'.",
+            "source": "National Curriculum in England: Mathematics, Year 3 Measurement (statutory), gov.uk",
+            "url": "https://www.gov.uk/government/publications/national-curriculum-in-england-mathematics-programmes-of-study/national-curriculum-in-england-mathematics-programmes-of-study",
+            "verified": true
+          },
+          {
+            "claim": "White Rose Y3 Time (Steps 10-12) documents that when estimating children often count seconds in their head too quickly, and when comparing they compare numbers without reference to units ('30 seconds is longer than 20 minutes because 30 > 20') and find it hard to choose the correct unit for an event; the recommended activity is 'put your hand up when you think a minute/40 seconds has passed' checked against a stopwatch.",
+            "source": "White Rose Education, Year 3 Summer Block 3: Time (scheme of learning), Steps 10-12",
+            "url": "https://assets.whiteroseeducation.com/new-schemes/Y3%20Summer%20Block%203%20SOL%20Time.pdf",
+            "verified": true
+          },
+          {
+            "claim": "Children apply discrete whole-number reasoning to time and struggle to coordinate its non-standard groupings, so they treat time quantities like ordinary counting numbers rather than reasoning about the units — consistent with comparing 30 and 20 without regard to seconds vs minutes.",
+            "source": "Earnest, Gonzales & Plant (2018), 'Time as a measure: elementary students positioning the hands of an analog clock', Journal of Numerical Cognition 4(1)",
+            "url": "https://jnc.psychopen.eu/index.php/jnc/article/view/5793",
+            "verified": true
+          }
+        ],
+        "confidence": "high",
+        "provenance": {
+          "originalResearchGeneratedBy": "claude-opus-4-8 (teaching-research plugin)",
+          "createdAt": "2026-07-27T22:04:31.373Z",
+          "updatedAt": "2026-10-19T15:20:10.193Z"
+        },
+        "publicationNotes": {
+          "omittedCurriculumText": []
+        }
+      }
+    },
+    {
+      "originalTopicId": "mt_NSC3LT_-ch",
+      "reason": "topic_refocused",
+      "relatedTopicIds": [
+        "mt_NSC3LT_-ch",
+        "mt_d7XktBQPxm"
+      ],
+      "topic": {
+        "id": "mt_NSC3LT_-ch",
+        "type": "CONCEPTUAL",
+        "subject": "Mathematics",
+        "domain": "Measurement",
+        "name": "Estimating volume",
+        "description": "Estimate volume of cuboids using 1 cm³ blocks; estimate capacity of containers using water",
+        "ageRangeStart": 9,
+        "ageRangeEnd": 10,
+        "centrality": 0.0304635761589404,
+        "evidence": [
+          "Build a cuboid from 1 cm³ blocks and state its volume",
+          "Estimate how many cm³ blocks would fill a given box",
+          "Estimate the capacity of a jug by comparing to known litre measures"
+        ],
+        "assessmentPrompt": "If {{name}} has a small cardboard box, can they estimate how many 1 cm³ cubes would fit inside it — and then fill it with sugar cubes to check?",
+        "standards": [
+          "uk-nc-2013:Ma5/3.1e"
+        ]
+      },
+      "research": {
+        "topicId": "mt_NSC3LT_-ch",
+        "pedagogy": {
+          "summary": "Volume is the amount of three-dimensional space inside a solid, measured by packing it with unit cubes (each 1 cm³ = one cubic unit) with no gaps or overlaps and counting them. Children estimate and find the volume of a cuboid by building it from 1 cm³ blocks and seeing its LAYER structure — a layer holds rows×columns of cubes and the height tells how many layers — and connect packing with cubes to filling with liquid (a box holding 24 cm³ holds 24 ml of water). Packing volume is harder than area tiling because it demands 3-D spatial structuring.",
+          "bestPractices": [
+            "Build cuboids from 1 cm³ cubes and watch the layers form; count as number-in-a-layer × number-of-layers.",
+            "Make hidden cubes explicit — the bottom layers you can't see still count; account for the whole 3-D array, not just the visible faces.",
+            "Estimate before packing (predict how many cubes fill the box), then check by building.",
+            "Connect packing to filling: pack a box with cm³ cubes and also fill it from a cylinder marked in ml, so 1 cm³ = 1 ml becomes real.",
+            "Use benchmark comparisons for capacity (compare a jug to a known 1-litre measure); state volume in cubic units."
+          ],
+          "keyRepresentations": [
+            "A cuboid built from 1 cm³ cubes, decomposed into layers (rows × columns × layers)",
+            "The net of a box, used to predict the number of cubes to fill it",
+            "A box packed with cm³ cubes beside a graduated cylinder (1 cm³ = 1 ml)",
+            "A jug compared against a 1-litre benchmark for capacity estimation"
+          ],
+          "commonMisconceptions": [
+            "Counts only the visible cubes/faces and forgets the hidden lower layers — undercounting the 3-D array.",
+            "Adds the three dimensions (4+3+2) instead of building the layered array.",
+            "Treats the packed cubes as discrete objects, not as units of volume — doesn't see '24 cubes' as an amount of space.",
+            "Doesn't connect packing with filling — can't say how much water (ml) fills a box packed with 24 cm³ cubes."
+          ]
+        },
+        "learn": {
+          "summary": "Volume is the amount of 3-D space inside a solid, found by packing it with unit cubes (1 cm³ each) with no gaps or overlaps and counting them. Learners build a cuboid from 1 cm³ cubes, see its layer structure (a layer holds rows×columns of cubes; the height tells how many layers, so count = cubes-per-layer × layers), account for the hidden lower layers that cannot be seen, and connect packing with cubes to filling with liquid (a box packed with 24 cm³ holds 24 ml of water). Packing volume is harder than iterating length or tiling area because it demands extending spatial structuring from two to three dimensions.",
+          "activities": [
+            {
+              "title": "Pack a box layer by layer and reveal the hidden cubes",
+              "feedback": [
+                "If a learner answers 12 ('the top is 4 by 3'), they have counted only the visible top layer. Have them physically lift the top layer to reveal the one beneath, then count number-in-a-layer × number-of-layers.",
+                "If a learner answers 9 ('4 + 3 + 2'), they are adding the three edges. Show that adding edges gives a length, not the space filled; pack the cubes to see it is layers of an array, so the dimensions multiply.",
+                "If a learner says just '24' meaning 24 loose blocks, name the unit: each block is 1 cubic centimetre, so the box holds 24 cm³ of space — the count measures volume, not a pile of objects.",
+                "If the box were twice as tall (4 layers instead of 2), ask how many cubes then and why — this checks whether the layer structure is secure (4 × 12 = 48)."
+              ],
+              "rationale": "Decomposing a right rectangular prism into layers, each a rows-and-columns array, and recomposing multiplicatively (length×width cubes per layer, height = number of layers) is the targeted spatial structuring; predicting before packing surfaces undercounts based on the visible top or outer faces. Packing cubes physically lets learners rotate and open the solid to make the hidden interior cubes explicit.",
+              "sourceClaims": [
+                "A unit cube (side length 1) has one cubic unit of volume; a solid figure packed without gaps or overlaps using n unit cubes has a volume of n cubic units (5.MD.3), and volume is measured by counting unit cubes in cubic cm/in/ft (5.MD.4). Packing volume is harder than iterating length or tiling area and demands extending spatial structuring from two to three dimensions.",
+                "Students decompose a right rectangular prism into layers, each a rows-and-columns array, and recompose multiplicatively — length×width gives the number of cubes in a layer and the height gives the number of layers; they may predict the number of cubes to fill a box from its net. Volume is additive."
+              ],
+              "learnerActions": [
+                "Take an empty open box whose inside measures 4 cm by 3 cm by 2 cm and a pile of 1 cm³ cubes.",
+                "Before packing, predict how many cubes will fill the box completely and say WHY.",
+                "Lay the first layer as a 4-by-3 array and count it (12 cubes).",
+                "Stack the second layer on top and track the running count until it reads 24.",
+                "Rotate the box and open or lift the top layer to expose the bottom layer you could not see, confirming those hidden cubes still count.",
+                "State the count as cubes-per-layer × number-of-layers: 4×3 = 12 in a layer, 2 layers, 12×2 = 24.",
+                "State the result in cubic centimetres: 24 cm³."
+              ],
+              "intendedInsight": "Volume is a layered 3-D array: each layer holds rows×columns of cubes and the height gives the number of layers, so you multiply (or count layer by layer) and the hidden lower cubes count too. The answer is an amount of space measured in cubic units, not a heap of objects."
+            },
+            {
+              "title": "Connect packing with cubes to filling with water",
+              "feedback": [
+                "If a learner can count the cubes but cannot say how much water fills the box, move between filling and packing on the same container until 1 cm³ = 1 ml becomes visible.",
+                "If a learner treats '24 cubes' as discrete objects, re-ask what the unit of volume is, so '24' is read as 24 cm³ (= 24 ml) of space."
+              ],
+              "rationale": "A documented key difficulty is that learners who say a box holds 24 cubes often treat the 24 as individual objects, not units of volume, and cannot say how much liquid would fill it. Moving between filling and packing on the same container, with the 1 cm³ = 1 ml equivalence, targets exactly this disconnect.",
+              "sourceClaims": [
+                "A key difficulty is the connection between 'packing' (cubes) and 'filling' (liquid): students who say a box holds 24 cubes often think of the 24 as individual discrete objects, not units of volume, and cannot confidently say how much liquid (from a cylinder marked in cc/ml) would fill the box. Instruction moves between filling and packing on the same container; 1 cm³ of water = 1 ml."
+              ],
+              "learnerActions": [
+                "Pack the same box completely with 1 cm³ cubes and agree on the count (24).",
+                "Empty it, then fill it with water poured from a cylinder marked in millilitres (the box must be watertight, or use a watertight container with the same inside measurements), and read how much water was poured in.",
+                "Compare the two results: the cubes show the box holds 24 cm³, and the water reading should be about 24 ml (small differences come from measuring and filling errors).",
+                "State the equivalence in your own words: 1 cm³ of water = 1 ml, so 24 cm³ = 24 ml.",
+                "Answer: 'If I filled this box with water instead of cubes, about how much water would it hold? How does that relate to the cubes?'"
+              ],
+              "intendedInsight": "Packing (cubes) and filling (liquid) describe the same amount of space: because 1 cm³ = 1 ml, a box whose inside is exactly filled by 24 one-centimetre cubes (24 cm³) holds 24 ml of water, and a real pour should give about 24 ml. The cube count is a measure of volume, not a tally of separate objects."
+            },
+            {
+              "title": "Predict the cube count from a net",
+              "feedback": [
+                "If the prediction ignores depth/layers, point to which dimension on the net gives the number of layers and rebuild to check.",
+                "If the prediction adds dimensions rather than multiplying, contrast an edge length with the filled space by packing one layer and stacking."
+              ],
+              "rationale": "The Progressions note that learners may predict the number of cubes to fill a box from its net; pairing a prediction with a physical build gives a discriminating check of layer structuring before the cubes are visible.",
+              "sourceClaims": [
+                "Students decompose a right rectangular prism into layers, each a rows-and-columns array, and recompose multiplicatively — length×width gives the number of cubes in a layer and the height gives the number of layers; they may predict the number of cubes to fill a box from its net. Volume is additive."
+              ],
+              "learnerActions": [
+                "Look at the flat net of a box before it is folded or packed.",
+                "Predict how many 1 cm³ cubes will fill the assembled box, explaining your reasoning in terms of a layer and the number of layers.",
+                "Fold/assemble (or build) the box and pack it to check your prediction.",
+                "Reconcile any difference between prediction and result, naming where the reasoning went wrong."
+              ],
+              "intendedInsight": "The layer structure can be read off a box's net before packing: identify the cubes in one layer (length×width) and how many layers (height), then multiply — and verify by building."
+            },
+            {
+              "title": "Estimate a container's capacity against a benchmark",
+              "feedback": [
+                "If an estimate is far off, re-anchor to the 1-litre benchmark and ask 'more than, less than, or about the same?' before pouring.",
+                "Encourage stating the result with a unit (ml or l) rather than a bare number."
+              ],
+              "rationale": "Benchmark comparison to a known 1-litre measure supports capacity estimation and extends the packing–filling link into everyday containers.",
+              "sourceClaims": [],
+              "learnerActions": [
+                "Pick a jug or container and estimate its capacity before measuring.",
+                "Compare it to a known 1-litre measure to judge whether it holds more or less, and roughly how much.",
+                "Pour to check against a graduated measure and state the capacity in millilitres or litres.",
+                "Relate capacity back to volume: discuss how a packed box's cm³ count would translate to ml."
+              ],
+              "intendedInsight": "Capacity can be estimated by comparison to a familiar benchmark (a 1-litre measure), and it connects to volume through the 1 cm³ = 1 ml relationship."
+            },
+            {
+              "title": "Reference cutaway: the cubes you cannot see",
+              "feedback": [
+                "If a learner still counts only visible faces, point to the cutaway's exposed lower layer and ask them to add those cubes to the total."
+              ],
+              "rationale": "A static cutaway makes explicit that hidden cubes count. This is a supporting scaffold: it clarifies hidden depth but does not let the learner pack, rotate, or fill, so it should accompany, not replace, hands-on packing.",
+              "sourceClaims": [],
+              "learnerActions": [
+                "Study a cutaway picture of a packed cuboid that shows the interior cubes, including the bottom layer.",
+                "Mark or count the hidden cubes that would be invisible from the outside.",
+                "Explain why the outside view alone undercounts the volume."
+              ],
+              "intendedInsight": "Unseen interior and bottom-layer cubes are part of the volume; relying on visible faces undercounts the 3-D array."
+            }
+          ],
+          "constraints": [
+            "Learners must account for the whole 3-D array including hidden bottom layers, not just visible faces; make hidden cubes explicit by lifting/rotating or using a cutaway.",
+            "Estimate before packing or pouring, then check by building/measuring; prediction surfaces undercounts.",
+            "State volume in cubic units (cm³) and capacity in ml/l — a bare number is not enough; '24 cubes' should be read as 24 cm³ of space.",
+            "The static cutaway is a scaffold for the hidden-cubes idea only; it cannot support packing, rotating, or filling and should supplement hands-on work.",
+            "Hands-on paper/card models and cube sets have real thickness and can be picked up; treat the represented cuboid as an idealised mathematical solid and any zero-thickness on-screen diagram or flat picture as a model of that solid.",
+            "An on-screen layer builder with a live cube count and a pack-vs-fill-water toggle, or a grid layer × layer-count side view with a fill-with-water overlay, can make number-in-a-layer × layers and the cm³ = ml link concrete; these are optional illustrative mechanisms, not required ones. A flat side view does not directly display the hidden interior/bottom-layer cubes that packing real cubes or a cutaway reveals.",
+            "Recognition-only responses (e.g. choosing the right number) do not by themselves elicit independent construction of the layered count; have learners build, predict, and explain."
+          ],
+          "reviewNotes": [
+            "This is an agent semantic rewrite of saved teaching research without fresh source verification; sources were not re-fetched. Activities are research-informed proposals, not validated interventions.",
+            "The 4×3×2 = 24 arithmetic, the single-layer distractor (12), and the add-the-edges distractor (9 = 4+3+2) were checked and are internally consistent; 48 for a doubled height (4 layers) also checks out.",
+            "The legacy 'conversation' entry was rated a poor fit with the claim that volume structuring is built by packing/filling 'not by in-role dialogue'. That comparative/necessity claim is not established by the sources; dialogue could still support reasoning. It has been omitted rather than restated as a universal law.",
+            "Capacity/benchmark estimation (jug vs 1-litre) is supported by the topic's stated evidence but has no directly supporting source claim, so its sourceClaims is [].",
+            "The cutaway activity's principle — that hidden/interior cubes count and visible faces undercount — is drawn from the stated common misconceptions, not from any sources[].claim, so its sourceClaims is []; the related 3-D structuring and layer-additivity claims are used in the packing activities instead.",
+            "The 1 cm³ = 1 ml equivalence and 'ml' content draw on the Grade 4 portion of the cited Progressions mirror as noted in the source.",
+            "An invented 'live recolouring' mechanism was removed from the constraints; only source-grounded optional mechanisms are retained.",
+            "A residual comparative 'less vividly' phrasing in the optional-mechanism constraint was replaced with an observable affordance (a flat view cannot directly display the hidden interior/bottom cubes)."
+          ],
+          "schemaVersion": 2
+        },
+        "assess": {
+          "method": "two_tier",
+          "poeTask": "Before packing, show the child the empty 4×3×2 box and the pile of 1 cm³ cubes and ask them to predict how many cubes will fill it completely and to say WHY. Then have them pack it, building layer by layer. The total of 24 confronts an under-prediction based on the visible top or the outside faces; the target explanation, given after packing, is that each layer holds 4×3 = 12 cubes and there are 2 layers.",
+          "probeDeeper": [
+            "You can see the top of the box — how many cubes are underneath, in the layer you can't see? How do you know?",
+            "If the box were twice as tall — 4 layers instead of 2 — how many cubes then? Why?",
+            "If I filled this box with water instead of cubes, about how much water would it hold? How does that relate to the cubes?",
+            "Is your answer 24 cubes, or 24 of something else — what is the unit for volume?"
+          ],
+          "correctAnswer": "24 cubic centimetres. Each layer is a 4-by-3 array of 12 cubes and the box is 2 layers deep, so 12 × 2 = 24 (equivalently 4 × 3 × 2), counting the hidden lower layer as well as the top.",
+          "errorPatterns": [
+            {
+              "kind": "misconception",
+              "pattern": "Counts one layer / visible cubes only: sees the top and forgets the box is layers deep, giving the single-layer count.",
+              "nextMove": "Extend the 2-D array to 3-D — build the box in layers, physically lift the top layer to reveal the one beneath; count number-in-a-layer × number-of-layers.",
+              "distractor": "12 — the top of the box is 4 by 3, so 12 blocks.",
+              "revealedBy": "Answers 12 with 'the top has 4×3 = 12 blocks'; doesn't account for the second, lower layer.",
+              "reteachPrerequisiteId": "mt_y1n0Zwhoca"
+            },
+            {
+              "kind": "interference",
+              "pattern": "Adds the three dimensions instead of building the layered array (interference from length/perimeter thinking).",
+              "nextMove": "Show that adding the edges gives a length, not the space filled; pack cubes to see it is layers of an array, so the dimensions multiply.",
+              "distractor": "9 — I added the three side lengths, 4 + 3 + 2.",
+              "revealedBy": "Answers 9 with '4 + 3 + 2'; treats volume like a sum of lengths.",
+              "reteachPrerequisiteId": null
+            },
+            {
+              "kind": "misconception",
+              "pattern": "Packing–filling disconnect: can count the cubes but cannot say how much water would fill the box — hasn't connected packing (cubes) with filling (liquid).",
+              "nextMove": "Pack the box with cm³ cubes and also fill it from a cylinder marked in ml on the same box, so 1 cm³ = 1 ml becomes visible.",
+              "distractor": null,
+              "revealedBy": "Gives the cube count but, asked how many ml of water fill the box, cannot connect it to the cubes (that it is 24 ml).",
+              "reteachPrerequisiteId": null
+            },
+            {
+              "kind": "misconception",
+              "pattern": "Cubes as discrete objects, not units of volume: treats the answer as '24 blocks' with no cubic unit and no sense of it as an amount of space.",
+              "nextMove": "Name the unit — each block is 1 cubic centimetre, so the box holds 24 cm³ of space; the count measures volume, not a heap of objects.",
+              "distractor": null,
+              "revealedBy": "Says '24' meaning 24 loose blocks; omits the cubic unit and doesn't treat it as a volume.",
+              "reteachPrerequisiteId": null
+            }
+          ],
+          "responseLevels": {
+            "gap": "Counts only the visible top/faces or adds the dimensions; under- or mis-counts and shows no layer structure.",
+            "full": "Finds volume as number-in-a-layer × number-of-layers (including hidden cubes), states it in cubic units, and connects packing with cubes to filling with liquid (24 cm³ = 24 ml).",
+            "partial": "Finds the cube count for a built cuboid (by counting or multiplying) but the structure is fragile — forgets hidden layers on a harder case, or cannot connect the cube count to how much water the box holds."
+          },
+          "diagnosticPrompt": "Show a box that is 4 cm by 3 cm by 2 cm (or its net) and a pile of 1 cm³ blocks. Ask: 'How many 1 cm³ blocks are needed to fill this box completely — and how did you work it out?'",
+          "whatMakesItDiscriminate": "The number alone can be reached different ways, so the reason tier carries it: a child with 3-D structure counts by layers (or multiplies) and accounts for hidden cubes; a child without it counts only the visible top/faces (undercounting) or adds the dimensions. A '24' justified by 'I counted the ones I can see' is caught."
+        },
+        "sources": [
+          {
+            "claim": "A unit cube (side length 1) has one cubic unit of volume; a solid figure packed without gaps or overlaps using n unit cubes has a volume of n cubic units (5.MD.3), and volume is measured by counting unit cubes in cubic cm/in/ft (5.MD.4). Packing volume is harder than iterating length or tiling area and demands extending spatial structuring from two to three dimensions.",
+            "source": "Common Core Progressions — K–5 Geometric Measurement (2012), Grade 5 (5.MD.3–4) (ISBE mirror)",
+            "url": "https://www.isbe.net/Documents/geometric-measurement-k-5.pdf",
+            "verified": true
+          },
+          {
+            "claim": "Students decompose a right rectangular prism into layers, each a rows-and-columns array, and recompose multiplicatively — length×width gives the number of cubes in a layer and the height gives the number of layers; they may predict the number of cubes to fill a box from its net. Volume is additive.",
+            "source": "Common Core Progressions — K–5 Geometric Measurement (2012), Grade 5 (5.MD.5) (ISBE mirror)",
+            "url": "https://www.isbe.net/Documents/geometric-measurement-k-5.pdf",
+            "verified": true
+          },
+          {
+            "claim": "A key difficulty is the connection between 'packing' (cubes) and 'filling' (liquid): students who say a box holds 24 cubes often think of the 24 as individual discrete objects, not units of volume, and cannot confidently say how much liquid (from a cylinder marked in cc/ml) would fill the box. Instruction moves between filling and packing on the same container; 1 cm³ of water = 1 ml.",
+            "source": "Common Core Progressions — K–5 Geometric Measurement (2012), Grade 5 (packing vs filling) & Grade 4 (ml) (ISBE mirror)",
+            "url": "https://www.isbe.net/Documents/geometric-measurement-k-5.pdf",
+            "verified": true
+          }
+        ],
+        "confidence": "high",
+        "provenance": {
+          "originalResearchGeneratedBy": "claude-opus-4-8 (teaching-research plugin)",
+          "createdAt": "2026-07-27T20:42:47.996Z",
+          "updatedAt": "2026-10-19T15:21:07.442Z"
+        },
+        "publicationNotes": {
+          "omittedCurriculumText": []
+        }
+      }
+    }
+  ]
+}

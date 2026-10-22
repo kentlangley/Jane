@@ -12,7 +12,7 @@ function scratch(){const d=tmpDir('jane-kid-');for(const p of['build.mjs','migra
 const run=(d,f,args=[])=>spawnSync(process.execPath,[f,...args],{cwd:d,encoding:'utf8'});
 
 test('every kid prompt line is mt_id|question|right|wrong1|wrong2 for a known topic, one per topic',()=>{
-  assert.ok(lines.length>=1344);const seen=new Set();
+  assert.equal(lines.length,tax.topics.filter(t=>t.kq).length,'one line per prompted topic');const seen=new Set();
   for(const {f,l,p} of lines){assert.equal(p.length,5,`${f}: ${l}`);assert.match(p[0],/^mt_[\w-]+$/,`${f}: not id-keyed: ${l}`);
     assert.ok(ids.has(p[0]),`${f}: unknown topic ${p[0]}`);assert.ok(!seen.has(p[0]),`${f}: duplicate ${p[0]}`);seen.add(p[0]);}});
 test('the built tax.json carries each prompt on the topic it names',()=>{const by=new Map(tax.topics.map(t=>[t.id,t]));

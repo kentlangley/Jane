@@ -1,0 +1,152 @@
+{
+ "_note": "Synthetic fixture for test/taxonomy-upgrade.test.mjs: made-up records, no real learner data. Ids cover the merged topic, its replacement, the two scope-changed topics and renamed topics.",
+ "progress": {
+  "v": 2,
+  "name": "Explorer",
+  "points": 120,
+  "stars": 1,
+  "streak": 0,
+  "bestStreak": 3,
+  "solved": 30,
+  "badges": [],
+  "firstDone": true,
+  "ts": {
+   "mt_3XJkeIn6J6": {
+    "st": "mastered",
+    "how": "direct",
+    "c": 4,
+    "w": 1,
+    "conf": 0.9,
+    "box": 2,
+    "due": 1790432000000,
+    "at": 1790000000000
+   },
+   "mt_UNzojLkNdm": {
+    "st": "mastered",
+    "how": "inferred",
+    "conf": 0.6,
+    "box": 1,
+    "due": 1790259200000,
+    "at": 1790086400000
+   },
+   "mt_bESTSBB0wK": {
+    "st": "mastered",
+    "how": "direct",
+    "c": 3,
+    "w": 0,
+    "conf": 0.9,
+    "box": 1,
+    "due": 1790172800000,
+    "at": 1790000000000
+   },
+   "mt_NSC3LT_-ch": {
+    "st": "learning",
+    "how": "direct",
+    "c": 1,
+    "w": 1,
+    "lvl": 3,
+    "at": 1790000000000
+   },
+   "mt_eiB3-6pu6a": {
+    "st": "mastered",
+    "how": "direct",
+    "c": 3,
+    "w": 0,
+    "conf": 0.9,
+    "box": 1,
+    "due": 1790172800000,
+    "at": 1790000000000
+   },
+   "mt_GzcJEVkNRn": {
+    "st": "mastered",
+    "how": "inferred",
+    "conf": 0.55,
+    "box": 1,
+    "due": 1790086400000,
+    "at": 1790000000000
+   },
+   "mt_e7filQgayF": {
+    "st": "mastered",
+    "how": "direct",
+    "c": 5,
+    "w": 0,
+    "conf": 0.95,
+    "box": 3,
+    "due": 1790777600000,
+    "at": 1790000000000
+   }
+  },
+  "medals": [
+   {
+    "id": "mt_3XJkeIn6J6",
+    "tier": "silver",
+    "at": 1790000000000
+   },
+   {
+    "id": "mt_bESTSBB0wK",
+    "tier": "bronze",
+    "at": 1790000000000
+   },
+   {
+    "id": "mt_eiB3-6pu6a",
+    "tier": "gold",
+    "at": 1790000000000
+   },
+   {
+    "id": "mt_e7filQgayF",
+    "tier": "gold",
+    "at": 1790000000000
+   }
+  ],
+  "questMedals": [],
+  "quests": {},
+  "current": {
+   "kind": "gen",
+   "topicId": "mt_3XJkeIn6J6",
+   "q": "How long is 9:05 to 9:41?",
+   "answer": "36 minutes",
+   "id": "x1",
+   "issued": 1790000000000
+  },
+  "focus": "mt_3XJkeIn6J6",
+  "packFocus": null,
+  "recent": [
+   "mt_3XJkeIn6J6",
+   "mt_e7filQgayF"
+  ],
+  "support": {
+   "mt_3XJkeIn6J6": {
+    "stuck": 1,
+    "skipped": 0
+   }
+  },
+  "teach": {
+   "mt_3XJkeIn6J6": {
+    "at": 1790000000000
+   }
+  },
+  "requeue": [
+   {
+    "item": {
+     "topicId": "mt_3XJkeIn6J6",
+     "q": "What time is 17 minutes after 8:50?",
+     "stage": "main"
+    },
+    "n": 1,
+    "notBefore": 1790086400000,
+    "at": 1790000000000
+   }
+  ],
+  "placement": {
+   "done": true,
+   "asked": 5,
+   "per": {},
+   "queue": []
+  },
+  "sinceReview": 0,
+  "sinceChoice": 0,
+  "packSeen": {},
+  "itemsServed": 30,
+  "rules": 2
+ }
+}

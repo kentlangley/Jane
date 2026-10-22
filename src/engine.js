@@ -18,16 +18,32 @@ export function graph(TAX){const byId={},pre={},post={};for(const t of TAX.topic
   const depth={};const dd=id=>depth[id]??=(depth[id]=0,1+Math.max(0,...pre[id].filter(e=>byId[e.id].domain===byId[id].domain).map(e=>dd(e.id))));
   const ends={};for(const t of TAX.topics)if(!post[t.id].some(e=>byId[e.id].domain===t.domain))(ends[t.subject+'|'+t.domain]??=[]).push(t.id);
   const boss=new Set(Object.values(ends).flatMap(a=>a.filter(id=>dd(id)>=3).sort((a,b)=>dd(b)-dd(a)).slice(0,2)));
-  return{topics:TAX.topics,byId,pre,post,boss};}
+  return{topics:TAX.topics,byId,pre,post,boss,aliases:TAX.aliases||{}};}
 export const blank=()=>({v:2,name:NAME,points:0,stars:0,streak:0,bestStreak:0,solved:0,badges:[],medals:[],firstDone:false,ts:{},current:null,
   focus:null,placement:{done:false,asked:0,per:{},queue:[]},sinceReview:0,sinceChoice:0,recent:[],packSeen:{},itemsServed:0});
-export function migrate(old,g){if(old&&old.v===2){if(!old.medals)backfillMedals(old,g);upgrade(old);return old;}const S=blank();if(!old)return S;
+export function migrate(old,g){if(old&&old.v===2){if(!old.medals)backfillMedals(old,g);upgrade(old,g);return old;}const S=blank();if(!old)return S;
   for(const k of['points','stars','streak','bestStreak','solved','badges'])if(old[k]!=null)S[k]=old[k];
   S.firstDone=!!old.firstDone&&old.solved>0;
-  for(const [id,t] of Object.entries(old.topics||{}))if(g.byId[id])S.ts[id]=t.mastered?{st:'mastered',how:'direct',conf:.9,box:0,due:Date.now()+DAY,c:t.correct,w:t.incorrect}:{st:'learning',how:'direct',c:t.correct,w:t.incorrect,lvl:old.level||3};
+  for(const [id0,t] of Object.entries(old.topics||{})){const id=g.aliases?.[id0]||id0;if(g.byId[id]&&!S.ts[id])S.ts[id]=t.mastered?{st:'mastered',how:'direct',conf:.9,box:0,due:Date.now()+DAY,c:t.correct,w:t.incorrect}:{st:'learning',how:'direct',c:t.correct,w:t.incorrect,lvl:old.level||3};}
   backfillMedals(S,g);return S;}
 // additive schema upgrades for v2 records (idempotent): finished quests from before completion snapshots are marked legacy
-function upgrade(S){for(const q of Object.values(S.quests||{}))if(q?.done&&!q.snap&&!q.legacy)q.legacy=true;dedupeMedals(S);return S;}
+function upgrade(S,g){for(const q of Object.values(S.quests||{}))if(q?.done&&!q.snap&&!q.legacy)q.legacy=true;if(g)foldAliases(S,g.aliases);dedupeMedals(S);return S;}
+// Topic ids removed upstream (data/topic-aliases.json, bundled as tax.aliases) are folded into their replacement
+// (idempotent). Topic state: the stronger record wins (mastered > learning; direct > inferred; then more correct
+// answers, then the newer one). Medals move to the new id (one per topic: dedupeMedals keeps the higher tier, earliest
+// date). Per-topic help state, the current item, focus and requeued items follow. History (logs, packSeen, quest
+// snapshots) is left as it was.
+const REC_RANK=r=>[r?.st==='mastered'?2:r?.st?1:0,r?.how==='direct'?1:0,r?.c||0,r?.at||0];
+const better=(a,b)=>{const x=REC_RANK(a),y=REC_RANK(b);for(let i=0;i<x.length;i++)if(x[i]!==y[i])return x[i]>y[i]?a:b;return b;};
+export function foldAliases(S,aliases){if(!S||!aliases)return S;const map=id=>aliases[id]||id;
+  for(const [a,b] of Object.entries(aliases)){
+    if(S.ts?.[a]){S.ts[b]=S.ts[b]?better(S.ts[a],S.ts[b]):S.ts[a];delete S.ts[a];}
+    for(const k of['support','teach'])if(S[k]?.[a]){if(!S[k][b])S[k][b]=S[k][a];delete S[k][a];}}
+  for(const m of S.medals||[])m.id=map(m.id);
+  if(Array.isArray(S.recent))S.recent=S.recent.map(map);
+  for(const k of['focus','packFocus'])if(typeof S[k]==='string')S[k]=map(S[k]);
+  for(const o of[S.current,S.mini,S.miniHold,...(S.requeue||[]).map(x=>x?.item)])if(o?.topicId)o.topicId=map(o.topicId);
+  return S;}
 // one trophy per achievement: one medal per topic, one quest medal per quest date (the earliest is kept)
 const TIER_RANK={bronze:0,silver:1,gold:2,legendary:3};
 function dedupeBy(a,key){const m=new Map();for(const x of a||[]){const k=key(x),o=m.get(k);if(!o){m.set(k,{...x});continue;}

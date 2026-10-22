@@ -1,0 +1,14 @@
+{
+  "about": "Topic ids removed upstream, mapped to the id that replaces them. Progress, medals and review state on an old id are folded into the new one (src/engine.js foldAliases). Never remove an entry: an old record may still be stored somewhere.",
+  "aliases": {
+    "mt_3XJkeIn6J6": "mt_UNzojLkNdm"
+  },
+  "why": {
+    "mt_3XJkeIn6J6": "os-taxonomy a871973 merged 'Estimating answers (age 7+)' (really: read and estimate time to the nearest minute) into 'Time to the nearest minute'; see data/marble/archived-teaching-research.json"
+  },
+  "scopeChanged": {
+    "mt_bESTSBB0wK": "Narrowed from 'pie charts and line graphs' to pie charts only; line graphs moved to the new mt_HlNSurPVDp. Decision: keep existing records on this id unchanged (pie charts were part of what was shown) and give no automatic credit for mt_HlNSurPVDp, which is pending until slice 3. Kid prompt rewritten for pie charts.",
+    "mt_NSC3LT_-ch": "Refocused from estimating volume (cubes) to estimating capacity (litres/millilitres); cube-counting volume lives in mt_d7XktBQPxm. Decision: keep existing records unchanged (same id, closely related measure); review gates re-check it like any topic. Kid prompt rewritten for capacity.",
+    "mt_H6LlpWgEYS": "Retitled from bar graphs to line-graph problems (same comparison/sum/difference skill). Records kept; kid prompt rewritten for a line graph."
+  }
+}

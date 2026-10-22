@@ -6,6 +6,24 @@ Dates are Pacific Time.
 ## [Unreleased]
 
 ### Changed
+- **Marble Skill Taxonomy updated to os-taxonomy `a871973`** ([#38](https://github.com/kentlangley/Jane/issues/38)):
+  `data/marble/` is the pinned upstream commit (`data/marble/UPSTREAM`), byte-identical, now including Marble's
+  teaching research (`teaching-research.json`, `archived-teaching-research.json`) as offline input for the lesson
+  author; it is never copied into `public/` or the Docker image. 1,590 → 1,930 topics, 3,221 → 4,102 prerequisites.
+  - **Pending topics:** the 341 new topics are listed in `data/kid-prompts/PENDING.txt` and left out of the app until
+    slice 3 ([#39](https://github.com/kentlangley/Jane/issues/39)) writes their kid prompts or reviews a generator.
+    `build.mjs` bridges the prerequisite graph across them, so no upstream prerequisite path is lost. The app plays
+    1,589 topics (the 1.0.0 topics minus one merged away), linked by 3,320 prerequisite edges.
+  - **Aliases:** `data/topic-aliases.json` maps removed ids to their replacement (`mt_3XJkeIn6J6` →
+    `mt_UNzojLkNdm`, an upstream merge). `E.migrate` folds topic state, medals, help state, the current item, focus
+    and requeued items forward (stronger record wins; one medal per topic, higher tier kept), idempotently.
+  - **Scope changes:** records on `mt_bESTSBB0wK` (now pie charts only) and `mt_NSC3LT_-ch` (now capacity) are kept as
+    they are; no credit is invented for the split-off line-graph topic. Kid prompts rewritten for those two, for
+    `mt_H6LlpWgEYS` (now line-graph problems) and for `mt_QhLAeAlHI0` (food groups vs nutrients, matching upstream's
+    correction). Icons added for the three Computing domains that moved out of Artificial Intelligence.
+  - **Credits** ([#43](https://github.com/kentlangley/Jane/issues/43)): `NOTICE`, `LICENSING.md` and `/about.html`
+    credit the teaching research, name the upstream commit, extend the NGSS notice to the research and add the ACARA
+    notice for Australian Curriculum codes.
 - **Kid prompts are keyed by topic id** ([#37](https://github.com/kentlangley/Jane/issues/37)): `data/kid-prompts/b*.txt`
   lines are now `mt_id|question|right|wrong1|wrong2` instead of `index|…` (the topic's position in
   `data/marble/topics.json`), so a reordered or extended taxonomy keeps every question on its own topic. `build.mjs`

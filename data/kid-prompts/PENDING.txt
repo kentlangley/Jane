@@ -1,0 +1,346 @@
+# Topics that are in the vendored taxonomy but not playable yet (no reviewed kid prompt or generator).
+# build.mjs leaves them out of public/tax.json and bridges the prerequisite graph across them, so the app,
+# the export's frontier and publish-lessons never see them. Slice 3 (#39) removes ids from this list as it
+# writes their kid prompts (data/kid-prompts/b*.txt) or reviews a math generator for them.
+# Format: mt_id  # subject > domain > name
+mt_eNJ99tRb3p  # Computing > Algorithms & Programming > Building and testing programs
+mt_nfGAtwqSvP  # Computing > Algorithms & Programming > Decisions and input in programs
+mt_iqmt8wL26h  # Computing > Algorithms & Programming > Decisions and repeats in algorithms
+mt_6XbAmdmjDb  # Computing > Algorithms & Programming > Loops in programs
+mt_sPV503BQnI  # Computing > Algorithms & Programming > My first visual program
+mt_5UtPmgdoQ9  # Computing > Algorithms & Programming > Testing and debugging programs
+mt_YZOjP8KHsM  # Computing > Algorithms & Programming > Variables in programs
+mt_sHMpam8zcd  # Computing > Data Representation > All data as numbers
+mt_WQiVj8gIRs  # Computing > Data Representation > Binary on and off
+mt_Q57cnsiKsB  # Computing > Designing Digital Solutions > Checking solutions against criteria
+mt_5CcwPYEafI  # Computing > Designing Digital Solutions > Co-creating user stories
+mt_9qF97kGhvq  # Computing > Designing Digital Solutions > Designing a digital solution
+mt_WoBE0CZWGg  # Computing > Designing Digital Solutions > Designing a user interface
+mt_MXxVMCr7_4  # Computing > Designing Digital Solutions > Evaluating digital solutions
+mt_QpK9BpUO__  # Computing > Designing Digital Solutions > How apps meet users' needs
+mt_9fyI5B1U_V  # Computing > Designing Digital Solutions > Improving digital designs
+mt_OKCmMGWczX  # Computing > Designing Digital Solutions > Problems digital systems solve
+mt_EfF81YvgXV  # Computing > Designing Digital Solutions > User stories and design criteria
+mt_Hft-0nxZvB  # Computing > Digital Systems > Computer networks
+mt_SZrMv3YAky  # Computing > Digital Systems > Hardware and software
+mt_el7qeUK-Cd  # Computing > Digital Systems > How the internet sends data
+mt_GKL5Usnd11  # Computing > Digital Systems > Inside a computer
+mt_o0vTMl8vj5  # Computing > Digital Systems > Parts of a computer
+mt_kV441n9SLg  # Computing > Digital Systems > Peripherals for different purposes
+mt_YfbfIdljWd  # Computing > Digital Systems > Sending data between devices
+mt_r5rwyP8zRU  # Computing > Digital Tools & Collaboration > Choosing the right digital tool
+mt_JI0Iv01hCT  # Computing > Digital Tools & Collaboration > Collaborating in shared documents
+mt_d6BsiDtFjP  # Computing > Digital Tools & Collaboration > Planning digital group projects
+mt_XeT37rd69f  # Computing > Digital Tools & Collaboration > Saving and organising files
+mt_mqMPlNMIEN  # Computing > Digital Tools & Collaboration > Sharing and working together digitally
+mt_ic4dmtTZlw  # Computing > Privacy & Security > Apps store my data online
+mt_gNDkyx19tk  # Computing > Privacy & Security > Data that is about me
+mt_0sR1xhrn7W  # Computing > Privacy & Security > Logging in to my account
+mt_y8-x0P5P9R  # Computing > Privacy & Security > Memorable, hard-to-guess passwords
+mt_0XHRJ49akv  # Computing > Privacy & Security > My digital footprint
+mt_h_XQsdIavD  # Computing > Privacy & Security > Privacy when collecting data
+mt_pWaBywSX9V  # Computing > Privacy & Security > Unique passphrases
+mt_qOv8OP8z2G  # Computing > Privacy & Security > What my accounts store
+mt_QwCjG9Pexc  # English > Grammar & Punctuation > Apostrophes for shared ownership
+mt_lC0gkyimcr  # English > Grammar & Punctuation > Capital letters in titles
+mt_39Yyr1KG7F  # English > Grammar & Punctuation > Doing, thinking and saying verbs
+mt_G7jhJrOD2P  # English > Grammar & Punctuation > Leaving out words readers know
+mt_T0jF7ylSvV  # English > Grammar & Punctuation > Quoted and reported speech
+mt_wtbCz5hBdw  # English > Grammar & Punctuation > Simple sentences: one idea
+mt_VRZawp3oFZ  # English > Handwriting & Transcription > Fast, legible joined writing
+mt_So_5wBv8fI  # English > Handwriting & Transcription > Writing neatly at speed
+mt_oVnNR1lVv6  # English > Phonics & Word Reading > Adding, deleting and swapping sounds
+mt_xvKvxDXdJj  # English > Phonics & Word Reading > Counting words in spoken sentences
+mt_-nj-DnW4uU  # English > Phonics & Word Reading > Reading and spelling consonant blends
+mt_7DEMuNxUTh  # English > Phonics & Word Reading > Segmenting consonant clusters
+mt_v9qTyarbgE  # English > Phonics & Word Reading > Sound games with clusters
+mt_j89i4u2fKr  # English > Phonics & Word Reading > Spotting and making alliteration
+mt_dgheXIYAD-  # English > Phonics & Word Reading > Three-letter consonant clusters
+mt_Pp_pizml7n  # English > Reading Comprehension > Australian stories: words and pictures
+mt__evtvKA25j  # English > Reading Comprehension > Blended and adapted text types
+mt_VJEQ32O0Ae  # English > Reading Comprehension > Clues to audience and purpose
+mt__CFtXgDaEL  # English > Reading Comprehension > Headlines, menus and links online
+mt_qdd0t4Sj6A  # English > Reading Comprehension > How characters and places connect
+mt_ix4nIsZzS3  # English > Reading Comprehension > How context shapes responses
+mt_ORlMNVV4FL  # English > Reading Comprehension > How image order shapes meaning
+mt_oX753JF2Ub  # English > Reading Comprehension > How images are framed
+mt_q2jwCeUZ9s  # English > Reading Comprehension > How recounts and reports work
+mt_yIk_4o0MOa  # English > Reading Comprehension > How texts in subjects differ
+mt__PcuXj7_I1  # English > Reading Comprehension > Layout and navigation words online
+mt_RNYNrRMqKL  # English > Reading Comprehension > Making pictures in your head
+mt_VitRPAsDik  # English > Reading Comprehension > Media texts and their context
+mt_YrDlg_J4kQ  # English > Reading Comprehension > Menus and links on websites
+mt_w5sIW_-T_J  # English > Reading Comprehension > Navigating digital texts
+mt_fruAJ2RaRT  # English > Reading Comprehension > Old and new texts compared
+mt_f7RadQGOnQ  # English > Reading Comprehension > Personification and sound devices
+mt_qUKddG0UYv  # English > Reading Comprehension > Pictures in different books
+mt_GbisjfWodT  # English > Reading Comprehension > Picturing and summing up stories
+mt_hvmqr1qcTU  # English > Reading Comprehension > Puns and playing with words
+mt_7-N8TmQUsB  # English > Reading Comprehension > Reading for history and culture
+mt_pxIoWWZy8L  # English > Reading Comprehension > Reading on a screen
+mt_7xt5pXdVvl  # English > Reading Comprehension > Recognising an author's style
+mt_ty63-JSHTC  # English > Reading Comprehension > Rhythm and sound words
+mt_OTFABm2xdf  # English > Reading Comprehension > Rhythm in rhymes and songs
+mt_M-S5oQhxYa  # English > Reading Comprehension > Same purpose, different audience
+mt_JcLwbDGGvJ  # English > Reading Comprehension > Same topic, different texts
+mt__sYpBrdzcp  # English > Reading Comprehension > Sharing ideas about Australian stories
+mt_BGMS9We5w9  # English > Reading Comprehension > Similar storylines across cultures
+mt_uQI6mhU6hW  # English > Reading Comprehension > Skimming, scanning and checking
+mt_mSpJK-rKW_  # English > Reading Comprehension > Sound and meaning in poems
+mt_Sg-jC5f9L6  # English > Reading Comprehension > Stages of speeches and videos
+mt_5zTlbDWkDI  # English > Reading Comprehension > Stages of texts across subjects
+mt_UcmVDMgFGX  # English > Reading Comprehension > Stories from other places, times
+mt_nePS3LNvBy  # English > Reading Comprehension > Stories, facts and persuading
+mt_sQYvGbYD1I  # English > Reading Comprehension > Texts are everywhere
+mt_rKwE6w2V6G  # English > Reading Comprehension > Texts as clues to time
+mt_vC-_ESyMut  # English > Reading Comprehension > Understanding and judging films
+mt_E2iv1E6klO  # English > Reading Comprehension > Visualising complex texts
+mt_2jksKpNzeF  # English > Reading Comprehension > Visualising to understand and judge
+mt_TffvIu6VgG  # English > Reading Comprehension > What holds a poem together
+mt_HF1t82HCJu  # English > Reading Comprehension > What is this text for?
+mt_JWjSZNk1Qy  # English > Reading Comprehension > Who is this text for?
+mt_vPmPulZtJG  # English > Reading Comprehension > Words that show characters
+mt_dALEWRHXnZ  # English > Speaking & Listening > Asking, offering and requesting
+mt_r-BgS-lqTe  # English > Speaking & Listening > Giving and following instructions
+mt_mpzmwTktqF  # English > Speaking & Listening > Home talk and school talk
+mt_2_fB4LuVwc  # English > Speaking & Listening > Language for different roles
+mt_k0-aLFge4X  # English > Speaking & Listening > Language that builds relationships
+mt_bJyOTtP0b6  # English > Speaking & Listening > Language, roles and social distance
+mt_gBK8uXQlQW  # English > Speaking & Listening > Precise words in presentations
+mt_cIxLOPS1Hc  # English > Speaking & Listening > Presentations that build a theme
+mt_PsQdUQBw0D  # English > Speaking & Listening > Presenting an argument
+mt_1m4J4KOjPy  # English > Speaking & Listening > Talks with clear structure
+mt__q8ln4Lvf7  # English > Speaking & Listening > Technical words in presentations
+mt_MIA4wfENUm  # English > Vocabulary > Hyperbole and emotive language
+mt__3hJj0H4HF  # English > Vocabulary > Words with several meanings
+mt_NTAc_EMeHZ  # English > Writing Composition > Borrowing from books you've read
+mt_9V8Z386RDx  # English > Writing Composition > Changing a familiar story
+mt_78-pnKfzmv  # English > Writing Composition > Creating digital multimodal texts
+mt_sxcE47yOvd  # English > Writing Composition > Flashback, foreshadowing and more
+mt_KpBg1_T_84  # English > Writing Composition > Inventing rhymes and alliteration
+mt_AHXePdicRf  # English > Writing Composition > Making multimodal texts
+mt_cB_j7towTD  # English > Writing Composition > Making new versions of stories
+mt_cGzd5z56FB  # English > Writing Composition > Retelling and adapting stories
+mt_DcSMuVWgKU  # English > Writing Composition > Trying figurative language in writing
+mt_nrXT7pDpG6  # English > Writing Composition > Writing and fixing together
+mt_61Pa4Eksva  # Geography > Maps & Spatial Skills > Finding places on a plan
+mt_ejht12jhm2  # Geography > Maps & Spatial Skills > Grid references and directions
+mt_QVUW4olzHP  # Geography > Maps & Spatial Skills > Local, regional and state scales
+mt_Juxx4n-8mu  # Geography > Maps & Spatial Skills > Locating neighbouring countries
+mt_fXE9t2ETGx  # Geography > Maps & Spatial Skills > Picture maps of familiar places
+mt_w4cUnN_SsQ  # Geography > Maps & Spatial Skills > Reading and drawing maps
+mt_PJZf6WGfzl  # Geography > Places & Environments > Australia's states and territories
+mt_KQRxnwElNc  # Geography > Places & Environments > Caring for Country
+mt_svBtqePrBP  # Geography > Places & Environments > Changing and caring for places
+mt_r_ja_V9Q70  # Geography > Places & Environments > Comparing places in different countries
+mt_axrs4Gfdm9  # Geography > Places & Environments > Connections to Country across Australia
+mt_kt3K54xUPu  # Geography > Places & Environments > First Nations Countries of Australia
+mt_pK6QkcKxZT  # Geography > Places & Environments > First Nations and local Country
+mt_VIUF5Vspbg  # Geography > Places & Environments > Food and fibre production
+mt_DxSbKzl-C-  # Geography > Places & Environments > Growing plants we use
+mt_n3ojDXoaqC  # Geography > Places & Environments > How countries are interconnected
+mt_hoc__Jx3sa  # Geography > Places & Environments > Managed environments for food
+mt_9wfokahWw6  # Geography > Places & Environments > Managing natural hazards
+mt_cUpJvBD1YA  # Geography > Places & Environments > Natural, managed and built features
+mt_l-3JUgI80b  # Geography > Places & Environments > Our school's Country
+mt_ZY38c705Ce  # Geography > Places & Environments > People shaping places
+mt_lyxrFwNUqE  # Geography > Places & Environments > Places in the Asia region
+mt_BYl4sds1SM  # Geography > Places & Environments > Raising farm animals
+mt_5zPXTvZTcX  # Geography > Places & Environments > Special places I belong to
+mt_bFK6owxsmi  # Geography > Places & Environments > Why environments matter
+mt_zbEcwd40uv  # History > Family & Community History > Celebrations we share
+mt__F_i67waLN  # History > Family & Community History > Childhood then and now
+mt_pBvABgZo5O  # History > Family & Community History > Family roles then and now
+mt_wlhg-ivMh6  # History > Family & Community History > How our community changed
+mt_2qc_Kq63Le  # History > Family & Community History > Important local people and places
+mt_0O4mXv3asF  # History > Family & Community History > My family and where we're from
+mt_CdB3nZHkEA  # History > Family & Community History > National days and commemorations
+mt_MVlTa0XKgo  # History > Family & Community History > Technology changes how we live
+mt_mRU4H9-fgb  # History > Historical Thinking > Dated timelines with notes
+mt_3itytx4K1v  # History > Historical Thinking > Picture timelines
+mt_x08z0N0HX8  # History > Historical Thinking > Questions about the past
+mt_196Gb4q6a5  # History > Historical Thinking > Telling stories of the past
+mt_69w5GVudJl  # History > Historical Thinking > Timelines of past events
+mt_a0yi2vpoUn  # History > Modern History > Changing rights in the 1900s
+mt_Am6mmH2X0s  # History > Modern History > Contact and invasion
+mt_QayfDN4rTB  # History > Modern History > Federation and the Constitution
+mt_E8IfrMksV0  # History > Modern History > Impact of the colonies
+mt_JNzgBlNkx0  # History > Modern History > Life in the first colony
+mt_4GyMkXpZRW  # History > Modern History > Migration stories since 1901
+mt__25ZZdiEZd  # History > Modern History > Significant people in a colony
+mt_OqDYMyw39G  # History > Modern History > Why Britain colonised in 1788
+mt_e0I0OSxNFc  # History > Modern History > Why new colonies began
+mt_yDQmYTrrzP  # Life Skills > Entrepreneurship > Natural, human and capital resources
+mt_k6_dUr_oH6  # Life Skills > Food & Cooking > Following a healthy recipe
+mt_NbkUKcOlEX  # Life Skills > Food & Cooking > Food characteristics and preparation
+mt_EWiY8-opdd  # Life Skills > Food & Cooking > Keeping food safe and clean
+mt_F62VTeHB4-  # Life Skills > Food & Cooking > Preparing simple healthy snacks
+mt_biGHAbkoV2  # Mathematics > Addition & Subtraction > Adding and subtracting on screen
+mt_Y6_cq3UMyy  # Mathematics > Addition & Subtraction > Number stories on screen
+mt_Eqk6oSbySH  # Mathematics > Addition & Subtraction > Three-number word problems
+mt_QeKWt4BZn3  # Mathematics > Algebra > Algorithms that generate number sets
+mt_W3VOAuFwVw  # Mathematics > Algebra > Describing growing number patterns
+mt_nx4a3kH-59  # Mathematics > Algebra > Designing number algorithms
+mt_ZjIFGc6zPW  # Mathematics > Algebra > Finding the repeating unit
+mt_zQfWqImxva  # Mathematics > Algebra > Following number algorithms
+mt_0ZDouU664X  # Mathematics > Counting & Cardinality > Counting big collections in groups
+mt_BK5xwkrD5C  # Mathematics > Counting & Cardinality > Seeing parts within 10
+mt_t9BICauBSI  # Mathematics > Counting & Cardinality > Subitising to 5
+mt_ZfpeI1CFyP  # Mathematics > Data & Statistics > Average distance from the mean
+mt_8VjmxR1yfw  # Mathematics > Data & Statistics > Box plots
+mt_QpJydot2Kh  # Mathematics > Data & Statistics > Choosing displays for a purpose
+mt_ebQURBOsM5  # Mathematics > Data & Statistics > Collecting data for a question
+mt_yrvYKSwSRZ  # Mathematics > Data & Statistics > Collecting data with digital tools
+mt_mn765HbXi1  # Mathematics > Data & Statistics > Comparing data sets digitally
+mt_TiFjjvBMaY  # Mathematics > Data & Statistics > Comparing displays and distributions
+mt__yvsKKp3TS  # Mathematics > Data & Statistics > Comparing two data displays
+mt_km4V6d5IAh  # Mathematics > Data & Statistics > Comparing two populations
+mt_Y6JmLjnfRP  # Mathematics > Data & Statistics > Conducting a statistical investigation
+mt_8IsaoMPvod  # Mathematics > Data & Statistics > Critiquing statistics in the media
+mt_X53txVXOcG  # Mathematics > Data & Statistics > Data with digital tools
+mt_OwYms2tB1L  # Mathematics > Data & Statistics > Describing distributions
+mt_JRzXQl9M7c  # Mathematics > Data & Statistics > Dot plots
+mt_fQ9Rw10fss  # Mathematics > Data & Statistics > Estimating from a sample
+mt_kxeuXm6EyC  # Mathematics > Data & Statistics > Guided statistical investigation
+mt_oderfUBZPw  # Mathematics > Data & Statistics > Histograms
+mt_A2hKhHXgL5  # Mathematics > Data & Statistics > How far apart two groups are
+mt_x7V1qrkiqH  # Mathematics > Data & Statistics > How samples vary
+mt_HlNSurPVDp  # Mathematics > Data & Statistics > Line graphs
+mt_SHVyE1CLUa  # Mathematics > Data & Statistics > Planning a statistical investigation
+mt_4zgPzc6yu5  # Mathematics > Data & Statistics > Populations, samples and fair sampling
+mt_KCS9GbZgU_  # Mathematics > Data & Statistics > Quartiles and interquartile range
+mt_O-U263ukg1  # Mathematics > Data & Statistics > Refining a statistical investigation
+mt_iykH2P5oFq  # Mathematics > Data & Statistics > Statistical questions
+mt_QHT16CrFO-  # Mathematics > Data & Statistics > Validating and describing categorical data
+mt_6gpryAnpoZ  # Mathematics > Data & Statistics > What was measured, and how
+mt_tuEnyrp5Ia  # Mathematics > Data & Statistics > Writing a data summary
+mt_gC-6JXAG5S  # Mathematics > Fractions > Halves, quarters and eighths
+mt_SK7WntVZ6y  # Mathematics > Geometry > Approximating objects with shapes
+mt_h02-C8PRrj  # Mathematics > Geometry > Cross-sections of prisms
+mt_NM5I3yN-Q6  # Mathematics > Geometry > Rotational symmetry
+mt_h7zVgCDVmx  # Mathematics > Geometry > Shapes on a coordinate grid
+mt_LBT-9jz7kR  # Mathematics > Geometry > Straight, reflex and revolution angles
+mt_Sij9ByyHq6  # Mathematics > Geometry > Surface area and volume of solids
+mt_61Nhj8W78f  # Mathematics > Geometry > Tessellations and transformation patterns
+mt_RdfzwInyAj  # Mathematics > Geometry > Transformations with geometry software
+mt_4bc3EAxhlY  # Mathematics > Geometry > Which triangles are possible
+mt_mN4Ye_vtR7  # Mathematics > Geometry > Why objects suit their uses
+mt_FVVSQR9vGg  # Mathematics > Mathematical Thinking > Calculator checks for money
+mt_ish_uH8vZe  # Mathematics > Mathematical Thinking > Using a calculator well
+mt_i2-QaXbyzB  # Mathematics > Measurement > Area by splitting shapes
+mt_FSLJbKkryb  # Mathematics > Measurement > Australian coins and simple purchases
+mt_Qe2PsFmSAH  # Mathematics > Measurement > Budgets and best buys
+mt_bnwHo5wfCD  # Mathematics > Measurement > Comparing mass and capacity indirectly
+mt_oMkQQ2O-ML  # Mathematics > Measurement > Discounts, GST and balances
+mt_9L5qyBYmg-  # Mathematics > Measurement > Dollars and cents
+mt_5bmrA-0pBi  # Mathematics > Measurement > Estimating money totals
+mt_Jz9UuT8BXW  # Mathematics > Measurement > Fractions of time and events
+mt_8cs4YPkp23  # Mathematics > Measurement > Money transactions in dollars
+mt_MgsDabdnr1  # Mathematics > Measurement > Quarter past and quarter to
+mt_SOM6Imm2sO  # Mathematics > Measurement > Reading between scale marks
+mt_5J2quSTspi  # Mathematics > Measurement > Roman numeral and 24-hour clocks
+mt_e7tLi9SCIE  # Mathematics > Measurement > Smaller units for accuracy
+mt_mMDpLugX2X  # Mathematics > Measurement > Spreadsheets for money problems
+mt_tegkuJA5gM  # Mathematics > Measurement > Surface area using nets
+mt_tVvZVWO5d6  # Mathematics > Measurement > Using a calendar
+mt_IlDaxVr60U  # Mathematics > Measurement > Volume with fraction lengths
+mt_NmvuwVUFRS  # Mathematics > Multiplication & Division > Calculators for multiplying and dividing
+mt_3m0pA-aeat  # Mathematics > Multiplication & Division > Estimating to check decimals
+mt_bZC-wqWX7Y  # Mathematics > Multiplication & Division > Factor algorithms and spreadsheets
+mt_oxfxzbat3k  # Mathematics > Multiplication & Division > Odd and even number rules
+mt_1GDEHyEZYH  # Mathematics > Multiplication & Division > Sharing and grouping on screen
+mt_qUjW0N1cYO  # Mathematics > Multiplication & Division > Sharing and grouping problems
+mt_HczwO1sr-y  # Mathematics > Number Representation & Place Value > Numbers to 1000 on screen
+mt_QguIGVMB1o  # Mathematics > Number Representation & Place Value > Numbers to 120 everywhere
+mt_dJOKkYMsCv  # Mathematics > Number Representation & Place Value > Ordering numbers to 20
+mt_Bt-iORUzdO  # Mathematics > Number Representation & Place Value > Renaming two-digit numbers
+mt_F_zEAJ8VIo  # Mathematics > Number Representation & Place Value > Representing numbers to 1000
+mt_dlg6i-Lw0I  # Mathematics > Probability > Independent and dependent events
+mt_aCwj2PCoRV  # Mathematics > Probability > Probability models
+mt_nzdtOLXWWa  # Mathematics > Probability > Simulating chance events
+mt_8DT3LXwwH-  # Mathematics > Probability > Simulating chance with digital tools
+mt_CUJr8L5_Wn  # Mathematics > Ratio & Proportion > Area from scale drawings
+mt_Mk_Bup-vsr  # Personal & Social Development > Empathy & Social Awareness > Australian national symbols
+mt_oqrqjd9jm9  # Personal & Social Development > Empathy & Social Awareness > Diverse First Nations peoples
+mt_O12GEyNwSi  # Personal & Social Development > Empathy & Social Awareness > Gender stereotypes in media
+mt_x3DJWIEHBq  # Personal & Social Development > Empathy & Social Awareness > Groups I belong to
+mt_urxvHF8Vds  # Personal & Social Development > Empathy & Social Awareness > How stereotypes shape choices
+mt_1kdEZRLyaZ  # Personal & Social Development > Empathy & Social Awareness > Religious and cultural festivals
+mt_sh1Mq-mshx  # Personal & Social Development > Friendship & Cooperation > Asking permission
+mt_1ZwxvIqIxf  # Personal & Social Development > Friendship & Cooperation > Communicating consent clearly
+mt_-WhvVTsKV-  # Personal & Social Development > Friendship & Cooperation > Rehearsing permission skills
+mt_L8y31QOR6s  # Personal & Social Development > Friendship & Cooperation > Saying yes or no respectfully
+mt_7b8EHUBoxd  # Personal & Social Development > Friendship & Cooperation > Telling and getting help
+mt_hkIbGmuH7D  # Personal & Social Development > Friendship & Cooperation > When permission is needed
+mt_085iC6v-Oa  # Personal & Social Development > Responsible Decision-Making > Analysing risky situations
+mt_KDIuiKzYTt  # Personal & Social Development > Responsible Decision-Making > Australia's democracy and elections
+mt_g8gJIsDxmj  # Personal & Social Development > Responsible Decision-Making > Citizens working for change
+mt_hHcaPPtPzS  # Personal & Social Development > Responsible Decision-Making > Early warning signs
+mt_Amojd_oviu  # Personal & Social Development > Responsible Decision-Making > Finding reliable health information
+mt_DRNXFr0ds6  # Personal & Social Development > Responsible Decision-Making > Health and safety signs
+mt_wudskBtVQc  # Personal & Social Development > Responsible Decision-Making > Health messages around us
+mt_n51zr0RFt4  # Personal & Social Development > Responsible Decision-Making > How Australia's government works
+mt_I9cDkW4Qz-  # Personal & Social Development > Responsible Decision-Making > My body belongs to me
+mt_R2_rZ4F6r4  # Personal & Social Development > Responsible Decision-Making > No, go, tell
+mt_JumBNYAiA_  # Personal & Social Development > Responsible Decision-Making > Proposing action on local issues
+mt_OTrQJVRRJ6  # Personal & Social Development > Responsible Decision-Making > Reading health messages
+mt_OzdI2-ZoXX  # Personal & Social Development > Responsible Decision-Making > Rules and laws
+mt_Udv6pH1nRh  # Personal & Social Development > Responsible Decision-Making > Staying safe online and offline
+mt_f62To2mA0B  # Personal & Social Development > Responsible Decision-Making > Three levels of government
+mt_blzW9Z8J7-  # Personal & Social Development > Responsible Decision-Making > What local councils do
+mt_IiWjd0377Z  # Personal & Social Development > Responsible Decision-Making > Who makes the rules?
+mt_tF6XuKIq8_  # Personal & Social Development > Responsible Decision-Making > Why people join in
+mt_nHvYYrhoM7  # Personal & Social Development > Self-Awareness > All about me
+mt_a0_W_oIEQg  # Personal & Social Development > Self-Awareness > Experiences that shape me
+mt_ij20XUbMHg  # Personal & Social Development > Self-Awareness > My qualities and identity
+mt_dXP_wBLIwU  # Personal & Social Development > Self-Awareness > People, places and identity
+mt_-beOa1AO6W  # Personal & Social Development > Self-Regulation & Resilience > Planning for change
+mt_zYX3606Dgd  # Personal & Social Development > Self-Regulation & Resilience > Support for changes and puberty
+mt_DnvWzDjoD8  # Science > Design & Technology > Balancing competing design factors
+mt_Re97rQJx_e  # Science > Design & Technology > Choosing tools and techniques
+mt_FtCLISvSGw  # Science > Design & Technology > Cutting, joining and shaping safely
+mt_qKHfQjgNMk  # Science > Design & Technology > Design and technology jobs
+mt_eFj9uWaPMI  # Science > Design & Technology > Designed for our community
+mt_cOJhDeLkPo  # Science > Design & Technology > Factors that shape designs
+mt_rSjwQLqLXH  # Science > Design & Technology > How tools suit their job
+mt_TrISKhznZt  # Science > Design & Technology > Investigating components and processes
+mt_xvHpeB03k5  # Science > Design & Technology > Making safely with simple tools
+mt_aGuP78tRMo  # Science > Design & Technology > Making with suitable tools safely
+mt_K1jLX9FXdl  # Science > Design & Technology > Planning making steps together
+mt_4fK8Bb8Tr_  # Science > Design & Technology > Project plans for making
+mt_hE05udHee7  # Science > Design & Technology > Sequencing production steps
+mt_Q2Zj3L8u9C  # Science > Design & Technology > Things people design
+mt_-Sk53QkyS0  # Science > Design & Technology > Trialling joins and components
+mt_8NYqAhHCa-  # Science > Earth's Systems > Fast and slow land changes
+mt_wH4t4TH0Yw  # Science > Earth's Systems > Rocks, soils and minerals
+mt_MRCnuYwnFQ  # Science > Ecosystems & Habitats > Investigating habitat conditions
+mt_RhlY8jeu7Q  # Science > Energy > Heat sources and temperature change
+mt_Dg5lQZFpav  # Science > Forces & Motion > Shape and material change movement
+mt_mYujFoIsVG  # Science > Matter & Materials > Breaking materials into pieces
+mt_RdIBKLbgyp  # Science > Matter & Materials > Investigating melting and freezing
+mt_i8AGTuk4fJ  # Science > Matter & Materials > Natural and made materials
+mt_fQHBicp1Rf  # Science > Scientific Inquiry > Annotated design drawings
+mt_jIUuqbJJRb  # Science > Scientific Inquiry > Checking predictions with others
+mt_3l9OJkjksw  # Science > Scientific Inquiry > Choosing materials that reduce waste
+mt_CBXBu5e4Iv  # Science > Scientific Inquiry > Communicating design processes
+mt_LADBSIowuS  # Science > Scientific Inquiry > Comparing findings with other groups
+mt_vLLyGZQ2AM  # Science > Scientific Inquiry > Comparing methods and findings
+mt_MRQcEvyPJv  # Science > Scientific Inquiry > Did it happen as predicted?
+mt_P2nm-qVnvd  # Science > Scientific Inquiry > Drawing design ideas digitally
+mt_0MI9ybM3j_  # Science > Scientific Inquiry > Evaluating the design process
+mt_K5Zqgu7rzp  # Science > Scientific Inquiry > Exploring safely with senses
+mt_tlfSqLFm_Y  # Science > Scientific Inquiry > How data builds explanations
+mt_VLBf624ElK  # Science > Scientific Inquiry > Negotiating design criteria
+mt_E-E8z9ZZOz  # Science > Scientific Inquiry > Ordering data and simple models
+mt_S2dCRbxdvM  # Science > Scientific Inquiry > Permission to investigate on Country
+mt_v5pOal_23d  # Science > Scientific Inquiry > Risks and safety plans
+mt_TTH2ouwyTW  # Science > Scientific Inquiry > Safe steps in science tests
+mt_q2MKwlPl_u  # Science > Scientific Inquiry > Science as teamwork
+mt_AigeWFgWIo  # Science > Scientific Inquiry > Sustainability as a design criterion
+mt_fKAq8aOfhD  # Science > Scientific Inquiry > Telling others what we found
+mt_89qLyvE70d  # Science > Scientific Inquiry > Using equipment safely in tests
+mt_nZaqNZaN0V  # Science > Space Systems & Earth's History > Modelling seasons and day length
+mt_GtL2PVfRYP  # Science > Space Systems & Earth's History > Planets moving among stars
+mt_vbbxnY7ZDT  # Science > The Human Body > Keeping clean and healthy
+mt_2eVg4Tt5r0  # Science > The Human Body > Putting healthy habits into practice
+mt_zIcYzrrO0Z  # Science > Waves, Light & Sound > Different ways to make sounds

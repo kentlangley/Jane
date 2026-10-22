@@ -190,7 +190,7 @@ mt_tiPyEkm4cU|You breathe air into your…|Lungs|Stomach|Heart
 mt_pJ5zsocdNx|What controls your body?|Your brain|Your knees|Your hair
 mt_nwSWPTENmv|Which sense uses your tongue?|Taste|Hearing|Sight
 mt_lp1eTsQen7|What does your heart do?|Pumps blood|Digests food|Thinks
-mt_QhLAeAlHI0|Which food group helps build muscles?|Protein|Sugar|Butter
+mt_QhLAeAlHI0|Eating foods from every food group gives you…|A balanced diet|Only sweets|No energy
 mt_C7FNeIDGc6|Your heart is an organ made of…|Tissues|Rocks|Plastic
 mt_6N-4TqCleR|To bend your arm, your biceps…|Contracts|Relaxes|Stretches
 mt_-gkJdxJUQT|Light enters your eye through the…|Pupil|Ear|Eyelash

@@ -30,3 +30,6 @@ public/vendor
 src/gen.js
 dist
 .DS_Store
+# offline-only data the build doesn't read
+data/marble/teaching-research.json
+data/marble/archived-teaching-research.json

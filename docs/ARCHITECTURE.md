@@ -35,7 +35,7 @@ chooses (Cloudflare, a home computer, Docker) while the agent just does the nigh
   medals come back.
 - **The Jane app** is static files ([`public/`](../public)) plus the engine ([`src/engine.js`](../src/engine.js)),
   served by [`src/worker.js`](../src/worker.js). It runs on the open
-  [Marble Skill Taxonomy](https://github.com/withmarbleapp/os-taxonomy): 1,590 topics linked by prerequisites. With
+  [Marble Skill Taxonomy](https://github.com/withmarbleapp/os-taxonomy): 1,930 topics linked by prerequisites. With
   that graph it places the kid, infers skills from harder ones they got right, schedules spaced review in Leitner boxes
   (1 → 3 → 7 → 21 → 60 days), runs 🗝️ review gates inside quests, grades answers (including the "I'm stuck" hint →
   worked example → skip help) and awards medals that have to be earned. Every rule is written down in the code, so

@@ -7,7 +7,7 @@ it yourself or on a host the parent chooses) and write a fresh quest every night
 
 ## What you are setting up
 Jane is an adaptive learning web app for grade-school kids (grades 3-6, ages about 8-12), built on the open
-[Marble Skill Taxonomy](https://github.com/withmarbleapp/os-taxonomy) (1,590 topics). The app runs placement, spaced
+[Marble Skill Taxonomy](https://github.com/withmarbleapp/os-taxonomy) (1,930 topics). The app runs placement, spaced
 review, review gates and medals by itself. **Your job:** set it up (host it yourself, or deploy it where the parent
 chooses), and each night act as the lesson author: read the day's progress export and write (or refresh) one quest,
 offline.

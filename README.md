@@ -7,8 +7,8 @@ written for parents and curious readers.
 The learner's name, target age and grade are settings.
 It runs as a single Cloudflare Worker with static assets and Workers KV, or as a standalone Node server (or Docker
 container) with file-based storage, and it is built on the open
-[Marble Skill Taxonomy](https://github.com/withmarbleapp/os-taxonomy): 1,590 micro-topics across 8 subjects,
-linked by 3,221 prerequisite edges.
+[Marble Skill Taxonomy](https://github.com/withmarbleapp/os-taxonomy): 1,930 micro-topics across 9 subjects,
+linked by 4,102 prerequisite edges (the app plays 1,589 of them today; the newest are waiting for kid prompts, [#39](https://github.com/kentlangley/Jane/issues/39)).
 
 > **v0.5.0.** It's a child's learning app, so all personal data is excluded from the repo, and every path has a clear
 > license (see [LICENSING.md](LICENSING.md)). What's next: [Roadmap](#roadmap). Changes: [CHANGELOG.md](CHANGELOG.md).
@@ -39,7 +39,7 @@ knowledge graph (powah!), AND pretty much any LLM these days of any power knows 
 let's lean on that. **Note that this system is NOT live AI. That is on purpose.**
 
 - **The knowledge graph is the backbone.** The [Marble Skill Taxonomy](https://github.com/withmarbleapp/os-taxonomy)
-  (1,590 topics, 3,221 prerequisites) decides *what* to learn, *in what order*, and *what mastery looks like*.
+  (1,930 topics, 4,102 prerequisites) decides *what* to learn, *in what order*, and *what mastery looks like*.
   Placement, inference, spaced review and the island map all come from it.
 - **An LLM is an author, offline.** It writes things ahead of time: the kid-friendly questions, the glossary entries,
   and each night's quest. Everything it writes is checked (`build.mjs` and `publish-lessons.mjs` validate it) before it
@@ -66,7 +66,7 @@ friendly tutor. The name is just a nod to the books: this project has no affilia
 
 ## Features
 
-- **Adaptive placement over the 1,590-topic graph.** Diagnostic questions walk the prerequisite graph to find where
+- **Adaptive placement over the topic graph.** Diagnostic questions walk the prerequisite graph to find where
   the learner is, aiming at a configurable target age (`LEARNER_AGE`).
 - **Inference.** Getting a harder topic right credits its prerequisites ("inferred" mastery); misses step down to
   easier prerequisites.
@@ -177,7 +177,7 @@ and Docker, set them as environment variables:
 | `server/` | Standalone Node server and file storage (`npm start`) |
 | `Dockerfile`, `docker-compose.yml` | Docker option (non-root, volume for data, health check) |
 | `test/` | End-to-end smoke test for the Node server (`npm test`) |
-| `data/marble/` | Marble Skill Taxonomy v1, unchanged, with its LICENSE, LICENSE-CONTENT, PROVENANCE.md, CITATION.cff |
+| `data/marble/` | Marble Skill Taxonomy v1 at a pinned upstream commit (`UPSTREAM`), unchanged, with its LICENSE, LICENSE-CONTENT, PROVENANCE.md, CITATION.cff and the offline teaching research |
 | `data/kid-prompts/`, `data/glossary.txt` | Kid-friendly layer derived from the taxonomy |
 | `packs/examples/` | A generic example quest. Real nightly packs (`packs/*.json`) are gitignored |
 | `LESSONS.md`, `docs/` | Lesson-pack rules and the nightly workflow |

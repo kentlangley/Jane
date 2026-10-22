@@ -1,0 +1,6 @@
+repository: https://github.com/withmarbleapp/os-taxonomy
+commit: a8719737ff86ef7940ba5feca11940de1204103e
+merged: 2026-10-22 (main; dataset CHANGELOG "Unreleased", taxonomy version v1)
+files: topics.json dependencies.json manifest.json teaching-research.json archived-teaching-research.json README.md CHANGELOG.md LICENSE LICENSE-CONTENT PROVENANCE.md CITATION.cff
+not vendored: curriculum-standards.json (not needed by the app; third-party terms, see PROVENANCE.md), clusters.json (not used by the app), schema/, scripts/, reports/, media/, .agents/
+all vendored files are byte-identical to the upstream commit
