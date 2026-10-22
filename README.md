@@ -10,7 +10,7 @@ container) with file-based storage, and it is built on the open
 [Marble Skill Taxonomy](https://github.com/withmarbleapp/os-taxonomy): 1,930 micro-topics across 9 subjects,
 linked by 4,102 prerequisite edges (the app plays 1,916 of them; 14 are held back with a reason in `data/kid-prompts/PENDING.txt`).
 
-> **v0.5.0.** It's a child's learning app, so all personal data is excluded from the repo, and every path has a clear
+> **v0.6.0.** It's a child's learning app, so all personal data is excluded from the repo, and every path has a clear
 > license (see [LICENSING.md](LICENSING.md)). What's next: [Roadmap](#roadmap). Changes: [CHANGELOG.md](CHANGELOG.md).
 
 ## Set up with an AI bot

@@ -5,6 +5,10 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-10-22
+
+Marble teaching research ([#44](https://github.com/kentlangley/Jane/issues/44)).
+
 ### Added
 - **Check-understanding items** ([#42](https://github.com/kentlangley/Jane/issues/42)): `data/checks/checks.txt` has 106
   kid-voice items for Math and Science topics, written offline from the two-tier and interpret/translate assessments,
@@ -300,7 +304,8 @@ First public release.
 - Runs on Cloudflare Workers (or `npm run dev` locally) only; the standalone Node server is planned for v0.2.
   `prototype/` is the early math-only version, not the full app.
 
-[Unreleased]: https://github.com/kentlangley/Jane/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/kentlangley/Jane/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/kentlangley/Jane/releases/tag/v0.6.0
 [0.5.0]: https://github.com/kentlangley/Jane/releases/tag/v0.5.0
 [0.4.2]: https://github.com/kentlangley/Jane/releases/tag/v0.4.2
 [0.4.1]: https://github.com/kentlangley/Jane/releases/tag/v0.4.1
