@@ -357,12 +357,17 @@
      "prompt": "What is 1/3 of 1/2?",
      "choices": [
       "1/6",
-      "2/5",
-      "1/5"
+      "1/2",
+      "2/5"
      ],
      "answer": "1/6",
      "hint": "Tops: 1 × 1. Bottoms: 3 × 2.",
-     "explanation": "1 × 1 = 1 and 3 × 2 = 6, so 1/6."
+     "explanation": "Cut the half into 3 equal parts: each part is 1/6 of the whole. Multiply both bottoms, 3 × 2 = 6. No common denominator needed.",
+     "misconception": "1/2",
+     "feedback": {
+      "1/2": "Careful! Times is not like adding. Multiply the bottoms too: 3 × 2.",
+      "2/5": "That adds tops and bottoms. For times, multiply them instead."
+     }
     },
     {
      "type": "numeric",
@@ -418,12 +423,17 @@
      "prompt": "Final hit! 1/2 of 1/4 is…",
      "choices": [
       "1/8",
-      "1/6",
-      "2/4"
+      "1/4",
+      "1/6"
      ],
      "answer": "1/8",
      "hint": "Multiply the bottoms: 2 × 4.",
-     "explanation": "1/2 × 1/4 = 1/8. Treasure unlocked!"
+     "explanation": "Half of a quarter is a smaller piece: 2 × 4 = 8 parts, so 1/8. Treasure unlocked!",
+     "misconception": "1/4",
+     "feedback": {
+      "1/4": "Ooh, the bottom stayed 4. Half of a quarter is smaller, so multiply: 2 × 4.",
+      "1/6": "That adds 2 + 4. For times, multiply the bottoms."
+     }
     }
    ],
    "powerup": "Boss ahead! Remember: \"of\" means times. Multiply the tops, then the bottoms."

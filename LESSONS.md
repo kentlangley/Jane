@@ -195,7 +195,33 @@ Where pedagogy or assess say something a learn constraint forbids, the brief dro
 "⚠ learn vs pedagogy/assess". Other topics, English for example, print "no research". Pending or hidden-region topics
 print a notice and no brief, because they can't go in a pack. The nightly export carries the same briefs in compact
 form under `research` (see "Nightly loop"). The research is agent-authored and has not been tested with learners, so
-adapt it in the kid's voice and never paste it. Using it is optional for now.
+adapt it in the kid's voice and never paste it. For a stage on a researched topic, follow "Researched stages" below.
+
+## Researched stages (Math and Science topics with research)
+When a stage's topic has a research brief, use the brief to plan the stage (the publisher prints "N researched stages"):
+1. **Learn card and worked example follow an activity's intended insight.** Build the idea the research's activity is
+   for, rather than only stating a rule. For example, show triangle area as half of a parallelogram, so the ÷2 means
+   something. Follow every learn constraint.
+2. **The hint targets the top misconception.** If the brief says learners grab the slant side, the hint points at the
+   right angle.
+3. **"I'm stuck" help follows best practice.** The question's `example` and `steps` use the approach the brief recommends
+   (its best practices and next moves): a similar solved problem, done the recommended way.
+4. **At least one wrong choice per mc comes from a listed misconception.** This applies to `mc`, `picture` and `blank`
+   with choices. Tag that choice with `"misconception": "<that wrong choice>"`, and write the `explanation` from the
+   misconception's next move. The publisher warns when a researched stage has choice questions and none is tagged. It's
+   a warning, not an error.
+5. **Optional per-wrong-choice feedback.** Add `"feedback": {"<wrong choice>": "short reply"}` (≤ 20 words, "you"). The
+   app shows that reply in place of the generic hint when the kid picks that choice, and again with the answer if they
+   miss twice. Give the misconception's choice a reply that says what went wrong, kindly. Keys must be wrong choices.
+   Like the answer, the feedback never reaches the browser before the kid answers.
+6. **needsSupport topics drop to the re-teach prerequisite.** For a topic in `weakSpots.needsSupport`, start an earlier
+   stage (or `teaches`, or a question `skill`) on the brief's "re-teach first" prerequisite. The publisher warns when a
+   stuck topic's stage has research re-teach prerequisites and none of them is in the pack.
+```json
+{"type":"mc","prompt":"What is 1/3 of 1/2?","choices":["1/6","1/2","2/5"],"answer":"1/6","misconception":"1/2",
+ "feedback":{"1/2":"Careful! Times is not like adding. Multiply the bottoms too: 3 × 2."},
+ "hint":"Tops: 1 × 1. Bottoms: 3 × 2.","explanation":"Cut the half into 3 equal parts: each is 1/6 of the whole. No common denominator needed."}
+```
 
 ## Writing style (required for every pack)
 Jane talks **to** the learner, never about them. Every prompt must be:

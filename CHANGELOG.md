@@ -6,6 +6,14 @@ Dates are Pacific Time.
 ## [Unreleased]
 
 ### Added
+- **Research in nightly authoring** ([#41](https://github.com/kentlangley/Jane/issues/41)): LESSONS.md "Researched
+  stages" rules for Math and Science stages whose topic has research. `publish-lessons.mjs` warns, but never fails, when
+  a researched stage has no wrong choice tagged `"misconception"`, or when a topic the learner got stuck on has no
+  research re-teach prerequisite in the pack. It prints how many stages were researched. The example quest follows the
+  rules.
+- **Per-wrong-choice feedback** (optional `"feedback": {"<wrong choice>": "reply"}` on mc, picture and blank-with-choices
+  questions): the app shows that reply in place of the generic hint on a first miss, and with the answer on a second.
+  It stays server-side like the answer.
 - **Research briefs for the lesson author** ([#40](https://github.com/kentlangley/Jane/issues/40)):
   `npm run research -- <topicId>` (`research.mjs`) prints a short brief, at most 6,000 characters, from Marble's teaching
   research. It shows the learn constraints first, then the summary, misconceptions, error patterns with next moves and
