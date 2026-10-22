@@ -1,127 +1,127 @@
-702|Why show your working in math?|So others see how you got it|To make it longer|It's not needed
-703|1, 2, 1, 2, 1… what's next?|2|1|3
-704|5 birds, 2 fly away. Best way to model it?|Draw 5, cross out 2|Draw a cat|Guess
-705|You have 4 stickers and get 3 more. Which sentence fits?|4 + 3 = 7|4 − 3 = 1|4 × 3 = 12
-706|A picture of 3 groups of 2 apples matches…|3 × 2|3 + 3 + 3|2 − 3
-707|Why is 8 + 5 = 13 true?|8 + 2 = 10, plus 3 more|It looks right|Because I said so
-708|Even + even always makes…|Even|Odd|Zero
-709|Sam has 10¢, buys a 4¢ and a 3¢ candy. How much left?|3¢|7¢|17¢
-710|On a number line, which is between 4 and 6?|5|7|3
-711|Which is said most precisely?|"The angle is 90 degrees."|"It's kinda pointy."|"It's big."
-712|Triangle, square, triangle, square… next?|Triangle|Circle|Square
-713|To add 99 + 47, a smart trick is…|100 + 47 − 1|Count by ones|Guess
-714|Table: 1→3, 2→6, 3→9. What does 4 give?|12|10|13
-715|Is 7 + 6 the same as 6 + 7? Why?|Yes, order doesn't matter in adding|No|Only sometimes
-716|You buy 3 packs of 4 pens and give away 5. Pens left?|7|12|17
-717|30 + 40 is like 3 + 4 tens. So it's…|70|7|340
-720|You pay $1 for a 75¢ snack. Change?|25¢|35¢|75¢
-721|Best tool to measure a pencil?|A ruler|A scale|A clock
-723|Why is 6 × 4 = 4 × 6?|Multiplication order doesn't matter|They're different|It isn't
-724|Which is precise?|"The square's sides are 5 cm."|"It's a big square."|"Sides are long."
-726|4 boxes of 6 donuts, 5 eaten. How many left?|19|24|29
-727|7 × 8 = ?|56|54|64
-728|25 × 4 is quick because 4 quarters make…|100|25|40
-729|Best way to show 3/4 of a pizza?|Draw a circle in 4 parts|Write a story|Measure it
-730|Tickets cost $7. Buy 5 and pay with $50. Change?|$15|$35|$20
-733|A shape with 8 sides is an…|Octagon|Hexagon|Pentagon
-734|A recipe for 2 needs 3 eggs. For 4 people?|6 eggs|5 eggs|3 eggs
-735|1/2 = 2/4 = 3/6. So 4/8 is…|Also 1/2|1/4|Bigger
-737|"Quotient" means the answer to a…|Division|Addition|Subtraction
-738|You earn $8 a week. After 6 weeks you spend $20. Left?|$28|$48|$14
-739|Best tool to draw a circle?|A compass|A ruler|A protractor
-740|"All squares are rectangles." True or false?|True|False|Sometimes
-741|1+3=4, 1+3+5=9, 1+3+5+7=16. Next sum?|25|20|24
-742|What is 3 + 4 × 2?|11|14|10
-743|Map scale 1 cm = 10 km. 4 cm is…|40 km|14 km|4 km
-745|Which holds more, a bathtub or a cup?|A bathtub|A cup|Same
-746|Which is quicker, a blink or a nap?|A blink|A nap|Same
-747|Who is taller, a giraffe or a cat?|A giraffe|A cat|Same
-748|Which can you measure on a pencil?|Its length|Its happiness|Its name
-749|Which is heavier, a brick or a feather?|A brick|A feather|Same
-750|What comes first in your morning?|Waking up|Eating lunch|Going to bed
-751|Which holds about 1 liter?|A big water bottle|A teaspoon|A swimming pool
-752|How many cents in a dime?|10|5|25
-753|How many days in a week?|7|5|10
-754|Measuring a desk with paper clips, you line them up…|End to end, no gaps|With gaps|In a pile
-755|To compare weights of two toys, use a…|Balance scale|Ruler|Clock
-756|The short hand on 3, long hand on 12. The time is…|3:00|12:15|12:03
-757|The long hand points to 6. It's…|Half past|O'clock|Quarter past
-758|Which coins make 30¢?|A quarter and a nickel|Three nickels|A dime and a penny
-759|Best unit to measure a road trip?|Miles|Inches|Grams
-760|Which is longest?|1 meter|50 cm|10 cm
-761|Pencil 15 cm, crayon 9 cm. How much longer is the pencil?|6 cm|24 cm|9 cm
-762|A book is 6 blocks long. Its length is…|6 blocks|60 blocks|1 block
-763|You have $5 and spend $2. What's left?|$3|$7|$2
-764|How many minutes in an hour?|60|100|30
-765|In money, $2.50 means 2 dollars and…|50 cents|5 cents|250 dollars
-766|Which takes longer, a movie or brushing teeth?|A movie|Brushing teeth|Same
-767|The long hand on 4 means…|20 minutes past|4 minutes past|40 minutes past
-768|A ribbon is 50 cm. You cut 18 cm. How much is left?|32 cm|68 cm|38 cm
-769|A rope 2 m plus a rope 75 cm is…|2 m 75 cm|77 cm|2.075 m
-770|A 12-inch ruler vs a 7-inch pencil: difference?|5 inches|19 inches|7 inches
-771|Practice starts 3:00, ends 4:30. How long?|1 hour 30 min|30 min|2 hours
-772|About how long is lunch?|30 minutes|30 seconds|30 hours
-773|About how tall is a door?|2 meters|2 centimeters|20 meters
-774|A toy costs $3.40. You pay $5. Change?|$1.60|$2.60|$1.40
-775|How many quarters make $1?|4|2|10
-776|To measure your room, the best tool is a…|Tape measure|Teaspoon|Thermometer
-777|A square has sides of 3 cm. Its perimeter?|12 cm|9 cm|6 cm
-778|You measure leaves: 3, 4, 4, 5 cm. Most common length?|4 cm|3 cm|5 cm
-779|A desk is 1 meter. In centimeters that's…|100 cm|10 cm|1,000 cm
-780|A digital clock shows 7:45. That's quarter…|To 8|Past 7|To 7
-781|How many seconds in a minute?|60|100|30
-782|15:00 in 12-hour time is…|3:00 p.m.|5:00 p.m.|1:50 p.m.
-783|A rectangle covers 12 unit squares. Its area is…|12 square units|12 cm|24 squares
-784|4 × 7 = 4 × 5 + 4 × …|2|7|5
-785|A 3-by-5 rectangle tiled with squares uses…|15 squares|8 squares|35 squares
-786|An L-shape made of a 2×3 and a 1×4 rectangle has area…|10|9|24
-787|2 kilometers is…|2,000 meters|200 meters|20 meters
-788|Which costs more: 3 × $2 or $5?|3 × $2|$5|Same
-789|Which is 1/2 inch longer than 3 inches?|3 1/2 inches|4 inches|2 1/2 inches
-790|A full bathtub holds about…|150 liters|2 liters|5 milliliters
-791|You start at 2:15 and play 40 minutes. You stop at…|2:55|3:15|2:40
-792|A hexagon with sides of 4 cm has perimeter…|24 cm|16 cm|20 cm
-793|The clock shows 10:37. It's 37 minutes past…|10|11|9
-794|Rectangle 6 m by 4 m. Area?|24 m²|20 m²|10 m²
-795|A unit square has area of…|1 square unit|4 units|0
-796|How many grams in a kilogram?|1,000|100|10
-797|Room 5 m by 4 m. Perimeter?|18 m|20 m|9 m
-798|A box fits about 1,000 sugar cubes. That's an estimate of its…|Volume|Weight only|Color
-800|A line plot shows each measurement as an…|X above a number line|A pie slice|A word
-801|1 inch is about…|2.5 cm|10 cm|1 cm
-802|An L-shape: sides 4, 2, 2, 3, 6, 5. Perimeter?|22|20|18
-803|How many minutes in 2 1/2 hours?|150|130|250
-804|Triangle base 8, height 5. Area?|20|40|13
-805|A box is 2 cubes long, 2 wide, 2 tall. Volume?|8 cubes|6 cubes|4 cubes
-807|Box 4 × 3 × 2 cm. Volume?|24 cm³|9 cm³|14 cm³
-808|3.5 kg in grams is…|3,500 g|350 g|35 g
-809|Volume measures how much…|Space something takes up|It weighs|It costs
-810|5 miles is about how many km?|8 km|3 km|50 km
-811|Can two rectangles have the same area but different perimeters?|Yes|No|Only squares
-812|Two boxes: 10 cm³ and 15 cm³. Together?|25 cm³|150 cm³|5 cm³
-922|Flip a fair coin. Heads and tails are…|Equally likely|Heads more likely|Impossible
-923|The Sun rising tomorrow is…|Certain|Impossible|Unlikely
-924|Bag: 8 red, 2 blue. Which is more likely?|Red|Blue|Same
-926|You flip a coin 10 times. About how many heads?|5|10|0
-927|Roll a die. Chance of a 3?|1/6|1/3|1/2
-928|You flip a coin 20 times and get 12 heads. Theory says…|10|12|20
-929|Chance of rain is 0.3. Chance of no rain?|0.7|0.3|1.3
-930|A probability of 0 means…|Impossible|Certain|Even chance
-931|P(win) = 1/4. P(not win) = ?|3/4|1/4|1
-932|You spin a spinner 50 times, get red 20 times. Red's experimental chance?|20/50|1/2|50/20
-933|A probability of 1/2 is…|Even chance|Impossible|Certain
-934|Kids who like cats AND dogs go in the Venn…|Overlap|Outside|Left circle only
-935|Flip 2 coins. How many outcomes?|4|2|3
-936|10 like soccer, 8 like art, 3 like both. How many total?|15|18|21
-937|Ratio 1:3 of red to blue beads, 4 red. How many blue?|12|7|4
-940|For every 2 cats there are 5 dogs. With 6 cats, how many dogs?|15|10|11
-941|A photo is enlarged ×3. A 2 cm side becomes…|6 cm|5 cm|9 cm
-943|Drive 120 km in 2 hours. Speed?|60 km/h|240 km/h|122 km/h
-944|Share $20 in ratio 3:1. Bigger share?|$15|$10|$5
-947|If one doubles when the other doubles, they're…|Proportional|Opposite|Random
-948|A straight line through (0,0) on a graph shows…|Proportion|No relation|A circle
-949|3 girls and 5 boys. Girls to boys ratio?|3:5|5:3|3:8
-950|Map scale 1:100. 3 cm on the map is…|300 cm|30 cm|3 m only on Tuesdays
-951|1.5 liters is how many milliliters?|1,500 mL|150 mL|15 mL
-953|1 notebook costs $2. 7 notebooks cost…|$14|$9|$27
-954|Ratio 2:3 means for every 2 of one there are…|3 of the other|5 of the other|2 of the other
+mt_nyK25mNOeR|Why show your working in math?|So others see how you got it|To make it longer|It's not needed
+mt_uG2mjHFOlO|1, 2, 1, 2, 1… what's next?|2|1|3
+mt_fLOkq-HfPB|5 birds, 2 fly away. Best way to model it?|Draw 5, cross out 2|Draw a cat|Guess
+mt_f67qGDhyfi|You have 4 stickers and get 3 more. Which sentence fits?|4 + 3 = 7|4 − 3 = 1|4 × 3 = 12
+mt_EBYGhd8X3x|A picture of 3 groups of 2 apples matches…|3 × 2|3 + 3 + 3|2 − 3
+mt_kJ5wYzO8qC|Why is 8 + 5 = 13 true?|8 + 2 = 10, plus 3 more|It looks right|Because I said so
+mt_fZTn0W_iZR|Even + even always makes…|Even|Odd|Zero
+mt_O_UOTiMvT_|Sam has 10¢, buys a 4¢ and a 3¢ candy. How much left?|3¢|7¢|17¢
+mt_zMEvtigoM3|On a number line, which is between 4 and 6?|5|7|3
+mt_TMoHjMhRS2|Which is said most precisely?|"The angle is 90 degrees."|"It's kinda pointy."|"It's big."
+mt_DW2D1c0fKx|Triangle, square, triangle, square… next?|Triangle|Circle|Square
+mt_mQcWGh02no|To add 99 + 47, a smart trick is…|100 + 47 − 1|Count by ones|Guess
+mt_2jbUekyTu4|Table: 1→3, 2→6, 3→9. What does 4 give?|12|10|13
+mt_pyMD_SIiYO|Is 7 + 6 the same as 6 + 7? Why?|Yes, order doesn't matter in adding|No|Only sometimes
+mt_RKeheOL9uo|You buy 3 packs of 4 pens and give away 5. Pens left?|7|12|17
+mt_FAXjFkgG6X|30 + 40 is like 3 + 4 tens. So it's…|70|7|340
+mt_iQYPw8bMfN|You pay $1 for a 75¢ snack. Change?|25¢|35¢|75¢
+mt_d-WZC2OyMB|Best tool to measure a pencil?|A ruler|A scale|A clock
+mt_a3dov8CZkq|Why is 6 × 4 = 4 × 6?|Multiplication order doesn't matter|They're different|It isn't
+mt_mywsN77hGZ|Which is precise?|"The square's sides are 5 cm."|"It's a big square."|"Sides are long."
+mt_SmghasIvbT|4 boxes of 6 donuts, 5 eaten. How many left?|19|24|29
+mt_aivrWs6jrS|7 × 8 = ?|56|54|64
+mt__Itf4aQZUj|25 × 4 is quick because 4 quarters make…|100|25|40
+mt_IwEOCN6bL1|Best way to show 3/4 of a pizza?|Draw a circle in 4 parts|Write a story|Measure it
+mt_GpltXPoaoc|Tickets cost $7. Buy 5 and pay with $50. Change?|$15|$35|$20
+mt_xfwv0M83mJ|A shape with 8 sides is an…|Octagon|Hexagon|Pentagon
+mt_8xVHooT4aI|A recipe for 2 needs 3 eggs. For 4 people?|6 eggs|5 eggs|3 eggs
+mt_jCy07DyBNU|1/2 = 2/4 = 3/6. So 4/8 is…|Also 1/2|1/4|Bigger
+mt_3rTIyJDw7-|"Quotient" means the answer to a…|Division|Addition|Subtraction
+mt_FieL-vVTI_|You earn $8 a week. After 6 weeks you spend $20. Left?|$28|$48|$14
+mt_ZJC7JnnPCu|Best tool to draw a circle?|A compass|A ruler|A protractor
+mt_j5YqQnN6xe|"All squares are rectangles." True or false?|True|False|Sometimes
+mt_iyovKgZC1q|1+3=4, 1+3+5=9, 1+3+5+7=16. Next sum?|25|20|24
+mt_hImiKNiaNh|What is 3 + 4 × 2?|11|14|10
+mt_yqZiX6vS7D|Map scale 1 cm = 10 km. 4 cm is…|40 km|14 km|4 km
+mt_zkFbMLpu3U|Which holds more, a bathtub or a cup?|A bathtub|A cup|Same
+mt_TcG90kS8nu|Which is quicker, a blink or a nap?|A blink|A nap|Same
+mt_uhuxX8sg9f|Who is taller, a giraffe or a cat?|A giraffe|A cat|Same
+mt_NtJYlJdUe9|Which can you measure on a pencil?|Its length|Its happiness|Its name
+mt_-P1kdZhHbL|Which is heavier, a brick or a feather?|A brick|A feather|Same
+mt_-vvVxpOHG2|What comes first in your morning?|Waking up|Eating lunch|Going to bed
+mt_4lp_b5Pzik|Which holds about 1 liter?|A big water bottle|A teaspoon|A swimming pool
+mt_cPZwlUk8Nd|How many cents in a dime?|10|5|25
+mt_bj1YCgNWUx|How many days in a week?|7|5|10
+mt_KaF0SQvaiu|Measuring a desk with paper clips, you line them up…|End to end, no gaps|With gaps|In a pile
+mt_zd0YkB3xNj|To compare weights of two toys, use a…|Balance scale|Ruler|Clock
+mt_0XxyaQLRhn|The short hand on 3, long hand on 12. The time is…|3:00|12:15|12:03
+mt__N55B7u7HD|The long hand points to 6. It's…|Half past|O'clock|Quarter past
+mt_AF2BeFQwfX|Which coins make 30¢?|A quarter and a nickel|Three nickels|A dime and a penny
+mt_DOe893F6gN|Best unit to measure a road trip?|Miles|Inches|Grams
+mt_BFJ-ch_8QU|Which is longest?|1 meter|50 cm|10 cm
+mt_skYly2Qm01|Pencil 15 cm, crayon 9 cm. How much longer is the pencil?|6 cm|24 cm|9 cm
+mt_cqSf213hSa|A book is 6 blocks long. Its length is…|6 blocks|60 blocks|1 block
+mt_6J1wmCWf41|You have $5 and spend $2. What's left?|$3|$7|$2
+mt_2XDGT5tei1|How many minutes in an hour?|60|100|30
+mt_pbuhUQJjtt|In money, $2.50 means 2 dollars and…|50 cents|5 cents|250 dollars
+mt_6XCURuNwPw|Which takes longer, a movie or brushing teeth?|A movie|Brushing teeth|Same
+mt_HNOPGJYiRK|The long hand on 4 means…|20 minutes past|4 minutes past|40 minutes past
+mt_DLcEzmmj2r|A ribbon is 50 cm. You cut 18 cm. How much is left?|32 cm|68 cm|38 cm
+mt_6oxQPNLHNv|A rope 2 m plus a rope 75 cm is…|2 m 75 cm|77 cm|2.075 m
+mt_xWg0lI_gG4|A 12-inch ruler vs a 7-inch pencil: difference?|5 inches|19 inches|7 inches
+mt_4emC463IyW|Practice starts 3:00, ends 4:30. How long?|1 hour 30 min|30 min|2 hours
+mt_3XJkeIn6J6|About how long is lunch?|30 minutes|30 seconds|30 hours
+mt_OzRZ89GrQW|About how tall is a door?|2 meters|2 centimeters|20 meters
+mt_6_O6THdEDK|A toy costs $3.40. You pay $5. Change?|$1.60|$2.60|$1.40
+mt_3tz3Otap5j|How many quarters make $1?|4|2|10
+mt_e4x3l2JeLI|To measure your room, the best tool is a…|Tape measure|Teaspoon|Thermometer
+mt_wE7-Gs9ENL|A square has sides of 3 cm. Its perimeter?|12 cm|9 cm|6 cm
+mt_mayItsxMUu|You measure leaves: 3, 4, 4, 5 cm. Most common length?|4 cm|3 cm|5 cm
+mt_jHv4BgRK8B|A desk is 1 meter. In centimeters that's…|100 cm|10 cm|1,000 cm
+mt_4m8BimI4G5|A digital clock shows 7:45. That's quarter…|To 8|Past 7|To 7
+mt_EXlmTURK_o|How many seconds in a minute?|60|100|30
+mt_WfrE_4r-kY|15:00 in 12-hour time is…|3:00 p.m.|5:00 p.m.|1:50 p.m.
+mt_y1n0Zwhoca|A rectangle covers 12 unit squares. Its area is…|12 square units|12 cm|24 squares
+mt_AQo4u7O4sM|4 × 7 = 4 × 5 + 4 × …|2|7|5
+mt_Jvvh5P06NV|A 3-by-5 rectangle tiled with squares uses…|15 squares|8 squares|35 squares
+mt_eMtV6tBSJm|An L-shape made of a 2×3 and a 1×4 rectangle has area…|10|9|24
+mt_d8al9JcajP|2 kilometers is…|2,000 meters|200 meters|20 meters
+mt_mFJ-2ZF6Tk|Which costs more: 3 × $2 or $5?|3 × $2|$5|Same
+mt_ghK1mnEstc|Which is 1/2 inch longer than 3 inches?|3 1/2 inches|4 inches|2 1/2 inches
+mt_-af65bxfdp|A full bathtub holds about…|150 liters|2 liters|5 milliliters
+mt_IL86kadLSS|You start at 2:15 and play 40 minutes. You stop at…|2:55|3:15|2:40
+mt_WtcFrxGOgw|A hexagon with sides of 4 cm has perimeter…|24 cm|16 cm|20 cm
+mt_UNzojLkNdm|The clock shows 10:37. It's 37 minutes past…|10|11|9
+mt_GzcJEVkNRn|Rectangle 6 m by 4 m. Area?|24 m²|20 m²|10 m²
+mt_6xNmQLzuqm|A unit square has area of…|1 square unit|4 units|0
+mt_Zks8xyInSG|How many grams in a kilogram?|1,000|100|10
+mt_eiB3-6pu6a|Room 5 m by 4 m. Perimeter?|18 m|20 m|9 m
+mt_NSC3LT_-ch|A box fits about 1,000 sugar cubes. That's an estimate of its…|Volume|Weight only|Color
+mt_42QD6nYjiZ|A line plot shows each measurement as an…|X above a number line|A pie slice|A word
+mt_p6MhZJYYPN|1 inch is about…|2.5 cm|10 cm|1 cm
+mt_n0AlyLQwC9|An L-shape: sides 4, 2, 2, 3, 6, 5. Perimeter?|22|20|18
+mt_2yas4Unc8o|How many minutes in 2 1/2 hours?|150|130|250
+mt_ML5t7n2-U8|Triangle base 8, height 5. Area?|20|40|13
+mt_d7XktBQPxm|A box is 2 cubes long, 2 wide, 2 tall. Volume?|8 cubes|6 cubes|4 cubes
+mt_nTL-owFJTF|Box 4 × 3 × 2 cm. Volume?|24 cm³|9 cm³|14 cm³
+mt_SqhXQhAEUf|3.5 kg in grams is…|3,500 g|350 g|35 g
+mt_IuHa5UI5od|Volume measures how much…|Space something takes up|It weighs|It costs
+mt_3tPI0HqqcN|5 miles is about how many km?|8 km|3 km|50 km
+mt_MJZA90uc6H|Can two rectangles have the same area but different perimeters?|Yes|No|Only squares
+mt_5TBUFnCy5-|Two boxes: 10 cm³ and 15 cm³. Together?|25 cm³|150 cm³|5 cm³
+mt_xSgAgg9Ej_|Flip a fair coin. Heads and tails are…|Equally likely|Heads more likely|Impossible
+mt_iFFKZd-Vgv|The Sun rising tomorrow is…|Certain|Impossible|Unlikely
+mt_UcGn2hjhYU|Bag: 8 red, 2 blue. Which is more likely?|Red|Blue|Same
+mt_J4j7d3iAfg|You flip a coin 10 times. About how many heads?|5|10|0
+mt_Zt30Gxi-qp|Roll a die. Chance of a 3?|1/6|1/3|1/2
+mt_-bMnJcPJy8|You flip a coin 20 times and get 12 heads. Theory says…|10|12|20
+mt_3fwYu7imd4|Chance of rain is 0.3. Chance of no rain?|0.7|0.3|1.3
+mt_t0g2SlP404|A probability of 0 means…|Impossible|Certain|Even chance
+mt_XfyqXLqzpx|P(win) = 1/4. P(not win) = ?|3/4|1/4|1
+mt_sHJqh6UUya|You spin a spinner 50 times, get red 20 times. Red's experimental chance?|20/50|1/2|50/20
+mt_vmQJAtAFuy|A probability of 1/2 is…|Even chance|Impossible|Certain
+mt_1YwOCMMwD8|Kids who like cats AND dogs go in the Venn…|Overlap|Outside|Left circle only
+mt_GDtFU5fyUv|Flip 2 coins. How many outcomes?|4|2|3
+mt_eSv_w46u6H|10 like soccer, 8 like art, 3 like both. How many total?|15|18|21
+mt_ePXg_XyCKU|Ratio 1:3 of red to blue beads, 4 red. How many blue?|12|7|4
+mt_h0gJcSuwdL|For every 2 cats there are 5 dogs. With 6 cats, how many dogs?|15|10|11
+mt_2OtRUM_0zW|A photo is enlarged ×3. A 2 cm side becomes…|6 cm|5 cm|9 cm
+mt_kLQOzZYrd5|Drive 120 km in 2 hours. Speed?|60 km/h|240 km/h|122 km/h
+mt_nOCPx5qw0Z|Share $20 in ratio 3:1. Bigger share?|$15|$10|$5
+mt_ATYLKt0je-|If one doubles when the other doubles, they're…|Proportional|Opposite|Random
+mt_FspV_imUGK|A straight line through (0,0) on a graph shows…|Proportion|No relation|A circle
+mt_XWSGuFW7It|3 girls and 5 boys. Girls to boys ratio?|3:5|5:3|3:8
+mt_1badik7iKJ|Map scale 1:100. 3 cm on the map is…|300 cm|30 cm|3 m only on Tuesdays
+mt_tpT9brpI6D|1.5 liters is how many milliliters?|1,500 mL|150 mL|15 mL
+mt_5mIcmKRCgA|1 notebook costs $2. 7 notebooks cost…|$14|$9|$27
+mt_yK51ZnKA8m|Ratio 2:3 means for every 2 of one there are…|3 of the other|5 of the other|2 of the other

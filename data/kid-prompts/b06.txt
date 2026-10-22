@@ -1,172 +1,172 @@
-1043|Why is a chameleon hard to spot?|It blends in with colors|It's invisible|It hides underground
-1044|Where does a bird often live?|In a nest|In a burrow underwater|In a shell
-1045|What's the biggest animal ever?|Blue whale|Elephant|T. rex
-1046|Where can animals live?|Land, water, and air|Only forests|Only zoos
-1047|How are most baby birds born?|They hatch from eggs|They're born live|They grow on trees
-1048|Which animal is nocturnal?|Owl|Butterfly|Squirrel
-1049|Which is a farm animal?|Cow|Lion|Shark
-1050|How do bees tell others where flowers are?|They dance|They write notes|They phone
-1051|Why do many birds fly south for winter?|To find food and warmth|They're lost|For a vacation
-1052|How do camels survive the desert?|They store fat and save water|They drink sand|They sleep all year
-1053|Which animal lives in Antarctica?|Penguin|Polar bear|Camel
-1054|How does a cheetah catch prey?|Sprints super fast|Builds traps|Waits for years
-1055|Why do rainforests have so many animals?|Warm, wet, lots of food|They're cold|No reason
-1056|Which animal lives on the savanna?|Zebra|Penguin|Octopus
-1057|How many legs does an insect have?|6|8|4
-1058|Which animal can use tools?|Chimpanzee|Goldfish|Snail
-1059|What does biodiversity mean?|Lots of different living things|One type of animal|Only plants
-1060|Why might an animal go extinct?|Losing its habitat|Too many friends|Being too cute
-1061|An invasive species is one that…|Moves in and harms a new place|Lives in a zoo|Helps everyone
-1062|How do people protect endangered animals?|Nature reserves and laws|Hunting them|Ignoring them
-1063|Why do ducks have webbed feet?|For swimming|For climbing|For digging
-1064|Clownfish and anemones help each other. That's…|Symbiosis|Hunting|Hibernation
-1065|Why must prey and predators keep evolving?|To keep up with each other|For fun|They don't
-1066|Deep-sea fish make their own light. That's called…|Bioluminescence|Photosynthesis|Hibernation
-1067|Why do peacocks have huge tails?|To attract mates|To fly faster|To hide
-1068|Why are many species disappearing fast today?|Humans are changing habitats|Natural magic|They're bored
-1069|How do scientists group species today?|By comparing DNA|By color only|By size only
-1070|Which dinosaur was longer than a bus?|Argentinosaurus|Compsognathus|A chicken
-1071|Did dinosaurs live at the same time as people?|No, long before|Yes|Only some
-1072|Which dinosaur had three horns?|Triceratops|T. rex|Stegosaurus
-1073|What is a fossil?|Remains of ancient life in rock|A shiny rock|A dinosaur egg toy
-1074|T. rex was a…|Meat-eater|Plant-eater|Fish
-1075|Which one was NOT a dinosaur?|Pterodactyl|T. rex|Triceratops
-1076|Did dinosaurs live on every continent?|Yes, all of them|Only America|Only Africa
-1077|What is a coprolite?|Fossil dino poop|A dino tooth|A rock type
-1078|Fish fossils on a mountain show that…|It was once under water|Fish climb|Someone dropped them
-1079|How do fossils form?|Buried in mud that turns to rock|Frozen in clouds|Made by people
-1080|Who was Mary Anning?|A famous fossil hunter|A queen|A pilot
-1081|Footprints far apart mean the dinosaur was…|Running|Sleeping|Swimming
-1082|Which period came first?|Triassic|Jurassic|Cretaceous
-1083|A fossil footprint is a…|Trace fossil|Body fossil|Fake fossil
-1084|Same fossils on two continents suggest…|They were once joined|Dinos swam oceans|Nothing
-1085|Which animals evolved from dinosaurs?|Birds|Cats|Fish
-1086|Scientists now think many dinosaurs had…|Feathers|Fur|Scales only, always
-1087|Dinosaurs are grouped by the shape of their…|Hips|Eyes|Teeth only
-1088|How do paleontologists dig up bones?|Carefully with brushes and tools|With bulldozers|With dynamite
-1089|Dino art is partly a guess because…|Colors don't fossilize|Artists are lazy|Photos exist
-1090|A cladogram shows…|How living things are related|A map|A recipe
-1091|In rock layers, the oldest layer is usually…|At the bottom|At the top|In the middle
-1092|What likely wiped out the dinosaurs?|An asteroid impact|A flood|Cavemen
-1093|How do we know life changed over time?|Fossils show it|Guesswork|Movies
-1094|Archaeopteryx had feathers AND…|Teeth|Wheels|Gills
-1095|Radiometric dating tells us a rock's…|Age|Color|Weight
-1096|How many big mass extinctions has Earth had?|5|1|50
-1097|How do scientists rebuild an ancient world?|Combining fossils, plants, and rocks|Guessing wildly|Movies
-1098|Why did woolly mammoths die out?|Climate change and hunting|They flew away|They shrank
-1153|What's best for making shade?|An umbrella|A glass window|A mirror
-1154|Where is a sidewalk warmest?|In the sunlight|In the shade|Underground
-1155|A moving car has which energy?|Motion energy|Sound only|No energy
-1156|A simple circuit needs a battery, a wire, and a…|Bulb|Spoon|Rock
-1157|Which is an insulator?|Plastic|Copper|Steel
-1158|What does a switch do?|Opens or closes a circuit|Makes batteries|Nothing
-1159|Which uses electricity?|A fridge|A bicycle|A pencil
-1160|A bulb won't light if the circuit is…|Broken (open)|Complete|Shiny
-1161|A windmill turns wind into…|Electricity or motion|Ice|Rain
-1162|What does a battery provide?|Electrical energy|Water|Light only
-1163|Rubbing hands makes them warm. Energy became…|Heat|Sound only|Light
-1164|In a circuit diagram, a circle with an X is a…|Bulb|Battery|Switch
-1165|A faster ball has…|More energy|Less energy|No energy
-1166|Two toy cars crash. Where does energy go?|Sound, heat, and motion|Nowhere|It doubles
-1167|In circuit symbols, long and short lines mean…|A cell/battery|A bulb|A wire
-1168|Add more batteries and the bulb gets…|Brighter|Dimmer|Blue
-1169|Why might one bulb be dimmer than another?|Different parts or more bulbs|It's sad|Random
-1170|Electric current measures…|How much charge flows|Wire color|Temperature
-1171|Can energy be destroyed?|No, it just changes form|Yes, easily|Only at night
-1172|A stretched rubber band stores…|Elastic energy|Heat energy|Sound energy
-1173|Rubbing a balloon on hair makes…|Static electricity|Magnetism forever|Water
-1174|Heat moving through a metal spoon is…|Conduction|Radiation|Evaporation
-1175|A bulb that wastes lots of heat is…|Less efficient|More efficient|Perfect
-1176|More water takes more energy to…|Heat up|Freeze instantly|Disappear
-1177|V = I × R. If I=2 and R=3, V =|6|5|1
-1178|Power is energy per…|Second|Meter|Kilogram
-1179|Which is renewable?|Solar power|Coal|Oil
-1180|In a parallel circuit, if one bulb breaks…|The others stay on|All go out|They get brighter
-1410|Which is a science question?|Do plants grow faster in sun?|What's your favorite color?|Is pizza nice?
-1411|Two paper towels tested. How do you pick the best?|Compare test results|Pick the prettiest|Guess
-1412|A sketch of a bridge design helps you…|Show your idea|Waste paper|Nothing
-1413|To see tiny details of a bug, use a…|Magnifying glass|Telescope|Ruler
-1414|A good way to record how tall a plant grows?|A table|Your memory|A song
-1415|You drop a ball and a feather. What are you doing?|A simple test|Cooking|Painting
-1416|Your idea was wrong, the test shows. What now?|Change your mind|Ignore the results|Hide it
-1417|"The ice melted" is…|An observation|An explanation|An opinion
-1418|Sorting animals by number of legs is…|Classifying|Measuring|Guessing
-1419|Your plant died. Could there be another reason?|Yes, check other causes|No, never|Plants hate you
-1420|A good conclusion is based on…|Evidence from tests|Your feelings|Luck
-1421|In a fair test, you change…|Only one thing|Everything|Nothing
-1422|Measuring water carefully, you should…|Read at eye level|Guess|Look from the top
-1423|Plants with fertilizer grew taller. That's a…|Difference you can test|Fact about pizza|Myth
-1424|Your bridge keeps breaking. What's smart?|Try several new designs|Give up|Use the same one
-1425|Ice cream sales and sunburns both go up. Does ice cream cause sunburn?|No, sunny days cause both|Yes|Maybe ice cream burns
-1426|Testing which ball bounces highest, you should keep the same…|Drop height|Ball|Nothing
-1427|Before designing a pet feeder, first decide…|What problem it solves|Its color|Its name
-1428|For an exact measurement, use…|A ruler with small marks|Your hand|A guess
-1429|Recording results neatly helps you…|Spot patterns|Lose data|Get bored
-1430|Testing plant food, you should keep the same…|Water and light|Plant food|Nothing
-1431|Your results show plants need light. You say…|"Plants need light to grow well."|"Plants are green."|"I like plants."
-1432|What evidence supports that Earth is round?|Photos from space|A flat map|A feeling
-1433|Your test shows heavier carts go slower. Next you could…|Predict and test a heavier cart|Stop testing|Guess
-1434|Can scientific ideas change?|Yes, with new evidence|No, never|Only on Mondays
-1435|"If I add more sugar, it dissolves slower." That's a…|Hypothesis|Fact|Opinion
-1436|Why repeat a test 3 times?|To check results are reliable|To waste time|For fun
-1437|A graph line going up shows…|An increasing trend|No change|A decrease
-1438|To show how a plant grew each week, use a…|Line graph|Pie chart|Map
-1439|A science report starts with your…|Question or aim|Conclusion|Thank-you list
-1507|What is Earth's outside mostly made of?|Rock|Cheese|Water only
-1508|During an earthquake you should…|Drop, cover, and hold on|Run outside fast|Stand by windows
-1509|Which change is fast?|An earthquake|A canyon forming|A mountain growing
-1510|A volcanic eruption can…|Shoot lava and ash|Make it snow candy|Do nothing
-1511|An earthquake is…|Sudden shaking of the ground|A big storm|A flood
-1512|What comes out of a volcano?|Lava|Water balloons|Ice cream
-1513|A volcano that won't erupt again is…|Extinct|Active|Dormant
-1514|Earth's thin outer layer is the…|Crust|Core|Mantle
-1515|Hot melted rock underground is called…|Magma|Lava|Sand
-1516|Which city was buried by Vesuvius?|Pompeii|Paris|London
-1517|The "Ring of Fire" circles which ocean?|Pacific|Atlantic|Indian
-1518|What usually causes a tsunami?|An undersea earthquake|Strong wind|A whale
-1519|Rock formed from cooled lava is…|Igneous|Sedimentary|Metamorphic
-1520|Earthquakes happen when underground rocks…|Suddenly slip|Melt|Sing
-1521|How can buildings survive earthquakes?|Flexible designs that sway|Glass walls|Taller towers only
-1522|Runny lava makes volcanoes that are…|Wide and gentle|Tall and pointy|Square
-1523|What was Pangaea?|A giant supercontinent|A volcano|A sea monster
-1524|Which tool measures earthquakes?|Seismometer|Thermometer|Telescope
-1525|Before an eruption, scientists watch for…|Small earthquakes and gas|Rainbows|Birds singing
-1526|How can a town prepare for floods?|Build barriers and plan escapes|Ignore it|Build in rivers
-1527|Plates sliding past each other cause…|Earthquakes|Rainbows|Snow
-1528|Earth's crust is broken into…|Tectonic plates|Slices of pie|Bubbles
-1529|Rocks can slowly change types. That's the…|Rock cycle|Water cycle|Life cycle
-1530|What makes tectonic plates move?|Heat currents in the mantle|Wind|The Moon
-1531|Which seismic waves move fastest?|P-waves|S-waves|Ocean waves
-1532|Why plan evacuation routes near volcanoes?|To get people out safely|For tourism|To find lava
-1533|Yellowstone sits on a…|Supervolcano|Glacier|Desert
-1534|Huge ancient lava floods may have caused…|Mass extinctions|Ice cream|Rainbows
-1560|It's snowing. What should you wear?|A warm coat|Shorts|A swimsuit
-1561|Where does rain come from?|Clouds|The ground|Trees
-1562|Which season usually has falling leaves?|Fall|Summer|Spring
-1563|During lightning, where should you go?|Indoors|Under a tall tree|Into a lake
-1564|What measures temperature?|Thermometer|Ruler|Scale
-1565|Which is a type of weather?|Foggy|Sleepy|Hungry
-1566|Why check the weather forecast?|To plan and stay safe|To see the news|No reason
-1567|What is wind?|Moving air|Moving water|Sunlight
-1568|Big fluffy white clouds are…|Cumulus|Cirrus|Stratus
-1569|Why is Alaska colder than Florida?|It's farther from the equator|It's higher|It's sad
-1570|In the water cycle, rain is called…|Precipitation|Evaporation|Condensation
-1571|Why do you hear thunder after lightning?|Light travels faster than sound|Thunder is lazy|Random
-1572|Which tool measures rainfall?|Rain gauge|Thermometer|Compass
-1573|Scientists who forecast weather are…|Meteorologists|Geologists|Astronauts
-1574|"It's sunny today" describes…|Weather|Climate|Season
-1575|What causes wind?|Uneven heating by the Sun|Trees waving|Airplanes
-1576|Which design best protects a house from floods?|Building it on stilts|Glass floors|A basement
-1577|Climate change is mostly caused by…|Burning fossil fuels|The Moon|Rainbows
-1578|Which climate zone is hot all year?|Tropical|Polar|Temperate
-1579|A hurricane is a…|Giant spinning storm|Snow day|Light drizzle
-1580|Which is a natural resource?|Water|Plastic toys|Phones
-1581|On a weather map, a sun symbol means…|Clear skies|Rain|Snow
-1582|What drives Earth's weather?|The Sun|The Moon|Volcanoes
-1583|The blanket of air around Earth is the…|Atmosphere|Crust|Ocean
-1584|Engineers build sea walls to stop…|Flooding|Earthquakes|Wind
-1585|Why does air rise near the equator?|It's heated most|It's lighter by magic|Mountains push it
-1586|Greenhouse gases trap…|Heat|Rain|Sound
-1587|Hurricanes form over…|Warm oceans|Deserts|Mountains
-1588|How do scientists learn about ancient climate?|Ice cores|Old TV shows|Guessing
-1589|"Net zero" means…|Balancing out carbon emissions|No electricity|Zero cars
+mt_pwo81ls_J-|Why is a chameleon hard to spot?|It blends in with colors|It's invisible|It hides underground
+mt_oLHXfLujmh|Where does a bird often live?|In a nest|In a burrow underwater|In a shell
+mt_goZW_hQUa4|What's the biggest animal ever?|Blue whale|Elephant|T. rex
+mt_v3Vz_Pgjjv|Where can animals live?|Land, water, and air|Only forests|Only zoos
+mt_-vsLvsxp0L|How are most baby birds born?|They hatch from eggs|They're born live|They grow on trees
+mt_V_wIdRZLsG|Which animal is nocturnal?|Owl|Butterfly|Squirrel
+mt_muxjw0fxxN|Which is a farm animal?|Cow|Lion|Shark
+mt_wHN14Unk7h|How do bees tell others where flowers are?|They dance|They write notes|They phone
+mt_bK84sPehyP|Why do many birds fly south for winter?|To find food and warmth|They're lost|For a vacation
+mt_0zqOTjjW2k|How do camels survive the desert?|They store fat and save water|They drink sand|They sleep all year
+mt_D4lyx0iYyB|Which animal lives in Antarctica?|Penguin|Polar bear|Camel
+mt_Bztatrv-_v|How does a cheetah catch prey?|Sprints super fast|Builds traps|Waits for years
+mt_DCelLx_H1A|Why do rainforests have so many animals?|Warm, wet, lots of food|They're cold|No reason
+mt_YynJoQcm_M|Which animal lives on the savanna?|Zebra|Penguin|Octopus
+mt_R7LEuZjTmx|How many legs does an insect have?|6|8|4
+mt_fpPLWFIRVo|Which animal can use tools?|Chimpanzee|Goldfish|Snail
+mt_NDZYiLvApW|What does biodiversity mean?|Lots of different living things|One type of animal|Only plants
+mt_5S4byWDX6n|Why might an animal go extinct?|Losing its habitat|Too many friends|Being too cute
+mt_CBxOcjh69x|An invasive species is one that…|Moves in and harms a new place|Lives in a zoo|Helps everyone
+mt_pWwV_8OgXD|How do people protect endangered animals?|Nature reserves and laws|Hunting them|Ignoring them
+mt_EaWjCyn8W2|Why do ducks have webbed feet?|For swimming|For climbing|For digging
+mt_H8OgKZbgGe|Clownfish and anemones help each other. That's…|Symbiosis|Hunting|Hibernation
+mt_mKNmXqz_Oo|Why must prey and predators keep evolving?|To keep up with each other|For fun|They don't
+mt_ot9rcUwBtK|Deep-sea fish make their own light. That's called…|Bioluminescence|Photosynthesis|Hibernation
+mt_YNrrNE23dZ|Why do peacocks have huge tails?|To attract mates|To fly faster|To hide
+mt_44HkROUnzE|Why are many species disappearing fast today?|Humans are changing habitats|Natural magic|They're bored
+mt_fqAkSv3cUE|How do scientists group species today?|By comparing DNA|By color only|By size only
+mt_u0TeRwRII_|Which dinosaur was longer than a bus?|Argentinosaurus|Compsognathus|A chicken
+mt_dpM1l5IOk6|Did dinosaurs live at the same time as people?|No, long before|Yes|Only some
+mt_BnabTHkNIp|Which dinosaur had three horns?|Triceratops|T. rex|Stegosaurus
+mt_bKlnc7dyVK|What is a fossil?|Remains of ancient life in rock|A shiny rock|A dinosaur egg toy
+mt_DJh2JPwTf6|T. rex was a…|Meat-eater|Plant-eater|Fish
+mt_JednrdYqpt|Which one was NOT a dinosaur?|Pterodactyl|T. rex|Triceratops
+mt_oH1XC8aQYn|Did dinosaurs live on every continent?|Yes, all of them|Only America|Only Africa
+mt_1dXhJp6qLJ|What is a coprolite?|Fossil dino poop|A dino tooth|A rock type
+mt_fKwgN61ttR|Fish fossils on a mountain show that…|It was once under water|Fish climb|Someone dropped them
+mt_iycQEai3dK|How do fossils form?|Buried in mud that turns to rock|Frozen in clouds|Made by people
+mt_excSPNHJWZ|Who was Mary Anning?|A famous fossil hunter|A queen|A pilot
+mt_Wpvuz3mvBq|Footprints far apart mean the dinosaur was…|Running|Sleeping|Swimming
+mt_uQljqc0J5j|Which period came first?|Triassic|Jurassic|Cretaceous
+mt_1VSFoM44JU|A fossil footprint is a…|Trace fossil|Body fossil|Fake fossil
+mt_6Z42wJaKYG|Same fossils on two continents suggest…|They were once joined|Dinos swam oceans|Nothing
+mt_T8JGTJ-oNI|Which animals evolved from dinosaurs?|Birds|Cats|Fish
+mt_0T0Zf0YG6k|Scientists now think many dinosaurs had…|Feathers|Fur|Scales only, always
+mt_yrSdVrXrsF|Dinosaurs are grouped by the shape of their…|Hips|Eyes|Teeth only
+mt_JBWMqZVO7S|How do paleontologists dig up bones?|Carefully with brushes and tools|With bulldozers|With dynamite
+mt_M8UQTURODF|Dino art is partly a guess because…|Colors don't fossilize|Artists are lazy|Photos exist
+mt_cSPtyLF3q1|A cladogram shows…|How living things are related|A map|A recipe
+mt_EGIlsfHxb6|In rock layers, the oldest layer is usually…|At the bottom|At the top|In the middle
+mt_QHKqckBdAk|What likely wiped out the dinosaurs?|An asteroid impact|A flood|Cavemen
+mt_gTDqxYkLs9|How do we know life changed over time?|Fossils show it|Guesswork|Movies
+mt_mqQ-DtH5m-|Archaeopteryx had feathers AND…|Teeth|Wheels|Gills
+mt_bHbpLW1HUg|Radiometric dating tells us a rock's…|Age|Color|Weight
+mt_IP0PTVfTXp|How many big mass extinctions has Earth had?|5|1|50
+mt_8_BxtNDrLZ|How do scientists rebuild an ancient world?|Combining fossils, plants, and rocks|Guessing wildly|Movies
+mt_tGZ2sMzMGz|Why did woolly mammoths die out?|Climate change and hunting|They flew away|They shrank
+mt_2agkUcdah9|What's best for making shade?|An umbrella|A glass window|A mirror
+mt_iGSfQg3g5c|Where is a sidewalk warmest?|In the sunlight|In the shade|Underground
+mt_akBotspaf2|A moving car has which energy?|Motion energy|Sound only|No energy
+mt_DA7-JYRvtP|A simple circuit needs a battery, a wire, and a…|Bulb|Spoon|Rock
+mt_d-EKO-pKkP|Which is an insulator?|Plastic|Copper|Steel
+mt_Hah24nbToi|What does a switch do?|Opens or closes a circuit|Makes batteries|Nothing
+mt_9nxyFoYD_b|Which uses electricity?|A fridge|A bicycle|A pencil
+mt_NNNbPccwB4|A bulb won't light if the circuit is…|Broken (open)|Complete|Shiny
+mt_K1-HopEJAB|A windmill turns wind into…|Electricity or motion|Ice|Rain
+mt_NzCNuABT3E|What does a battery provide?|Electrical energy|Water|Light only
+mt_X_aDUBh-HF|Rubbing hands makes them warm. Energy became…|Heat|Sound only|Light
+mt_loYPGHJ8lm|In a circuit diagram, a circle with an X is a…|Bulb|Battery|Switch
+mt_2Um22lTBZV|A faster ball has…|More energy|Less energy|No energy
+mt_1MLi55bPnt|Two toy cars crash. Where does energy go?|Sound, heat, and motion|Nowhere|It doubles
+mt_NzNLYDb9CZ|In circuit symbols, long and short lines mean…|A cell/battery|A bulb|A wire
+mt_vFT_GbkP9m|Add more batteries and the bulb gets…|Brighter|Dimmer|Blue
+mt_-QY08-88rw|Why might one bulb be dimmer than another?|Different parts or more bulbs|It's sad|Random
+mt_2bnXrfS4Iq|Electric current measures…|How much charge flows|Wire color|Temperature
+mt_68pIoiiG4g|Can energy be destroyed?|No, it just changes form|Yes, easily|Only at night
+mt_Jvg_r4yWaY|A stretched rubber band stores…|Elastic energy|Heat energy|Sound energy
+mt_2_YoprauaJ|Rubbing a balloon on hair makes…|Static electricity|Magnetism forever|Water
+mt_ySnOkVIu22|Heat moving through a metal spoon is…|Conduction|Radiation|Evaporation
+mt_JyfLtl_nhw|A bulb that wastes lots of heat is…|Less efficient|More efficient|Perfect
+mt_DI1cyAyGyN|More water takes more energy to…|Heat up|Freeze instantly|Disappear
+mt_H3ZDK0EYNV|V = I × R. If I=2 and R=3, V =|6|5|1
+mt_ckpA3oZQ44|Power is energy per…|Second|Meter|Kilogram
+mt_w2A8D76ymp|Which is renewable?|Solar power|Coal|Oil
+mt_loEMaQ8kFA|In a parallel circuit, if one bulb breaks…|The others stay on|All go out|They get brighter
+mt_XirhnAB6Ye|Which is a science question?|Do plants grow faster in sun?|What's your favorite color?|Is pizza nice?
+mt_nNYo5A-7Bl|Two paper towels tested. How do you pick the best?|Compare test results|Pick the prettiest|Guess
+mt_hi8cVycbwn|A sketch of a bridge design helps you…|Show your idea|Waste paper|Nothing
+mt_vJO5Bxk4z-|To see tiny details of a bug, use a…|Magnifying glass|Telescope|Ruler
+mt_ZFwPZaDJ0_|A good way to record how tall a plant grows?|A table|Your memory|A song
+mt_Wa44s-f8Ws|You drop a ball and a feather. What are you doing?|A simple test|Cooking|Painting
+mt_obF-6VYRya|Your idea was wrong, the test shows. What now?|Change your mind|Ignore the results|Hide it
+mt_Hw70LI5xza|"The ice melted" is…|An observation|An explanation|An opinion
+mt_7IFpDVNsmt|Sorting animals by number of legs is…|Classifying|Measuring|Guessing
+mt_QrVF5n7vci|Your plant died. Could there be another reason?|Yes, check other causes|No, never|Plants hate you
+mt_7VrR1GzhrN|A good conclusion is based on…|Evidence from tests|Your feelings|Luck
+mt_qgb76wHN2X|In a fair test, you change…|Only one thing|Everything|Nothing
+mt_nUnowllzaN|Measuring water carefully, you should…|Read at eye level|Guess|Look from the top
+mt_CVywzrjT_c|Plants with fertilizer grew taller. That's a…|Difference you can test|Fact about pizza|Myth
+mt_HveO1bOXpJ|Your bridge keeps breaking. What's smart?|Try several new designs|Give up|Use the same one
+mt_X0Tr8IYaEd|Ice cream sales and sunburns both go up. Does ice cream cause sunburn?|No, sunny days cause both|Yes|Maybe ice cream burns
+mt_eoPcc4nrBE|Testing which ball bounces highest, you should keep the same…|Drop height|Ball|Nothing
+mt_Z5-fSCOBep|Before designing a pet feeder, first decide…|What problem it solves|Its color|Its name
+mt_Psun-u_lPf|For an exact measurement, use…|A ruler with small marks|Your hand|A guess
+mt_rDjtmDogJr|Recording results neatly helps you…|Spot patterns|Lose data|Get bored
+mt_ArVBEpMAPk|Testing plant food, you should keep the same…|Water and light|Plant food|Nothing
+mt_nyPMkeHlVJ|Your results show plants need light. You say…|"Plants need light to grow well."|"Plants are green."|"I like plants."
+mt_AstzvYDU2m|What evidence supports that Earth is round?|Photos from space|A flat map|A feeling
+mt_5PgQB0QkWi|Your test shows heavier carts go slower. Next you could…|Predict and test a heavier cart|Stop testing|Guess
+mt_1GVAmcwAiO|Can scientific ideas change?|Yes, with new evidence|No, never|Only on Mondays
+mt_Ae56umVlTT|"If I add more sugar, it dissolves slower." That's a…|Hypothesis|Fact|Opinion
+mt_auJqTemMpI|Why repeat a test 3 times?|To check results are reliable|To waste time|For fun
+mt_3jmBpEepYX|A graph line going up shows…|An increasing trend|No change|A decrease
+mt_YHsUhi4Prc|To show how a plant grew each week, use a…|Line graph|Pie chart|Map
+mt_ThTbUuNb3p|A science report starts with your…|Question or aim|Conclusion|Thank-you list
+mt_uUa6cgv8zV|What is Earth's outside mostly made of?|Rock|Cheese|Water only
+mt__pMF-Xb0TE|During an earthquake you should…|Drop, cover, and hold on|Run outside fast|Stand by windows
+mt_adpdEaKEBC|Which change is fast?|An earthquake|A canyon forming|A mountain growing
+mt_BLQ2_OXPod|A volcanic eruption can…|Shoot lava and ash|Make it snow candy|Do nothing
+mt_e29VrLfmYt|An earthquake is…|Sudden shaking of the ground|A big storm|A flood
+mt_S9SKah-yi_|What comes out of a volcano?|Lava|Water balloons|Ice cream
+mt_dSeFrAWE4v|A volcano that won't erupt again is…|Extinct|Active|Dormant
+mt_jwElFY7Syd|Earth's thin outer layer is the…|Crust|Core|Mantle
+mt_QtIAWOcoQT|Hot melted rock underground is called…|Magma|Lava|Sand
+mt_XG4RqUIXm8|Which city was buried by Vesuvius?|Pompeii|Paris|London
+mt_bhwf_rDXQL|The "Ring of Fire" circles which ocean?|Pacific|Atlantic|Indian
+mt_Wu-ftkzoiE|What usually causes a tsunami?|An undersea earthquake|Strong wind|A whale
+mt_NYA50DFcOO|Rock formed from cooled lava is…|Igneous|Sedimentary|Metamorphic
+mt_NVr4AhsvIq|Earthquakes happen when underground rocks…|Suddenly slip|Melt|Sing
+mt_yDZbQODIwp|How can buildings survive earthquakes?|Flexible designs that sway|Glass walls|Taller towers only
+mt_W4j7T_PnGH|Runny lava makes volcanoes that are…|Wide and gentle|Tall and pointy|Square
+mt_rML9unnd9x|What was Pangaea?|A giant supercontinent|A volcano|A sea monster
+mt_mdZ3nBWChW|Which tool measures earthquakes?|Seismometer|Thermometer|Telescope
+mt_ZRoQVXf_aD|Before an eruption, scientists watch for…|Small earthquakes and gas|Rainbows|Birds singing
+mt_cpDpjJaE5u|How can a town prepare for floods?|Build barriers and plan escapes|Ignore it|Build in rivers
+mt_-JnOhdei6F|Plates sliding past each other cause…|Earthquakes|Rainbows|Snow
+mt_XrvPx5kUfO|Earth's crust is broken into…|Tectonic plates|Slices of pie|Bubbles
+mt_z7AJZapsJj|Rocks can slowly change types. That's the…|Rock cycle|Water cycle|Life cycle
+mt_gv_uoHkdjR|What makes tectonic plates move?|Heat currents in the mantle|Wind|The Moon
+mt__kFxuAgs6d|Which seismic waves move fastest?|P-waves|S-waves|Ocean waves
+mt_edaoZRkK6M|Why plan evacuation routes near volcanoes?|To get people out safely|For tourism|To find lava
+mt_Am_iTzHjoe|Yellowstone sits on a…|Supervolcano|Glacier|Desert
+mt_QwWo6an9N1|Huge ancient lava floods may have caused…|Mass extinctions|Ice cream|Rainbows
+mt_Dj2xr8CoI0|It's snowing. What should you wear?|A warm coat|Shorts|A swimsuit
+mt_TlLE4cZgOr|Where does rain come from?|Clouds|The ground|Trees
+mt_fI-8iqf_Id|Which season usually has falling leaves?|Fall|Summer|Spring
+mt_4pLvMN8uzL|During lightning, where should you go?|Indoors|Under a tall tree|Into a lake
+mt_PrWc-HZzDl|What measures temperature?|Thermometer|Ruler|Scale
+mt_jc9k_HJQGd|Which is a type of weather?|Foggy|Sleepy|Hungry
+mt_URezjbU-6f|Why check the weather forecast?|To plan and stay safe|To see the news|No reason
+mt_j7cj9eWN7w|What is wind?|Moving air|Moving water|Sunlight
+mt_IhWzO4sQPg|Big fluffy white clouds are…|Cumulus|Cirrus|Stratus
+mt_hjJkBWruO6|Why is Alaska colder than Florida?|It's farther from the equator|It's higher|It's sad
+mt_fhqVdj4BYr|In the water cycle, rain is called…|Precipitation|Evaporation|Condensation
+mt_BO_AHGLCk0|Why do you hear thunder after lightning?|Light travels faster than sound|Thunder is lazy|Random
+mt_sA0RvWXSYY|Which tool measures rainfall?|Rain gauge|Thermometer|Compass
+mt_AghN5YcCHX|Scientists who forecast weather are…|Meteorologists|Geologists|Astronauts
+mt_AB-TEMXSGJ|"It's sunny today" describes…|Weather|Climate|Season
+mt_-UAxilUtUt|What causes wind?|Uneven heating by the Sun|Trees waving|Airplanes
+mt_JmMtZCifJB|Which design best protects a house from floods?|Building it on stilts|Glass floors|A basement
+mt_DbI1kNg_0R|Climate change is mostly caused by…|Burning fossil fuels|The Moon|Rainbows
+mt_TMOzMCE17H|Which climate zone is hot all year?|Tropical|Polar|Temperate
+mt_6EfevRyeFW|A hurricane is a…|Giant spinning storm|Snow day|Light drizzle
+mt_VI5kdtf28e|Which is a natural resource?|Water|Plastic toys|Phones
+mt_3pgTpuetKi|On a weather map, a sun symbol means…|Clear skies|Rain|Snow
+mt_-YYnLLIZh5|What drives Earth's weather?|The Sun|The Moon|Volcanoes
+mt_fkcxpeYP85|The blanket of air around Earth is the…|Atmosphere|Crust|Ocean
+mt_iiUdDUEEGY|Engineers build sea walls to stop…|Flooding|Earthquakes|Wind
+mt_iYOcfzFqMw|Why does air rise near the equator?|It's heated most|It's lighter by magic|Mountains push it
+mt_EQQWKz03P8|Greenhouse gases trap…|Heat|Rain|Sound
+mt__wWHVvqMWb|Hurricanes form over…|Warm oceans|Deserts|Mountains
+mt_olFzbawexJ|How do scientists learn about ancient climate?|Ice cores|Old TV shows|Guessing
+mt_Wzj1RETm9A|"Net zero" means…|Balancing out carbon emissions|No electricity|Zero cars

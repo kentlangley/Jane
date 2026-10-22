@@ -1,163 +1,163 @@
-955|Your friend takes your toy. What's the best thing to do?|Say "I feel upset" calmly|Hit them|Scream
-956|Can feelings change during one day?|Yes, feelings change|No, never|Only on birthdays
-957|Your ice cream falls on the ground. How might you feel?|Sad|Excited|Sleepy
-958|What usually comes before a feeling?|Something happens|Nothing ever|A sneeze
-959|Which word means a little worried?|Nervous|Furious|Thrilled
-960|A friend smiles but seems upset. What could be true?|They're hiding a feeling|They're always happy|Smiles mean nothing
-961|Your heart pounds before a test. What feeling is that?|Nervous|Bored|Sleepy
-962|Which feeling is strongest?|Furious|Annoyed|A bit grumpy
-963|Why might two kids feel differently about a big dog?|Different past experiences|One is a robot|Feelings are random
-964|You always get grumpy when hungry. What is that?|A pattern in your feelings|A magic spell|Nothing at all
-965|You're really angry. When should you make a big choice?|After you calm down|Right now|Never
-966|Moving to a new town, can you feel happy AND sad?|Yes, both at once|No, only one|Only sad
-967|Which part of your brain sounds the alarm when scared?|The amygdala|Your elbow|Your nose
-968|Why do teens try new styles and interests?|They're figuring out who they are|They're bored|No reason
-969|What is emotional intelligence?|Understanding feelings, yours and others'|Being good at math|Never feeling sad
-970|Which is an act of kindness?|Holding the door for someone|Laughing at someone|Pushing in line
-971|Your friend hates spinach, but you love it. What does that show?|People think differently|Your friend is wrong|Spinach is bad
-972|How are people different?|Looks, likes and families|They're all the same|Only by height
-973|What does "empathy" mean?|Feeling what someone else feels|Being bored|Winning a game
-974|Why might a classmate's life be different from yours?|Different family, home or culture|Everyone's life is the same|They live on Mars
-975|Giving glasses only to kids who need them is…|Fair|Unfair|Silly
-976|A new kid sits alone. How might they feel?|Lonely or nervous|Super excited|Bored of friends
-977|What does "inclusion" mean?|Making sure everyone is included|Leaving people out|Winning a race
-978|Treating someone badly because of their skin is…|Discrimination|Kindness|Fairness
-979|You think a quiet kid is unfriendly. What should you do?|Question it and get to know them|Ignore them|Tell everyone
-980|"All boys love football" is an example of a…|Stereotype|Fact|Rule
-981|Why do families celebrate different holidays?|Different cultures and traditions|They're confused|By accident
-982|What does an ally do?|Stands up for others|Stays quiet always|Makes fun of others
-983|"I understand how you feel" shows…|Empathy|Sympathy only|Boredom
-984|What's a global citizen?|Someone who cares about the whole world|Someone who never travels|A world leader only
-985|You're stuck on homework after trying. What now?|Ask for help|Cry and quit|Hide it
-986|What shows you're really listening?|Looking at the speaker|Talking over them|Looking at your phone
-987|What makes a good friend?|Being kind and honest|Being bossy|Keeping secrets to hurt you
-988|Two kids want the same swing. What's fair?|Take turns|Grab it first|Push them off
-989|What does "cooperate" mean?|Work together|Work against|Stop working
-990|Which is calm, healthy talk?|"Can we talk about this?"|"You're dumb!"|Silent treatment
-991|Your best friend makes a new friend too. Is that okay?|Yes, friendships change and grow|No, never|Only if you agree
-992|You and a friend disagree on a game. Best fix?|Talk it out and compromise|Yell|Stop being friends
-993|In a group project, who keeps everyone on track?|The leader|The snack-eater|Nobody
-994|What makes a group project go well?|Everyone helps and listens|One person does everything|Everyone argues
-995|Which is ASSERTIVE?|"Please ask before borrowing."|Say nothing|"You thief!"
-996|What's helpful feedback?|"I liked this. Try adding more detail."|"It's bad."|"Whatever."
-997|Two friends are fighting. How can you help?|Help each one share their side|Pick a side loudly|Laugh
-998|You snapped at a friend. What's a good next step?|Think about it and say sorry|Pretend it didn't happen|Blame them
-999|A friend says "fine" but frowns. What might they mean?|They're not really fine|They're super happy|Nothing
-1000|You hurt a friend's feelings. What helps fix it?|An honest talk and sorry|Ignoring them|Gossiping
-1001|A leader who lets everyone vote is…|Democratic|Bossy|Lazy
-1002|You skip brushing your teeth for weeks. What could happen?|Cavities|Superpowers|Nothing ever
-1003|Before crossing the street, what should you do?|Look both ways|Run fast|Close your eyes
-1004|You find a wallet. What's the right choice?|Return it|Keep it|Throw it away
-1005|Why do classrooms have rules?|To keep things safe and fair|To be boring|For no reason
-1006|What does "consequence" mean?|What happens because of a choice|A type of food|A secret
-1007|What's good online behavior?|Be kind and keep info private|Share your password|Post mean comments
-1008|You see someone being bullied. An upstander would…|Help or tell an adult|Watch and laugh|Walk away
-1009|Facing a tough choice, what's a good first step?|Stop and think|Act fast|Copy others
-1010|What makes something bullying?|It's mean and happens again and again|One accident|A friendly joke
-1011|What does "responsibility" mean?|Doing what you should|Avoiding chores|Breaking rules
-1012|What's a responsibility you have in your community?|Not littering|Breaking things|Being loud at night
-1013|Your friend cheated. Telling the teacher feels hard because…|It's not black and white|It's always easy|Cheating is fine
-1014|Is it fair to cut down a forest for a new mall?|There are good points on both sides|Always yes|It doesn't matter
-1015|Friends dare you to do something unsafe. You should…|Say no confidently|Do it|Hide
-1016|Why do people think plane crashes are more common than they are?|Scary news sticks in our minds|Planes crash daily|Math is wrong
-1017|Before sharing a shocking post, what should you do?|Check if it's true|Share it fast|Add more drama
-1018|Thinking "what will happen if I do this?" helps you…|Make good choices|Get bored|Forget rules
-1019|Your cheeks feel hot and fists are tight. What feeling is it?|Angry|Happy|Sleepy
-1020|What does "self-aware" mean?|Knowing your own feelings and habits|Being selfish|Being lost
-1021|You feel angry. Do you have to hit something?|No, feelings and actions are separate|Yes, always|Only if it's a pillow
-1022|You always get nervous before tests. What can you do?|Plan ways to calm down|Skip school|Nothing helps
-1023|You joke about a friend's haircut and they look sad. What happened?|Your words hurt them|Nothing|They loved it
-1024|A kid doesn't wave back. What else might be true?|They didn't see you|They hate you|They're a robot
-1025|What's something that shows you've grown?|Something that was hard is easier now|Nothing changes|You got taller only
-1026|Moving to a new school feels scary. What's true?|Change is normal and gets easier|Change is always bad|It will never get better
-1027|You make a mistake. What does it mean?|You're learning|You're bad at everything|Give up
-1028|Waiting for your birthday present, what helps?|Being patient and keeping busy|Yelling|Opening it early
-1029|You feel really upset. What helps you calm down?|Take slow deep breaths|Scream louder|Throw stuff
-1030|Which word means peaceful and relaxed?|Calm|Frustrated|Overwhelmed
-1031|A big project feels huge. What helps?|Break it into small steps|Do it all in one minute|Give up
-1032|You're nervous before a game. Which coping tool fits?|Deep breaths|Eat 10 candies|Quit the team
-1033|"I can't do this YET." That's a…|Growth mindset|Fixed mindset|Bad attitude
-1034|Which is positive self-talk?|"I can try again."|"I'm useless."|"I always fail."
-1035|What does "resilient" mean?|Bouncing back after hard times|Never trying|Always winning
-1036|What's in your coping toolkit?|Strategies that help you calm down|Hammers|Nothing
-1037|Which goal is realistic?|Read 20 minutes a day|Read 1,000 books tonight|Never read
-1038|You lose a big game. What does resilience look like?|Practice and try again|Quit forever|Blame everyone
-1039|Homework or game first? What's smart?|Homework first, then play|Game all night|Neither
-1040|Feeling a bit nervous before a big race can…|Help you try harder|Always ruin it|Make you faster magic
-1041|What helps build a good habit?|Do it at the same time daily|Do it once a year|Never think about it
-1042|What can facing a hard challenge do?|Make you stronger|Ruin you forever|Nothing
-28|Which is a complete sentence?|The cat sleeps.|The cat.|Sleeps the.
-29|Why do we put spaces between words?|So we can read them|To save paper|For no reason
-30|Which word is a verb?|Run|Table|Blue
-31|Which needs a capital letter?|Monday|apple|chair
-32|How many words in "I like pizza"?|3|2|5
-33|Join with "and": I like cats. I like dogs.|I like cats and dogs.|I like and cats dogs.|Cats and I like dogs.
-34|"The ball is ___ the table." Which word fits?|under|run|happy
-35|Which question word asks about a place?|Where|When|Who
-36|What's the plural of "box"?|Boxes|Boxs|Boxen
-37|How should a sentence end?|With a period or other mark|With a comma|With nothing
-38|Which shows something belongs to Sam?|Sam's hat|Sams hat|Sams' hat
-39|Which list has commas right?|I ate apples, pears and plums.|I ate, apples pears, and plums.|I ate apples pears and plums.
-40|Which fits: "___ elephant"?|An|A|The a
-41|Which is an expanded noun phrase?|The big red bus|Bus|Big
-42|"Shut the door!" What type of sentence?|Command|Question|Statement
-43|In "She jumped," which word is the verb?|Jumped|She|The
-44|Which is the past tense of "walk"?|Walked|Walking|Walks
-45|"Max lost ___ hat." Which word fits?|his|him|he
-46|Which is correct?|The dogs bark.|The dogs barks.|The dog bark.
-47|Which joins with "because"?|I'm tired because I ran.|I'm tired because.|Because tired I.
-48|Which uses an adverb?|She ran quickly.|She is quick.|Quick she.
-49|Which is correct?|An apple|A apple|An banana
-50|"I ate lunch ___ I played outside." Which fits?|before|cat|blue
-51|What is a clause?|A group of words with a verb|A single letter|A punctuation mark
-52|What's the past tense of "go"?|Went|Goed|Gone
-53|What's the plural of "child"?|Children|Childs|Childes
-54|Which sentence is clearest?|Max told Sam that Sam won.|He told him he won.|He won him.
-55|Which is punctuated right?|"Hi!" said Jo.|Hi! said "Jo."|"Hi! said Jo."
-56|Which uses the present perfect?|I have eaten lunch.|I ate lunch.|I eat lunch.
-57|Which is an abstract noun?|Happiness|Table|Dog
-58|Which is correct?|Everyone has a book.|Everyone have a book.|Everyone are a book.
-59|Which is the superlative of "big"?|Biggest|Bigger|More big
-60|Which noun phrase gives the most detail?|The old wooden box on the shelf|The box|A box
-61|Where does the comma go? "Later that day we swam."|After "day"|After "we"|After "Later"
-62|In "this book," what is "this"?|A determiner|A verb|An adverb
-63|Which shows ownership?|The dog's bone|The dogs bone|The dogs bones
-64|Which is future tense?|I will swim.|I swam.|I swim.
-65|Which is Standard English?|We were playing.|We was playing.|Us was playing.
-66|Which order sounds right?|A big red ball|A red big ball|A ball red big
-67|Which uses brackets correctly?|My dog (a poodle) barks.|My (dog a poodle) barks.|My dog a (poodle barks).
-68|Which word links ideas in a paragraph?|However|Banana|Purple
-69|Where does the comma go? "I ran but I lost."|Before "but"|After "but"|After "I"
-70|Which comma stops a funny mix-up?|Let's eat, Grandma!|Let's eat Grandma!|Let's, eat Grandma!
-71|Add a suffix to make "simple" a verb:|Simplify|Simpleness|Simply
-72|Which is a prepositional phrase?|Under the bridge|Very fast|He ran
-73|Which is a fragment?|Because it rained.|It rained.|I stayed in because it rained.
-74|In "You must stop," what is "must"?|A modal verb|A noun|An adjective
-75|Which word links two paragraphs about time?|Later|Purple|Cat
-76|Which modal verb shows it MIGHT happen?|might|must|will
-77|Which is past progressive?|I was running.|I ran.|I run.
-78|"The girl ___ won is my sister." Which fits?|who|which|where
-79|What does "redo" mean?|Do again|Not do|Do badly
-80|Which is passive voice?|The cake was eaten by Sam.|Sam ate the cake.|Sam eats cake.
-81|In a bullet list, every point should…|Be punctuated the same way|Be in a different color|Be a question
-82|Which shows something finished before another past event?|I had eaten before he came.|I eat when he comes.|I will eat.
-83|What does a colon do in "Bring: pens, paper, glue"?|Introduces a list|Ends a sentence|Shows a question
-84|Where does the comma go? "After school I swim."|After "school"|After "I"|After "After"
-85|Which is punctuated right?|Yes, I'm coming.|Yes I'm, coming.|Yes I'm coming,
-86|Which is an interjection?|Wow!|Under|And
-87|Which keeps the tense the same?|I ran and jumped.|I ran and jump.|I run and jumped.
-88|Finish it: "Either pizza ___ pasta."|or|nor|and
-89|In "The dog chased the cat," the subject is…|The dog|The cat|Chased
-90|Which needs a hyphen?|Re-enter|Reenter is fine|Neither
-91|Which phrase links paragraphs smoothly?|On the other hand|Purple monkey|The end
-92|Which uses a semicolon right?|I was tired; I went to bed.|I was; tired I went.|I; was tired.
-93|How do you show a book title when writing?|Italics or underlining|ALL CAPS|Leave it plain
-94|Which uses the subjunctive?|If I were you, I'd go.|If I was you, I'd go.|If I am you.
-95|Join: "I ran. I was late."|I ran because I was late.|I ran I was late.|Ran late I was.
-96|Which punctuation adds dramatic pause?|A dash —|A comma only|No mark
-97|Why do writers use very short sentences?|For drama or suspense|To confuse readers|By accident
-98|What is a metaphor?|Saying something IS something else|A rhyme|A question
-99|Which is a phrase, not a clause?|In the morning|I woke up|She smiled
-100|Which is Standard English?|I did it.|I done it.|I doed it.
-101|"I ran, and she walked." What type of sentence?|Compound|Simple|Fragment
-102|Which uses passive voice on purpose to hide who did it?|Mistakes were made.|I made mistakes.|You made mistakes.
+mt_kvrvpQris4|Your friend takes your toy. What's the best thing to do?|Say "I feel upset" calmly|Hit them|Scream
+mt_ggcamLzXAy|Can feelings change during one day?|Yes, feelings change|No, never|Only on birthdays
+mt_LhkP_KKIRS|Your ice cream falls on the ground. How might you feel?|Sad|Excited|Sleepy
+mt_9Y5-GjF2B0|What usually comes before a feeling?|Something happens|Nothing ever|A sneeze
+mt_MOY_2Cqalz|Which word means a little worried?|Nervous|Furious|Thrilled
+mt_E5ju6kQSu3|A friend smiles but seems upset. What could be true?|They're hiding a feeling|They're always happy|Smiles mean nothing
+mt_Ytd8XC3eQr|Your heart pounds before a test. What feeling is that?|Nervous|Bored|Sleepy
+mt_rymBfJmvFl|Which feeling is strongest?|Furious|Annoyed|A bit grumpy
+mt_nIl1kKZHsk|Why might two kids feel differently about a big dog?|Different past experiences|One is a robot|Feelings are random
+mt_cEQqskOaoo|You always get grumpy when hungry. What is that?|A pattern in your feelings|A magic spell|Nothing at all
+mt_KA5j5OeGvw|You're really angry. When should you make a big choice?|After you calm down|Right now|Never
+mt_dlm3NspUyy|Moving to a new town, can you feel happy AND sad?|Yes, both at once|No, only one|Only sad
+mt_gf4RUcACLg|Which part of your brain sounds the alarm when scared?|The amygdala|Your elbow|Your nose
+mt_p-8Hlf6_9k|Why do teens try new styles and interests?|They're figuring out who they are|They're bored|No reason
+mt_mydcMoa8gN|What is emotional intelligence?|Understanding feelings, yours and others'|Being good at math|Never feeling sad
+mt_lAvS72LOUO|Which is an act of kindness?|Holding the door for someone|Laughing at someone|Pushing in line
+mt_wzUzVEBqJb|Your friend hates spinach, but you love it. What does that show?|People think differently|Your friend is wrong|Spinach is bad
+mt_OJVkWvIaM_|How are people different?|Looks, likes and families|They're all the same|Only by height
+mt_wRlf0g2MbB|What does "empathy" mean?|Feeling what someone else feels|Being bored|Winning a game
+mt_S7UTAhptLi|Why might a classmate's life be different from yours?|Different family, home or culture|Everyone's life is the same|They live on Mars
+mt_mDp-1vlL3R|Giving glasses only to kids who need them is…|Fair|Unfair|Silly
+mt_9NQEiYLQA3|A new kid sits alone. How might they feel?|Lonely or nervous|Super excited|Bored of friends
+mt_a6AYrbb7x4|What does "inclusion" mean?|Making sure everyone is included|Leaving people out|Winning a race
+mt_HFN1pGASpZ|Treating someone badly because of their skin is…|Discrimination|Kindness|Fairness
+mt_cOknxrYhwL|You think a quiet kid is unfriendly. What should you do?|Question it and get to know them|Ignore them|Tell everyone
+mt_2oswCNuapH|"All boys love football" is an example of a…|Stereotype|Fact|Rule
+mt_DkzsZdyaL2|Why do families celebrate different holidays?|Different cultures and traditions|They're confused|By accident
+mt_oqvJJKCJXw|What does an ally do?|Stands up for others|Stays quiet always|Makes fun of others
+mt_VA126P6Wp5|"I understand how you feel" shows…|Empathy|Sympathy only|Boredom
+mt_5XLhiqmocP|What's a global citizen?|Someone who cares about the whole world|Someone who never travels|A world leader only
+mt_PdYlsA33jB|You're stuck on homework after trying. What now?|Ask for help|Cry and quit|Hide it
+mt_YbX3LD0Eca|What shows you're really listening?|Looking at the speaker|Talking over them|Looking at your phone
+mt_HBcvu0UxYe|What makes a good friend?|Being kind and honest|Being bossy|Keeping secrets to hurt you
+mt_FwI7q7DSIx|Two kids want the same swing. What's fair?|Take turns|Grab it first|Push them off
+mt_NS5t-Jzlh8|What does "cooperate" mean?|Work together|Work against|Stop working
+mt_Ag9NSWJu-X|Which is calm, healthy talk?|"Can we talk about this?"|"You're dumb!"|Silent treatment
+mt_X7Tu94-a2m|Your best friend makes a new friend too. Is that okay?|Yes, friendships change and grow|No, never|Only if you agree
+mt_iWGnyUyN2j|You and a friend disagree on a game. Best fix?|Talk it out and compromise|Yell|Stop being friends
+mt_w4nSIDhIgC|In a group project, who keeps everyone on track?|The leader|The snack-eater|Nobody
+mt_QxsoqVUt6u|What makes a group project go well?|Everyone helps and listens|One person does everything|Everyone argues
+mt_rqLMfiw61L|Which is ASSERTIVE?|"Please ask before borrowing."|Say nothing|"You thief!"
+mt_33zncDHC3N|What's helpful feedback?|"I liked this. Try adding more detail."|"It's bad."|"Whatever."
+mt_AbnwmKD8oe|Two friends are fighting. How can you help?|Help each one share their side|Pick a side loudly|Laugh
+mt_z98J_Zg2L3|You snapped at a friend. What's a good next step?|Think about it and say sorry|Pretend it didn't happen|Blame them
+mt_nqM2OW0Qlm|A friend says "fine" but frowns. What might they mean?|They're not really fine|They're super happy|Nothing
+mt_NCrbQe0LdB|You hurt a friend's feelings. What helps fix it?|An honest talk and sorry|Ignoring them|Gossiping
+mt_8StiXnYq1u|A leader who lets everyone vote is…|Democratic|Bossy|Lazy
+mt_UHQfb-n-w3|You skip brushing your teeth for weeks. What could happen?|Cavities|Superpowers|Nothing ever
+mt_q3vRl4dddK|Before crossing the street, what should you do?|Look both ways|Run fast|Close your eyes
+mt_Wc6cOTQ1bA|You find a wallet. What's the right choice?|Return it|Keep it|Throw it away
+mt_rkrG2w7WXI|Why do classrooms have rules?|To keep things safe and fair|To be boring|For no reason
+mt_uTKgmWqSoI|What does "consequence" mean?|What happens because of a choice|A type of food|A secret
+mt_zIzJGkaj0Q|What's good online behavior?|Be kind and keep info private|Share your password|Post mean comments
+mt_yCmYV9ruQu|You see someone being bullied. An upstander would…|Help or tell an adult|Watch and laugh|Walk away
+mt_RhntJz7p_6|Facing a tough choice, what's a good first step?|Stop and think|Act fast|Copy others
+mt_I9iSzpGRn5|What makes something bullying?|It's mean and happens again and again|One accident|A friendly joke
+mt_h-z88yf9Pn|What does "responsibility" mean?|Doing what you should|Avoiding chores|Breaking rules
+mt_h_shhH-6DC|What's a responsibility you have in your community?|Not littering|Breaking things|Being loud at night
+mt_6xj94tmpi-|Your friend cheated. Telling the teacher feels hard because…|It's not black and white|It's always easy|Cheating is fine
+mt_RNeEF1JU4J|Is it fair to cut down a forest for a new mall?|There are good points on both sides|Always yes|It doesn't matter
+mt_JivEBTD_KV|Friends dare you to do something unsafe. You should…|Say no confidently|Do it|Hide
+mt_JiZ3H90Xg8|Why do people think plane crashes are more common than they are?|Scary news sticks in our minds|Planes crash daily|Math is wrong
+mt_WtO50EZQkf|Before sharing a shocking post, what should you do?|Check if it's true|Share it fast|Add more drama
+mt_LPYPuSaxv_|Thinking "what will happen if I do this?" helps you…|Make good choices|Get bored|Forget rules
+mt_69hFD2NgGe|Your cheeks feel hot and fists are tight. What feeling is it?|Angry|Happy|Sleepy
+mt_H4YZ1rSKP3|What does "self-aware" mean?|Knowing your own feelings and habits|Being selfish|Being lost
+mt_TU3BcLOgiV|You feel angry. Do you have to hit something?|No, feelings and actions are separate|Yes, always|Only if it's a pillow
+mt_H8dEMH_wik|You always get nervous before tests. What can you do?|Plan ways to calm down|Skip school|Nothing helps
+mt_rpug2tkYhb|You joke about a friend's haircut and they look sad. What happened?|Your words hurt them|Nothing|They loved it
+mt_Mb1JUJmnbX|A kid doesn't wave back. What else might be true?|They didn't see you|They hate you|They're a robot
+mt_bkMDDstwwG|What's something that shows you've grown?|Something that was hard is easier now|Nothing changes|You got taller only
+mt_aS-Gdh-MHx|Moving to a new school feels scary. What's true?|Change is normal and gets easier|Change is always bad|It will never get better
+mt_UGf6jICEhs|You make a mistake. What does it mean?|You're learning|You're bad at everything|Give up
+mt_nNDX_jZ-cb|Waiting for your birthday present, what helps?|Being patient and keeping busy|Yelling|Opening it early
+mt_Iwg2diBSyW|You feel really upset. What helps you calm down?|Take slow deep breaths|Scream louder|Throw stuff
+mt_SeNxOZTHCN|Which word means peaceful and relaxed?|Calm|Frustrated|Overwhelmed
+mt_miGrca8zaS|A big project feels huge. What helps?|Break it into small steps|Do it all in one minute|Give up
+mt_j8Pv3s7TZR|You're nervous before a game. Which coping tool fits?|Deep breaths|Eat 10 candies|Quit the team
+mt_pAuo9Op89t|"I can't do this YET." That's a…|Growth mindset|Fixed mindset|Bad attitude
+mt_35-DhMh_Yr|Which is positive self-talk?|"I can try again."|"I'm useless."|"I always fail."
+mt_i1kk9HDctI|What does "resilient" mean?|Bouncing back after hard times|Never trying|Always winning
+mt_Jd2aWEUJ9G|What's in your coping toolkit?|Strategies that help you calm down|Hammers|Nothing
+mt_cJjnPjuvCU|Which goal is realistic?|Read 20 minutes a day|Read 1,000 books tonight|Never read
+mt_Amw5ikSSQI|You lose a big game. What does resilience look like?|Practice and try again|Quit forever|Blame everyone
+mt_HoJGVsMO7H|Homework or game first? What's smart?|Homework first, then play|Game all night|Neither
+mt_0VOZSVjo6c|Feeling a bit nervous before a big race can…|Help you try harder|Always ruin it|Make you faster magic
+mt_0ewYhTSHtP|What helps build a good habit?|Do it at the same time daily|Do it once a year|Never think about it
+mt__J2BO4V95l|What can facing a hard challenge do?|Make you stronger|Ruin you forever|Nothing
+mt_N8CpN1EJrP|Which is a complete sentence?|The cat sleeps.|The cat.|Sleeps the.
+mt_of2GggtxFl|Why do we put spaces between words?|So we can read them|To save paper|For no reason
+mt_yBJyCfhtem|Which word is a verb?|Run|Table|Blue
+mt_uM6q_KBWKy|Which needs a capital letter?|Monday|apple|chair
+mt_TfOiog-ALs|How many words in "I like pizza"?|3|2|5
+mt_YXVQaufkKO|Join with "and": I like cats. I like dogs.|I like cats and dogs.|I like and cats dogs.|Cats and I like dogs.
+mt_VY3rBq8RyP|"The ball is ___ the table." Which word fits?|under|run|happy
+mt_6lHBTwQPrS|Which question word asks about a place?|Where|When|Who
+mt_18qkgxr_-T|What's the plural of "box"?|Boxes|Boxs|Boxen
+mt_QEr24lqzvH|How should a sentence end?|With a period or other mark|With a comma|With nothing
+mt_mKAZTqItRG|Which shows something belongs to Sam?|Sam's hat|Sams hat|Sams' hat
+mt_ntqNLHsj5n|Which list has commas right?|I ate apples, pears and plums.|I ate, apples pears, and plums.|I ate apples pears and plums.
+mt_RioBUxHz1X|Which fits: "___ elephant"?|An|A|The a
+mt_cU3LcEVkBQ|Which is an expanded noun phrase?|The big red bus|Bus|Big
+mt_u1-UfD0rTH|"Shut the door!" What type of sentence?|Command|Question|Statement
+mt_qzwQAOfurw|In "She jumped," which word is the verb?|Jumped|She|The
+mt_enj1sMcfOT|Which is the past tense of "walk"?|Walked|Walking|Walks
+mt_sZXPK1FnRB|"Max lost ___ hat." Which word fits?|his|him|he
+mt_u7Jxjjatkh|Which is correct?|The dogs bark.|The dogs barks.|The dog bark.
+mt_wq-1OJ_8s5|Which joins with "because"?|I'm tired because I ran.|I'm tired because.|Because tired I.
+mt_j351evNNnB|Which uses an adverb?|She ran quickly.|She is quick.|Quick she.
+mt_2l06snztdP|Which is correct?|An apple|A apple|An banana
+mt_uorNrPTh6U|"I ate lunch ___ I played outside." Which fits?|before|cat|blue
+mt_B8JOz79O6t|What is a clause?|A group of words with a verb|A single letter|A punctuation mark
+mt_KIG5FQI5fC|What's the past tense of "go"?|Went|Goed|Gone
+mt_nFBLNoChD0|What's the plural of "child"?|Children|Childs|Childes
+mt_9yFAtUkoYr|Which sentence is clearest?|Max told Sam that Sam won.|He told him he won.|He won him.
+mt_-mw3JeIjhU|Which is punctuated right?|"Hi!" said Jo.|Hi! said "Jo."|"Hi! said Jo."
+mt_7D-vlii8F-|Which uses the present perfect?|I have eaten lunch.|I ate lunch.|I eat lunch.
+mt_8bIXVKTdtK|Which is an abstract noun?|Happiness|Table|Dog
+mt_2NfIKEYdbm|Which is correct?|Everyone has a book.|Everyone have a book.|Everyone are a book.
+mt_X1L9DoUwjF|Which is the superlative of "big"?|Biggest|Bigger|More big
+mt_EbiGRVK8uR|Which noun phrase gives the most detail?|The old wooden box on the shelf|The box|A box
+mt_0QJoKWABdC|Where does the comma go? "Later that day we swam."|After "day"|After "we"|After "Later"
+mt_J5cx6S_eT9|In "this book," what is "this"?|A determiner|A verb|An adverb
+mt_bn5ggh84qD|Which shows ownership?|The dog's bone|The dogs bone|The dogs bones
+mt_Of-WsrRQ8B|Which is future tense?|I will swim.|I swam.|I swim.
+mt_ay0qkGj0jg|Which is Standard English?|We were playing.|We was playing.|Us was playing.
+mt_VVx0hPPSKi|Which order sounds right?|A big red ball|A red big ball|A ball red big
+mt_m3-eXac3aP|Which uses brackets correctly?|My dog (a poodle) barks.|My (dog a poodle) barks.|My dog a (poodle barks).
+mt_4-vfMgmCVB|Which word links ideas in a paragraph?|However|Banana|Purple
+mt_j2idD_jq73|Where does the comma go? "I ran but I lost."|Before "but"|After "but"|After "I"
+mt_VMS3kDQ8sA|Which comma stops a funny mix-up?|Let's eat, Grandma!|Let's eat Grandma!|Let's, eat Grandma!
+mt_p3tZiUaWAa|Add a suffix to make "simple" a verb:|Simplify|Simpleness|Simply
+mt_7SfQuXgNtd|Which is a prepositional phrase?|Under the bridge|Very fast|He ran
+mt_7oZ2YenzhX|Which is a fragment?|Because it rained.|It rained.|I stayed in because it rained.
+mt_-tcJeAhK5k|In "You must stop," what is "must"?|A modal verb|A noun|An adjective
+mt_uvILgZq9HN|Which word links two paragraphs about time?|Later|Purple|Cat
+mt_N9zffZxuu5|Which modal verb shows it MIGHT happen?|might|must|will
+mt_mkDqmejLMw|Which is past progressive?|I was running.|I ran.|I run.
+mt_YQ64pzcLDl|"The girl ___ won is my sister." Which fits?|who|which|where
+mt_qw6mhOl-Qy|What does "redo" mean?|Do again|Not do|Do badly
+mt_gbTyzvnWzr|Which is passive voice?|The cake was eaten by Sam.|Sam ate the cake.|Sam eats cake.
+mt_wUyAZJikAA|In a bullet list, every point should…|Be punctuated the same way|Be in a different color|Be a question
+mt_mpktt3wj1M|Which shows something finished before another past event?|I had eaten before he came.|I eat when he comes.|I will eat.
+mt_uycuqPaiJ1|What does a colon do in "Bring: pens, paper, glue"?|Introduces a list|Ends a sentence|Shows a question
+mt_0wUwxyBs5y|Where does the comma go? "After school I swim."|After "school"|After "I"|After "After"
+mt_AfIzLRvMgW|Which is punctuated right?|Yes, I'm coming.|Yes I'm, coming.|Yes I'm coming,
+mt_LN_g2b3d34|Which is an interjection?|Wow!|Under|And
+mt_npRaYRhU2V|Which keeps the tense the same?|I ran and jumped.|I ran and jump.|I run and jumped.
+mt_S7CnyZCnxg|Finish it: "Either pizza ___ pasta."|or|nor|and
+mt_hzkNpp2PdV|In "The dog chased the cat," the subject is…|The dog|The cat|Chased
+mt_QpmVikVaqY|Which needs a hyphen?|Re-enter|Reenter is fine|Neither
+mt_hjtbA3g-Nn|Which phrase links paragraphs smoothly?|On the other hand|Purple monkey|The end
+mt_xYjD_kA70s|Which uses a semicolon right?|I was tired; I went to bed.|I was; tired I went.|I; was tired.
+mt_Q2Eud_PPz6|How do you show a book title when writing?|Italics or underlining|ALL CAPS|Leave it plain
+mt_k7VtbWdfDO|Which uses the subjunctive?|If I were you, I'd go.|If I was you, I'd go.|If I am you.
+mt_ZO2iP89cld|Join: "I ran. I was late."|I ran because I was late.|I ran I was late.|Ran late I was.
+mt_lsO9O-_eZH|Which punctuation adds dramatic pause?|A dash —|A comma only|No mark
+mt_N5tiL3uIeq|Why do writers use very short sentences?|For drama or suspense|To confuse readers|By accident
+mt_HCweOHWSiu|What is a metaphor?|Saying something IS something else|A rhyme|A question
+mt_IdFxLz-UW9|Which is a phrase, not a clause?|In the morning|I woke up|She smiled
+mt_S2fP8rUwrl|Which is Standard English?|I did it.|I done it.|I doed it.
+mt_T9IXrlxfx2|"I ran, and she walked." What type of sentence?|Compound|Simple|Fragment
+mt_N5tciHU8cE|Which uses passive voice on purpose to hide who did it?|Mistakes were made.|I made mistakes.|You made mistakes.

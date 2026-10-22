@@ -1,101 +1,101 @@
-21|Why do we read?|To understand meaning|To say sounds only|To turn pages
-22|You read a page but can't remember it. What should you do?|Reread it slowly|Keep going anyway|Close the book
-23|Why might an author pick "sprinted" instead of "ran"?|To show speed|By accident|To confuse you
-24|"Jo grabbed her coat and shivered." What can you infer?|It's cold|It's hot|She's hungry
-25|You half-know a word. What's smart?|Look it up|Pretend you know it|Skip all words
-26|You wrote a scary story. How do you check it works?|Reread — is it scary?|Count the words|Change the font
-27|What helps you grow as a reader and writer?|Thinking about what you do well and can improve|Nothing|Only reading comics
-103|What's the best way to hold a pencil?|Comfy grip between fingers|In your fist|With your toes
-104|Which is a capital letter?|B|b|d
-105|Which letters start with a curve like "c"?|a, d, g|l, t, i|v, w, x
-106|Which digit is this: six?|6|9|0
-107|What makes handwriting joined?|Letters connect with strokes|Big spaces|All capitals
-108|Blend the sounds: c-a-t.|Cat|Cap|Cot
-109|Which word has the "sh" sound?|Ship|Sip|Hip
-110|Which letter comes after M?|N|L|O
-111|Change the first sound of "cat" to make "hat". What changed?|c to h|a to o|t to p
-112|Which word rhymes with "cake"?|Lake|Cook|Kick
-113|What sound does "b" make at the start of "ball"?|/b/|/d/|/p/
-114|Which way do we read English?|Left to right|Right to left|Bottom to top
-115|Which word has "ai" like "rain"?|Train|Tin|Ten
-116|Which is a compound word?|Sunflower|Sunny|Flowers
-117|Which word has the "ow" sound as in "cow"?|Town|Toe|Tin
-118|Which word has "ar" like "car"?|Star|Stair|Stir
-119|What does "can't" mean?|Cannot|Can it|Can tea
-120|What does reading fluently sound like?|Smooth and clear|Super slow|Only whispering
-121|Which is a sight word you just know?|The|Hippopotamus|Xylophone
-122|In "jumping," what's the ending?|-ing|-ed|-s
-123|What does the "magic e" do in "cake"?|Makes the "a" say its name|Nothing|Makes it silent
-124|How many syllables in "elephant"?|3|2|4
-125|Which word has the trigraph "igh"?|Night|Nit|Net
-126|Which spelling makes the same sound as "ee" in "see"?|"ea" in "sea"|"oa" in "boat"|"oo" in "moon"
-127|Reading aloud with expression means…|Your voice matches the feeling|Reading as fast as possible|Using a robot voice
-128|Break "butterfly" into syllables.|but-ter-fly|butt-erfly|bu-tterf-ly
-129|A tricky word you can't sound out — what helps?|Use context and check it|Skip it always|Guess any word
-130|What does "un-" do in "unhappy"?|Means "not"|Means "very"|Means "again"
-203|Wondering why the sky is blue, what should you do?|Ask a question|Stay silent|Change topics
-204|Describe your dog with detail:|"My fluffy brown dog loves fetch."|"Dog."|"It's a thing."
-205|Talking ideas out loud with friends helps you…|Think them through|Forget them|Get bored
-206|You think recess should be longer. What makes it convincing?|Give a reason why|Just say it louder|Say nothing
-207|In a group chat about a book, you should…|Stay on topic and take turns|Talk about lunch|Interrupt
-208|Your teacher gives two steps. What should you do?|Listen and follow both|Do only one|Ignore them
-209|Reciting a poem, you should…|Speak clearly with feeling|Mumble|Read super fast
-210|How do you keep listeners interested?|Use expression and eye contact|Read in a flat voice|Turn your back
-211|Before a class discussion, you should…|Prepare your ideas|Forget the topic|Stay home
-212|Reporting on a trip, what makes it clear?|Facts in order|Random details|Only jokes
-213|A speaker says "recycle!" and gives facts. The facts are…|Reasons to back it up|Jokes|Off topic
-214|Paraphrasing means…|Saying it in your own words|Copying exactly|Forgetting it
-215|Talking to a principal vs. a friend, you…|Use more formal words|Use slang|Talk the same
-216|In a discussion, how can you add to a friend's idea?|"I agree, and also…"|"You're wrong!"|Stay silent
-217|After a class debate, what should you do?|Sum up the key ideas|Forget it|Start a new topic
-218|A speaker gives no evidence. Their argument is…|Weak|Strong|Perfect
-219|Why add pictures to a presentation?|To help explain|To hide words|To waste time
-220|Summarizing a video means…|Sharing its main points|Retelling every second|Rating it
-221|Performing a play, what matters most?|Voice, actions, and feeling|Reading the stage directions aloud|Whispering
-222|Giving a class presentation, you should…|Speak clearly and formally|Use texting slang|Mumble
-223|In a debate, you must…|Back your side with reasons|Yell louder|Agree with everyone
-224|A "phoneme" is…|A single sound in a word|A phone game|A whole sentence
-225|How many sounds in "dog"?|3|2|4
-226|Teacher says "The cat sat." What do you do?|Write it from memory|Draw a cat|Wait
-227|What's the right plural of "fox"?|Foxes|Foxs|Foxies
-228|Add "un-" to "lock." What does it mean?|Open the lock|Lock it more|A big lock
-229|Which tricky word is spelled right?|Said|Sed|Seid
-230|Which spelling for the "ay" sound fits "tr__n"?|ai (train)|oy|ee
-231|Which shows the bike belongs to Tom?|Tom's bike|Toms bike|Tom bike's
-232|Which contraction is correct for "do not"?|Don't|Do'nt|Dont'
-233|Add "-ing" to "hop."|Hopping|Hoping|Hopeing
-234|The toys belong to the children. Write it:|The children's toys|The childrens' toys|The childrens toys
-235|"I ___ the answer." Which fits?|know|no|now
-236|Which prefix means "not" in "dislike"?|dis-|like|-ke
-237|Which is spelled correctly?|Because|Becuase|Becos
-238|Add "-ly" to "quick."|Quickly|Quickley|Quicly
-239|Looking up "elephant," you start in which part of the dictionary?|E|L|P
-240|"Ch" sounds like "k" in which word?|Chorus|Chair|Cheese
-241|Add "-ed" to "stop."|Stopped|Stoped|Stopt
-242|"I'll ___ my bike." Which fits?|ride|rode|road
-243|Which word has a silent letter?|Knight|Night|Nice
-244|Which ending fits "comfort"?|Comfortable|Comfortible|Comfortabel
-245|Which is spelled correctly?|Necessary|Neccessary|Necesary
-246|Which is spelled correctly?|Delicious|Delishus|Delicous
-247|Which is spelled correctly?|Accommodate|Acommodate|Accomodate
-248|You meet a new word "enormous." What's smart to ask?|What does it mean?|How long is it?|Nothing
-249|Which is the most extreme way to look?|Stare|Glance|Peek
-250|Which word does NOT belong: apple, banana, carrot, grape?|Carrot|Apple|Grape
-251|You learned the word "gigantic." Use it!|The whale was gigantic.|Gigantic is a word.|I gigantic.
-252|What does "-ed" in "jumped" tell you?|It already happened|It will happen|It's a person
-253|A robin is a bird that…|Has a red chest|Has 6 legs|Swims
-254|What's the root word in "playing"?|Play|Ing|Lay
-255|Which is formal?|Good morning, Mr. Lee.|Hey dude!|Sup?
-256|Which word is in the same family as "sign"?|Signal|Sing|Sigh
-257|"It's raining cats and dogs" means…|It's raining hard|Pets are falling|It's sunny
-258|Which is a synonym for "happy"?|Joyful|Sad|Angry
-259|In science, "habitat" means…|Where an animal lives|What it eats|Its color
-260|"Tele" means far. A telephone lets you…|Talk far away|Eat fast|Write
-261|"Break the ice" means…|Start a friendly chat|Smash ice|Get cold
-262|"As brave as a lion" is a…|Simile|Metaphor|Question
-263|Which is more formal?|Request|Ask for stuff|Gimme
-264|Why might a character say "y'all"?|It shows their dialect|It's a typo|It's formal
-265|A thesaurus helps you find…|Synonyms|Spellings only|Maps
-266|"Analyze" means to…|Study something closely|Ignore it|Guess
-267|"Time is a thief." What does it mean?|Time slips away fast|Clocks steal|Time is a person
-268|"Bat" can mean an animal or…|A baseball bat|A cat|A hat
+mt_scBgiMKhG_|Why do we read?|To understand meaning|To say sounds only|To turn pages
+mt_GugVunb2lI|You read a page but can't remember it. What should you do?|Reread it slowly|Keep going anyway|Close the book
+mt_QB4qIGJIIj|Why might an author pick "sprinted" instead of "ran"?|To show speed|By accident|To confuse you
+mt_lp3qyEujIv|"Jo grabbed her coat and shivered." What can you infer?|It's cold|It's hot|She's hungry
+mt_LH714Riydn|You half-know a word. What's smart?|Look it up|Pretend you know it|Skip all words
+mt_U_8iVFZuHH|You wrote a scary story. How do you check it works?|Reread — is it scary?|Count the words|Change the font
+mt_haNr13NIuN|What helps you grow as a reader and writer?|Thinking about what you do well and can improve|Nothing|Only reading comics
+mt_WBfj79OqXz|What's the best way to hold a pencil?|Comfy grip between fingers|In your fist|With your toes
+mt_H7DquwQi_F|Which is a capital letter?|B|b|d
+mt_DMvKfP4uGC|Which letters start with a curve like "c"?|a, d, g|l, t, i|v, w, x
+mt_oAK9GXSfqV|Which digit is this: six?|6|9|0
+mt_02DH7sGXCi|What makes handwriting joined?|Letters connect with strokes|Big spaces|All capitals
+mt__KHQttMde3|Blend the sounds: c-a-t.|Cat|Cap|Cot
+mt_9-OHslmt1g|Which word has the "sh" sound?|Ship|Sip|Hip
+mt_frDIaXzWbx|Which letter comes after M?|N|L|O
+mt_PvU3eoikev|Change the first sound of "cat" to make "hat". What changed?|c to h|a to o|t to p
+mt_4GiE83rJF_|Which word rhymes with "cake"?|Lake|Cook|Kick
+mt_F978c32kDr|What sound does "b" make at the start of "ball"?|/b/|/d/|/p/
+mt_1KCwbGvm1F|Which way do we read English?|Left to right|Right to left|Bottom to top
+mt_BtMbZibZUj|Which word has "ai" like "rain"?|Train|Tin|Ten
+mt_70Ys4i1AB1|Which is a compound word?|Sunflower|Sunny|Flowers
+mt_fMd7v87IiI|Which word has the "ow" sound as in "cow"?|Town|Toe|Tin
+mt_a6m7PqTuJN|Which word has "ar" like "car"?|Star|Stair|Stir
+mt_t1JXeNgKcu|What does "can't" mean?|Cannot|Can it|Can tea
+mt_ZhvwM6LMBL|What does reading fluently sound like?|Smooth and clear|Super slow|Only whispering
+mt_YKkCM63fSC|Which is a sight word you just know?|The|Hippopotamus|Xylophone
+mt__CMXZiPfTV|In "jumping," what's the ending?|-ing|-ed|-s
+mt_C7abt7pRr6|What does the "magic e" do in "cake"?|Makes the "a" say its name|Nothing|Makes it silent
+mt_UvNrOXny1i|How many syllables in "elephant"?|3|2|4
+mt_roAgL1rQRF|Which word has the trigraph "igh"?|Night|Nit|Net
+mt_OgJPbGkrYk|Which spelling makes the same sound as "ee" in "see"?|"ea" in "sea"|"oa" in "boat"|"oo" in "moon"
+mt_V-ldQp56bF|Reading aloud with expression means…|Your voice matches the feeling|Reading as fast as possible|Using a robot voice
+mt_kVzAFMuFc4|Break "butterfly" into syllables.|but-ter-fly|butt-erfly|bu-tterf-ly
+mt_14OR-MhGJ9|A tricky word you can't sound out — what helps?|Use context and check it|Skip it always|Guess any word
+mt_HrgDjxcWvf|What does "un-" do in "unhappy"?|Means "not"|Means "very"|Means "again"
+mt_f8n4txtLej|Wondering why the sky is blue, what should you do?|Ask a question|Stay silent|Change topics
+mt_4A7FYmvVhA|Describe your dog with detail:|"My fluffy brown dog loves fetch."|"Dog."|"It's a thing."
+mt_n6GhzDPllD|Talking ideas out loud with friends helps you…|Think them through|Forget them|Get bored
+mt_S0hzjAeLSK|You think recess should be longer. What makes it convincing?|Give a reason why|Just say it louder|Say nothing
+mt_wwdRhPyz6s|In a group chat about a book, you should…|Stay on topic and take turns|Talk about lunch|Interrupt
+mt_mB7DVai-Uf|Your teacher gives two steps. What should you do?|Listen and follow both|Do only one|Ignore them
+mt_ZBMcX2oRor|Reciting a poem, you should…|Speak clearly with feeling|Mumble|Read super fast
+mt_sXRHr7tfS5|How do you keep listeners interested?|Use expression and eye contact|Read in a flat voice|Turn your back
+mt_yrMniCJu_S|Before a class discussion, you should…|Prepare your ideas|Forget the topic|Stay home
+mt_ds2TOtP8I1|Reporting on a trip, what makes it clear?|Facts in order|Random details|Only jokes
+mt_iodbOOmEQs|A speaker says "recycle!" and gives facts. The facts are…|Reasons to back it up|Jokes|Off topic
+mt_-DuXzMVVXQ|Paraphrasing means…|Saying it in your own words|Copying exactly|Forgetting it
+mt_bkvB7QYKwg|Talking to a principal vs. a friend, you…|Use more formal words|Use slang|Talk the same
+mt_LNYTNpJOGT|In a discussion, how can you add to a friend's idea?|"I agree, and also…"|"You're wrong!"|Stay silent
+mt_Cc-QHVo747|After a class debate, what should you do?|Sum up the key ideas|Forget it|Start a new topic
+mt_on7FHCDmi-|A speaker gives no evidence. Their argument is…|Weak|Strong|Perfect
+mt_VtqvUORa8K|Why add pictures to a presentation?|To help explain|To hide words|To waste time
+mt_A4YUbzUFan|Summarizing a video means…|Sharing its main points|Retelling every second|Rating it
+mt_ylFTYS80d1|Performing a play, what matters most?|Voice, actions, and feeling|Reading the stage directions aloud|Whispering
+mt_z07UNAIsNc|Giving a class presentation, you should…|Speak clearly and formally|Use texting slang|Mumble
+mt_Yrjn8jAt1c|In a debate, you must…|Back your side with reasons|Yell louder|Agree with everyone
+mt_EqXlZfB4jp|A "phoneme" is…|A single sound in a word|A phone game|A whole sentence
+mt_BhYJZUsErp|How many sounds in "dog"?|3|2|4
+mt_AhfyJoTQtY|Teacher says "The cat sat." What do you do?|Write it from memory|Draw a cat|Wait
+mt_QdMMLRYWhn|What's the right plural of "fox"?|Foxes|Foxs|Foxies
+mt_zBUcAPDRPM|Add "un-" to "lock." What does it mean?|Open the lock|Lock it more|A big lock
+mt_Jq0MjURrRC|Which tricky word is spelled right?|Said|Sed|Seid
+mt_p_jxNLdus4|Which spelling for the "ay" sound fits "tr__n"?|ai (train)|oy|ee
+mt_Z3G_97fnha|Which shows the bike belongs to Tom?|Tom's bike|Toms bike|Tom bike's
+mt_IntmJBg4VQ|Which contraction is correct for "do not"?|Don't|Do'nt|Dont'
+mt_FYK8m6eHQm|Add "-ing" to "hop."|Hopping|Hoping|Hopeing
+mt_HdI1y5KsBl|The toys belong to the children. Write it:|The children's toys|The childrens' toys|The childrens toys
+mt_37QCuGOxFe|"I ___ the answer." Which fits?|know|no|now
+mt_T6nrrf2K43|Which prefix means "not" in "dislike"?|dis-|like|-ke
+mt_O2dS6gvClw|Which is spelled correctly?|Because|Becuase|Becos
+mt_tHtjfjjFrl|Add "-ly" to "quick."|Quickly|Quickley|Quicly
+mt_6W5zzDIGZH|Looking up "elephant," you start in which part of the dictionary?|E|L|P
+mt_y8sicbhMci|"Ch" sounds like "k" in which word?|Chorus|Chair|Cheese
+mt_U_HQXCnAaG|Add "-ed" to "stop."|Stopped|Stoped|Stopt
+mt_u3OuIXqmAo|"I'll ___ my bike." Which fits?|ride|rode|road
+mt_XK7NYt61cO|Which word has a silent letter?|Knight|Night|Nice
+mt_9hBs430cU4|Which ending fits "comfort"?|Comfortable|Comfortible|Comfortabel
+mt_sJyZW4qYUG|Which is spelled correctly?|Necessary|Neccessary|Necesary
+mt_2X9Cd38eSJ|Which is spelled correctly?|Delicious|Delishus|Delicous
+mt_4PA9IrxtCQ|Which is spelled correctly?|Accommodate|Acommodate|Accomodate
+mt_6-MYToNZ39|You meet a new word "enormous." What's smart to ask?|What does it mean?|How long is it?|Nothing
+mt_VLu59hpQ4T|Which is the most extreme way to look?|Stare|Glance|Peek
+mt_oL9s_bufDp|Which word does NOT belong: apple, banana, carrot, grape?|Carrot|Apple|Grape
+mt_NP101Zl-4g|You learned the word "gigantic." Use it!|The whale was gigantic.|Gigantic is a word.|I gigantic.
+mt_aw0PldeT_L|What does "-ed" in "jumped" tell you?|It already happened|It will happen|It's a person
+mt_f_dMmvzxwo|A robin is a bird that…|Has a red chest|Has 6 legs|Swims
+mt_UEe3MC5RZc|What's the root word in "playing"?|Play|Ing|Lay
+mt_86DyHo9zO3|Which is formal?|Good morning, Mr. Lee.|Hey dude!|Sup?
+mt_p1imGSFgJT|Which word is in the same family as "sign"?|Signal|Sing|Sigh
+mt_SUOhjmRqv9|"It's raining cats and dogs" means…|It's raining hard|Pets are falling|It's sunny
+mt_E5YbLvMgLL|Which is a synonym for "happy"?|Joyful|Sad|Angry
+mt_WzOyJFKDIu|In science, "habitat" means…|Where an animal lives|What it eats|Its color
+mt_x_Lg4RASVU|"Tele" means far. A telephone lets you…|Talk far away|Eat fast|Write
+mt_IoGOSAQ8bz|"Break the ice" means…|Start a friendly chat|Smash ice|Get cold
+mt_hJW7hVflm3|"As brave as a lion" is a…|Simile|Metaphor|Question
+mt_h3vmvQW5Wa|Which is more formal?|Request|Ask for stuff|Gimme
+mt_1ro8W1cZYn|Why might a character say "y'all"?|It shows their dialect|It's a typo|It's formal
+mt_saW7PxtPxw|A thesaurus helps you find…|Synonyms|Spellings only|Maps
+mt_OLwNsTI6C7|"Analyze" means to…|Study something closely|Ignore it|Guess
+mt_MlmIrLb_7x|"Time is a thief." What does it mean?|Time slips away fast|Clocks steal|Time is a person
+mt_WZnwITSWr8|"Bat" can mean an animal or…|A baseball bat|A cat|A hat

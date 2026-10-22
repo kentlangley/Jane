@@ -1,211 +1,211 @@
-1099|How do beavers change their habitat?|They build dams|They plant flowers|They dig volcanoes
-1100|It rained 3 days in a row. What's that?|A weather pattern|Climate change|A season
-1101|Which season is usually hottest?|Summer|Winter|Fall
-1102|Water turning into vapor is…|Evaporation|Condensation|Freezing
-1103|Fossils usually form in…|Layers of mud and sand|Clouds|Ice cream
-1104|What helps stop soil washing away?|Planting grass and trees|Removing plants|Digging more
-1105|Which rock property can you test by scratching?|Hardness|Smell|Taste
-1106|Soil is made from rocks and…|Bits of dead plants and animals|Plastic|Sugar
-1107|A tall, steep landform is a…|Mountain|Lake|Valley
-1108|Where is most of Earth's water?|Oceans|Lakes|Clouds
-1109|A chart shows more rain in spring. That's a…|Seasonal pattern|Mistake|Climate zone
-1110|Deserts are dry most years. That describes…|Climate|Today's weather|A season
-1111|Wind and water slowly wearing rock away is…|Erosion|Melting|Freezing
-1112|On a map, earthquakes cluster along…|Plate edges|Random spots|Ocean middles only
-1113|Rock made from layers of sand pressed together is…|Sedimentary|Igneous|Metamorphic
-1114|Plants, air, water, and rocks all…|Affect each other|Never interact|Live on Mars
-1115|In rock layers, deeper layers are usually…|Older|Newer|Same age
-1116|Most of Earth's water is…|Salty|Fresh|Frozen pizza
-1181|Which word is a force?|Pull|Blue|Soft
-1182|Kicking a ball is a…|Push|Pull|Nap
-1183|Your toy ramp didn't work. What now?|Check the test data and fix it|Give up|Paint it
-1184|A magnet pulling a paperclip without touching is a…|Non-contact force|Contact force|No force
-1185|In a force diagram, an arrow shows…|Direction and size of a force|Color|Speed of light
-1186|Which surface has the most friction?|Carpet|Ice|Glass
-1187|Which will a magnet pick up?|An iron nail|A plastic cup|A wooden block
-1188|Two north poles of magnets will…|Push apart|Stick together|Melt
-1189|A tug-of-war with no movement has…|Balanced forces|Unbalanced forces|No forces
-1190|A swing goes back and forth. You can predict…|Its next swing|Tomorrow's weather|Nothing
-1191|What slows a parachute?|Air resistance|Gravity|Magnetism
-1192|An object speeding up has…|Unbalanced forces|Balanced forces|No forces
-1193|What pulls things toward Earth?|Gravity|Wind|Magnets
-1194|A see-saw is a kind of…|Lever|Pulley|Gear
-1195|On a distance-time graph, a flat line means…|Not moving|Moving fast|Going backward
-1196|Iron filings around a magnet show its…|Magnetic field|Weight|Temperature
-1197|On the Moon, your mass…|Stays the same|Gets smaller|Disappears
-1198|On a moving train, a sitting friend looks…|Still to you|Super fast|Backward
-1199|Push 10 N right and 4 N left. Overall force?|6 N right|14 N right|4 N left
-1200|You travel 100 m in 20 s. Your speed?|5 m/s|2 m/s|80 m/s
-1201|Why do snowshoes stop you sinking?|They spread out your weight|They're magic|They're heavy
-1202|How do you make an electromagnet?|Wrap wire around iron and add a battery|Freeze a magnet|Paint iron
-1203|Measuring force, scientists use a…|Newton meter|Thermometer|Ruler
-1204|A longer wrench makes turning a bolt…|Easier|Harder|Impossible
-1205|A soccer ball stays still until…|A force moves it|It gets bored|Night falls
-1206|You push a wall. The wall…|Pushes back on you|Does nothing|Falls over
-1207|An electric motor turns electricity into…|Motion|Water|Sound only
-1208|How should you handle a ladybug?|Gently, then let it go|Squeeze it|Keep it in a jar forever
-1209|What comes after the caterpillar?|Chrysalis|Egg|Tadpole
-1210|Which is a minibeast?|Ladybug|Elephant|Shark
-1211|How does a snail move?|Slides on slime|Flies|Hops
-1212|Where might you find woodlice?|Under a log|In the sky|In the ocean
-1213|What eats aphids in the garden?|Ladybugs|Cows|Rocks
-1214|A minibeast has no…|Backbone|Legs ever|Body
-1215|Why do flowers need bees?|To carry pollen|To water them|To scare birds
-1216|Why are wasps striped yellow and black?|To warn predators|To look fancy|To hide
-1217|Dung beetles can roll balls many times their…|Own weight|Height in miles|Age
-1218|Butterfly order: egg, larva, pupa…|Adult|Egg again|Tadpole
-1219|Spiders aren't insects because they have…|8 legs|6 legs|Wings
-1220|In an ant colony, who lays eggs?|The queen|Every ant|The workers
-1221|Using a key, "Does it have 8 legs?" Yes → it's a…|Spider|Beetle|Fly
-1222|What are an insect's three body parts?|Head, thorax, abdomen|Arms, legs, tail|Wings, shell, fins
-1223|Dark moths survived better on sooty trees. That's…|Adaptation|Luck only|Magic
-1224|An insect's compound eyes are made of…|Thousands of tiny lenses|One big lens|Glass
-1225|How do bees share where food is?|A waggle dance|Singing|Writing
-1226|Which job do insects do in nature?|Pollinate plants|Make rocks|Build roads
-1227|Which animals are most common on Earth?|Insects|Elephants|Humans
-1228|What's a big threat to insects?|Pesticides and habitat loss|Too many flowers|Rain
-1229|Grasshoppers grow without a pupa stage. That's…|Incomplete metamorphosis|Complete metamorphosis|Hibernation
-1270|Where does land meet the sea?|The coast|The desert|The mountain
-1271|Which lives in the ocean?|Octopus|Giraffe|Squirrel
-1272|In the ocean, what do tiny fish eat?|Plankton|Sharks|Seaweed pizza
-1273|What can you find in a rock pool?|Crabs and starfish|Lions|Penguins only
-1274|Why is a dolphin a mammal?|It breathes air and feeds milk|It swims|It has fins
-1275|How much of Earth is ocean?|About 70%|About 10%|About 99%
-1276|What do ocean animals need?|Food and shelter|Phones|Trees
-1277|A shark breathes with…|Gills|Lungs|Its tail
-1278|Coral reefs are built by…|Tiny animals called polyps|Rocks only|Fish
-1279|Why do penguins have flippers?|To swim fast|To fly|To dig
-1280|The deepest ocean zone is…|Very dark and cold|Sunny|Hot
-1281|An ocean food web shows…|Many linked food chains|One fish|Waves
-1282|What's the biggest ocean?|Pacific|Atlantic|Arctic
-1283|The ocean floor has…|Mountains and trenches|Only sand|Nothing
-1284|What mainly causes tides?|The Moon's pull|Wind|Fish
-1285|How do some deep-sea fish find food in the dark?|They make their own light|They use flashlights|They don't eat
-1286|Scientists exploring deep oceans use…|Submarines and robots|Kites|Bicycles
-1287|Which animal swims thousands of miles each year?|Humpback whale|Goldfish|Starfish
-1288|Removing sharks from a reef can…|Upset the whole system|Help everything|Do nothing
-1289|What hurts ocean animals?|Plastic trash|Clean water|Sunshine
-1290|How do oceans affect climate?|They store and move heat|They don't|They make snow
-1291|How can people protect the ocean?|Reduce plastic and protect areas|Dump trash|Overfish
-1292|Deep vent animals get energy from…|Chemicals, not sunlight|Sunlight|Pizza
-1293|Ocean currents carry warm water…|Around the world|Nowhere|Only up
-1294|Warmer water makes coral…|Bleach white|Grow faster|Turn into fish
-1295|Losing top predators can cause…|Too many prey animals|Nothing|More predators
-1296|What helps humans visit the deepest ocean?|Submersibles|Snorkels|Boats only
-1360|Which pole has penguins?|Antarctic (South)|Arctic (North)|Both
-1361|Who led a famous trip to the South Pole?|Roald Amundsen|Columbus|Neil Armstrong
-1362|Ice is water that has…|Frozen|Boiled|Evaporated
-1363|What's the "midnight sun"?|The Sun stays up all night|A full moon|A star
-1364|Can penguins fly?|No, they swim|Yes, high|Only at night
-1365|Which animal lives in the Arctic?|Arctic fox|Kangaroo|Lion
-1366|Where do polar bears live?|The Arctic|Antarctica|The jungle
-1367|How many poles does Earth have?|2|1|4
-1368|How do seals stay warm?|Thick blubber|Wearing coats|Sitting by fires
-1369|The Arctic is mostly…|Frozen ocean|A big desert|A forest
-1370|Floating ice in the sea is called…|Sea ice|Lava|Glass
-1371|Who has lived in the Arctic for thousands of years?|The Inuit|The Romans|The Vikings only
-1372|What's at the bottom of the Antarctic food chain?|Phytoplankton|Penguins|Whales
-1373|The Arctic tundra has…|No trees|Huge jungles|Palm trees
-1374|Who reached the South Pole first?|Amundsen|Scott|Columbus
-1375|Why do poles have months of darkness?|Earth's tilt|Clouds|The Moon
-1376|What does the Antarctic Treaty protect?|Antarctica for peace and science|Oil drilling|Hunting
-1377|What's happening to Arctic ice?|It's melting|It's growing fast|Nothing
-1378|Most of Earth's fresh water is…|Frozen in ice|In rivers|In clouds
-1379|Glaciers form from…|Snow packing into ice|Rain only|Lava
-1380|Polar climate is…|Very cold and dry|Hot and wet|Mild
-1381|What threatens polar animals most?|Melting ice|Too much snow|Tourists' cameras
-1382|Which has land predators like polar bears?|The Arctic|Antarctica|Neither
-1383|Modern polar explorers use…|Satellites and GPS|Only maps|Nothing
-1384|Melting polar ice makes sea levels…|Rise|Fall|Stay the same
-1385|Which food comes from rainforests?|Chocolate|Cheese|Milk
-1386|How have rainforest peoples lived?|In harmony with the forest|In skyscrapers|On boats
-1387|How does a rainforest feel?|Hot and wet|Cold and dry|Snowy
-1388|Which animal lives in a rainforest?|Toucan|Penguin|Polar bear
-1389|Rainforests have lots of…|Insects|Snowmen|Cacti
-1390|The top rainforest layer is the…|Emergent layer|Forest floor|Basement
-1391|Why do rainforest leaves have pointy tips?|To drip rain off|To poke animals|For style
-1392|What is a rainforest?|A thick, rainy forest|A desert|An ice field
-1393|Rainforests are found near the…|Equator|Poles|Moon
-1394|A jaguar is a…|Mammal|Reptile|Bird
-1395|Rainforest peoples know which plants…|Heal and feed them|Are made of plastic|Grow on Mars
-1396|How does a sloth avoid predators?|Moving slowly and blending in|Running fast|Roaring
-1397|In a rainforest food web, fungi…|Break down dead stuff|Hunt jaguars|Fly
-1398|Why do vines climb trees?|To reach sunlight|To hide|To sleep
-1399|Rainforest trees release water vapor that makes…|Rain|Snow|Sand
-1400|The Amazon rainforest is mostly in…|South America|Europe|Asia
-1401|Rainforest weather is…|Warm and rainy all year|Snowy|Dry
-1402|Why are rainforests cut down?|Farming and logging|For snow|They grow too fast
-1403|Why is rainforest soil thin?|Nutrients get used fast|It's made of sand|Too much snow
-1404|Rainforests cover a small area but hold…|Half the world's species|No animals|Only trees
-1405|How can we protect rainforests?|Protected parks and less logging|Cut more trees|Ignore them
-1406|Saving rainforests means balancing nature and…|People's needs|Snow|Space travel
-1407|Which everyday item may come from rainforests?|Rubber|Plastic bottles|Glass
-1408|Rainforests help climate by…|Absorbing carbon dioxide|Making smoke|Melting ice
-1409|Where is a temperate rainforest?|The Pacific Northwest|The Sahara|Antarctica
-1440|The Moon's shape seems to change. Those are…|Phases|Eclipses|Seasons
-1441|How many planets orbit our Sun?|8|3|20
-1442|The Big Dipper is a…|Star pattern|Planet|Comet
-1443|What gives Earth daytime light?|The Sun|The Moon|Stars
-1444|What do astronauts do?|Travel and work in space|Drive taxis|Fix shoes
-1445|A comet has a…|Glowing tail|Ring|Moon
-1446|Earth spins once every…|Day|Year|Hour
-1447|A telescope helps you see…|Faraway things|Tiny germs|Underwater
-1448|Which planet has big rings?|Saturn|Mars|Mercury
-1449|Which robot explored Mars?|A rover|A submarine|A drone ship
-1450|Which planet is third from the Sun?|Earth|Mars|Venus
-1451|How long does the Moon take to orbit Earth?|About a month|A day|A year
-1452|The Sun is a…|Star|Planet|Moon
-1453|People once thought what was at the center?|Earth|Mars|The Moon
-1454|Why do things fall down?|Gravity|Magnetism|Wind
-1455|What happens to a big star at the end?|It can explode as a supernova|It turns into a planet|It freezes
-1456|If the Sun were a beach ball, Earth would be…|A peppercorn|A basketball|A car
-1457|Why do we see different stars in different seasons?|Earth moves around the Sun|Stars move house|Clouds
-1458|Who first walked on the Moon?|Neil Armstrong|Amelia Earhart|Galileo
-1459|Our solar system is in which galaxy?|The Milky Way|Andromeda|Pluto
-1460|Why does the Sun look brighter than other stars?|It's much closer|It's bigger than all|It's on fire more
-1461|How do astronomers find planets around other stars?|The star dims slightly|They phone aliens|Guess
-1462|Telescopes can see light we can't, like…|Infrared|Rainbows|Sound
-1463|What keeps the Moon in orbit?|Gravity|Rockets|Wind
-1464|Where did most elements first come from?|Stars|Oceans|Volcanoes
-1465|What's a big challenge for a Mars trip?|It takes months|Mars is close|It's easy
-1466|Which planet is closest to the Sun?|Mercury|Venus|Neptune
-1467|In summer, the Sun is…|Higher in the sky|Lower|Gone
-1468|The Sun rises in the…|East|West|North
-1469|Which changes land in minutes?|A landslide|Erosion|Mountain growth
-1470|One trip around the Sun is a…|Year|Day|Month
-1471|Why do we have day and night?|Earth spins|The Sun moves|Clouds
-1472|Seashell fossils on a mountaintop mean…|It was once under the sea|Birds dropped them|Fake
-1473|What shape are Earth, Moon, and Sun?|Spheres|Cubes|Flat discs
-1474|When is your shadow shortest?|At noon|At sunrise|At sunset
-1475|Why do some stars look dim?|They're very far away|They're asleep|They're small only
-1476|A full moon happens when we see…|The whole lit side|No lit side|Half
-1477|Which planet is the biggest?|Jupiter|Saturn|Earth
-1478|Why do we have seasons?|Earth's tilt|Distance from Sun|The Moon
-1479|What's a galaxy?|A huge group of stars|A planet|A comet
-1480|Which has stronger gravity?|Earth|The Moon|A pebble
-1481|A star is born in a…|Nebula|Black hole|Planet
-1482|What does your body need every day?|Water and food|Candy only|Video games
-1483|What holds your body up?|Your skeleton|Your hair|Your skin only
-1484|You breathe air into your…|Lungs|Stomach|Heart
-1485|What controls your body?|Your brain|Your knees|Your hair
-1486|Which sense uses your tongue?|Taste|Hearing|Sight
-1487|What does your heart do?|Pumps blood|Digests food|Thinks
-1488|Which food group helps build muscles?|Protein|Sugar|Butter
-1489|Your heart is an organ made of…|Tissues|Rocks|Plastic
-1490|To bend your arm, your biceps…|Contracts|Relaxes|Stretches
-1491|Light enters your eye through the…|Pupil|Ear|Eyelash
-1492|Your skull protects your…|Brain|Heart|Stomach
-1493|After the stomach, food goes to the…|Small intestine|Lungs|Heart
-1494|Which teeth grind food?|Molars|Incisors|Canines
-1495|Your heart and lungs team up to deliver…|Oxygen|Food only|Hair
-1496|During puberty, bodies…|Grow and change|Shrink|Stay the same
-1497|Which is a healthy choice?|Exercise and sleep|Skipping meals|Staying up all night
-1498|Blood goes from the heart to the body through…|Arteries|Veins only|Bones
-1499|Tiny air sacs in the lungs are…|Alveoli|Muscles|Teeth
-1500|What fights germs in your body?|White blood cells|Bones|Hair
-1501|Your brain and spinal cord make up the…|Central nervous system|Digestive system|Skeleton
-1502|How do vaccines help?|Teach your body to fight germs|Make germs|Give energy
-1503|Nerve cells are called…|Neurons|Atoms|Organs
-1504|DNA is shaped like a…|Twisted ladder|Circle|Square
-1505|Shivering when cold helps your body…|Stay warm|Cool down|Sleep
-1506|Cancer happens when cells…|Grow out of control|Stop growing|Turn blue
+mt_qixeaiswFP|How do beavers change their habitat?|They build dams|They plant flowers|They dig volcanoes
+mt_HZvTriQWTh|It rained 3 days in a row. What's that?|A weather pattern|Climate change|A season
+mt_go5i87u2b9|Which season is usually hottest?|Summer|Winter|Fall
+mt_zCGwH1OQZa|Water turning into vapor is…|Evaporation|Condensation|Freezing
+mt_mwirOvigWD|Fossils usually form in…|Layers of mud and sand|Clouds|Ice cream
+mt_m6UaSmrQVG|What helps stop soil washing away?|Planting grass and trees|Removing plants|Digging more
+mt_R6YoRXkRxS|Which rock property can you test by scratching?|Hardness|Smell|Taste
+mt_yhhprm7dZK|Soil is made from rocks and…|Bits of dead plants and animals|Plastic|Sugar
+mt_KsKLVW_ssY|A tall, steep landform is a…|Mountain|Lake|Valley
+mt_nRF_VRntrW|Where is most of Earth's water?|Oceans|Lakes|Clouds
+mt_NYsz6QgaaE|A chart shows more rain in spring. That's a…|Seasonal pattern|Mistake|Climate zone
+mt_Gm12BzcCfX|Deserts are dry most years. That describes…|Climate|Today's weather|A season
+mt_vAP_A986IQ|Wind and water slowly wearing rock away is…|Erosion|Melting|Freezing
+mt_-G6erQvLig|On a map, earthquakes cluster along…|Plate edges|Random spots|Ocean middles only
+mt_bqL8DD1SbV|Rock made from layers of sand pressed together is…|Sedimentary|Igneous|Metamorphic
+mt_LKagN9GJPX|Plants, air, water, and rocks all…|Affect each other|Never interact|Live on Mars
+mt_0_K-GrKQpd|In rock layers, deeper layers are usually…|Older|Newer|Same age
+mt_LsY4-T2fU7|Most of Earth's water is…|Salty|Fresh|Frozen pizza
+mt_GBY8enpzO0|Which word is a force?|Pull|Blue|Soft
+mt_B3W5EfimJw|Kicking a ball is a…|Push|Pull|Nap
+mt_RlILL2sccX|Your toy ramp didn't work. What now?|Check the test data and fix it|Give up|Paint it
+mt_lcf8lx-LkZ|A magnet pulling a paperclip without touching is a…|Non-contact force|Contact force|No force
+mt_k7GOtslF-x|In a force diagram, an arrow shows…|Direction and size of a force|Color|Speed of light
+mt_-p_xp4hMvh|Which surface has the most friction?|Carpet|Ice|Glass
+mt_9NvuqZKNiV|Which will a magnet pick up?|An iron nail|A plastic cup|A wooden block
+mt_jgNB2752b9|Two north poles of magnets will…|Push apart|Stick together|Melt
+mt_3WMADSy0mA|A tug-of-war with no movement has…|Balanced forces|Unbalanced forces|No forces
+mt_AlLYwCm92a|A swing goes back and forth. You can predict…|Its next swing|Tomorrow's weather|Nothing
+mt_Y9k86G8BBT|What slows a parachute?|Air resistance|Gravity|Magnetism
+mt_F3ATPTCYm6|An object speeding up has…|Unbalanced forces|Balanced forces|No forces
+mt_AvrQauS_zX|What pulls things toward Earth?|Gravity|Wind|Magnets
+mt_Q2k3fSwyzQ|A see-saw is a kind of…|Lever|Pulley|Gear
+mt_OUv-QXmW7_|On a distance-time graph, a flat line means…|Not moving|Moving fast|Going backward
+mt_56aspHjU19|Iron filings around a magnet show its…|Magnetic field|Weight|Temperature
+mt_sUVeVXzRuq|On the Moon, your mass…|Stays the same|Gets smaller|Disappears
+mt_-OndzpVsrv|On a moving train, a sitting friend looks…|Still to you|Super fast|Backward
+mt_AiWlJfvC3O|Push 10 N right and 4 N left. Overall force?|6 N right|14 N right|4 N left
+mt_q-1a86ydgU|You travel 100 m in 20 s. Your speed?|5 m/s|2 m/s|80 m/s
+mt_fkwcCB5px7|Why do snowshoes stop you sinking?|They spread out your weight|They're magic|They're heavy
+mt_2qkn8Lhc8e|How do you make an electromagnet?|Wrap wire around iron and add a battery|Freeze a magnet|Paint iron
+mt_xkn2sf93WJ|Measuring force, scientists use a…|Newton meter|Thermometer|Ruler
+mt_vuNjYx3qOy|A longer wrench makes turning a bolt…|Easier|Harder|Impossible
+mt_tXxxCFl32J|A soccer ball stays still until…|A force moves it|It gets bored|Night falls
+mt_fbYbe3YSVj|You push a wall. The wall…|Pushes back on you|Does nothing|Falls over
+mt__7BVYUN180|An electric motor turns electricity into…|Motion|Water|Sound only
+mt_LTb0ZReMR2|How should you handle a ladybug?|Gently, then let it go|Squeeze it|Keep it in a jar forever
+mt_Wr6DDgr_kH|What comes after the caterpillar?|Chrysalis|Egg|Tadpole
+mt_yR1moI5kX1|Which is a minibeast?|Ladybug|Elephant|Shark
+mt__7hXSTbu9s|How does a snail move?|Slides on slime|Flies|Hops
+mt_zir5yyAzUB|Where might you find woodlice?|Under a log|In the sky|In the ocean
+mt_QH-Fs97twT|What eats aphids in the garden?|Ladybugs|Cows|Rocks
+mt_BI6oGIO-xM|A minibeast has no…|Backbone|Legs ever|Body
+mt_SZJ1mN7Vfk|Why do flowers need bees?|To carry pollen|To water them|To scare birds
+mt_07Geg7LITa|Why are wasps striped yellow and black?|To warn predators|To look fancy|To hide
+mt_M7YrfAZk8u|Dung beetles can roll balls many times their…|Own weight|Height in miles|Age
+mt_hsN-YvCNQY|Butterfly order: egg, larva, pupa…|Adult|Egg again|Tadpole
+mt_4vHa3I5bNj|Spiders aren't insects because they have…|8 legs|6 legs|Wings
+mt_guaaD6Dn2M|In an ant colony, who lays eggs?|The queen|Every ant|The workers
+mt__bhJX2SuFJ|Using a key, "Does it have 8 legs?" Yes → it's a…|Spider|Beetle|Fly
+mt_oNWXXAn3cn|What are an insect's three body parts?|Head, thorax, abdomen|Arms, legs, tail|Wings, shell, fins
+mt_7_XXh9NCp0|Dark moths survived better on sooty trees. That's…|Adaptation|Luck only|Magic
+mt_Oz8yNPNtub|An insect's compound eyes are made of…|Thousands of tiny lenses|One big lens|Glass
+mt_a9VnPBhoYs|How do bees share where food is?|A waggle dance|Singing|Writing
+mt_r6oKXpN0er|Which job do insects do in nature?|Pollinate plants|Make rocks|Build roads
+mt_5_Zr9xXDNH|Which animals are most common on Earth?|Insects|Elephants|Humans
+mt__EL7DHjf5R|What's a big threat to insects?|Pesticides and habitat loss|Too many flowers|Rain
+mt_ShAptVcQR3|Grasshoppers grow without a pupa stage. That's…|Incomplete metamorphosis|Complete metamorphosis|Hibernation
+mt_4bJiGiMPmy|Where does land meet the sea?|The coast|The desert|The mountain
+mt_ytUG3yjCYt|Which lives in the ocean?|Octopus|Giraffe|Squirrel
+mt_l6OpmOKMuT|In the ocean, what do tiny fish eat?|Plankton|Sharks|Seaweed pizza
+mt_w2u9bXP9n7|What can you find in a rock pool?|Crabs and starfish|Lions|Penguins only
+mt_mRCPP_Ab2W|Why is a dolphin a mammal?|It breathes air and feeds milk|It swims|It has fins
+mt_oAg79ju344|How much of Earth is ocean?|About 70%|About 10%|About 99%
+mt_m31_gPS8F1|What do ocean animals need?|Food and shelter|Phones|Trees
+mt__aHSZTm5k5|A shark breathes with…|Gills|Lungs|Its tail
+mt_AxGPeVRm__|Coral reefs are built by…|Tiny animals called polyps|Rocks only|Fish
+mt_9EoS35vaYB|Why do penguins have flippers?|To swim fast|To fly|To dig
+mt_sQpIV0-qY7|The deepest ocean zone is…|Very dark and cold|Sunny|Hot
+mt_OnV_DTp5i8|An ocean food web shows…|Many linked food chains|One fish|Waves
+mt_8QOeG3CuKc|What's the biggest ocean?|Pacific|Atlantic|Arctic
+mt_yxL1v4LuqR|The ocean floor has…|Mountains and trenches|Only sand|Nothing
+mt_kCSy3Lsgme|What mainly causes tides?|The Moon's pull|Wind|Fish
+mt_dRCnJEIwk4|How do some deep-sea fish find food in the dark?|They make their own light|They use flashlights|They don't eat
+mt_1m5ItPiwUK|Scientists exploring deep oceans use…|Submarines and robots|Kites|Bicycles
+mt_Te-ulgYMUd|Which animal swims thousands of miles each year?|Humpback whale|Goldfish|Starfish
+mt_w4OYcWJs6H|Removing sharks from a reef can…|Upset the whole system|Help everything|Do nothing
+mt_J6uccv2Bo4|What hurts ocean animals?|Plastic trash|Clean water|Sunshine
+mt_KRNU0IOKfO|How do oceans affect climate?|They store and move heat|They don't|They make snow
+mt_50SdpkNH49|How can people protect the ocean?|Reduce plastic and protect areas|Dump trash|Overfish
+mt_6Wx--Du8j3|Deep vent animals get energy from…|Chemicals, not sunlight|Sunlight|Pizza
+mt_Mp_CpVK6e-|Ocean currents carry warm water…|Around the world|Nowhere|Only up
+mt_EXO1bJ3G_v|Warmer water makes coral…|Bleach white|Grow faster|Turn into fish
+mt_NPTjGJIyb3|Losing top predators can cause…|Too many prey animals|Nothing|More predators
+mt_kKxbPHi5Db|What helps humans visit the deepest ocean?|Submersibles|Snorkels|Boats only
+mt_aO018DkCun|Which pole has penguins?|Antarctic (South)|Arctic (North)|Both
+mt_22XbXTRq50|Who led a famous trip to the South Pole?|Roald Amundsen|Columbus|Neil Armstrong
+mt_SrmHaJXKrX|Ice is water that has…|Frozen|Boiled|Evaporated
+mt_3duNkf6Qmr|What's the "midnight sun"?|The Sun stays up all night|A full moon|A star
+mt_CK2orHetl3|Can penguins fly?|No, they swim|Yes, high|Only at night
+mt_7OJjLOl0fz|Which animal lives in the Arctic?|Arctic fox|Kangaroo|Lion
+mt_O9dH94NFae|Where do polar bears live?|The Arctic|Antarctica|The jungle
+mt_4uPnLieBPN|How many poles does Earth have?|2|1|4
+mt_kDKo4lxRKi|How do seals stay warm?|Thick blubber|Wearing coats|Sitting by fires
+mt_z9jn9HogfE|The Arctic is mostly…|Frozen ocean|A big desert|A forest
+mt_scbDHJZZHK|Floating ice in the sea is called…|Sea ice|Lava|Glass
+mt_rqalOvjkj3|Who has lived in the Arctic for thousands of years?|The Inuit|The Romans|The Vikings only
+mt_7nduoLvoB1|What's at the bottom of the Antarctic food chain?|Phytoplankton|Penguins|Whales
+mt_X4CJpPRxae|The Arctic tundra has…|No trees|Huge jungles|Palm trees
+mt_islVn_P28Z|Who reached the South Pole first?|Amundsen|Scott|Columbus
+mt_f9syMry-0S|Why do poles have months of darkness?|Earth's tilt|Clouds|The Moon
+mt_itldWmVItr|What does the Antarctic Treaty protect?|Antarctica for peace and science|Oil drilling|Hunting
+mt_Fqna9qHffr|What's happening to Arctic ice?|It's melting|It's growing fast|Nothing
+mt_cMmG8VLbAp|Most of Earth's fresh water is…|Frozen in ice|In rivers|In clouds
+mt_5_kErPeeNu|Glaciers form from…|Snow packing into ice|Rain only|Lava
+mt_GbZFuGDFsa|Polar climate is…|Very cold and dry|Hot and wet|Mild
+mt_7QeiS95TRC|What threatens polar animals most?|Melting ice|Too much snow|Tourists' cameras
+mt_kOYw43NPzr|Which has land predators like polar bears?|The Arctic|Antarctica|Neither
+mt_I_c57p0aGN|Modern polar explorers use…|Satellites and GPS|Only maps|Nothing
+mt_g1qgxmlJQ2|Melting polar ice makes sea levels…|Rise|Fall|Stay the same
+mt_s08-QxASd2|Which food comes from rainforests?|Chocolate|Cheese|Milk
+mt_2zJ1NrGgYm|How have rainforest peoples lived?|In harmony with the forest|In skyscrapers|On boats
+mt_ntxlccnYzB|How does a rainforest feel?|Hot and wet|Cold and dry|Snowy
+mt_xVW5U41tbp|Which animal lives in a rainforest?|Toucan|Penguin|Polar bear
+mt_XL2gqdKJfu|Rainforests have lots of…|Insects|Snowmen|Cacti
+mt_-0cjwyYhce|The top rainforest layer is the…|Emergent layer|Forest floor|Basement
+mt_x5ZrQMAZ5v|Why do rainforest leaves have pointy tips?|To drip rain off|To poke animals|For style
+mt_FZ_ixwU1p1|What is a rainforest?|A thick, rainy forest|A desert|An ice field
+mt_0u3QNroZ34|Rainforests are found near the…|Equator|Poles|Moon
+mt_OtShuvs3x8|A jaguar is a…|Mammal|Reptile|Bird
+mt_m43jiOAOCt|Rainforest peoples know which plants…|Heal and feed them|Are made of plastic|Grow on Mars
+mt_XxgU_91AXg|How does a sloth avoid predators?|Moving slowly and blending in|Running fast|Roaring
+mt_1LFVPjdGg-|In a rainforest food web, fungi…|Break down dead stuff|Hunt jaguars|Fly
+mt_Wx5m6mwkpj|Why do vines climb trees?|To reach sunlight|To hide|To sleep
+mt_ZWTk6eP1qF|Rainforest trees release water vapor that makes…|Rain|Snow|Sand
+mt_38d-k-dJPa|The Amazon rainforest is mostly in…|South America|Europe|Asia
+mt_v6CBCMuvz1|Rainforest weather is…|Warm and rainy all year|Snowy|Dry
+mt_2OSTHTWDpa|Why are rainforests cut down?|Farming and logging|For snow|They grow too fast
+mt_JcfP1hWKa_|Why is rainforest soil thin?|Nutrients get used fast|It's made of sand|Too much snow
+mt_pPGaf8bR8r|Rainforests cover a small area but hold…|Half the world's species|No animals|Only trees
+mt_kON8bYEHYl|How can we protect rainforests?|Protected parks and less logging|Cut more trees|Ignore them
+mt_ZM7u9m-gS4|Saving rainforests means balancing nature and…|People's needs|Snow|Space travel
+mt_xE_b3JiDZU|Which everyday item may come from rainforests?|Rubber|Plastic bottles|Glass
+mt_HJd-8EEC6N|Rainforests help climate by…|Absorbing carbon dioxide|Making smoke|Melting ice
+mt_hbDflQfW-U|Where is a temperate rainforest?|The Pacific Northwest|The Sahara|Antarctica
+mt_ByXgbTld6R|The Moon's shape seems to change. Those are…|Phases|Eclipses|Seasons
+mt_XlyF294bPR|How many planets orbit our Sun?|8|3|20
+mt_BVpB5wyijZ|The Big Dipper is a…|Star pattern|Planet|Comet
+mt_PiWZA8Z0ZJ|What gives Earth daytime light?|The Sun|The Moon|Stars
+mt_oiqsIP97V3|What do astronauts do?|Travel and work in space|Drive taxis|Fix shoes
+mt_uoTBeyMhGm|A comet has a…|Glowing tail|Ring|Moon
+mt_w2xiMNkyyX|Earth spins once every…|Day|Year|Hour
+mt_-SZU6cVB_-|A telescope helps you see…|Faraway things|Tiny germs|Underwater
+mt_W8Eq3CqWJf|Which planet has big rings?|Saturn|Mars|Mercury
+mt_7GwWplh-48|Which robot explored Mars?|A rover|A submarine|A drone ship
+mt_AVk2EmSULC|Which planet is third from the Sun?|Earth|Mars|Venus
+mt_15FduGRf5c|How long does the Moon take to orbit Earth?|About a month|A day|A year
+mt_u3Y3Tb-G_n|The Sun is a…|Star|Planet|Moon
+mt_KiRn5lnRgj|People once thought what was at the center?|Earth|Mars|The Moon
+mt_Y2WcY2lOTK|Why do things fall down?|Gravity|Magnetism|Wind
+mt_iTjrKEdAOj|What happens to a big star at the end?|It can explode as a supernova|It turns into a planet|It freezes
+mt_TlGhXAqC4p|If the Sun were a beach ball, Earth would be…|A peppercorn|A basketball|A car
+mt_9VZem2vUqk|Why do we see different stars in different seasons?|Earth moves around the Sun|Stars move house|Clouds
+mt_H9RAGGiHBL|Who first walked on the Moon?|Neil Armstrong|Amelia Earhart|Galileo
+mt_aulwq39aj8|Our solar system is in which galaxy?|The Milky Way|Andromeda|Pluto
+mt_ae-cHHFR76|Why does the Sun look brighter than other stars?|It's much closer|It's bigger than all|It's on fire more
+mt_UjuriPLVgT|How do astronomers find planets around other stars?|The star dims slightly|They phone aliens|Guess
+mt_rbY77m8_s1|Telescopes can see light we can't, like…|Infrared|Rainbows|Sound
+mt_1nl396BaVa|What keeps the Moon in orbit?|Gravity|Rockets|Wind
+mt_KYx0m4OyZv|Where did most elements first come from?|Stars|Oceans|Volcanoes
+mt_EIbltgXRWR|What's a big challenge for a Mars trip?|It takes months|Mars is close|It's easy
+mt_EHuU1ZeUFA|Which planet is closest to the Sun?|Mercury|Venus|Neptune
+mt_K0mZxY2AM8|In summer, the Sun is…|Higher in the sky|Lower|Gone
+mt_fk33IEGP-T|The Sun rises in the…|East|West|North
+mt_ZJu8s-Q1xa|Which changes land in minutes?|A landslide|Erosion|Mountain growth
+mt_LQt4vnKeB4|One trip around the Sun is a…|Year|Day|Month
+mt_q15w--Fb5H|Why do we have day and night?|Earth spins|The Sun moves|Clouds
+mt_GheLsWvrJ4|Seashell fossils on a mountaintop mean…|It was once under the sea|Birds dropped them|Fake
+mt_5l7iGkf1Tp|What shape are Earth, Moon, and Sun?|Spheres|Cubes|Flat discs
+mt_tMLsTPQHwF|When is your shadow shortest?|At noon|At sunrise|At sunset
+mt_ZhKuYCbXz1|Why do some stars look dim?|They're very far away|They're asleep|They're small only
+mt_4V-vYhFUcm|A full moon happens when we see…|The whole lit side|No lit side|Half
+mt_33RrpbceZE|Which planet is the biggest?|Jupiter|Saturn|Earth
+mt_lFiDFPkVmH|Why do we have seasons?|Earth's tilt|Distance from Sun|The Moon
+mt_v9uYnIY5-B|What's a galaxy?|A huge group of stars|A planet|A comet
+mt_oLjz18CxDg|Which has stronger gravity?|Earth|The Moon|A pebble
+mt_lHasFmgvnT|A star is born in a…|Nebula|Black hole|Planet
+mt_cxJRc15osy|What does your body need every day?|Water and food|Candy only|Video games
+mt_SdIWVjzopp|What holds your body up?|Your skeleton|Your hair|Your skin only
+mt_tiPyEkm4cU|You breathe air into your…|Lungs|Stomach|Heart
+mt_pJ5zsocdNx|What controls your body?|Your brain|Your knees|Your hair
+mt_nwSWPTENmv|Which sense uses your tongue?|Taste|Hearing|Sight
+mt_lp1eTsQen7|What does your heart do?|Pumps blood|Digests food|Thinks
+mt_QhLAeAlHI0|Which food group helps build muscles?|Protein|Sugar|Butter
+mt_C7FNeIDGc6|Your heart is an organ made of…|Tissues|Rocks|Plastic
+mt_6N-4TqCleR|To bend your arm, your biceps…|Contracts|Relaxes|Stretches
+mt_-gkJdxJUQT|Light enters your eye through the…|Pupil|Ear|Eyelash
+mt_OMmiuv9ZLH|Your skull protects your…|Brain|Heart|Stomach
+mt_JpQUM1129q|After the stomach, food goes to the…|Small intestine|Lungs|Heart
+mt_I047mKeeaq|Which teeth grind food?|Molars|Incisors|Canines
+mt_QK-ZZb7UUN|Your heart and lungs team up to deliver…|Oxygen|Food only|Hair
+mt_pu2mmK27UA|During puberty, bodies…|Grow and change|Shrink|Stay the same
+mt_4k3HGahK2k|Which is a healthy choice?|Exercise and sleep|Skipping meals|Staying up all night
+mt_g_M4Vh_pK7|Blood goes from the heart to the body through…|Arteries|Veins only|Bones
+mt_zPDDJLAl-J|Tiny air sacs in the lungs are…|Alveoli|Muscles|Teeth
+mt_4JpMXUIxeD|What fights germs in your body?|White blood cells|Bones|Hair
+mt_qzbgwaUQOA|Your brain and spinal cord make up the…|Central nervous system|Digestive system|Skeleton
+mt_LkOMijDvL7|How do vaccines help?|Teach your body to fight germs|Make germs|Give energy
+mt_okUMpHsV-P|Nerve cells are called…|Neurons|Atoms|Organs
+mt_0sELh0MYWb|DNA is shaped like a…|Twisted ladder|Circle|Square
+mt_J40cOn7VWn|Shivering when cold helps your body…|Stay warm|Cool down|Sleep
+mt_roinupb_7L|Cancer happens when cells…|Grow out of control|Stop growing|Turn blue
