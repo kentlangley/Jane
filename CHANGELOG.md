@@ -6,6 +6,16 @@ Dates are Pacific Time.
 ## [Unreleased]
 
 ### Added
+- **Research briefs for the lesson author** ([#40](https://github.com/kentlangley/Jane/issues/40)):
+  `npm run research -- <topicId>` (`research.mjs`) prints a short brief, at most 6,000 characters, from Marble's teaching
+  research. It shows the learn constraints first, then the summary, misconceptions, error patterns with next moves and
+  prerequisite re-teach ids (with titles), the diagnostic and response levels, activities and best practices. Learn wins:
+  pedagogy or assess text that a learn constraint forbids is dropped and flagged. For example, assess's "Earth's shadow
+  points away at full Moon" is gone from the Moon-phases brief. Topics without research, such as all of English, print
+  "no research". Pending and hidden-region topics get a notice instead of a brief. `export-progress.mjs` adds a bounded
+  `research` section (compact briefs for the needsSupport, goDeeper, quest-refresh, stretch and nearest frontier
+  topics) and `research: true` on frontier entries. A test makes sure the research stays out of `public/`, the Worker
+  bundle and the Docker image. It is offline tooling only, so the app doesn't change.
 - **Household region filter** (`HIDE_REGIONS`): `data/regions/AU.txt` tags 26 topics whose content is specifically
   Australian (Australian Curriculum-only, and about Australian history, government, money, symbols, literature or
   First Nations Australians' Country). Every topic still plays by default. A household that sets `HIDE_REGIONS="AU"`
