@@ -126,6 +126,11 @@ function backfillMedals(S,g){S.medals=[];for(const [id,r] of Object.entries(S.ts
 // A self-check never counts. A repeated identical question counts at most once per Pacific day. Guided practice doesn't count.
 export const MASTERY_MIN=2,MEDAL_MIN=3,BOSS_LEGEND=3;
 const ptDay=ms=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(ms));
+// Boss hearts = THIS fight only: first-try boss hits on this topic today (rec.bossRun, reset by a miss or a new PT day),
+// never the topic's lifetime/cross-day streak. Target is honest per topic: 3 (BOSS_LEGEND) for a Play boss, but a pack
+// boss topic with fewer graded questions can only take that many hits (and can't be legendary).
+export function bossHP(rec,it,now){const max=it.kind==='quiz'?1:it.kind==='pack'?Math.max(1,Math.min(BOSS_LEGEND,it.packN||BOSS_LEGEND)):BOSS_LEGEND;
+  const run=rec&&rec.bossDay===ptDay(now)?(rec.bossRun||0):0,hits=Math.min(max,run);return{max,hp:max-hits,hits,legend:max>=BOSS_LEGEND};}
 function countFt(rec,q,now){const k=ptDay(now)+'|'+String(q||'').slice(0,120);rec.ftQ??=[];if(rec.ftQ.includes(k))return false;rec.ftQ=[...rec.ftQ.slice(-7),k];rec.ft=(rec.ft||0)+1;return true;}
 function maybeMedal(S,g,id,boss,now){const r=S.ts[id];if(!r||r.st!=='mastered'||r.how!=='direct'||(r.ft||0)<MEDAL_MIN)return null;return award(S,g,id,boss,now);}
 function award(S,g,id,boss,now){S.medals??=[];if(S.medals.some(m=>m.id===id))return null;const m={id,tier:tierOf(g,id,boss),at:now,boss:boss||undefined};S.medals.push(m);return m;}
@@ -285,7 +290,7 @@ export function buildItem(S,g,id,mode,pack,now){const t=g.byId[id],r=S.ts[id];le
   if(!it.format)it.format=mode==='review'?'review':mode==='diagnostic'?'explore':g.boss.has(id)&&bossOk?'boss':(it.kind==='math'&&Math.random()<.25)?'timed':(it.type==='mc'?'minigame':'quest');
   if(it.type!=='card'){if(mode==='review')it.format='review';if(mode==='diagnostic')it.format='explore';}
   if(it.format==='timed'&&!it.timed)it.timed=it.kind==='math'?60:45;if(it.type==='card'){it.timed=null;it.format='card';}
-  if(it.format==='boss'&&it.type!=='card')it.boss=it.kind==='quiz'?{max:1,hp:1}:{max:3,hp:3-Math.min(2,r?.streak||0)};
+  if(it.format==='boss'&&it.type!=='card')it.boss=bossHP(r,it,now);
   return{...it,id:now+'-'+R(0,999),topicId:id,mode,tries:0,stage:'main',issued:now};}
 // ---------- next item ----------
 // Coverage (LESSONS.md "Coverage"): an area (Marble domain) is seen with a direct record that has a correct answer
@@ -448,14 +453,14 @@ function submit0(S,g,answer,now){const it=S.current;if(!it)return{error:'no item
         if(n)r.jane+=` That tells me you already know ${n} earlier skill${n>1?'s':''} — I lit them up on your map! 🗺️`;}
       else{rec.st='learning';rec.how='direct';}placementResult(S,g,it.topicId,!it.tries);}
     else if(!it.tries){rec.streak=(rec.streak||0)+1;if(it.kind==='math'&&(rec.lvl||3)<5){rec.lvl=(rec.lvl||3)+1;r.levelUp=rec.lvl;}
-      const need=it.kind==='quiz'?MASTERY_MIN:it.kind==='pack'?Math.max(MASTERY_MIN,Math.min(it.format==='boss'||it.deep?3:2,it.packN)):it.format==='boss'?3:it.kind==='math'?3:2;if(it.boss)r.boss={max:it.boss.max,hp:Math.max(0,it.boss.max-rec.streak)};
+      const need=it.kind==='quiz'?MASTERY_MIN:it.kind==='pack'?Math.max(MASTERY_MIN,Math.min(it.format==='boss'||it.deep?3:2,it.packN)):it.format==='boss'?3:it.kind==='math'?3:2;if(it.boss){r.boss=bossHP(rec,it,now);it.boss=r.boss;}
       if(!(rec.st==='mastered'&&rec.how==='direct')&&rec.streak>=need&&(rec.ft||0)>=MASTERY_MIN){setMastered(S,g,it.topicId,'direct',.9,now,ev);const n=inferDown(S,g,it.topicId,.9,now,ev);S.badges.push(t.sn||t.name);r.mastered=t.sn||t.name;r.inferred=n;S.focus=null;
         r.jane+=it.format==='boss'?` 💥 You defeated the ${t.domain} BOSS! "${t.sn||t.name}" mastered! 🏆`:` You MASTERED "${t.sn||t.name}"! 🏆`;}}
     // legendary only for a real boss fight: ≥ 3 first-try right boss answers on this skill in one day
     if(!it.tries){const md=maybeMedal(S,g,it.topicId,it.format==='boss'&&(rec.bossRun||0)>=BOSS_LEGEND,now);if(md)r.medal=md;}
     if(it.bonus){it.stage='bonus';it.tries=0;r.bonus=it.bonus.q;r.jane+=' Want a bonus challenge?';}else{r.done=true;S.current=null;}
     return finish(S,r,ev);}
-  it.tries++;S.streak=0;if(it.format==='boss')rec.bossRun=0;
+  it.tries++;S.streak=0;if(it.format==='boss'){rec.bossRun=0;rec.bossDay=ptDay(now);if(it.boss){it.boss=bossHP(rec,it,now);r.boss=it.boss;}}
   const fb=fbFor(it,answer);if(fb)logE.feedback=true;
   if(it.tries===1){r.retry=true;r.hint=fb||it.hint;r.correct=false;r.jane=fb?`${pick(comfort)} ${fb}`:`${pick(comfort)} Here's a hint: ${it.hint}`;return finish(S,r,ev);}
   rec.streak=0;rec.last=now;r.correct=false;r.reveal=it.answer;
@@ -506,8 +511,8 @@ export function choose(S,g,c,pack,now){const cur=S.focus&&g.byId[S.focus];let ms
   else if(c==='different'){const ns={notSubject:cur?.subject||'Mathematics'};id=pickFocus(S,g,pack,now,{...ns,unseen:true})||pickFocus(S,g,pack,now,{unseen:true})||pickFocus(S,g,pack,now,ns);msg=id?`Something new: ${g.byId[id].sn||g.byId[id].name}! 🎨`:msg;}
   else if(c==='fractions'){id=pickFocus(S,g,pack,now,{domain:'Fractions'});msg='Back to fractions! 🍕';}
   if(id)S.focus=id;S.current=null;return{jane:msg};}
-export function publicItem(it,g){if(!it)return null;const t=g.byId[it.topicId];const b=it.stage==='bonus';
-  return{id:it.id,topicId:it.topicId,topic:{name:t.sn||t.name,subject:t.subject,domain:t.domain,ic:t.ic},q:b?it.bonus.q:it.q,type:b?'input':it.type,choices:b?null:it.choices,vis:it.vis,ptype:it.ptype,creative:it.creative,placeholder:it.placeholder,pics:it.pics,items:it.items,left:it.left,right:it.right,statements:it.statements,line:it.line,parts:it.parts,blank:it.blank,card:it.card,body:it.body,emoji:it.emoji,scene:it.scene,tpl:it.tpl,mini:it.mini,stage:it.stage,mode:it.mode,format:b?'bonus':it.format,intro:b?null:it.intro,timed:b?null:it.timed,boss:it.boss,level:it.lvl,issued:it.issued,title:it.title,example:it.example,guided:b?undefined:it.guided,steps:b||!it.guided?undefined:it.steps,requeued:it.requeued,gate:it.gate?{n:it.gate.n,of:it.gate.of,k:it.gate.k,spot:!!it.spot,warm:!!it.gate.warm}:undefined,help:helpFor(it)};}
+export function publicItem(it,g,S,now=Date.now()){if(!it)return null;const boss=it.boss&&S?bossHP(S.ts?.[it.topicId],it,now):it.boss;const t=g.byId[it.topicId];const b=it.stage==='bonus';
+  return{id:it.id,topicId:it.topicId,topic:{name:t.sn||t.name,subject:t.subject,domain:t.domain,ic:t.ic},q:b?it.bonus.q:it.q,type:b?'input':it.type,choices:b?null:it.choices,vis:it.vis,ptype:it.ptype,creative:it.creative,placeholder:it.placeholder,pics:it.pics,items:it.items,left:it.left,right:it.right,statements:it.statements,line:it.line,parts:it.parts,blank:it.blank,card:it.card,body:it.body,emoji:it.emoji,scene:it.scene,tpl:it.tpl,mini:it.mini,stage:it.stage,mode:it.mode,format:b?'bonus':it.format,intro:b?null:it.intro,timed:b?null:it.timed,boss,level:it.lvl,issued:it.issued,title:it.title,example:it.example,guided:b?undefined:it.guided,steps:b||!it.guided?undefined:it.steps,requeued:it.requeued,gate:it.gate?{n:it.gate.n,of:it.gate.of,k:it.gate.k,spot:!!it.spot,warm:!!it.gate.warm}:undefined,help:helpFor(it)};}
 export function medalInfo(m,g){const t=g.byId[m.id]||g.hidden?.[m.id];if(!t)return null;return{id:m.id,tier:m.tier,at:m.at,boss:!!m.boss,name:t.sn||t.name,ic:t.ic,subject:t.subject,domain:t.domain,why:t.kq?`${t.kq} → ${t.ka}`:t.self};}
 // upgrade an in-flight old-style self-check (raw assessmentPrompt) to the kid-friendly item, keeping its mode
 export function refresh(S,g,pack,now){const c=S.current;if(c&&c.kind==='self'&&/Yes, I can/.test(c.choices?.[0]||'')&&g.byId[c.topicId]){S.current=buildItem(S,g,c.topicId,c.mode,pack,now);return true;}return false;}
