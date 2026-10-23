@@ -28,7 +28,7 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
  let finaleJust=false;
  const pub=()=>{const fin=E.syncFinale(S,g,now);if(fin.justUnlocked){finaleJust=true;ev.push({event:'finaleUnlocked',at:fin.revealedAt});}
    const sm=E.summary(S,g,now);delete sm.codes;return{name:E.learner().name,learner:E.learner(),points:S.points,stars:S.stars,streak:S.streak,bestStreak:S.bestStreak,solved:S.solved,medals:(S.medals||[]).slice(-4).reverse().map(m=>E.medalInfo(m,g)).filter(Boolean),medalCount:E.trophies(S,g).medals.filter(m=>m.tier!=='quest').length,
-   placement:{done:S.placement.done,asked:S.placement.asked},progress:sm,pack:pack?{date:pack.date,title:pack.title}:null,item:E.publicItem(S.current,g),clockOffsetDays:off||undefined,sandbox:sbx||undefined,
+   placement:{done:S.placement.done,asked:S.placement.asked},progress:sm,pack:pack?{date:pack.date,title:pack.title}:null,item:E.publicItem(S.current,g,S,now),clockOffsetDays:off||undefined,sandbox:sbx||undefined,
    quest:pack?.quest?E.questInfo(S,g,pack):null,newQuest:(()=>{const L=LU();return L.newQuest&&pack?.date===L.current;})(),
    quests:(()=>{const L=LU();return{current:L.current,nextUp:L.queued.length>0,boost:pack?.boost||null};})(),
    terms:pack?.terms||null,mini:S.mini?{topicId:S.mini.topicId,subject:S.mini.ret}:null,

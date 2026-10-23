@@ -15,13 +15,18 @@ function confetti(n=40){for(let i=0;i<n;i++){const e=document.createElement('div
 function banner(t){const b=document.createElement('div');b.className='banner';b.innerHTML=`<div>${t}</div>`;document.body.appendChild(b);setTimeout(()=>b.remove(),2000);}
 function chips(s){$('pts').textContent='⭐ '+s.points+' pts';$('stars').textContent='🌟 '+s.stars;$('streak').textContent='🔥 '+s.streak;$('pct').textContent=`🗺️ ${s.progress.pct}%`;campaignHUD(s);}
 let LN='Explorer';function setLearner(L){if(!L?.name||L.name===LN&&document.title.includes(LN))return;LN=L.name;document.querySelectorAll('.lname').forEach(e=>e.textContent=LN);document.title=`${LN}'s Learning Adventure with Jane`;}
+// boss hearts: ❤️ = hits the boss still needs in THIS fight (server bossHP: today's first-try boss run on this topic), 🖤 = hits landed
+function bossHTML(b,topicId){if(!b)return'';const max=Math.max(1,b.max|0),hp=Math.max(0,Math.min(max,b.hp|0));
+ const msg=hp?`Hit it ${hp} more time${hp>1?'s':''} in a row!`:'Boss defeated! 💥';
+ return`<div class="hp" aria-label="Boss: ${hp} of ${max} hearts left"><span class="boss">${BOSSES[String(topicId||'').charCodeAt(4)%BOSSES.length||0]}</span>${'❤️'.repeat(hp)}${'🖤'.repeat(max-hp)}<span class="small">${msg}</span></div>`;}
+function bossBar(p){$('bossbar').innerHTML=p?.boss?bossHTML(p.boss,p.topicId):'';}
 function render(s){st=s;if(s?.learner)setLearner(s.learner);chips(s);const p=s.item;clearInterval(timerInt);$('timer').innerHTML='';if(!p)return;
  const f=p.format||'quest';$('frame').className='framebar f-'+f;$('frame').textContent=p.gate?(p.gate.warm?`🔥 Warm-up! A quick one you learned before (${p.gate.n}/${p.gate.of})`:p.gate.spot?`🗝️ Gate! Quick check: show me you know this one (${p.gate.n}/${p.gate.of})`:`🗝️ Gate! Unlock it with something you learned before (${p.gate.n}/${p.gate.of})`):FRAMES[f]||'🗡️ Quest';$('pcard').className='card '+f;
  $('topic').textContent=`${ISL[p.topic.subject]?.e||'📚'} ${p.topic.name}${p.level?` · Lv ${p.level}`:''}`;
  PACKT=s.terms||{};glReset();if(p.blank)$('q').innerHTML=gl(p.q).replace(/_{2,}/,'<span class="blank" id="blankslot">❓</span>');else $('q').innerHTML=p.type==='card'?'':gl(p.q);$('ev').innerHTML='';
  $('vis').innerHTML=(p.vis?(p.vis.type==='pizza'?pizza(p.vis.slices,p.vis.eaten):bar(p.vis.parts,p.vis.shaded)):'')+(p.scene?sceneHTML(p.scene):'')+(p.tpl?tplHTML(p.tpl):'');
  questStrip(s,p);
- $('bossbar').innerHTML=p.boss?`<div class="hp"><span class="boss">${BOSSES[p.topicId.charCodeAt(4)%BOSSES.length]}</span>${'❤️'.repeat(p.boss.hp)}${'🖤'.repeat(p.boss.max-p.boss.hp)}<span class="small">Hit it ${p.boss.hp} more time${p.boss.hp>1?'s':''} in a row!</span></div>`:'';
+ bossBar(p);
  if(p.intro){$('intro').hidden=false;$('intro').innerHTML=`<h3>${esc(p.intro.emoji||'✨')} ${gl(p.intro.title||'',new Set())}</h3><div>${gl(p.intro.story||'',new Set())}</div>`;}else $('intro').hidden=true;
  medalRow(s);
  $('steps').innerHTML=p.steps?.length?`<div class="steps"><b>🧭 Start like this:</b><ol>${p.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>`:'';
@@ -40,7 +45,7 @@ async function send(v){if(!v||$('pcard').classList.contains('busy'))return;$('pc
  if(r.correct){const big=!!(r.mastered||r.levelUp||r.medal);if(!(window.FX&&FX.good($('pcard'),big)))confetti(big?80:30);if(r.medal)reveal(r.medal,r.inferred);else if(r.mastered)banner(`🏆 Mastered!<br><small>${esc(r.mastered)}</small>${r.inferred?`<br><small>+${r.inferred} skills lit up on your map!</small>`:''}`);else if(r.levelUp)banner('⬆ Level '+r.levelUp+'!');}
  else if(r.formNudge){/* right value, wrong form: a gentle nudge, no shake */}
  else if(window.FX&&!FX.reduced()){FX.bad($('pcard'));}else{$('pcard').classList.remove('shake');void $('pcard').offsetWidth;$('pcard').classList.add('shake');}
- if(r.boss){$('bossbar').querySelector('.boss')?.classList.add('shake');}
+ if(r.boss){if(st?.item)st.item.boss=r.boss;$('bossbar').innerHTML=bossHTML(r.boss,st?.item?.topicId);$('bossbar').querySelector('.boss')?.classList.add('shake');}
  if(r.askChoice){chips(r.state);return ask(r.jane);}
  if(r.reveal){$('f').style.display='none';$('mc').innerHTML='';$('extra').innerHTML=`<p style="font-size:1.3rem">✅ Answer: <b>${esc(String(r.reveal).replace(/\|/g,' → '))}</b></p><button onclick="next()">Next ➡</button>`;window._next=r.state;window._mini=r.miniDone?r:null;chips(r.state);return;}
  if(r.retry){if(st.item.type==='input')$('a').select();else if(INTER[st.item.type])setTimeout(()=>render(st),900);return;}
@@ -65,12 +70,16 @@ async function next(){if(window._mini){const m=window._mini;window._mini=null;re
 $('f').onsubmit=e=>{e.preventDefault();send($('a').value.trim());};
 // ---------- world map ----------
 const ISL={Science:{x:290,y:540,r:250,e:'🔬',c:'#66bb6a'},Mathematics:{x:950,y:340,r:240,e:'🔢',c:'#42a5f5'},English:{x:1280,y:740,r:180,e:'📚',c:'#ab47bc'},History:{x:680,y:860,r:105,e:'🏛️',c:'#8d6e63'},
- 'Personal & Social Development':{x:690,y:625,r:100,e:'💛',c:'#ec407a',s:'Heart Isle'},'Life Skills':{x:1370,y:300,r:70,e:'💰',c:'#ffa726'},Computing:{x:1000,y:690,r:70,e:'🤖',c:'#26c6da'},'Learning to Learn':{x:1000,y:900,r:70,e:'🧠',c:'#7e57c2'}};
+ 'Personal & Social Development':{x:690,y:625,r:100,e:'💛',c:'#ec407a',s:'Heart Isle'},'Life Skills':{x:1370,y:300,r:70,e:'💰',c:'#ffa726'},Computing:{x:1000,y:690,r:70,e:'🤖',c:'#26c6da'},'Learning to Learn':{x:1000,y:900,r:70,e:'🧠',c:'#7e57c2'},
+ Geography:{x:560,y:140,r:70,e:'🧭',c:'#26a69a'}};
+// a subject the taxonomy adds later must never blank the whole Map: give it a spare islet instead of crashing doLayout
+const SPARE=[[1480,470],[160,140],[160,960],[1500,1000],[1380,90]];
+function ensureIslands(){let k=0;for(const t of TAX.topics){if(ISL[t.subject])continue;const [x,y]=SPARE[k%SPARE.length];k++;ISL[t.subject]={x,y,r:60,e:'🏝️',c:'#78909c'};}}
 const COL={m:'#ffc400',v:'#ff6d00',r:'#00e676',l:'#2979ff',x:'#b0bec5'},SN={m:'Mastered ⭐',v:'Review due 🧠',r:'Ready to explore 🟢',l:'Learning 🔵',x:'Still to go 🔒'};
 const hash=s=>{let h=2166136261;for(const c of s)h=Math.imul(h^c.charCodeAt(0),16777619);return(h>>>0)/4294967296;};
 let layout=null,mapData=null,zoomed=null;
-async function loadMap(){if(!TAX)TAX=await (await fetch('/tax.json')).json();if(!layout){layout=doLayout();TAX.idx=Object.fromEntries(TAX.topics.map((t,i)=>[t.id,i]));}
- mapData=await api('/api/map');drawMap();drawBars();}
+async function loadMap(){if(!TAX)TAX=await (await fetch('/tax.json')).json();if(!layout){ensureIslands();layout=doLayout();TAX.idx=Object.fromEntries(TAX.topics.map((t,i)=>[t.id,i]));}
+ mapData=await api('/api/map');try{drawMap();}catch(e){console.error(e);$('world').innerHTML='<p class="small">Oops, the map got lost in the fog. Try again in a moment! 🧭</p>';}drawBars();}
 function blob(cx,cy,r,seed,n=48,amp=1){let d='';const P=[];for(let i=0;i<n;i++){const a=i/n*2*Math.PI,k=1+amp*(.07*Math.sin(a*3+seed*9)+.05*Math.sin(a*5+seed*4)+.025*Math.sin(a*11+seed*17));P.push([cx+r*k*Math.cos(a),cy+r*k*Math.sin(a)]);}
  // smooth closed curve through points (Catmull-Rom → cubic Bézier)
  for(let i=0;i<n;i++){const p0=P[(i-1+n)%n],p1=P[i],p2=P[(i+1)%n],p3=P[(i+2)%n];if(!i)d+=`M${p1[0].toFixed(1)},${p1[1].toFixed(1)}`;
@@ -143,6 +152,17 @@ function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const vb=zo
   ${trees(I,sub,Math.round(I.r/14))}${landmark(sub,I.x,I.y-I.r*.04,I.r*.55)}</g>`;}
  if(zoomed){const ids=new Set();TAX.topics.forEach((t)=>{if(t.subject===zoomed)ids.add(t.id)});let ls='';for(const [a,b,h] of TAX.deps){if(!h||!ids.has(a)||!ids.has(b))continue;const ia=TAX.idx[a],ib=TAX.idx[b];const ca=codes[ia],cb=codes[ib];if(cb==='x')continue;
    ls+=`<line x1="${pos[ib][0]}" y1="${pos[ib][1]}" x2="${pos[ia][0]}" y2="${pos[ia][1]}" stroke="${ca==='r'?'#00e676':ca==='m'||ca==='v'?'#fff8e1':'#ffffff55'}" stroke-width="${ca==='r'?1.4:.7}" opacity=".75"/>`;}s+=`<g pointer-events="none">${ls}</g>`;}
+ // literal fog (slice 4): dark, see-through mist over the unexplored parts only. A stone is lit (no fog) when it is
+ // directly cleared (mapData.fog mask 'C') or mastered / review due (codes m|v). Fog sits BELOW the nodes so lit and
+ // learning stones always show, and a mask punches clear holes around every lit stone. The quiet % chip stays.
+ const fog=mapData.fog||{bySubject:{},mask:'',pct:0},mask=fog.mask||'',lit=i=>mask[i]==='C'||codes[i]==='m'||codes[i]==='v';
+ const fogRad=zoomed?ISL[zoomed].r/58*2.6:13;let holes='';const tot={};
+ TAX.topics.forEach((t,i)=>{if(zoomed&&t.subject!==zoomed)return;const b=tot[t.subject]??={n:0,lit:0};b.n++;if(lit(i)){b.lit++;const[x,y]=pos[i];holes+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${fogRad.toFixed(1)}"/>`;}});
+ let fogS='';for(const [sub,I] of Object.entries(ISL)){if(zoomed&&zoomed!==sub)continue;const b=tot[sub];if(!b||!b.n||b.lit>=b.n)continue;const un=1-b.lit/b.n;
+  fogS+=`<g class="fog-layer" opacity="${(.18+.32*un).toFixed(2)}"><path class="fog-island" d="${blob(I.x,I.y,I.r*1.06,hash(sub)+.9)}" fill="#37474f"/>
+  <path class="fog-wisp" d="${blob(I.x+I.r*.12,I.y-I.r*.08,I.r*.62,hash(sub)+1.4)}" fill="#546e7a" opacity=".5"/></g>`;}
+ if(fogS)s+=`<mask id="fogHoles" maskUnits="userSpaceOnUse" x="-500" y="-500" width="2600" height="2100"><rect x="-500" y="-500" width="2600" height="2100" fill="#fff"/><g fill="#000" filter="url(#fogBlur)">${holes}</g></mask>
+ <g class="fog" pointer-events="none" mask="url(#fogHoles)">${fogS}</g>`;
  const rad=zoomed?ISL[zoomed].r/58:4.4;const G={m:'',v:'',r:'',l:'',x:''},fl=[];
  TAX.topics.forEach((t,i)=>{if(zoomed&&t.subject!==zoomed)return;const c=codes[i],[x,y]=pos[i];const rr=c==='x'?rad*.8:rad;
   G[c]+=`<circle class="tp ${c}" data-i="${i}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rr.toFixed(2)}"/>`;
@@ -150,27 +170,18 @@ function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const vb=zo
  // one group per state: one filter / one animation per group keeps ~1,900 nodes cheap on phones
  s+=`<g class="nodes" stroke-width="${(rad/4).toFixed(2)}"><g class="g-x" fill="#cfd8dc" stroke="#eceff1">${G.x}</g><g class="g-l" fill="${COL.l}" stroke="#fff">${G.l}</g><g class="g-r" fill="${COL.r}" stroke="#fff">${G.r}</g>
  <g class="g-m" fill="${COL.m}" stroke="#fff8e1" filter="url(#glow)">${G.m}</g><g class="g-v" fill="${COL.v}" stroke="#fff">${G.v}</g><g pointer-events="none">${fl.join('')}</g></g>`;
- // literal fog (slice 4): clears only with direct mastery (mapData.fog); quiet % chip stays in header
- const fog=mapData.fog||{bySubject:{},mask:'',pct:0},mask=fog.mask||'';
- if(!zoomed){for(const [sub,I] of Object.entries(ISL)){const fb=fog.bySubject?.[sub];if(!fb||!fb.total)continue;const uncleared=1-(fb.clear/fb.total);
-  if(uncleared<=0)continue;
-  s+=`<g class="fog-layer" pointer-events="none" opacity="${(.22+.55*uncleared).toFixed(2)}"><path class="fog-island" d="${blob(I.x,I.y,I.r*1.08,hash(sub)+.9)}" fill="#cfd8dc" filter="url(#fogBlur)"/>
-  <path class="fog-wisp" d="${blob(I.x+I.r*.12,I.y-I.r*.08,I.r*.72,hash(sub)+1.4)}" fill="#eceff1" opacity=".85"/><path class="fog-wisp" d="${blob(I.x-I.r*.1,I.y+I.r*.1,I.r*.55,hash(sub)+2.1)}" fill="#fff" opacity=".7"/></g>`;}}
- else{let fogStones='';TAX.topics.forEach((t,i)=>{if(t.subject!==zoomed)return;if(mask[i]==='C')return;const[x,y]=pos[i];const rr=rad*2.4;
-  fogStones+=`<ellipse class="fog-stone" data-i="${i}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${rr.toFixed(1)}" ry="${(rr*.78).toFixed(1)}"/>`;});
-  if(fogStones)s+=`<g class="fog-stones" pointer-events="none" fill="#cfd8dc" opacity=".72" filter="url(#fogBlur)">${fogStones}</g>`;}
  for(const [sub,I] of Object.entries(ISL)){if(zoomed&&zoomed!==sub)continue;const b=by[sub],p=b?Math.round(100*(b.mastered+b.review)/b.total):0;const fs=zoomed?I.r/8:Math.max(20,I.r/7);s+=banner2(I,sub,p,fs);}
  if(zoomed)for(const {d,a} of doms[zoomed]){const I=ISL[zoomed];const lb=d.length>16?d.split(/ & | and /)[0]:d;s+=`<text pointer-events="none" x="${I.x+I.r*1.0*Math.cos(a)}" y="${I.y+I.r*1.0*Math.sin(a)}" font-size="${I.r/(doms[zoomed].length>10?24:17)}" text-anchor="middle" fill="#3e2723" font-weight="800" stroke="#fff8e1" stroke-width="${I.r/80}" paint-order="stroke">${esc(lb)}</text>`;}
- if(!zoomed){s+=ship(560,180,1.1,'#42a5f5',22)+ship(1180,960,.9,'#ec407a',28)+ship(1500,560,.8,'#ffca28',25)+compass(1500,110,55);
+ if(!zoomed){s+=ship(250,985,.9,'#42a5f5',22)+ship(1180,960,.9,'#ec407a',28)+ship(1500,560,.8,'#ffca28',25)+compass(1500,110,55);
   for(const [x,y,k,d] of [[200,120,1,70],[800,90,.8,90],[1300,480,.7,80],[400,980,.9,100],[1100,140,.6,75]])s+=cloud(x,y,k,d);}
  const cur=mapData.current&&TAX.idx[mapData.current];if(cur!=null&&pos[cur]&&(!zoomed||TAX.topics[cur].subject===zoomed)){const[x,y]=pos[cur];s+=`<text pointer-events="none" class="boat" x="${x}" y="${y-rad*1.5}" font-size="${rad*6}" text-anchor="middle">⛵</text>`;}
  $('world').innerHTML=s+'</svg>';const svg=$('msvg');
  svg.querySelectorAll('.isl').forEach(g=>g.onclick=()=>{if(!zoomed){zoomed=g.dataset.s;drawMap();}});
  svg.addEventListener('pointermove',tip);svg.addEventListener('click',e=>{const isl=e.target.closest?.('.isl');if(!zoomed&&isl&&!e.target.classList.contains('tp')){zoomed=isl.dataset.s;window.FX?FX.view(drawMap):drawMap();return;}if(e.target.classList.contains('tp')){if(!zoomed){tip(e,true);zoomed=TAX.topics[e.target.dataset.i].subject;drawMap();}else{$('tip').hidden=true;stoneCard(+e.target.dataset.i);}}});
- $('zoomout').hidden=!zoomed;const pr=mapData.progress,fp=mapData.fog?.pct??0;$('msub').textContent=zoomed?`${zoomed}: tap a stone to see the skill. Fog lifts when you master a skill for real!`:`${pr.done} of ${pr.total} skills · fog clear ${fp}% · ${pr.tot.ready} ready · tap an island`;}
+ $('zoomout').hidden=!zoomed;const pr=mapData.progress,fp=mapData.fog?.pct??0,lp=pr.total?Math.round(1000*TAX.topics.reduce((n,t,i)=>n+(mapData.fog?.mask?.[i]==='C'||'mv'.includes(mapData.codes[i]||'_')?1:0),0)/pr.total)/10:0;$('msub').textContent=zoomed?`${zoomed}: tap a stone to see the skill. Fog lifts when you master a skill for real!`:`${pr.done} of ${pr.total} skills · ${lp}% lit · fog clear ${fp}% · ${pr.tot.ready} ready · tap an island`;}
 function tip(e,force){const t=e.target;if(!t.classList?.contains('tp')){if(!force)$('tip').hidden=true;return;}const i=+t.dataset.i,tp=TAX.topics[i],c=mapData.codes[i];
  const box=$('world').getBoundingClientRect(),card=$('world').parentElement.getBoundingClientRect();const el=$('tip');el.hidden=false;
- const fogged=mapData.fog?.mask?.[i]==='F';el.innerHTML=`<b>${esc(tp.name)}</b><br><span class="small">${esc(tp.subject)} › ${esc(tp.domain)} · ages ${tp.ageRangeStart}+</span><br>${SN[c]}${fogged?' · 🌫️ under fog':(mapData.fog?.mask?.[i]==='C'?' · ✨ fog cleared':'')}<br><span class="small">${esc(tp.description).slice(0,140)}…</span>`;
+ const cl=mapData.fog?.mask?.[i]==='C',fogged=!!mapData.fog&&!cl&&!'mv'.includes(c||'_');el.innerHTML=`<b>${esc(tp.name)}</b><br><span class="small">${esc(tp.subject)} › ${esc(tp.domain)} · ages ${tp.ageRangeStart}+</span><br>${SN[c]}${fogged?' · 🌫️ under fog':(cl?' · ✨ fog cleared':'')}<br><span class="small">${esc(tp.description).slice(0,140)}…</span>`;
  el.style.left=Math.min(e.clientX-card.left+12,card.width-290)+'px';el.style.top=(e.clientY-card.top+12)+'px';}
 function drawBars(){const pr=mapData.progress;let s=`<div class="big">🌍 ${pr.pct}% of ${pr.total} skills</div><div class="sbar"><div class="track">${seg(pr.tot,pr.total)}</div></div>`;
  for(const [sub,I] of Object.entries(ISL)){const b=pr.by[sub];if(!b)continue;s+=`<div class="sbar"><div class="lbl"><span>${I.e} ${esc(sub)}</span><span>${b.mastered+b.review} / ${b.total}</span></div><div class="track">${seg(b,b.total)}</div></div>`;}
