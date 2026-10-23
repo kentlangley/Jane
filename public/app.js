@@ -130,7 +130,8 @@ function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const vb=zo
  let s=`<svg viewBox="${vb}" id="msvg" class="${zoomed?'zoom':''}"><defs><radialGradient id="sea" cx="50%" cy="40%" r="75%"><stop offset="0" stop-color="#4dd0e1"/><stop offset=".6" stop-color="#0288d1"/><stop offset="1" stop-color="#01579b"/></radialGradient>
  <pattern id="ripple" width="90" height="60" patternUnits="userSpaceOnUse"><path d="M5 20 q10 -7 20 0 M50 48 q10 -7 20 0" stroke="#ffffff" stroke-opacity=".18" stroke-width="2.5" fill="none" stroke-linecap="round"/></pattern>
  <radialGradient id="grass" cx="45%" cy="40%"><stop offset="0" stop-color="#9ccc65"/><stop offset="1" stop-color="#558b2f"/></radialGradient>
- <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+ <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <filter id="fogBlur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6"/></filter></defs>
  <rect x="-500" y="-500" width="2600" height="2100" fill="url(#sea)"/><rect class="ripple" x="-500" y="-500" width="2600" height="2100" fill="url(#ripple)"/>`;
  for(let i=0;i<14;i++)s+=`<path class="wave" style="animation-delay:${-i*.7}s" d="M${(i*137)%1500} ${60+i*72} q15 -10 30 0 t30 0" stroke="#fff6" stroke-width="3" fill="none"/>`;
  const by=mapData.progress.by;
@@ -149,8 +150,15 @@ function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const vb=zo
  // one group per state: one filter / one animation per group keeps ~1,900 nodes cheap on phones
  s+=`<g class="nodes" stroke-width="${(rad/4).toFixed(2)}"><g class="g-x" fill="#cfd8dc" stroke="#eceff1">${G.x}</g><g class="g-l" fill="${COL.l}" stroke="#fff">${G.l}</g><g class="g-r" fill="${COL.r}" stroke="#fff">${G.r}</g>
  <g class="g-m" fill="${COL.m}" stroke="#fff8e1" filter="url(#glow)">${G.m}</g><g class="g-v" fill="${COL.v}" stroke="#fff">${G.v}</g><g pointer-events="none">${fl.join('')}</g></g>`;
- // fog over locked land (world view only)
- if(!zoomed)for(const [sub,I] of Object.entries(ISL)){const b=by[sub];if(!b)continue;const f=b.locked/b.total;s+=`<path pointer-events="none" class="fog" d="${blob(I.x,I.y,I.r*1.05,hash(sub)+.9)}" fill="#fff" opacity="${(.03+.09*f).toFixed(2)}"/>`;}
+ // literal fog (slice 4): clears only with direct mastery (mapData.fog); quiet % chip stays in header
+ const fog=mapData.fog||{bySubject:{},mask:'',pct:0},mask=fog.mask||'';
+ if(!zoomed){for(const [sub,I] of Object.entries(ISL)){const fb=fog.bySubject?.[sub];if(!fb||!fb.total)continue;const uncleared=1-(fb.clear/fb.total);
+  if(uncleared<=0)continue;
+  s+=`<g class="fog-layer" pointer-events="none" opacity="${(.22+.55*uncleared).toFixed(2)}"><path class="fog-island" d="${blob(I.x,I.y,I.r*1.08,hash(sub)+.9)}" fill="#cfd8dc" filter="url(#fogBlur)"/>
+  <path class="fog-wisp" d="${blob(I.x+I.r*.12,I.y-I.r*.08,I.r*.72,hash(sub)+1.4)}" fill="#eceff1" opacity=".85"/><path class="fog-wisp" d="${blob(I.x-I.r*.1,I.y+I.r*.1,I.r*.55,hash(sub)+2.1)}" fill="#fff" opacity=".7"/></g>`;}}
+ else{let fogStones='';TAX.topics.forEach((t,i)=>{if(t.subject!==zoomed)return;if(mask[i]==='C')return;const[x,y]=pos[i];const rr=rad*2.4;
+  fogStones+=`<ellipse class="fog-stone" data-i="${i}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${rr.toFixed(1)}" ry="${(rr*.78).toFixed(1)}"/>`;});
+  if(fogStones)s+=`<g class="fog-stones" pointer-events="none" fill="#cfd8dc" opacity=".72" filter="url(#fogBlur)">${fogStones}</g>`;}
  for(const [sub,I] of Object.entries(ISL)){if(zoomed&&zoomed!==sub)continue;const b=by[sub],p=b?Math.round(100*(b.mastered+b.review)/b.total):0;const fs=zoomed?I.r/8:Math.max(20,I.r/7);s+=banner2(I,sub,p,fs);}
  if(zoomed)for(const {d,a} of doms[zoomed]){const I=ISL[zoomed];const lb=d.length>16?d.split(/ & | and /)[0]:d;s+=`<text pointer-events="none" x="${I.x+I.r*1.0*Math.cos(a)}" y="${I.y+I.r*1.0*Math.sin(a)}" font-size="${I.r/(doms[zoomed].length>10?24:17)}" text-anchor="middle" fill="#3e2723" font-weight="800" stroke="#fff8e1" stroke-width="${I.r/80}" paint-order="stroke">${esc(lb)}</text>`;}
  if(!zoomed){s+=ship(560,180,1.1,'#42a5f5',22)+ship(1180,960,.9,'#ec407a',28)+ship(1500,560,.8,'#ffca28',25)+compass(1500,110,55);
@@ -159,10 +167,10 @@ function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const vb=zo
  $('world').innerHTML=s+'</svg>';const svg=$('msvg');
  svg.querySelectorAll('.isl').forEach(g=>g.onclick=()=>{if(!zoomed){zoomed=g.dataset.s;drawMap();}});
  svg.addEventListener('pointermove',tip);svg.addEventListener('click',e=>{const isl=e.target.closest?.('.isl');if(!zoomed&&isl&&!e.target.classList.contains('tp')){zoomed=isl.dataset.s;window.FX?FX.view(drawMap):drawMap();return;}if(e.target.classList.contains('tp')){if(!zoomed){tip(e,true);zoomed=TAX.topics[e.target.dataset.i].subject;drawMap();}else{$('tip').hidden=true;stoneCard(+e.target.dataset.i);}}});
- $('zoomout').hidden=!zoomed;const pr=mapData.progress;$('msub').textContent=zoomed?`${zoomed}: tap a stone to see the skill. Flags = mastered, glowing green = ready!`:`${pr.done} of ${pr.total} skills · ${pr.tot.ready} ready to explore · tap an island to zoom in`;}
+ $('zoomout').hidden=!zoomed;const pr=mapData.progress,fp=mapData.fog?.pct??0;$('msub').textContent=zoomed?`${zoomed}: tap a stone to see the skill. Fog lifts when you master a skill for real!`:`${pr.done} of ${pr.total} skills · fog clear ${fp}% · ${pr.tot.ready} ready · tap an island`;}
 function tip(e,force){const t=e.target;if(!t.classList?.contains('tp')){if(!force)$('tip').hidden=true;return;}const i=+t.dataset.i,tp=TAX.topics[i],c=mapData.codes[i];
  const box=$('world').getBoundingClientRect(),card=$('world').parentElement.getBoundingClientRect();const el=$('tip');el.hidden=false;
- el.innerHTML=`<b>${esc(tp.name)}</b><br><span class="small">${esc(tp.subject)} › ${esc(tp.domain)} · ages ${tp.ageRangeStart}+</span><br>${SN[c]}<br><span class="small">${esc(tp.description).slice(0,140)}…</span>`;
+ const fogged=mapData.fog?.mask?.[i]==='F';el.innerHTML=`<b>${esc(tp.name)}</b><br><span class="small">${esc(tp.subject)} › ${esc(tp.domain)} · ages ${tp.ageRangeStart}+</span><br>${SN[c]}${fogged?' · 🌫️ under fog':(mapData.fog?.mask?.[i]==='C'?' · ✨ fog cleared':'')}<br><span class="small">${esc(tp.description).slice(0,140)}…</span>`;
  el.style.left=Math.min(e.clientX-card.left+12,card.width-290)+'px';el.style.top=(e.clientY-card.top+12)+'px';}
 function drawBars(){const pr=mapData.progress;let s=`<div class="big">🌍 ${pr.pct}% of ${pr.total} skills</div><div class="sbar"><div class="track">${seg(pr.tot,pr.total)}</div></div>`;
  for(const [sub,I] of Object.entries(ISL)){const b=pr.by[sub];if(!b)continue;s+=`<div class="sbar"><div class="lbl"><span>${I.e} ${esc(sub)}</span><span>${b.mastered+b.review} / ${b.total}</span></div><div class="track">${seg(b,b.total)}</div></div>`;}

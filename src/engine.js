@@ -77,10 +77,10 @@ export function campaignState(S,g){const trailLen=TRAIL_LEN,need=LEGENDARY_NEED;
   else taunt=leftLeg===1?'Trail full! 1 legendary win lights the Final Boss!':`Trail full! ${leftLeg} legendary wins to fully light the Final Boss!`;
   return{trailLen,filled,nodes,history,legendaries:{have,need,slots},finalBoss:{lit,unlocked},taunt};}
 // Fog clear = direct mastery (map "lights on"); inferred mastery does not clear fog. finds stubbed for slice 5.
-export function fogState(S,g){const bySubject={};let clear=0,total=0;
-  for(const t of g.topics){total++;const ok=S.ts[t.id]?.st==='mastered'&&S.ts[t.id]?.how==='direct';if(ok)clear++;
+export function fogState(S,g){const bySubject={};let clear=0,total=0,mask='';
+  for(const t of g.topics){total++;const ok=S.ts[t.id]?.st==='mastered'&&S.ts[t.id]?.how==='direct';if(ok)clear++;mask+=ok?'C':'F';
     const b=bySubject[t.subject]??={clear:0,total:0};b.total++;if(ok)b.clear++;}
-  return{clear,total,pct:total?Math.round(1000*clear/total)/10:0,bySubject,finds:[]};}
+  return{clear,total,pct:total?Math.round(1000*clear/total)/10:0,bySubject,mask,finds:[]};}
 // medals: one per directly-mastered topic (not inferred, not self-rated); boss wins are legendary
 export function tierOf(g,id,boss){return boss?'legendary':(g.byId[id]||g.hidden?.[id])?.tier||'bronze';}
 function backfillMedals(S,g){S.medals=[];for(const [id,r] of Object.entries(S.ts))if(r.st==='mastered'&&r.how==='direct'&&(g.byId[id]||g.hidden?.[id]))S.medals.push({id,tier:tierOf(g,id,false),at:r.at||Date.now()});S.medals.sort((a,b)=>a.at-b.at);}

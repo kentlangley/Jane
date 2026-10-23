@@ -1,6 +1,6 @@
 # Campaign Trail + Fog Map — always-on progress kids can see
 
-**Status:** in progress — slices 1–3 done; slice 4 next.
+**Status:** in progress — slices 1–4 done; slice 5 next.
 **Tracking:** [#54](https://github.com/kentlangley/Jane/issues/54)
 **Slices:** [#55](https://github.com/kentlangley/Jane/issues/55) API · [#56](https://github.com/kentlangley/Jane/issues/56) HUD · [#57](https://github.com/kentlangley/Jane/issues/57) Quest of Quests · [#58](https://github.com/kentlangley/Jane/issues/58) Fog Map · [#59](https://github.com/kentlangley/Jane/issues/59) Secrets · [#60](https://github.com/kentlangley/Jane/issues/60) Final Boss  
 **Frozen:** quest medals advance the trail; legendary topic medals light the Final Boss (Kent).  
@@ -76,15 +76,15 @@ Kids who like Minecraft Dungeons want (1) a graphic campaign with bosses ahead a
 - Done test: as above ✅
 - Decisions frozen: D6.
 
-### Slice 4: Literal fog on the Map
+### Slice 4: Literal fog on the Map ✅
 - Ships: Map draws fog over unclear stones/domains; fog pulls back as mastery grows (sandbox-visible). Quiet `%` remains.
-- Touches: `public/app.js` (`drawMap`), `public/app.css`, map API fields from slice 1
-- Done test: sandbox Map shows fog on unknown areas and clear stones without fog; screenshot or deterministic SVG class checks in a small test if practical
+- Touches: `public/app.js` (`drawMap`), `public/app.css`, `src/engine.js` (fog `mask`), `src/worker.js` (`/api/map` fog)
+- Done test: sandbox Map shows fog on unknown areas and clear stones without fog; SVG class smoke — **passed** 2026-10-22
 - Owner: self
 
-#### Execute (Slice 4)
-- Fog layer from `state.fog` / map payload.
-- Done test: as above.
+#### Execute (Slice 4) — done
+- Fog layer from `mapData.fog` (direct-mastery `mask` + `bySubject`); world island fog + zoomed stone fog; clear stones unfogged.
+- Done test: as above ✅
 - Decisions frozen: D8, D9.
 
 ### Slice 5: Secrets, treasures, power-ups
