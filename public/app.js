@@ -178,11 +178,19 @@ function drawBars(){const pr=mapData.progress;let s=`<div class="big">🌍 ${pr.
 const seg=(b,t)=>[['mastered','m'],['review','v'],['learning','l'],['ready','r']].map(([k,c])=>`<i style="width:0;background:${COL[c]};opacity:${c==='r'?.45:1}" data-w="${(100*b[k]/t).toFixed(2)}%" title="${k}: ${b[k]}"></i>`).join('');
 $('zoomout').onclick=()=>{zoomed=null;drawMap();};
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{const sw=()=>{document.querySelectorAll('.tab').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-selected',x===b);x.tabIndex=x===b?0:-1;});for(const v of['play','map','trophies','quests'])$(v).hidden=b.dataset.v!==v;};window.FX?FX.view(sw):sw();if(b.dataset.v==='map')loadMap();if(b.dataset.v==='trophies')loadTrophies();if(b.dataset.v==='quests')loadQuests();});
-loadGloss().finally(()=>api('/api/state').then(s=>{render(s);questDot(s);if(s.newQuest&&!location.hash&&s.quest)questReveal(s.quest);}));
+loadGloss().finally(()=>api('/api/state').then(s=>{render(s);questDot(s);if(s.finaleReveal)finaleReveal(s.campaign);else if(s.newQuest&&!location.hash&&s.quest)questReveal(s.quest);}));
 if(location.hash==='#quests')document.querySelector('.tab[data-v=quests]').click();
 if(location.hash==='#trophies')document.querySelector('.tab[data-v=trophies]').click();
 if(location.hash.startsWith('#map')){const z=decodeURIComponent(location.hash.slice(5));if(z)zoomed=z;document.querySelector('.tab[data-v=map]').click();}
 
+// ---------- Final Boss unlock reveal (slice 6 / #60) ----------
+function finaleReveal(C){if(document.querySelector('.finale'))return;const o=document.createElement('div');o.className='finale';
+ o.innerHTML=`<div class="fnbox"><div class="fnemo">👑</div><div class="fnnew">FINAL BOSS UNLOCKED!</div>
+ <p>The Campaign Trail is complete and the Final Boss is fully lit.</p>
+ <p class="ctaunt">${esc(C?.taunt||'Jane is forging the finale…')}</p>
+ <p class="small">No free medals — when Jane finishes forging, a one-shot Finale quest may appear.</p>
+ <button type="button" id="fnok">Awesome! 🗡️</button></div>`;
+ document.body.appendChild(o);confetti(90);const close=()=>{o.classList.add('out');setTimeout(()=>o.remove(),320);};$('fnok').onclick=close;o.onclick=e=>{if(e.target===o)close();};setTimeout(()=>$('fnok')?.focus(),60);}
 // ---------- fog finds (slice 5 / #59): claim once; garnish only — never invent medals ----------
 function fogFindReveal(f,reward){const o=document.createElement('div');o.className='freveal';
  o.innerHTML=`<div class="frbox"><div class="fremo">${esc(f.emoji||'📦')}</div><div class="frnew">✨ Fog find! ✨</div><h3>${esc(f.title||'Treasure')}</h3>
@@ -210,7 +218,7 @@ function cTrailHTML(C,{big=false}={}){const nodes=C.nodes.map((n,i)=>{const done
  const fbCls=unlocked?'unlocked':lit>=1?'lit':lit>0?'partial':'fog';
  const fb=unlocked?'👑':lit>=1?'🐲':lit>0?'🐉':'🌫️';
  return`<div class="ctrail${big?' big':''}" role="list" aria-label="Trail ${C.filled} of ${C.trailLen}">${nodes}<i class="cend"></i><span class="cn boss ${fbCls}" role="listitem" title="Final Boss" aria-label="Final Boss ${Math.round(lit*100)} percent lit">${fb}</span></div>`;}
-function campaignHUD(s){const el=$('campaign');if(!el)return;const C=s?.campaign;if(!C){el.hidden=true;return;}
+function campaignHUD(s){if(s?.finaleReveal)finaleReveal(s.campaign);const el=$('campaign');if(!el)return;const C=s?.campaign;if(!C){el.hidden=true;return;}
  const legs='★'.repeat(C.legendaries.have)+'☆'.repeat(Math.max(0,C.legendaries.need-C.legendaries.have));
  el.hidden=false;
  el.innerHTML=`<button type="button" class="copen" id="copen" aria-haspopup="dialog" aria-controls="coverlay" aria-label="Open Quest of Quests campaign map">
@@ -427,5 +435,5 @@ addEventListener('scroll',()=>gclose(),{passive:true});
  // tabs: arrow keys move between tabs
  const tabs=[...document.querySelectorAll('.tab')];tabs.forEach((t,i)=>t.addEventListener('keydown',e=>{const d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;if(!d)return;e.preventDefault();const n=tabs[(i+d+tabs.length)%tabs.length];n.focus();n.click();}));
  // Escape closes medal / stone / quest overlays
- document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;(document.querySelector('.coverlay #cclose')||document.querySelector('.scard .x')||document.querySelector('.reveal .rbox button'))?.click();});
+ document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;(document.querySelector('.finale #fnok')||document.querySelector('.coverlay #cclose')||document.querySelector('.scard .x')||document.querySelector('.reveal .rbox button'))?.click();});
 })();

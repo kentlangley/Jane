@@ -75,7 +75,16 @@ export function campaignState(S,g){const trailLen=TRAIL_LEN,need=LEGENDARY_NEED;
   else if(leftBoss>0&&leftLeg>0)taunt=leftBoss===1?`1 boss till the Final Boss — and ${leftLeg} legendary${leftLeg===1?'':'s'} to light it!`:`${leftBoss} bosses till the Final Boss…`;
   else if(leftBoss>0)taunt=leftBoss===1?'1 boss left — then the Final Boss!':`${leftBoss} bosses till the Final Boss…`;
   else taunt=leftLeg===1?'Trail full! 1 legendary win lights the Final Boss!':`Trail full! ${leftLeg} legendary wins to fully light the Final Boss!`;
-  return{trailLen,filled,nodes,history,legendaries:{have,need,slots},finalBoss:{lit,unlocked},taunt};}
+  const revealedAt=S.campaign?.finalBossRevealedAt||null;
+  return{trailLen,filled,nodes,history,legendaries:{have,need,slots},finalBoss:{lit,unlocked,revealedAt},taunt};}
+// Persist Final Boss unlock once (slice 6). Never invents medals. Returns {justUnlocked, revealedAt}.
+export function syncFinale(S,g,now=Date.now()){const C=campaignState(S,g);
+  if(!C.finalBoss.unlocked)return{justUnlocked:false,revealedAt:S.campaign?.finalBossRevealedAt||null};
+  if(S.campaign?.finalBossRevealedAt)return{justUnlocked:false,revealedAt:S.campaign.finalBossRevealedAt};
+  const medalsBefore=(S.medals||[]).length,qmBefore=(S.questMedals||[]).length;
+  S.campaign??={};S.campaign.finalBossRevealedAt=now;
+  if((S.medals||[]).length!==medalsBefore||(S.questMedals||[]).length!==qmBefore)throw new Error('syncFinale must not invent medals');
+  return{justUnlocked:true,revealedAt:now};}
 // Fog clear = direct mastery (map "lights on"); inferred mastery does not clear fog.
 // Finds (slice 5): table-driven chests/secrets/power-ups revealed when clear thresholds hit; claim once; never invent medals or skip mastery (D11).
 export const FOG_FINDS=[

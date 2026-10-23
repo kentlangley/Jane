@@ -391,6 +391,13 @@ A new quest while one is in progress exits 3; a refresh that touches a reached s
 The script exits with code 1 and lists every problem if the pack is invalid, for example an unknown topic id, an
 mc answer that isn't one of the choices, or a missing hint or explanation. Nothing is written in that case.
 
+
+## Finale quest (Campaign Trail climax)
+
+When the learner's Campaign Trail is full (**12** quest medals) **and** the Final Boss is fully lit (**4** legendary topic medals), the app persists `campaign.finalBoss.revealedAt` and shows a one-time unlock reveal. Export surfaces `campaign.finalBoss.unlocked` / `revealedAt`.
+
+The nightly author **may** write a one-shot **Finale** quest (still one-quest-at-a-time; no free medals). Until that pack exists, the app taunts: "Jane is forging the finale…". Do not invent medals or skip mastery to rush the unlock.
+
 ## Nightly loop
 ```bash
 node export-progress.mjs                    # → exports/progress-<today PT>.json
