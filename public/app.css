@@ -168,7 +168,31 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #009624}
 @keyframes cnPulse{50%{transform:scale(1.08)}}
 .campaign .ctaunt{margin:2px 0 0;font-size:.95rem;font-weight:700;line-height:1.25;color:#ffe082}
 .campaign.preview{outline:3px dashed #ffd54f;outline-offset:2px}
+.campaign .copen{display:block;width:100%;text-align:left;background:transparent;border:0;color:inherit;box-shadow:none;padding:0;min-height:0;font:inherit;cursor:pointer}
+.campaign .copen:active,.campaign .copen.pressing{transform:none!important;filter:none}
+.campaign .chint{display:block;margin-top:4px;font-size:.85rem;font-weight:700;color:#b39ddb;opacity:.95}
+.ctrail.big .cn{width:36px;height:36px;font-size:1.15rem}.ctrail.big .cn.boss{width:44px;height:44px;font-size:1.4rem}
 @media (prefers-reduced-motion:reduce){.campaign .cn.cur,.campaign .cn.boss.lit,.campaign .cn.boss.unlocked{animation:none}}
+
+/* Quest of Quests overlay (slice 3) */
+.coverlay{position:fixed;inset:0;z-index:55;background:radial-gradient(circle at 50% 20%,#4a148ccc,#0d0a1af2);display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto;animation:fadein .25s}
+.coverlay.out{animation:fadeout .28s forwards}
+.coverlay .cobox{position:relative;background:linear-gradient(160deg,#1a237e,#311b92 40%,#4a148c);color:#fff;border-radius:28px;padding:18px 16px 20px;max-width:520px;width:100%;margin:12px auto 40px;box-shadow:0 12px 40px #0008;border:3px solid #ffd54f55;animation:pop .35s}
+.coverlay .cobox h2{margin:.2em 0 .4em;font-size:1.7rem;text-align:center}
+.coverlay .cobox h3{margin:.6em 0 .35em;font-size:1.15rem}
+.coverlay .x{position:absolute;top:10px;right:10px;background:#ffffff22;color:#fff;box-shadow:none;padding:4px 12px;font-size:1.1rem;min-height:40px}
+.coverlay .ctaunt{text-align:center;color:#ffe082;font-weight:700;margin:.2em 0 .6em}
+.coverlay .ctrail{justify-content:center;flex-wrap:wrap;padding-bottom:10px}
+.coverlay .csec{background:#ffffff12;border-radius:18px;padding:10px 12px;margin-top:10px}
+.coverlay .cslots{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px}
+.coverlay .cslot{background:#ffffff14;border:2px dashed #b39ddb;border-radius:14px;padding:8px 6px;text-align:center;opacity:.7}
+.coverlay .cslot.on{border-style:solid;border-color:#ffd54f;background:linear-gradient(135deg,#ff8bd855,#8a5cff55);opacity:1}
+.coverlay .csemo{display:block;font-size:1.6rem}.coverlay .csnm{font-size:.85rem;font-weight:700;line-height:1.15}
+.coverlay .chist{list-style:none;margin:0;padding:0;max-height:220px;overflow:auto}
+.coverlay .chist li{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid #ffffff18}
+.coverlay .chist .he{font-size:1.5rem;flex:none}
+.coverlay .bigbtn{margin-top:14px;background:#00c853;box-shadow:0 5px 0 #009624;animation:none}
+@media (prefers-reduced-motion:reduce){.coverlay,.coverlay .cobox{animation:none}}
 
 /* ===================== polish layer (tokens, motion, a11y, tablet) ===================== */
 :root{--c-primary:#7c4dff;--c-primary-d:#4a148c;--c-sky:#00b8d4;--c-orange:#ff6d00;--c-pink:#e91e63;--c-green:#00c853;--c-green-d:#009624;--c-sun:#ffd600;--c-ink:#2d2a4a;--c-mut:#666;

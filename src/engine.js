@@ -63,7 +63,10 @@ export function campaignState(S,g){const trailLen=TRAIL_LEN,need=LEGENDARY_NEED;
   const qs=[...dedupeBy(S.questMedals,q=>q.date)].sort((a,b)=>(a.at||0)-(b.at||0));
   const filled=Math.min(trailLen,qs.length);
   const nodes=Array.from({length:trailLen},(_,i)=>i<qs.length?{date:qs[i].date,name:qs[i].name,emoji:qs[i].emoji||'🏅'}:null);
-  const have=(S.medals||[]).filter(m=>m.tier==='legendary').length;
+  const history=qs.map(q=>({date:q.date,name:q.name,emoji:q.emoji||'🏅',title:q.title||''}));
+  const legs=(S.medals||[]).filter(m=>m.tier==='legendary').sort((a,b)=>(a.at||0)-(b.at||0));
+  const have=legs.length;
+  const slots=Array.from({length:need},(_,i)=>{const m=legs[i];if(!m)return null;const t=g.byId?.[m.id]||g.hidden?.[m.id];return{id:m.id,name:t?.sn||t?.name||m.name||'Legendary',ic:t?.ic||'🌈',at:m.at};});
   const lit=Math.min(1,have/need),unlocked=filled>=trailLen&&have>=need;
   const leftBoss=trailLen-filled,leftLeg=Math.max(0,need-have);
   let taunt;
@@ -72,7 +75,7 @@ export function campaignState(S,g){const trailLen=TRAIL_LEN,need=LEGENDARY_NEED;
   else if(leftBoss>0&&leftLeg>0)taunt=leftBoss===1?`1 boss till the Final Boss — and ${leftLeg} legendary${leftLeg===1?'':'s'} to light it!`:`${leftBoss} bosses till the Final Boss…`;
   else if(leftBoss>0)taunt=leftBoss===1?'1 boss left — then the Final Boss!':`${leftBoss} bosses till the Final Boss…`;
   else taunt=leftLeg===1?'Trail full! 1 legendary win lights the Final Boss!':`Trail full! ${leftLeg} legendary wins to fully light the Final Boss!`;
-  return{trailLen,filled,nodes,legendaries:{have,need},finalBoss:{lit,unlocked},taunt};}
+  return{trailLen,filled,nodes,history,legendaries:{have,need,slots},finalBoss:{lit,unlocked},taunt};}
 // Fog clear = direct mastery (map "lights on"); inferred mastery does not clear fog. finds stubbed for slice 5.
 export function fogState(S,g){const bySubject={};let clear=0,total=0;
   for(const t of g.topics){total++;const ok=S.ts[t.id]?.st==='mastered'&&S.ts[t.id]?.how==='direct';if(ok)clear++;

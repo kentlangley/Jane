@@ -8,7 +8,8 @@ const blank=()=>E.blank();
 test('empty progress: empty trail, no legendaries, fog clear 0',()=>{
   const S=blank(),C=E.campaignState(S,g),F=E.fogState(S,g);
   assert.equal(C.trailLen,12);assert.equal(C.filled,0);assert.equal(C.nodes.length,12);
-  assert.ok(C.nodes.every(n=>n===null));assert.deepEqual(C.legendaries,{have:0,need:4});
+  assert.ok(C.nodes.every(n=>n===null));assert.equal(C.legendaries.have,0);assert.equal(C.legendaries.need,4);
+  assert.equal(C.legendaries.slots.length,4);assert.ok(C.legendaries.slots.every(s=>s===null));assert.deepEqual(C.history,[]);
   assert.equal(C.finalBoss.lit,0);assert.equal(C.finalBoss.unlocked,false);assert.equal(typeof C.taunt,'string');
   assert.equal(F.clear,0);assert.equal(F.total,g.topics.length);assert.equal(F.pct,0);
   assert.deepEqual(F.finds,[]);assert.ok(Object.keys(F.bySubject).length>0);
@@ -29,7 +30,8 @@ test('more than 12 quest medals caps trail length; extras do not extend',()=>{
 test('legendary medals light the Final Boss; unlocked only when trail full AND need met',()=>{
   const S=blank();
   S.medals=[{id:'a',tier:'legendary',at:1},{id:'b',tier:'legendary',at:2},{id:'c',tier:'bronze',at:3}];
-  let C=E.campaignState(S,g);assert.equal(C.legendaries.have,2);assert.equal(C.finalBoss.lit,0.5);assert.equal(C.finalBoss.unlocked,false);
+  let C=E.campaignState(S,g);assert.equal(C.legendaries.have,2);assert.ok(C.legendaries.slots[0]&&C.legendaries.slots[1]);assert.equal(C.legendaries.slots[2],null);
+  assert.equal(C.finalBoss.lit,0.5);assert.equal(C.finalBoss.unlocked,false);
   S.medals.push({id:'d',tier:'legendary',at:4},{id:'e',tier:'legendary',at:5});
   C=E.campaignState(S,g);assert.equal(C.legendaries.have,4);assert.equal(C.finalBoss.lit,1);assert.equal(C.finalBoss.unlocked,false,'need trail too');
   S.questMedals=Array.from({length:12},(_,i)=>qm(`2026-02-${String(i+1).padStart(2,'0')}`,100+i));
@@ -53,4 +55,12 @@ test('Play mounts Campaign Trail HUD + preview hash (slice 2)',()=>{
   assert.ok(html.includes('id="campaign"'),'index has #campaign');
   assert.match(js,/function campaignHUD/);assert.match(js,/#campaign-preview/);
   assert.match(css,/\.campaign/);assert.match(css,/cnPulse|prefers-reduced-motion:reduce/);
+});
+
+test('campaign overlay helpers present; strip is actionable (slice 3)',()=>{
+  const js=fs.readFileSync(path.join(DIR,'../public/app.js'),'utf8');
+  const css=fs.readFileSync(path.join(DIR,'../public/app.css'),'utf8');
+  assert.match(js,/function openCampaign/);assert.match(js,/function closeCampaign/);
+  assert.match(js,/campaignHUD[\s\S]*openCampaign|onclick=.*openCampaign|campaign.*button/s);
+  assert.match(css,/\.coverlay|\.qomap/);
 });
