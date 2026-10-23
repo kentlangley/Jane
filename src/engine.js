@@ -56,6 +56,28 @@ function dedupeMedals(S){if(S.medals){const d=dedupeBy(S.medals,m=>m.id);if(d.le
 export function trophies(S,g){const M=[...dedupeBy(S.medals,m=>m.id).map(m=>medalInfo(m,g)).filter(Boolean),
   ...dedupeBy(S.questMedals,q=>q.date).map(q=>({id:'quest:'+q.date,tier:'quest',at:q.at,name:q.name,ic:q.emoji,subject:'Quest',domain:q.title,why:`finishing the quest "${q.title}"`}))].sort((a,b)=>b.at-a.at);
   const counts={};M.forEach(m=>counts[m.tier]=(counts[m.tier]||0)+1);return{medals:M,counts};}
+// ---------- campaign trail + fog map (slice 1) ----------
+// Quest medals fill a fixed-length trail; legendary topic medals light the Final Boss. Pure: no unlock persistence here.
+export const TRAIL_LEN=12, LEGENDARY_NEED=4;
+export function campaignState(S,g){const trailLen=TRAIL_LEN,need=LEGENDARY_NEED;
+  const qs=[...dedupeBy(S.questMedals,q=>q.date)].sort((a,b)=>(a.at||0)-(b.at||0));
+  const filled=Math.min(trailLen,qs.length);
+  const nodes=Array.from({length:trailLen},(_,i)=>i<qs.length?{date:qs[i].date,name:qs[i].name,emoji:qs[i].emoji||'🏅'}:null);
+  const have=(S.medals||[]).filter(m=>m.tier==='legendary').length;
+  const lit=Math.min(1,have/need),unlocked=filled>=trailLen&&have>=need;
+  const leftBoss=trailLen-filled,leftLeg=Math.max(0,need-have);
+  let taunt;
+  if(unlocked)taunt='The Final Boss is unlocked — Jane is forging the finale…';
+  else if(!filled&&!have)taunt='Beat quests to light the Campaign Trail. Legendaries wake the Final Boss!';
+  else if(leftBoss>0&&leftLeg>0)taunt=leftBoss===1?`1 boss till the Final Boss — and ${leftLeg} legendary${leftLeg===1?'':'s'} to light it!`:`${leftBoss} bosses till the Final Boss…`;
+  else if(leftBoss>0)taunt=leftBoss===1?'1 boss left — then the Final Boss!':`${leftBoss} bosses till the Final Boss…`;
+  else taunt=leftLeg===1?'Trail full! 1 legendary win lights the Final Boss!':`Trail full! ${leftLeg} legendary wins to fully light the Final Boss!`;
+  return{trailLen,filled,nodes,legendaries:{have,need},finalBoss:{lit,unlocked},taunt};}
+// Fog clear = direct mastery (map "lights on"); inferred mastery does not clear fog. finds stubbed for slice 5.
+export function fogState(S,g){const bySubject={};let clear=0,total=0;
+  for(const t of g.topics){total++;const ok=S.ts[t.id]?.st==='mastered'&&S.ts[t.id]?.how==='direct';if(ok)clear++;
+    const b=bySubject[t.subject]??={clear:0,total:0};b.total++;if(ok)b.clear++;}
+  return{clear,total,pct:total?Math.round(1000*clear/total)/10:0,bySubject,finds:[]};}
 // medals: one per directly-mastered topic (not inferred, not self-rated); boss wins are legendary
 export function tierOf(g,id,boss){return boss?'legendary':(g.byId[id]||g.hidden?.[id])?.tier||'bronze';}
 function backfillMedals(S,g){S.medals=[];for(const [id,r] of Object.entries(S.ts))if(r.st==='mastered'&&r.how==='direct'&&(g.byId[id]||g.hidden?.[id]))S.medals.push({id,tier:tierOf(g,id,false),at:r.at||Date.now()});S.medals.sort((a,b)=>a.at-b.at);}
