@@ -76,11 +76,40 @@ export function campaignState(S,g){const trailLen=TRAIL_LEN,need=LEGENDARY_NEED;
   else if(leftBoss>0)taunt=leftBoss===1?'1 boss left — then the Final Boss!':`${leftBoss} bosses till the Final Boss…`;
   else taunt=leftLeg===1?'Trail full! 1 legendary win lights the Final Boss!':`Trail full! ${leftLeg} legendary wins to fully light the Final Boss!`;
   return{trailLen,filled,nodes,history,legendaries:{have,need,slots},finalBoss:{lit,unlocked},taunt};}
-// Fog clear = direct mastery (map "lights on"); inferred mastery does not clear fog. finds stubbed for slice 5.
-export function fogState(S,g){const bySubject={};let clear=0,total=0,mask='';
+// Fog clear = direct mastery (map "lights on"); inferred mastery does not clear fog.
+// Finds (slice 5): table-driven chests/secrets/power-ups revealed when clear thresholds hit; claim once; never invent medals or skip mastery (D11).
+export const FOG_FINDS=[
+  {id:'chest-world-5',kind:'chest',emoji:'📦',title:'Explorer\'s Chest',when:{clear:5},reward:{type:'fun',note:'A brass compass sticker for your map!'}},
+  {id:'chest-math-25',kind:'chest',emoji:'💎',title:'Math Island Treasure',when:{subject:'Mathematics',pct:25},reward:{type:'fun',note:'Sparkly fraction gems (cosmetic).'}},
+  {id:'secret-sci-30',kind:'secret',emoji:'🔮',title:'Hidden Lab Path',when:{subject:'Science',pct:30},reward:{type:'path',note:'A ready Science stretch is glowing — explore it on the Map.'}},
+  {id:'power-hint-10',kind:'power',emoji:'💡',title:'Hint Token',when:{clear:10},reward:{type:'hintToken',note:'One extra hint next time you\'re stuck. Never skips teach→practice→graded→boss.'}},
+  {id:'chest-eng-20',kind:'chest',emoji:'📜',title:'Story Scroll',when:{subject:'English',pct:20},reward:{type:'skin',note:'A parchment story skin Jane can weave into tomorrow\'s hook.'}},
+  {id:'power-fact-15',kind:'power',emoji:'🃏',title:'Fun-Fact Card',when:{clear:15},reward:{type:'funFact',note:'A cool fact card for the next quest intro — garnish only.'}},
+];
+function fogClearCounts(S,g){const bySubject={};let clear=0,total=0,mask='';
   for(const t of g.topics){total++;const ok=S.ts[t.id]?.st==='mastered'&&S.ts[t.id]?.how==='direct';if(ok)clear++;mask+=ok?'C':'F';
     const b=bySubject[t.subject]??={clear:0,total:0};b.total++;if(ok)b.clear++;}
-  return{clear,total,pct:total?Math.round(1000*clear/total)/10:0,bySubject,mask,finds:[]};}
+  return{clear,total,pct:total?Math.round(1000*clear/total)/10:0,bySubject,mask};}
+function findEligible(def,counts){const w=def.when||{};
+  if(w.clear!=null&&counts.clear<w.clear)return false;
+  if(w.subject){const b=counts.bySubject[w.subject];if(!b||!b.total)return false;const pct=Math.round(1000*b.clear/b.total)/10;if(w.pct!=null&&pct<w.pct)return false;if(w.clear!=null&&b.clear<w.clear)return false;}
+  return true;}
+export function fogState(S,g){const counts=fogClearCounts(S,g);const claimed=S.fog?.finds||[];
+  const have=new Set(claimed.map(f=>f.id));
+  const available=FOG_FINDS.filter(d=>!have.has(d.id)&&findEligible(d,counts)).map(d=>({id:d.id,kind:d.kind,emoji:d.emoji,title:d.title,reward:d.reward}));
+  const finds=claimed.map(f=>{const d=FOG_FINDS.find(x=>x.id===f.id);return{id:f.id,kind:f.kind||d?.kind,emoji:f.emoji||d?.emoji,title:f.title||d?.title,claimedAt:f.claimedAt,reward:d?.reward};});
+  return{...counts,finds,available};}
+// Idempotent claim. Never awards medals, mastery, quest medals, or bypasses teach→practice→graded→boss.
+export function claimFind(S,g,id,now=Date.now()){const def=FOG_FINDS.find(d=>d.id===id);if(!def)return{error:'unknown find'};
+  S.fog??={finds:[]};S.fog.finds??=[];
+  if(S.fog.finds.some(f=>f.id===id))return{ok:true,already:true,find:S.fog.finds.find(f=>f.id===id)};
+  const counts=fogClearCounts(S,g);if(!findEligible(def,counts))return{error:'not yet uncovered'};
+  const medalsBefore=(S.medals||[]).length,qmBefore=(S.questMedals||[]).length;
+  const find={id:def.id,kind:def.kind,emoji:def.emoji,title:def.title,claimedAt:now};
+  S.fog.finds.push(find);
+  if(def.reward?.type==='hintToken'){S.fog.buffs??={};S.fog.buffs.hintToken=(S.fog.buffs.hintToken||0)+1;}
+  if((S.medals||[]).length!==medalsBefore||(S.questMedals||[]).length!==qmBefore)throw new Error('claimFind must not invent medals');
+  return{ok:true,find,reward:def.reward};}
 // medals: one per directly-mastered topic (not inferred, not self-rated); boss wins are legendary
 export function tierOf(g,id,boss){return boss?'legendary':(g.byId[id]||g.hidden?.[id])?.tier||'bronze';}
 function backfillMedals(S,g){S.medals=[];for(const [id,r] of Object.entries(S.ts))if(r.st==='mastered'&&r.how==='direct'&&(g.byId[id]||g.hidden?.[id]))S.medals.push({id,tier:tierOf(g,id,false),at:r.at||Date.now()});S.medals.sort((a,b)=>a.at-b.at);}

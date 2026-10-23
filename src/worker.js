@@ -60,6 +60,7 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
  else if(P==='/api/next'&&req.method==='POST'){if(!S.current)E.next(S,g,pack,now);out=pub();}
  else if(P==='/api/skipbonus'&&req.method==='POST'){S.current=null;E.next(S,g,pack,now);out=pub();}
  else if(P==='/api/choice'&&req.method==='POST'){const r=E.choose(S,g,body.choice,pack,now);E.next(S,g,pack,now);out={...r,state:pub()};}
+ else if(P==='/api/fog/claim'&&req.method==='POST'){const x=E.claimFind(S,g,String(body.id||''),now);if(x.error)return J(x,400);ev.push({event:'fogFind',id:x.find?.id,kind:x.find?.kind,already:!!x.already});out={...x,state:pub(),fog:E.fogState(S,g)};}
  else return J({error:'not found'},404);
  if(migrated&&raw?.topics&&!sbx){/* keep a copy of the pre-v2 record */await KV.put('progress:v1-backup',JSON.stringify(raw));}
  if(JSON.stringify(S)!==S0)await KV.put(K('progress'),JSON.stringify(S));

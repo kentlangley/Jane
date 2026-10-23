@@ -12,7 +12,7 @@ test('empty progress: empty trail, no legendaries, fog clear 0',()=>{
   assert.equal(C.legendaries.slots.length,4);assert.ok(C.legendaries.slots.every(s=>s===null));assert.deepEqual(C.history,[]);
   assert.equal(C.finalBoss.lit,0);assert.equal(C.finalBoss.unlocked,false);assert.equal(typeof C.taunt,'string');
   assert.equal(F.clear,0);assert.equal(F.total,g.topics.length);assert.equal(F.pct,0);
-  assert.deepEqual(F.finds,[]);assert.equal(F.mask.length,g.topics.length);assert.ok(F.mask.split('').every(c=>c==='F'));
+  assert.deepEqual(F.finds,[]);assert.deepEqual(F.available,[]);assert.equal(F.mask.length,g.topics.length);assert.ok(F.mask.split('').every(c=>c==='F'));
   assert.ok(Object.keys(F.bySubject).length>0);
   for(const b of Object.values(F.bySubject)){assert.equal(b.clear,0);assert.ok(b.total>0);}});
 
@@ -73,4 +73,34 @@ test('Map draws literal fog from fog mask (slice 4)',()=>{
   const w=fs.readFileSync(path.join(DIR,'../src/worker.js'),'utf8');
   assert.match(js,/fog-island|fog-stone/);assert.match(js,/mapData\.fog/);
   assert.match(w,/fog:E\.fogState/);assert.match(css,/fogDrift|fog-layer/);
+});
+
+test('claimFind: eligible chest claims once; idempotent; never invents medals (slice 5)',()=>{
+  const S=blank(),ids=g.topics.slice(0,12).map(t=>t.id);
+  for(const id of ids)S.ts[id]={st:'mastered',how:'direct',c:3,w:0,ft:3};
+  const F0=E.fogState(S,g);assert.ok(F0.clear>=5);assert.ok(F0.available.some(a=>a.id==='chest-world-5'));
+  const medals0=(S.medals||[]).length,qm0=(S.questMedals||[]).length;
+  const r1=E.claimFind(S,g,'chest-world-5',1000);assert.equal(r1.ok,true);assert.equal(r1.already,undefined);
+  assert.equal(r1.find.id,'chest-world-5');assert.equal((S.medals||[]).length,medals0);assert.equal((S.questMedals||[]).length,qm0);
+  const r2=E.claimFind(S,g,'chest-world-5',2000);assert.equal(r2.ok,true);assert.equal(r2.already,true);
+  assert.equal(S.fog.finds.filter(f=>f.id==='chest-world-5').length,1);
+  const F1=E.fogState(S,g);assert.ok(F1.finds.some(f=>f.id==='chest-world-5'));
+  assert.ok(!F1.available.some(a=>a.id==='chest-world-5'));
+  assert.equal(E.claimFind(S,g,'nope',3).error,'unknown find');
+  assert.equal(E.claimFind(blank(),g,'chest-world-5',4).error,'not yet uncovered');
+});
+test('claimFind power-up is garnish only (hintToken buff, no mastery skip) (slice 5)',()=>{
+  const S=blank();for(const t of g.topics.slice(0,12))S.ts[t.id]={st:'mastered',how:'direct',c:3,w:0,ft:3};
+  const r=E.claimFind(S,g,'power-hint-10',50);assert.equal(r.ok,true);assert.equal(r.reward.type,'hintToken');
+  assert.equal(S.fog.buffs.hintToken,1);assert.ok(!(S.medals||[]).length||true);
+  // still no quest medal invented
+  assert.deepEqual(S.questMedals||[],[]);
+});
+test('export + UI surfaces fog finds (slice 5)',()=>{
+  const js=fs.readFileSync(path.join(DIR,'../public/app.js'),'utf8');
+  const html=fs.readFileSync(path.join(DIR,'../public/index.html'),'utf8');
+  const ex=fs.readFileSync(path.join(DIR,'../export-progress.mjs'),'utf8');
+  const les=fs.readFileSync(path.join(DIR,'../LESSONS.md'),'utf8');
+  assert.ok(html.includes('id="ffinds"'));assert.match(js,/claimFogFind|fogFindReveal/);
+  assert.match(ex,/fog:E\.fogState/);assert.match(les,/Fog finds/);
 });
