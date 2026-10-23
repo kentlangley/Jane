@@ -150,6 +150,26 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #009624}
 .boost{background:#fff3e0;border-radius:12px;padding:4px 10px;margin-top:4px;font-weight:700}.boost.lock{background:#eceff1}
 .foot.attr{font-size:.72rem;opacity:.75;margin:4px 12px 16px}
 
+/* campaign trail HUD (always-on Play) */
+.campaign{background:linear-gradient(135deg,#1a237e,#4a148c 55%,#880e4f);color:#fff;padding:12px 14px;overflow:hidden}
+.campaign .chd{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.campaign .ctitle{font-weight:800;font-size:1.15rem;letter-spacing:.02em}
+.campaign .cleg{font-size:1.05rem;letter-spacing:1px;color:#ffd54f;text-shadow:0 1px 0 #0006}
+.campaign .ctrail{display:flex;align-items:center;gap:2px;overflow-x:auto;padding:4px 2px 8px;scrollbar-width:thin}
+.campaign .ctrail i{flex:none;width:10px;height:3px;background:#ffffff44;border-radius:2px}
+.campaign .ctrail i.cend{width:14px;background:linear-gradient(90deg,#fff6,#ffd54f)}
+.campaign .cn{flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;font-size:.95rem;background:#311b9277;border:2px solid #7e57c2;opacity:.55}
+.campaign .cn.done{background:#69f0ae;border-color:#00c853;opacity:1;color:#1b5e20}
+.campaign .cn.cur{background:#fff3e0;border-color:#ff6d00;opacity:1;box-shadow:0 0 0 3px #ff6d0088;animation:cnPulse 1.4s ease-in-out infinite}
+.campaign .cn.fog{filter:saturate(.4)}
+.campaign .cn.boss{width:34px;height:34px;font-size:1.15rem;border-width:3px;border-color:#ffd54f;background:#3e2723}
+.campaign .cn.boss.partial{opacity:.85;box-shadow:0 0 10px #ff80ab88}
+.campaign .cn.boss.lit,.campaign .cn.boss.unlocked{opacity:1;background:linear-gradient(135deg,#ff8bd8,#8a5cff);box-shadow:0 0 14px #ffd54fcc;animation:cnPulse 1.6s ease-in-out infinite}
+@keyframes cnPulse{50%{transform:scale(1.08)}}
+.campaign .ctaunt{margin:2px 0 0;font-size:.95rem;font-weight:700;line-height:1.25;color:#ffe082}
+.campaign.preview{outline:3px dashed #ffd54f;outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.campaign .cn.cur,.campaign .cn.boss.lit,.campaign .cn.boss.unlocked{animation:none}}
+
 /* ===================== polish layer (tokens, motion, a11y, tablet) ===================== */
 :root{--c-primary:#7c4dff;--c-primary-d:#4a148c;--c-sky:#00b8d4;--c-orange:#ff6d00;--c-pink:#e91e63;--c-green:#00c853;--c-green-d:#009624;--c-sun:#ffd600;--c-ink:#2d2a4a;--c-mut:#666;
  --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:18px;--sp-5:24px;--sp-6:32px;--r-sm:12px;--r-md:18px;--r-lg:28px;
@@ -189,8 +209,8 @@ header{view-transition-name:hdr}
 /* tablet & laptop */
 @media (min-width:700px){main{max-width:900px}.q{font-size:1.75rem}.mc{grid-template-columns:repeat(2,1fr)}.bubble{font-size:1.3rem}.tgrid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))!important}header{padding:14px}}
 @media (min-width:1080px){main#play{max-width:1180px;display:grid;grid-template-columns:minmax(300px,380px) 1fr;column-gap:var(--sp-4);align-items:start}
- main#play>.card:first-child{grid-column:1;grid-row:1}main#play>#qstrip{grid-column:1;grid-row:2}main#play>#badges{grid-column:1;grid-row:3}
- main#play>#intro{grid-column:2;grid-row:1}main#play>#pcard{grid-column:2;grid-row:1/span 3}main#play>#intro:not([hidden])+#qstrip+#pcard{grid-row:2/span 3}
+ main#play>.card:first-child{grid-column:1;grid-row:1}main#play>#campaign{grid-column:1;grid-row:2}main#play>#qstrip{grid-column:1;grid-row:3}main#play>#badges{grid-column:1;grid-row:4}
+ main#play>#intro{grid-column:2;grid-row:1}main#play>#pcard{grid-column:2;grid-row:1/span 4}main#play>#intro:not([hidden])+#campaign+#qstrip+#pcard{grid-row:2/span 4}
  main#play>.foot{grid-column:1/-1}main#play .jane{flex-direction:column;align-items:center;text-align:center}main#play .avatar{width:96px;height:96px;font-size:3.8rem}}
 /* reduced motion: no bobbing, pulsing, confetti or springs */
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
