@@ -183,6 +183,24 @@ if(location.hash==='#quests')document.querySelector('.tab[data-v=quests]').click
 if(location.hash==='#trophies')document.querySelector('.tab[data-v=trophies]').click();
 if(location.hash.startsWith('#map')){const z=decodeURIComponent(location.hash.slice(5));if(z)zoomed=z;document.querySelector('.tab[data-v=map]').click();}
 
+// ---------- fog finds (slice 5 / #59): claim once; garnish only — never invent medals ----------
+function fogFindReveal(f,reward){const o=document.createElement('div');o.className='freveal';
+ o.innerHTML=`<div class="frbox"><div class="fremo">${esc(f.emoji||'📦')}</div><div class="frnew">✨ Fog find! ✨</div><h3>${esc(f.title||'Treasure')}</h3>
+ <p class="small">${esc(reward?.note||'You uncovered something under the fog!')}</p>
+ <div class="small">Garnish only — no free medals, no skipping mastery.</div>
+ <button type="button" id="frok">Collect it!</button></div>`;
+ document.body.appendChild(o);confetti(40);const close=()=>{o.classList.add('out');setTimeout(()=>o.remove(),300);};o.querySelector('#frok').onclick=close;o.onclick=e=>{if(e.target===o)close();};setTimeout(()=>$('frok')?.focus(),50);}
+async function claimFogFind(id){const r=await api('/api/fog/claim',{id});if(r.error){say(r.error);return null;}
+ if(r.state){st=r.state;if(st.fog){if(mapData)mapData.fog=st.fog;campaignHUD(st);}chips(st);}
+ if(!r.already)fogFindReveal(r.find,r.reward);return r;}
+function paintFogFinds(fog){const host=$('ffinds');if(!host)return;const avail=fog?.available||[];
+ if(!avail.length){host.hidden=true;host.innerHTML='';return;}
+ host.hidden=false;host.innerHTML=`<div class="ffh">🌫️ Fog finds ready!</div>${avail.map(f=>`<button type="button" class="ffbtn" data-id="${esc(f.id)}">${esc(f.emoji||'📦')} ${esc(f.title)}</button>`).join('')}`;
+ host.querySelectorAll('.ffbtn').forEach(b=>b.onclick=()=>claimFogFind(b.dataset.id));}
+// refresh find strip whenever map fog or state fog updates
+const _loadMap=loadMap;loadMap=async function(){await _loadMap();paintFogFinds(mapData?.fog||st?.fog);}
+const _chipsFog=chips;chips=function(s){_chipsFog(s);if(s?.fog)paintFogFinds(s.fog);}
+
 // ---------- campaign trail HUD + Quest of Quests overlay (slices 2–3 / #56 #57) ----------
 function cTrailHTML(C,{big=false}={}){const nodes=C.nodes.map((n,i)=>{const done=!!n,cur=!done&&i===C.filled;
   const label=done?`${n.emoji||'🏅'} ${n.name}`:cur?'Next boss':'Boss ahead';

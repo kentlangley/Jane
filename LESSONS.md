@@ -354,6 +354,13 @@ before/after counts), then `node migrate-medals.mjs --backup <file>` (needs a fr
 **Legendary policy (default):** legendary medals that were already awarded are always kept as legendary, and their
 topics keep their mastery; everything else is re-scored. `--no-keep-legendary` re-scores legendary medals strictly too.
 
+## Fog finds (secrets under the Map)
+
+Clearing fog (direct mastery only) can uncover a **chest**, **secret path**, or **power-up** from a fixed table — never live AI. Finds are claimed once (`/api/fog/claim`); `export-progress.mjs` lists them under `fog.finds` / `fog.available` so the nightly author can weave a hook if they want.
+
+**Honesty (D11):** power-ups are garnish only (hint token, fun-fact card, story skin). They must not invent medals, skip teach → guided practice → graded → boss, or bypass hearts/mastery rules.
+
+
 ## Example deep dive (Similes & Metaphors, for a topic that showed up in `weakSpots.goDeeper`)
 ```json
 {"topicId":"mt_hJW7hVflm3","deepDive":true,"format":"story","stage":{"name":"Simile Swamp (deep dive)","emoji":"🐊"},

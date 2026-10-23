@@ -1,6 +1,6 @@
 # Campaign Trail + Fog Map — always-on progress kids can see
 
-**Status:** in progress — slices 1–4 done; slice 5 next.
+**Status:** in progress — slices 1–5 done; slice 6 next.
 **Tracking:** [#54](https://github.com/kentlangley/Jane/issues/54)
 **Slices:** [#55](https://github.com/kentlangley/Jane/issues/55) API · [#56](https://github.com/kentlangley/Jane/issues/56) HUD · [#57](https://github.com/kentlangley/Jane/issues/57) Quest of Quests · [#58](https://github.com/kentlangley/Jane/issues/58) Fog Map · [#59](https://github.com/kentlangley/Jane/issues/59) Secrets · [#60](https://github.com/kentlangley/Jane/issues/60) Final Boss  
 **Frozen:** quest medals advance the trail; legendary topic medals light the Final Boss (Kent).  
@@ -87,15 +87,15 @@ Kids who like Minecraft Dungeons want (1) a graphic campaign with bosses ahead a
 - Done test: as above ✅
 - Decisions frozen: D8, D9.
 
-### Slice 5: Secrets, treasures, power-ups
+### Slice 5: Secrets, treasures, power-ups ✅
 - Ships: clearing a fog patch can reveal a chest / secret / power-up; claim once; small reveal UI; finds stored on progress; export lists them for nightly flavor. Power-ups follow D11.
-- Touches: `src/engine.js`, `src/worker.js`, `public/app.js`, `export-progress.mjs`, `LESSONS.md` (one short “Fog finds” note), tests
-- Done test: unit tests for claim idempotency + no medal invention; sandbox can clear fog and see a chest once; export includes `fog.finds`
+- Touches: `src/engine.js`, `src/worker.js`, `public/app.js`, `public/app.css`, `public/index.html`, `export-progress.mjs`, `LESSONS.md`, tests
+- Done test: unit tests for claim idempotency + no medal invention; sandbox can clear fog and see a chest once; export includes `fog.finds` — **passed** 2026-10-22
 - Owner: self
 
-#### Execute (Slice 5)
-- Table of finds keyed by domain clear thresholds or topic ids; `claimFind`.
-- Done test: as above.
+#### Execute (Slice 5) — done
+- `FOG_FINDS` table + `claimFind` (idempotent, no medals); `/api/fog/claim`; Map `#ffinds` + reveal; export `fog`; LESSONS Fog finds note.
+- Done test: as above ✅
 - Decisions frozen: D10, D11, D12.
 
 ### Slice 6: Final Boss unlock + finale hook
