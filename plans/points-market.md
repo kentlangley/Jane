@@ -1,7 +1,8 @@
 # Points Market — spend points on fun, choice and peeks
 
 **Status:** planned (prep only, no code yet) — 2026-10-23.
-**Tracking:** TBD (filled in after issues are opened)
+**Tracking:** [#74](https://github.com/kentlangley/Jane/issues/74)
+**Slices:** [#68](https://github.com/kentlangley/Jane/issues/68) Wallet · [#69](https://github.com/kentlangley/Jane/issues/69) Skins · [#70](https://github.com/kentlangley/Jane/issues/70) Scout flare · [#71](https://github.com/kentlangley/Jane/issues/71) Prove-it · [#72](https://github.com/kentlangley/Jane/issues/72) Pick your path · [#73](https://github.com/kentlangley/Jane/issues/73) Chests + extras
 **Idea credit:** Christopher (Kent's son), who proposed the Points Market items: hidden items, temporary fog push-back, skins, influencing the next question, buying out known reviews.
 **Frozen (Kent):** points buy **fun, choice and peeks — never mastery, medals, or permanent fog clearing.**
 
