@@ -5,6 +5,10 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+### Added
+- **Campaign Trail + Fog Map** ([#54](https://github.com/kentlangley/Jane/issues/54)): always-on Play trail + taunt, Quest of Quests overlay, literal fog on the Map (direct mastery clears), fog finds (chests/secrets/power-ups, D11 garnish only), and Final Boss unlock persistence with a Finale authoring hook.
+
+
 ## [0.6.0] - 2026-10-22
 
 Marble teaching research ([#44](https://github.com/kentlangley/Jane/issues/44)).

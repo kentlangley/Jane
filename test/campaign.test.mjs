@@ -104,3 +104,28 @@ test('export + UI surfaces fog finds (slice 5)',()=>{
   assert.ok(html.includes('id="ffinds"'));assert.match(js,/claimFogFind|fogFindReveal/);
   assert.match(ex,/fog:E\.fogState/);assert.match(les,/Fog finds/);
 });
+
+test('syncFinale persists reveal once; no fake medals (slice 6)',()=>{
+  const S=blank();
+  S.questMedals=Array.from({length:12},(_,i)=>qm(`2026-03-${String(i+1).padStart(2,'0')}`,100+i));
+  S.medals=[{id:'a',tier:'legendary',at:1},{id:'b',tier:'legendary',at:2},{id:'c',tier:'legendary',at:3},{id:'d',tier:'legendary',at:4}];
+  const medals0=S.medals.length;
+  let C=E.campaignState(S,g);assert.equal(C.finalBoss.unlocked,true);assert.equal(C.finalBoss.revealedAt,null);
+  const r1=E.syncFinale(S,g,5000);assert.equal(r1.justUnlocked,true);assert.equal(r1.revealedAt,5000);
+  assert.equal(S.campaign.finalBossRevealedAt,5000);assert.equal(S.medals.length,medals0);assert.deepEqual(S.questMedals.length,12);
+  C=E.campaignState(S,g);assert.equal(C.finalBoss.revealedAt,5000);
+  const r2=E.syncFinale(S,g,9000);assert.equal(r2.justUnlocked,false);assert.equal(r2.revealedAt,5000);
+  assert.equal(S.campaign.finalBossRevealedAt,5000,'idempotent');
+  // not unlocked → no persist
+  const S2=blank();assert.equal(E.syncFinale(S2,g,1).justUnlocked,false);assert.equal(S2.campaign?.finalBossRevealedAt,undefined);
+});
+test('finale reveal UI + docs + export campaign flag (slice 6)',()=>{
+  const js=fs.readFileSync(path.join(DIR,'../public/app.js'),'utf8');
+  const les=fs.readFileSync(path.join(DIR,'../LESSONS.md'),'utf8');
+  const night=fs.readFileSync(path.join(DIR,'../NIGHTLY.md'),'utf8');
+  const ex=fs.readFileSync(path.join(DIR,'../export-progress.mjs'),'utf8');
+  const w=fs.readFileSync(path.join(DIR,'../src/worker.js'),'utf8');
+  assert.match(js,/function finaleReveal/);assert.match(w,/syncFinale/);
+  assert.match(ex,/campaign:E\.campaignState/);assert.match(les,/Finale quest|forging the finale/i);
+  assert.match(night,/Finale/i);
+});

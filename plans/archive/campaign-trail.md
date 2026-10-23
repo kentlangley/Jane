@@ -1,6 +1,6 @@
 # Campaign Trail + Fog Map — always-on progress kids can see
 
-**Status:** in progress — slices 1–5 done; slice 6 next.
+**Status:** done — all six slices shipped 2026-10-22.
 **Tracking:** [#54](https://github.com/kentlangley/Jane/issues/54)
 **Slices:** [#55](https://github.com/kentlangley/Jane/issues/55) API · [#56](https://github.com/kentlangley/Jane/issues/56) HUD · [#57](https://github.com/kentlangley/Jane/issues/57) Quest of Quests · [#58](https://github.com/kentlangley/Jane/issues/58) Fog Map · [#59](https://github.com/kentlangley/Jane/issues/59) Secrets · [#60](https://github.com/kentlangley/Jane/issues/60) Final Boss  
 **Frozen:** quest medals advance the trail; legendary topic medals light the Final Boss (Kent).  
@@ -98,15 +98,15 @@ Kids who like Minecraft Dungeons want (1) a graphic campaign with bosses ahead a
 - Done test: as above ✅
 - Decisions frozen: D10, D11, D12.
 
-### Slice 6: Final Boss unlock + finale hook
+### Slice 6: Final Boss unlock + finale hook ✅
 - Ships: unlock when trail full + legendaries need met; one-time reveal; export flag; LESSONS.md / NIGHTLY.md Finale authoring note.
-- Touches: engine, worker, export, docs, tests
-- Done test: unlock persistence test; export `campaign.finalBoss.unlocked`; no fake medals
+- Touches: `src/engine.js`, `src/worker.js`, `public/app.js`, `public/app.css`, `export-progress.mjs`, `LESSONS.md`, `NIGHTLY.md`, tests
+- Done test: unlock persistence test; export `campaign.finalBoss.unlocked`; no fake medals — **passed** 2026-10-22
 - Owner: self
 
-#### Execute (Slice 6)
-- Persist `campaign.finalBoss.revealedAt`.
-- Done test: as above.
+#### Execute (Slice 6) — done
+- `syncFinale` persists `campaign.finalBoss.revealedAt` once; `finaleReveal` UI; export already includes `campaign`; LESSONS + NIGHTLY Finale notes.
+- Done test: as above ✅
 - Decisions frozen: D3, D4.
 
 ## Open questions
