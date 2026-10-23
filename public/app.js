@@ -13,7 +13,7 @@ const BOSSES=['🐉','👾','🦖','🐙','🤖','🧌'];
 function say(t){const b=$('jane');b.innerHTML=gl(t);b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');}
 function confetti(n=40){for(let i=0;i<n;i++){const e=document.createElement('div');e.className='confetti';e.textContent=['🎉','⭐','🍕','✨','🎈','💜'][i%6];e.style.left=Math.random()*100+'vw';e.style.animationDuration=1.5+Math.random()*2+'s';document.body.appendChild(e);setTimeout(()=>e.remove(),4000);}}
 function banner(t){const b=document.createElement('div');b.className='banner';b.innerHTML=`<div>${t}</div>`;document.body.appendChild(b);setTimeout(()=>b.remove(),2000);}
-function chips(s){$('pts').textContent='⭐ '+s.points+' pts';$('stars').textContent='🌟 '+s.stars;$('streak').textContent='🔥 '+s.streak;$('pct').textContent=`🗺️ ${s.progress.pct}%`;}
+function chips(s){$('pts').textContent='⭐ '+s.points+' pts';$('stars').textContent='🌟 '+s.stars;$('streak').textContent='🔥 '+s.streak;$('pct').textContent=`🗺️ ${s.progress.pct}%`;campaignHUD(s);}
 let LN='Explorer';function setLearner(L){if(!L?.name||L.name===LN&&document.title.includes(LN))return;LN=L.name;document.querySelectorAll('.lname').forEach(e=>e.textContent=LN);document.title=`${LN}'s Learning Adventure with Jane`;}
 function render(s){st=s;if(s?.learner)setLearner(s.learner);chips(s);const p=s.item;clearInterval(timerInt);$('timer').innerHTML='';if(!p)return;
  const f=p.format||'quest';$('frame').className='framebar f-'+f;$('frame').textContent=p.gate?(p.gate.warm?`🔥 Warm-up! A quick one you learned before (${p.gate.n}/${p.gate.of})`:p.gate.spot?`🗝️ Gate! Quick check: show me you know this one (${p.gate.n}/${p.gate.of})`:`🗝️ Gate! Unlock it with something you learned before (${p.gate.n}/${p.gate.of})`):FRAMES[f]||'🗡️ Quest';$('pcard').className='card '+f;
@@ -175,6 +175,20 @@ if(location.hash==='#quests')document.querySelector('.tab[data-v=quests]').click
 if(location.hash==='#trophies')document.querySelector('.tab[data-v=trophies]').click();
 if(location.hash.startsWith('#map')){const z=decodeURIComponent(location.hash.slice(5));if(z)zoomed=z;document.querySelector('.tab[data-v=map]').click();}
 
+// ---------- campaign trail HUD (always-on Play strip; slice 2 / #56) ----------
+function campaignHUD(s){const el=$('campaign');if(!el)return;const C=s?.campaign;if(!C){el.hidden=true;return;}
+ const nodes=C.nodes.map((n,i)=>{const done=!!n,cur=!done&&i===C.filled;
+  const label=done?`${n.emoji||'🏅'} ${n.name}`:cur?'Next boss':'Boss ahead';
+  const face=done?esc(n.emoji||'🏅'):cur?'⚔️':'🌫️';
+  return`<span class="cn ${done?'done':cur?'cur':'fog'}" title="${esc(label)}" aria-label="${esc(label)}">${face}</span>`;}).join('<i></i>');
+ const lit=C.finalBoss.lit||0,unlocked=!!C.finalBoss.unlocked;
+ const fbCls=unlocked?'unlocked':lit>=1?'lit':lit>0?'partial':'fog';
+ const fb=unlocked?'👑':lit>=1?'🐲':lit>0?'🐉':'🌫️';
+ const legs='★'.repeat(C.legendaries.have)+'☆'.repeat(Math.max(0,C.legendaries.need-C.legendaries.have));
+ el.hidden=false;
+ el.innerHTML=`<div class="chd"><span class="ctitle">🗡️ Campaign Trail</span><span class="cleg" title="Legendary wins light the Final Boss" aria-label="${C.legendaries.have} of ${C.legendaries.need} legendaries">${esc(legs)}</span></div>
+<div class="ctrail" role="list" aria-label="Trail ${C.filled} of ${C.trailLen}">${nodes}<i class="cend"></i><span class="cn boss ${fbCls}" role="listitem" title="Final Boss" aria-label="Final Boss ${Math.round(lit*100)} percent lit">${fb}</span></div>
+<p class="ctaunt">${esc(C.taunt)}</p>`;}
 // ---------- medals ----------
 const TIER={quest:{n:'Quest',g:['#b9f6ca','#00c853','#1b5e20']},bronze:{n:'Bronze',g:['#ffd8a8','#c87533','#7a4317']},silver:{n:'Silver',g:['#ffffff','#c3ccd6','#7b8794']},gold:{n:'Gold',g:['#fff7b0','#ffc93c','#b8860b']},legendary:{n:'Legendary',g:['#ff8bd8','#8a5cff','#2de2ff']}};
 let MID=0;
@@ -210,6 +224,8 @@ async function loadTrophies(){const d=await api('/api/trophies');const TF=window
   $('tdetail').innerHTML=`<div class="tdbox">${medalSVG(m,120)}<h3>${esc(m.name)}</h3><div class="tier-pill t-${m.tier}">${TIER[m.tier].n}${m.boss?' · Boss win!':''}</div><p class="small">${ISL[m.subject]?.e||''} ${esc(m.subject)} › ${esc(m.domain)}</p><p>You earned this for: <b>${esc(m.why)}</b></p><p class="small">Won ${new Date(m.at).toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'})}</p><button onclick="$('tdetail').hidden=true">Close</button></div>`;}}
 // preview the unlock animation with the latest medal (no progress change): /#medal-preview
 if(location.hash==='#medal-preview')api('/api/state').then(s=>s.medals?.[0]&&reveal(s.medals[0],0));
+if(location.hash==='#campaign-preview'){document.querySelector('.tab[data-v=play]')?.click();api('/api/state').then(s=>{campaignHUD(s);const el=$('campaign');if(el){el.hidden=false;el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});el.classList.add('preview');}});
+}
 
 // ---------- illustrations: pack scenes (emoji or inline SVG) + app templates ----------
 function cleanSVG(x){return String(x).replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi,'').replace(/\son\w+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi,'').replace(/(href\s*=\s*["'])\s*javascript:[^"']*/gi,'$1#');}

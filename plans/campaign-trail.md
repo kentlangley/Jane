@@ -1,6 +1,6 @@
 # Campaign Trail + Fog Map — always-on progress kids can see
 
-**Status:** in progress — slice 1 done; slice 2 next.
+**Status:** in progress — slices 1–2 done; slice 3 next.
 **Tracking:** [#54](https://github.com/kentlangley/Jane/issues/54)
 **Slices:** [#55](https://github.com/kentlangley/Jane/issues/55) API · [#56](https://github.com/kentlangley/Jane/issues/56) HUD · [#57](https://github.com/kentlangley/Jane/issues/57) Quest of Quests · [#58](https://github.com/kentlangley/Jane/issues/58) Fog Map · [#59](https://github.com/kentlangley/Jane/issues/59) Secrets · [#60](https://github.com/kentlangley/Jane/issues/60) Final Boss  
 **Frozen:** quest medals advance the trail; legendary topic medals light the Final Boss (Kent).  
@@ -53,15 +53,15 @@ Kids who like Minecraft Dungeons want (1) a graphic campaign with bosses ahead a
 - Done test: `node --test test/campaign.test.mjs` ✅
 - Decisions frozen: D2–D4, D8–D9, D12, D7.
 
-### Slice 2: Always-on Campaign Trail HUD
+### Slice 2: Always-on Campaign Trail HUD ✅
 - Ships: Play shows trail + taunt; updates on quest/legendary wins; reduced-motion safe.
 - Touches: `public/index.html`, `public/app.js`, `public/app.css`
-- Done test: sandbox / `#campaign-preview` shows strip without opening Map; `npm test`
+- Done test: sandbox / `#campaign-preview` shows strip without opening Map; `npm test` — **passed** 2026-10-22
 - Owner: self
 
-#### Execute (Slice 2)
-- Render from `state.campaign`.
-- Done test: as above.
+#### Execute (Slice 2) — done
+- Render from `state.campaign` via `campaignHUD` on Play (`#campaign`); taunt + trail + Final Boss + legendary stars; `#campaign-preview` hash; reduced-motion kills node pulse.
+- Done test: as above ✅
 - Decisions frozen: D1, D5.
 
 ### Slice 3: Quest of Quests overlay

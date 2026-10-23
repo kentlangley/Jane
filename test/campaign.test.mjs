@@ -1,5 +1,6 @@
 // Slice 1 (#55): campaign trail + fog state API (quest medals fill trail; legendaries light Final Boss; fog clear counts).
-import {test} from 'node:test';import assert from 'node:assert/strict';import {loadEngine} from './helpers.mjs';
+import {test} from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import {fileURLToPath} from 'node:url';import {loadEngine} from './helpers.mjs';
+const DIR=path.dirname(fileURLToPath(import.meta.url));
 const {E,g}=await loadEngine();
 const qm=(date,at,name='Medal',emoji='🏅')=>({date,title:'Q '+date,name,emoji,at});
 const blank=()=>E.blank();
@@ -44,3 +45,12 @@ test('fog counts direct mastery only; inferred does not clear',()=>{
   for(const [sub,b] of Object.entries(F.bySubject)){
     const want=g.topics.filter(t=>t.subject===sub&&S.ts[t.id]?.st==='mastered'&&S.ts[t.id]?.how==='direct').length;
     assert.equal(b.clear,want);assert.equal(b.total,g.topics.filter(t=>t.subject===sub).length);}});
+
+test('Play mounts Campaign Trail HUD + preview hash (slice 2)',()=>{
+  const html=fs.readFileSync(path.join(DIR,'../public/index.html'),'utf8');
+  const js=fs.readFileSync(path.join(DIR,'../public/app.js'),'utf8');
+  const css=fs.readFileSync(path.join(DIR,'../public/app.css'),'utf8');
+  assert.ok(html.includes('id="campaign"'),'index has #campaign');
+  assert.match(js,/function campaignHUD/);assert.match(js,/#campaign-preview/);
+  assert.match(css,/\.campaign/);assert.match(css,/cnPulse|prefers-reduced-motion:reduce/);
+});
