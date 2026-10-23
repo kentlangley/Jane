@@ -175,20 +175,48 @@ if(location.hash==='#quests')document.querySelector('.tab[data-v=quests]').click
 if(location.hash==='#trophies')document.querySelector('.tab[data-v=trophies]').click();
 if(location.hash.startsWith('#map')){const z=decodeURIComponent(location.hash.slice(5));if(z)zoomed=z;document.querySelector('.tab[data-v=map]').click();}
 
-// ---------- campaign trail HUD (always-on Play strip; slice 2 / #56) ----------
-function campaignHUD(s){const el=$('campaign');if(!el)return;const C=s?.campaign;if(!C){el.hidden=true;return;}
- const nodes=C.nodes.map((n,i)=>{const done=!!n,cur=!done&&i===C.filled;
+// ---------- campaign trail HUD + Quest of Quests overlay (slices 2–3 / #56 #57) ----------
+function cTrailHTML(C,{big=false}={}){const nodes=C.nodes.map((n,i)=>{const done=!!n,cur=!done&&i===C.filled;
   const label=done?`${n.emoji||'🏅'} ${n.name}`:cur?'Next boss':'Boss ahead';
   const face=done?esc(n.emoji||'🏅'):cur?'⚔️':'🌫️';
   return`<span class="cn ${done?'done':cur?'cur':'fog'}" title="${esc(label)}" aria-label="${esc(label)}">${face}</span>`;}).join('<i></i>');
  const lit=C.finalBoss.lit||0,unlocked=!!C.finalBoss.unlocked;
  const fbCls=unlocked?'unlocked':lit>=1?'lit':lit>0?'partial':'fog';
  const fb=unlocked?'👑':lit>=1?'🐲':lit>0?'🐉':'🌫️';
+ return`<div class="ctrail${big?' big':''}" role="list" aria-label="Trail ${C.filled} of ${C.trailLen}">${nodes}<i class="cend"></i><span class="cn boss ${fbCls}" role="listitem" title="Final Boss" aria-label="Final Boss ${Math.round(lit*100)} percent lit">${fb}</span></div>`;}
+function campaignHUD(s){const el=$('campaign');if(!el)return;const C=s?.campaign;if(!C){el.hidden=true;return;}
  const legs='★'.repeat(C.legendaries.have)+'☆'.repeat(Math.max(0,C.legendaries.need-C.legendaries.have));
  el.hidden=false;
- el.innerHTML=`<div class="chd"><span class="ctitle">🗡️ Campaign Trail</span><span class="cleg" title="Legendary wins light the Final Boss" aria-label="${C.legendaries.have} of ${C.legendaries.need} legendaries">${esc(legs)}</span></div>
-<div class="ctrail" role="list" aria-label="Trail ${C.filled} of ${C.trailLen}">${nodes}<i class="cend"></i><span class="cn boss ${fbCls}" role="listitem" title="Final Boss" aria-label="Final Boss ${Math.round(lit*100)} percent lit">${fb}</span></div>
-<p class="ctaunt">${esc(C.taunt)}</p>`;}
+ el.innerHTML=`<button type="button" class="copen" id="copen" aria-haspopup="dialog" aria-controls="coverlay" aria-label="Open Quest of Quests campaign map">
+<div class="chd"><span class="ctitle">🗡️ Campaign Trail</span><span class="cleg" title="Legendary wins light the Final Boss" aria-label="${C.legendaries.have} of ${C.legendaries.need} legendaries">${esc(legs)}</span></div>
+${cTrailHTML(C)}
+<p class="ctaunt">${esc(C.taunt)}</p>
+<span class="chint">Tap for Quest of Quests ›</span></button>`;
+ $('copen').onclick=()=>openCampaign();}
+let _cFocus=null;
+function openCampaign(){const C=st?.campaign;if(!C)return;closeCampaign();_cFocus=document.activeElement;
+ const slots=(C.legendaries.slots||[]).map((s,i)=>s?`<div class="cslot on" title="${esc(s.name)}"><span class="csemo">${esc(s.ic||'🌈')}</span><span class="csnm">${esc(s.name)}</span></div>`
+  :`<div class="cslot" aria-label="Legendary slot ${i+1} empty"><span class="csemo">☆</span><span class="csnm">Empty</span></div>`).join('');
+ const hist=(C.history||[]).length?`<ul class="chist">${C.history.map(h=>`<li><span class="he">${esc(h.emoji||'🏅')}</span><span><b>${esc(h.name)}</b>${h.title?` · ${esc(h.title)}`:''}<br><span class="small">${esc(h.date)}</span></span></li>`).join('')}</ul>`
+  :'<p class="small">No quest medals yet — beat a quest to light the first boss!</p>';
+ const lit=Math.round((C.finalBoss.lit||0)*100);
+ const o=document.createElement('div');o.className='coverlay';o.id='coverlay';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label','Quest of Quests');
+ o.innerHTML=`<div class="cobox"><button type="button" class="x" id="cclose" aria-label="Close campaign map">✕</button>
+ <h2>🗺️ Quest of Quests</h2>
+ <p class="ctaunt">${esc(C.taunt)}</p>
+ ${cTrailHTML(C,{big:true})}
+ <div class="csec"><h3>🌈 Legendary slots · Final Boss ${lit}%</h3><div class="cslots">${slots}</div>
+ <div class="small">${C.finalBoss.unlocked?'👑 Unlocked — Jane is forging the finale…':`Need ${C.legendaries.need} legendaries + a full trail of ${C.trailLen}.`}</div></div>
+ <div class="csec"><h3>🏅 Quest history</h3>${hist}</div>
+ <button type="button" class="bigbtn" id="cback">⬅ Back to Play</button></div>`;
+ document.body.appendChild(o);
+ const close=()=>closeCampaign();$('cclose').onclick=close;$('cback').onclick=close;
+ o.onclick=e=>{if(e.target===o)close();};
+ setTimeout(()=>$('cclose')?.focus(),50);
+ if(window.FX){FX.sound?.('open');FX.enter?.(o.querySelector('.cobox'));}}
+function closeCampaign(){const o=document.querySelector('.coverlay');if(!o)return;o.classList.add('out');
+ const done=()=>{o.remove();(_cFocus||$('copen'))?.focus?.();_cFocus=null;};
+ if(matchMedia('(prefers-reduced-motion: reduce)').matches)done();else setTimeout(done,280);}
 // ---------- medals ----------
 const TIER={quest:{n:'Quest',g:['#b9f6ca','#00c853','#1b5e20']},bronze:{n:'Bronze',g:['#ffd8a8','#c87533','#7a4317']},silver:{n:'Silver',g:['#ffffff','#c3ccd6','#7b8794']},gold:{n:'Gold',g:['#fff7b0','#ffc93c','#b8860b']},legendary:{n:'Legendary',g:['#ff8bd8','#8a5cff','#2de2ff']}};
 let MID=0;
@@ -373,5 +401,5 @@ addEventListener('scroll',()=>gclose(),{passive:true});
  // tabs: arrow keys move between tabs
  const tabs=[...document.querySelectorAll('.tab')];tabs.forEach((t,i)=>t.addEventListener('keydown',e=>{const d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;if(!d)return;e.preventDefault();const n=tabs[(i+d+tabs.length)%tabs.length];n.focus();n.click();}));
  // Escape closes medal / stone / quest overlays
- document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;(document.querySelector('.scard .x')||document.querySelector('.reveal .rbox button'))?.click();});
+ document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;(document.querySelector('.coverlay #cclose')||document.querySelector('.scard .x')||document.querySelector('.reveal .rbox button'))?.click();});
 })();

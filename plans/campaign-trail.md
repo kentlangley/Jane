@@ -1,6 +1,6 @@
 # Campaign Trail + Fog Map — always-on progress kids can see
 
-**Status:** in progress — slices 1–2 done; slice 3 next.
+**Status:** in progress — slices 1–3 done; slice 4 next.
 **Tracking:** [#54](https://github.com/kentlangley/Jane/issues/54)
 **Slices:** [#55](https://github.com/kentlangley/Jane/issues/55) API · [#56](https://github.com/kentlangley/Jane/issues/56) HUD · [#57](https://github.com/kentlangley/Jane/issues/57) Quest of Quests · [#58](https://github.com/kentlangley/Jane/issues/58) Fog Map · [#59](https://github.com/kentlangley/Jane/issues/59) Secrets · [#60](https://github.com/kentlangley/Jane/issues/60) Final Boss  
 **Frozen:** quest medals advance the trail; legendary topic medals light the Final Boss (Kent).  
@@ -64,15 +64,16 @@ Kids who like Minecraft Dungeons want (1) a graphic campaign with bosses ahead a
 - Done test: as above ✅
 - Decisions frozen: D1, D5.
 
-### Slice 3: Quest of Quests overlay
+### Slice 3: Quest of Quests overlay ✅
 - Ships: tap strip → full campaign map (trail, legendary slots, history); close back to Play.
-- Touches: `public/app.js`, `public/app.css`
-- Done test: open/close + focus; `/api/quest/start` still one-at-a-time
+- Touches: `public/app.js`, `public/app.css`, `src/engine.js` (history + legendary slots on campaign)
+- Done test: open/close + focus; `/api/quest/start` still one-at-a-time — **passed** 2026-10-22
 - Owner: self
 
-#### Execute (Slice 3)
-- Overlay only.
-- Done test: as above.
+#### Execute (Slice 3) — done
+- Overlay only (`openCampaign` / `closeCampaign`); Escape + ✕ + Back restore focus to strip.
+- `campaign.history` + `legendaries.slots` for the map; one-quest-at-a-time unchanged.
+- Done test: as above ✅
 - Decisions frozen: D6.
 
 ### Slice 4: Literal fog on the Map
