@@ -12,7 +12,8 @@ test('empty progress: empty trail, no legendaries, fog clear 0',()=>{
   assert.equal(C.legendaries.slots.length,4);assert.ok(C.legendaries.slots.every(s=>s===null));assert.deepEqual(C.history,[]);
   assert.equal(C.finalBoss.lit,0);assert.equal(C.finalBoss.unlocked,false);assert.equal(typeof C.taunt,'string');
   assert.equal(F.clear,0);assert.equal(F.total,g.topics.length);assert.equal(F.pct,0);
-  assert.deepEqual(F.finds,[]);assert.ok(Object.keys(F.bySubject).length>0);
+  assert.deepEqual(F.finds,[]);assert.equal(F.mask.length,g.topics.length);assert.ok(F.mask.split('').every(c=>c==='F'));
+  assert.ok(Object.keys(F.bySubject).length>0);
   for(const b of Object.values(F.bySubject)){assert.equal(b.clear,0);assert.ok(b.total>0);}});
 
 test('N quest medals fill N trail nodes in at-order',()=>{
@@ -44,6 +45,7 @@ test('fog counts direct mastery only; inferred does not clear',()=>{
   S.ts[ids[2]]={st:'mastered',how:'inferred',conf:.9};S.ts[ids[3]]={st:'learning',how:'direct',c:1,w:0};
   const F=E.fogState(S,g);assert.equal(F.clear,2);assert.equal(F.total,g.topics.length);
   assert.equal(F.pct,Math.round(1000*2/g.topics.length)/10);assert.deepEqual(F.finds,[]);
+  assert.equal(F.mask[0],'C');assert.equal(F.mask[1],'C');assert.equal(F.mask[2],'F');assert.equal(F.mask[3],'F');
   for(const [sub,b] of Object.entries(F.bySubject)){
     const want=g.topics.filter(t=>t.subject===sub&&S.ts[t.id]?.st==='mastered'&&S.ts[t.id]?.how==='direct').length;
     assert.equal(b.clear,want);assert.equal(b.total,g.topics.filter(t=>t.subject===sub).length);}});
@@ -63,4 +65,12 @@ test('campaign overlay helpers present; strip is actionable (slice 3)',()=>{
   assert.match(js,/function openCampaign/);assert.match(js,/function closeCampaign/);
   assert.match(js,/campaignHUD[\s\S]*openCampaign|onclick=.*openCampaign|campaign.*button/s);
   assert.match(css,/\.coverlay|\.qomap/);
+});
+
+test('Map draws literal fog from fog mask (slice 4)',()=>{
+  const js=fs.readFileSync(path.join(DIR,'../public/app.js'),'utf8');
+  const css=fs.readFileSync(path.join(DIR,'../public/app.css'),'utf8');
+  const w=fs.readFileSync(path.join(DIR,'../src/worker.js'),'utf8');
+  assert.match(js,/fog-island|fog-stone/);assert.match(js,/mapData\.fog/);
+  assert.match(w,/fog:E\.fogState/);assert.match(css,/fogDrift|fog-layer/);
 });

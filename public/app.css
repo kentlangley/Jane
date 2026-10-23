@@ -34,6 +34,12 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #009624}
 .g-r{animation:pulse 1.6s ease-in-out infinite}.g-v{animation:pulse 1s ease-in-out infinite}.g-x{opacity:.55}
 @keyframes pulse{50%{opacity:.45}}.tw{animation:tw 2.5s ease-in-out infinite}@keyframes tw{50%{opacity:.6}}
 .boat{animation:boat 3s ease-in-out infinite}@keyframes boat{50%{transform:translateY(-6px) rotate(3deg)}}
+.fog-layer .fog-wisp{animation:fogDrift 9s ease-in-out infinite alternate}
+.fog-stones .fog-stone{animation:fogPulse 4.5s ease-in-out infinite alternate}
+@keyframes fogDrift{from{transform:translate(-4px,2px)}to{transform:translate(6px,-3px)}}
+@keyframes fogPulse{from{opacity:.55}to{opacity:.85}}
+@media (prefers-reduced-motion:reduce){.fog-layer .fog-wisp,.fog-stones .fog-stone{animation:none}}
+
 .legend{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;font-size:.95rem;padding:6px}.d{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:4px;vertical-align:middle}
 .d.m,.c-m{background:#ffc400}.d.v{background:#ff6d00}.d.r{background:#00e676}.d.l{background:#2979ff}.d.x{background:#b0bec5}
 .tip{position:absolute;background:#fff;border-radius:14px;padding:8px 12px;box-shadow:0 6px 20px #0003;max-width:280px;font-size:.95rem;z-index:5;pointer-events:none}
