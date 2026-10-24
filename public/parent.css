@@ -64,3 +64,12 @@ input,select{min-height:40px;transition:border-color .2s,box-shadow .2s}input:fo
 /* coverage by area */
 .cov{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}.covs{border:1px solid var(--line);border-left:5px solid var(--c);border-radius:12px;padding:10px 12px;background:#fffdfa;display:grid;gap:6px;align-content:start}
 .covh{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.covbar{height:8px;border-radius:99px;background:#eef0f4;overflow:hidden}.covbar i{display:block;height:100%;background:var(--c)}.covu{align-items:flex-start}.covu .chip{font-size:.78rem;color:#555}
+/* learner profiles: kid switcher + manage players */
+.kids{display:flex;flex-wrap:wrap;gap:10px;padding-top:6px;padding-bottom:10px}
+.kid{display:flex;gap:10px;align-items:center;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:#fff;border-radius:14px;padding:8px 12px;flex:1 1 260px}
+.kid.on{border-color:var(--acc);box-shadow:0 0 0 2px #4f46e522}.kid:hover{border-color:var(--acc)}.kav{font-size:2rem;line-height:1}.kmain{display:flex;flex-direction:column}.kst{color:var(--mut)}
+.kidman{width:100%;border:1px dashed var(--line);border-radius:14px;padding:6px 12px;background:#fffdfa}.kidman summary{cursor:pointer;font-weight:600}
+.kidbody{display:flex;flex-direction:column;gap:10px;padding:8px 0}.kidrow,.kidnew{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.kidnew h3{width:100%;margin:6px 0 0;font-size:1rem}.kidman input,.kidman select{font:inherit;padding:6px 10px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.kidmsg{color:#b91c1c}
+@media print{.kidman{display:none}}

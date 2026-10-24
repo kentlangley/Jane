@@ -51,6 +51,9 @@ export function parentData({S,g,now,today,logs,packs,tomorrowPack,boosts}){
   const cv=areaCoverage(S,g,all,{age:E.learner().age,now});
   const coverage={seen:cv.seen,total:cv.total,subjects:cv.subjects.map(s=>({name:s.name,total:s.total,seen:s.seen,domains:s.domains.map(d=>({name:d.name,seen:d.seen,answered:d.answered,mastered:d.mastered,topics:d.topics}))}))};
   return{coverage,name:E.learner().name,grade:E.learner().grade,today,generated:now,head,perDay,growth,subjects:Object.values(subjects),struggles,wins,terms:Object.values(terms).sort((a,b)=>b.count-a.count),quests,tonight,reviews,inferredDue,log,medals,placement:S.placement};}
+// one line of stats per kid for the parent switcher (learner profiles, Slice 3). S may be null (never played).
+export function kidStats(S,g,now){if(!S)return{points:0,medals:0,mastered:0,days:0,lastPlayed:null};const sm=E.summary(S,g,now);
+  return{points:S.points||0,medals:E.trophies(S,g).medals.filter(m=>m.tier!=='quest').length,mastered:sm.done,days:E.dayStreak(S,now).n,lastPlayed:S.days?.last||null,placementDone:!!S.placementQuest};}
 export function parentShell(data){const json=E.withName(JSON.stringify(data),JSON.stringify(data.name).slice(1,-1)).replace(/</g,'\\u003c');
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Parent report: ${String(data.name).replace(/[&<>"]/g,'')}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">

@@ -90,3 +90,22 @@ test('PIN profile: kid APIs need the PIN cookie; wrong PIN refused; right PIN re
 
 test('the kid app loads picker.js before app.js and app.js waits for it',()=>{const h=fs.readFileSync(path.join(ROOT,'public/index.html'),'utf8');
   assert.ok(h.indexOf('/picker.js')>0&&h.indexOf('/picker.js')<h.indexOf('/app.js'));assert.match(fs.readFileSync(path.join(ROOT,'public/app.js'),'utf8'),/window\.janeWho/);});
+
+// ---- Slice 3: parent view per kid + add a learner ----
+const parentData=async(env,q='')=>{const r=await worker.fetch(new Request('http://x/parent'+q),env);const h=await r.text();return JSON.parse(h.match(/<script id="data" type="application\/json">([\s\S]*?)<\/script>/)[1].replace(/\\u003c/g,'<'));};
+test('parent adds a learner (generic onboarding), sees each kid, sets and clears a PIN',async()=>{const {dir,env}=mk();
+  await call(env,'/api/state');await call(env,'/api/answer',{answer:'3/8'});const h=sha(path.join(dir,'progress.json'));
+  const bad=await call(env,'/api/parent/profiles',{name:'',grade:''});assert.equal(bad.status,400);
+  const c=await call(env,'/api/parent/profiles',{name:'Test Kid',grade:'8th grade',interests:'chess, music',avatar:'🦉'});assert.equal(c.status,200);assert.equal(c.json.profile.id,'test-kid');
+  const R=env.JANE_KV.getSync('profiles','json');assert.equal(R.primary,'sam');assert.equal(R.learners[0].prefix,'');assert.equal(R.learners[1].prefix,'L:test-kid:');assert.deepEqual(R.learners[1].interests,['chess','music']);
+  assert.equal(sha(path.join(dir,'progress.json')),h,'adding a learner never touches the primary record');
+  assert.equal((await call(env,'/api/parent/profiles',{name:'Test Kid',grade:'3'})).json.profile.id,'test-kid-2','ids stay unique');
+  const D=await parentData(env);assert.equal(D.profiles.current,'sam');assert.equal(D.profiles.learners.length,3);assert.equal(D.profiles.learners[0].points>0,true);assert.equal(D.profiles.learners[1].points,0);
+  const D2=await parentData(env,'?learner=test-kid');assert.equal(D2.name,'Test Kid');assert.equal(D2.grade,'8th grade');assert.equal(D2.profiles.current,'test-kid');
+  assert.equal((await call(env,'/api/parent/profiles/update',{id:'test-kid',pin:'12a4'})).status,400);
+  assert.equal((await call(env,'/api/parent/profiles/update',{id:'test-kid',pin:'1357'})).status,200);assert.equal((await call(env,'/api/state?learner=test-kid')).status,401);
+  assert.equal((await call(env,'/api/parent/profiles/update',{id:'test-kid',pin:null})).status,200);assert.equal((await call(env,'/api/state?learner=test-kid')).status,200);
+  assert.equal((await call(env,'/api/parent/profiles/update',{id:'sam',name:'Changed'})).status,200);assert.equal((await call(env,'/api/state')).json.name,'Sam','primary name stays from [vars]');
+  assert.ok(!JSON.stringify(D).includes('"hash"'),'no PIN hashes in the parent page');});
+test('PARENT_PIN (optional) guards the parent writes',async()=>{const {env}=mk();env.PARENT_PIN='9090';
+  assert.equal((await call(env,'/api/parent/profiles',{name:'A',grade:'2'})).status,403);assert.equal((await call(env,'/api/parent/profiles',{name:'A',grade:'2',parentPin:'9090'})).status,200);});
