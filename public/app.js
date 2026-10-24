@@ -8,7 +8,7 @@ function pizza(n,eaten){const cx=100,cy=100,r=90;let s=`<svg viewBox="0 0 200 20
   if(!gone){const m=(a1+a2)/2;for(const k of[.45,.75])s+=`<circle cx="${cx+r*k*Math.cos(m+(k>.6?.12:-.08))}" cy="${cy+r*k*Math.sin(m+(k>.6?.12:-.08))}" r="${Math.min(9,40/n+4)}" fill="#d32f2f"/>`;}}
  return s+`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#bf6c00" stroke-width="8"/></svg>`;}
 function bar(n,sh){const w=190/n;let s='<svg viewBox="0 0 200 60">';for(let i=0;i<n;i++)s+=`<rect x="${5+i*w}" y="10" width="${w}" height="40" fill="${i<sh?'#8d6e63':'#ffccbc'}" stroke="#4e342e" stroke-width="2" rx="3"/>`;return s+'</svg>';}
-const FRAMES={gate:'🗝️ Review Gate',card:'💡 Cool Card',explore:'🔍 Explorer Check',review:'🧠 Memory Check-in',boss:'👾 BOSS BATTLE',timed:'⏱️ Speed Round',mystery:'🕵️ Mystery',story:'📖 Story Quest',minigame:'🎲 Mini-game',quest:'🗡️ Quest',bonus:'⭐ Bonus',guided:'🧭 Practice'};
+const FRAMES={gate:'🗝️ Review Gate',card:'💡 Cool Card',explore:'🔍 Explorer Check',review:'🧠 Memory Check-in',boss:'👾 BOSS BATTLE',timed:'⏱️ Speed Round',mystery:'🕵️ Mystery',story:'📖 Story Quest',minigame:'🎲 Mini-game',quest:'🗡️ Quest',bonus:'⭐ Bonus',guided:'🧭 Practice',prove:'🎟️ Prove It! One harder question'};
 const BOSSES=['🐉','👾','🦖','🐙','🤖','🧌'];
 function say(t){const b=$('jane');b.innerHTML=gl(t);b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');}
 function confetti(n=40){for(let i=0;i<n;i++){const e=document.createElement('div');e.className='confetti';e.textContent=['🎉','⭐','🍕','✨','🎈','💜'][i%6];e.style.left=Math.random()*100+'vw';e.style.animationDuration=1.5+Math.random()*2+'s';document.body.appendChild(e);setTimeout(()=>e.remove(),4000);}}
@@ -30,7 +30,7 @@ function render(s){st=s;if(s?.learner)setLearner(s.learner);chips(s);const p=s.i
  if(p.intro){$('intro').hidden=false;$('intro').innerHTML=`<h3>${esc(p.intro.emoji||'✨')} ${gl(p.intro.title||'',new Set())}</h3><div>${gl(p.intro.story||'',new Set())}</div>`;}else $('intro').hidden=true;
  medalRow(s);
  $('steps').innerHTML=p.steps?.length?`<div class="steps"><b>🧭 Start like this:</b><ol>${p.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>`:'';
- const canStuck=p.type!=='card'&&p.type!=='self';$('stuckf').hidden=!canStuck;$('srow').innerHTML=canStuck&&p.type!=='input'?'<button type="button" class="stuckb" onclick="stuckTap()">I\'m stuck 🤔</button>':'';showHelp(p.help);
+ const canStuck=p.type!=='card'&&p.type!=='self';$('stuckf').hidden=!canStuck;$('srow').innerHTML=(canStuck&&p.type!=='input'?'<button type="button" class="stuckb" onclick="stuckTap()">I\'m stuck 🤔</button>':'')+(p.gate&&!p.gate.spot?'<button type="button" class="ghost provelink" onclick="openProve()">🎟️ Prove-It tickets</button>':'');showHelp(p.help);
  $('extra').innerHTML=p.stage==='bonus'?'<button class="ghost" onclick="skip()">Skip bonus ➡</button>':'';$('mc').innerHTML='';
  if(INTER[p.type]){$('f').style.display='none';INTER[p.type](p);}
  else if(p.type==='mc'||p.type==='self'){$('f').style.display='none';const ch=p.type==='self'?[['yes',p.choices[0]],['kinda',p.choices[1]],['no',p.choices[2]]]:p.choices.map(c=>[c,c]);
@@ -41,6 +41,7 @@ function render(s){st=s;if(s?.learner)setLearner(s.learner);chips(s);const p=s.i
 async function send(v){if(!v||$('pcard').classList.contains('busy'))return;$('pcard').classList.add('busy');let r;try{r=await api('/api/answer',{answer:v});}catch(e){$('pcard').classList.remove('busy');say('Oops, the internet hiccuped. Try again! 🔌');return;}$('pcard').classList.remove('busy');say(r.jane);
  if(r.stuck){if(r.state)st=r.state;showHelp(r.stuck);return;}
  if(r.questDone)setTimeout(()=>questMedal(r.questDone),r.medal?2600:300);
+ if(r.proveIt?.passed)setTimeout(()=>banner(`🎟️ Proved it!<br><small>${esc(r.proveIt.topic||'')} +${r.proveIt.bonus} bonus</small>`),r.medal?2600:500);
  if(r.miniDone&&!r.reveal){chips(r.state);return miniEnd(r);}
  if(r.correct){const big=!!(r.mastered||r.levelUp||r.medal);if(!(window.FX&&FX.good($('pcard'),big)))confetti(big?80:30);if(r.medal)reveal(r.medal,r.inferred);else if(r.mastered)banner(`🏆 Mastered!<br><small>${esc(r.mastered)}</small>${r.inferred?`<br><small>+${r.inferred} skills lit up on your map!</small>`:''}`);else if(r.levelUp)banner('⬆ Level '+r.levelUp+'!');}
  else if(r.formNudge){/* right value, wrong form: a gentle nudge, no shake */}
@@ -471,14 +472,15 @@ const mkPid=()=>{const r=globalThis.crypto?.randomUUID?.()||(Date.now().toString
 let MK=null,_mkFocus=null;
 async function loadMarket(){let d;try{d=await api('/api/market');}catch{d=null;}if(!d||d.error){$('mlist').innerHTML='<p class="small">The Market is closed for a moment. Try again soon! 🛒</p>';return;}
  MK=d;if(st){st.wallet=d.wallet;chips(st);}paintMarket();}
-function mkSetWallet(r){if(r.wallet&&r.items)MK={...MK,wallet:r.wallet,items:r.items};if(r.state){st=r.state;chips(st);}}
+function mkSetWallet(r){if(r.wallet&&r.items)MK={...MK,wallet:r.wallet,items:r.items,prove:r.prove?.due?r.prove:MK?.prove};if(r.state){st=r.state;chips(st);}}
 function paintMarket(){const d=MK;if(!d)return;const W=d.wallet;
  $('mbal').innerHTML=`<div class="mkbal">⭐ ${W.balance.toLocaleString()} <span>to spend</span></div><div class="small">earned ${W.earned.toLocaleString()} · spent ${W.spent.toLocaleString()} · your medals and skills never cost points</div>`;
  const groups={};for(const it of d.items)(groups[it.slot||it.kind]??=[]).push(it);
  $('mlist').innerHTML=Object.entries(groups).map(([k,items])=>`<div class="card mksec"><h3>${esc(MK_GROUP[k]||k)}</h3><div class="mkgrid">${items.map(mkCard).join('')}</div></div>`).join('');
- $('mlist').querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const it=d.items.find(i=>i.id===b.dataset.buy);if(it?.kind==='flare')return mkFlare(it);mkConfirm(it);});
+ $('mlist').querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const it=d.items.find(i=>i.id===b.dataset.buy);if(it?.kind==='flare')return mkFlare(it);if(it?.kind==='prove')return mkProve(it);mkConfirm(it);});
  $('mlist').querySelectorAll('[data-eq]').forEach(b=>b.onclick=()=>mkEquip(b.dataset.slot,b.dataset.eq==='off'?null:b.dataset.eq));}
-function mkCard(it){const bal=MK.wallet.balance;
+function mkCard(it){const bal=MK.wallet.balance,PV=MK.prove;
+ if(it.kind==='prove'&&PV&&(!PV.due.length||!PV.left))return`<div class="mkcard" id="mkprove"><div class="mkemo" aria-hidden="true">${esc(it.emoji)}</div><b>${esc(it.title)}</b><div class="small">${esc(it.note||'')}</div><div class="mkprice">⭐ ${it.price}</div><button type="button" disabled>${PV.left?'No reviews due right now 🌱':'Come back tomorrow 🌙'}</button></div>`;
  const btn=it.owned&&it.slot?(it.equipped?`<button type="button" class="ghost" data-eq="off" data-slot="${esc(it.slot)}">✓ Wearing · take off</button>`:`<button type="button" data-eq="${esc(it.id)}" data-slot="${esc(it.slot)}">Wear it</button>`)
   :it.owned&&it.once?'<span class="mkown">✓ Yours!</span>'
   :`<button type="button" data-buy="${esc(it.id)}"${it.affordable?'':' disabled'}>${it.affordable?`Buy · ⭐ ${it.price}`:`Need ${it.price-bal} more ⭐`}</button>`;
@@ -507,3 +509,10 @@ function mkFlare(it,pre){const F=st?.fog||mapData?.fog||{},by=F.bySubject||{},on
  mkConfirm(it,{extra:`<label for="mkreg"><b>Which island?</b></label><br><select id="mkreg">${opts.map(([k,b])=>`<option value="${esc(k)}"${k===pre?' selected':''}>${esc((ISL[k]?.e||'🏝️')+' '+(ISL[k]?.s||k))} · ${Math.round(100*b.clear/b.total)}% clear</option>`).join('')}</select>
   <div class="small">For 24 hours you'll see skill names and where secrets hide. Then the fog rolls back. Only mastering skills clears it for good!</div>`,
   meta:o=>({region:o.querySelector('#mkreg').value}),after:r=>{if(r.flare)goMap(r.flare.region);}});}
+// prove-it: pick a due review (most overdue first); a gate's own topic is not offered while its gate item is on screen
+function openProve(){document.querySelector('.tab[data-v=market]').click();setTimeout(()=>$('mkprove')?.scrollIntoView({behavior:'smooth',block:'center'}),600);}
+function mkProve(it){const gt=st?.item?.gate?st.item.topicId:null,due=(MK?.prove?.due||[]).filter(d=>d.topicId!==gt);
+ if(!due.length){say('No reviews are due right now. Nice work! 🌱');return;}
+ mkConfirm(it,{extra:`<label for="mkpv"><b>Which review?</b></label><br><select id="mkpv">${due.map(d=>`<option value="${esc(d.topicId)}">${esc((d.ic||ISL[d.subject]?.e||'🧠')+' '+d.name)}${d.overdueDays?` · due ${d.overdueDays} day${d.overdueDays>1?'s':''} ago`:' · due now'}</option>`).join('')}</select>
+  <div class="small">One HARDER question, one try. Right: the review is cleared + ${MK.prove.bonus} bonus points. Wrong: the review stays, and the ticket is used up. ${MK.prove.left} left today.</div>`,
+  meta:o=>({topicId:o.querySelector('#mkpv').value}),after:r=>{if(r.state?.item?.format==='prove'){document.querySelector('.tab[data-v=play]').click();render(r.state);say('🎟️ Here is your Prove-It question. Show me what you know!');}}});}

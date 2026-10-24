@@ -151,6 +151,11 @@ export const MARKET=[
       if(b.clear>=b.total)return{error:'That island has no fog left: you cleared it! ✨'};
       if((S.wallet?.active?.flares||[]).some(f=>f.region===r&&f.until>now))return{error:'Your flare is still burning over that island! 🎆'};return{meta:{region:r}};},
     apply:(S,g,row,now)=>{const A=S.wallet.active;A.flares=[...(A.flares||[]).filter(f=>f.until>now),{region:row.meta.region,at:now,until:now+FLARE_HOURS*3600e3,pid:row.id}];return{flare:{region:row.meta.region,until:now+FLARE_HOURS*3600e3}};}},
+  // prove-it ticket (slice 4): one harder question on a DUE review now. Right first try = review passed + PROVE_BONUS; a miss
+  // = review stays due (≤ 1 day), no refund. Max PROVE_DAY_MAX per Pacific day so it never replaces the review gates.
+  {id:'prove-it',kind:'prove',price:150,emoji:'🎟️',title:'Prove-It Ticket',note:'Answer one HARDER question on a review that is due. Right first try: review cleared + 20 bonus points!',
+    check:(S,g,meta,now)=>{const id=String(meta.topicId||'');const e=proveError(S,g,id,now);return e?{error:e}:{meta:{topicId:id}};},
+    apply:(S,g,row,now)=>{if(S.current&&!S.current.proveIt)S.proveHold=S.current;S.current=proveItem(S,g,row.meta.topicId,now,row.id);return{proving:{topicId:row.meta.topicId}};}},
 ];
 export const SKIN_SLOTS=['ship','avatar','boss','theme'];
 export const WALLET_DAYS=60;
@@ -186,6 +191,32 @@ export function buy(S,g,{pid,item,meta}={},now=Date.now()){pid=String(pid||'');i
   const extra=def.apply?def.apply(S,g,row,now)||{}:{};
   if(m0Sig(S)!==sig)throw new Error('Market purchases must not change points, medals or mastery');
   return{ok:true,row,...extra};}
+// ---------- prove-it (slice 4) ----------
+export const PROVE_BONUS=20,PROVE_DAY_MAX=2;
+// provable = has a harder question: a check item's "why" tier, or a generator one level up (a self-check or a plain kid MCQ is not harder)
+const provable=(g,id)=>{const t=g.byId[id];return !!(t&&(t.ck?.y||kindFor(t)));};
+const provesToday=(S,now)=>(S.wallet?.ledger||[]).filter(r=>r.item==='prove-it'&&ptDay(r.at)===ptDay(now)).length;
+function proveError(S,g,id,now){if(!g.byId[id])return 'Pick a review to prove! 🧠';if(stateOf(S,g,id,now)!=='review')return 'Prove-it only works on a review that is due right now. 🧠';
+  if(!provable(g,id))return 'That one has no harder question yet. Try another review!';if(S.mini)return 'Finish your Map practice first! 🗺️';
+  if(S.current?.proveIt)return 'Answer your Prove-It question first! 🎟️';if(provesToday(S,now)>=PROVE_DAY_MAX)return `That's ${PROVE_DAY_MAX} Prove-It tickets today. Come back tomorrow! 🌙`;return null;}
+export function proveOffers(S,g,now=Date.now()){const due=g.topics.filter(t=>stateOf(S,g,t.id,now)==='review'&&provable(g,t.id)).sort((a,b)=>S.ts[a.id].due-S.ts[b.id].due);
+  return{left:Math.max(0,PROVE_DAY_MAX-provesToday(S,now)),bonus:PROVE_BONUS,due:due.slice(0,8).map(t=>({topicId:t.id,name:t.sn||t.name,subject:t.subject,ic:t.ic,overdueDays:Math.max(0,Math.floor((now-S.ts[t.id].due)/DAY))}))};}
+function proveItem(S,g,id,now,pid){const t=g.byId[id],r=S.ts[id],c=t.ck;let it;
+  if(c?.y)it={kind:'quiz',type:'mc',ptype:'check',check:true,q:`${c.q} "${c.a}". WHY is that right?`,base:'why:'+c.q,choices:shuf([c.y.a,...c.y.w]),answer:c.y.a,hint:'Which reason really explains it?',explain:`The reason: ${c.y.a}.`};
+  else{const k=kindFor(t),lvl=Math.min(5,(r?.lvl||4)+1),p=genFair(k,lvl,S.support?.[id],false,now);it={kind:'math',type:'input',q:p.q,answer:p.a,cmp:p.cmp,needSimplest:p.needSimplest,hint:p.hint,explain:p.explain,vis:p.vis,lvl};}
+  return{...it,id:now+'-pv',topicId:id,mode:'review',format:'prove',proveIt:pid||true,tries:0,stage:'main',issued:now,timed:null,boss:null,bonus:null};}
+function proveEnd(S){S.current=S.proveHold||null;delete S.proveHold;}
+// one question, one try: right first try reuses the normal review pass (box +1, new due, points) and adds the bonus;
+// a miss is a memory-check miss (due ≤ now + 1 day, no demotion), like a pack review. A nudge (wrong form) is not a miss.
+function proveSubmit(S,g,answer,now){const it=S.current,t=g.byId[it.topicId];if(it.type==='input'&&isStuck(answer))return stuck(S,g,now,String(answer));
+  const ok=grade(it,answer,false);
+  if(ok==='wrongForm'||ok==='notSimplest'||ok===true||ok==='creative'){const first=!it.tries&&(ok===true||ok==='creative'),x=submit0(S,g,answer,now);
+    if(!x.r.done)return x;x.r.askChoice=false;if(first){S.points+=PROVE_BONUS;x.r.jane+=` 🎟️ PROVED IT! +${PROVE_BONUS} bonus points!`;}
+    x.r.proveIt={passed:first,bonus:first?PROVE_BONUS:0,topic:t.sn||t.name};x.ev.push({event:'proveIt',topicId:it.topicId,topic:t.name,passed:first,bonus:first?PROVE_BONUS:0});proveEnd(S);return x;}
+  const rec=S.ts[it.topicId],ev=[{topicId:it.topicId,topic:t.name,subject:t.subject,mode:'review',format:'prove',qtype:it.ptype||it.kind,level:it.lvl,stage:'main',question:it.q,expected:it.answer,given:String(answer),correct:false,try:it.tries+1,elapsedSec:Math.round((now-it.issued)/1000),proveIt:true}];
+  S.streak=0;if(rec){rec.streak=0;rec.last=now;if(rec.st==='mastered')rec.due=Math.min(rec.due,now+DAY);}
+  ev.push({event:'reviewMiss',topicId:it.topicId,topic:t.name},{event:'proveIt',topicId:it.topicId,topic:t.name,passed:false,bonus:0});proveEnd(S);
+  return{r:{done:true,correct:false,reveal:it.answer,proveIt:{passed:false,bonus:0,topic:t.sn||t.name},jane:`Good try! ${it.explain} This review stays on your list. You'll get it next time! 💪`},ev};}
 // M6: one snapshot of the earned total per Pacific day (last WALLET_DAYS days) so the export can show earned7d
 export function snapDay(S,day){const W=walletOf(S);if(W.days[day]===(S.points||0))return;W.days[day]=S.points||0;
   const ks=Object.keys(W.days).sort();for(const k of ks.slice(0,Math.max(0,ks.length-WALLET_DAYS)))delete W.days[k];}
@@ -491,7 +522,7 @@ function grade(it,ans,isBonus){const a=String(ans??'').trim();if(isBonus){const 
   return [it.answer,...(it.accept||[])].some(x=>norm(x)===norm(a)||(it.fuzzy&&it.kind==='pack'&&fuzzyEq(x,a)));}
 const praise=['Amazing, {name}! 🎉','You nailed it! 🌟','Brilliant thinking! 🧠','Wow, superstar! ⭐','That\'s exactly right! 🙌','You\'re on fire! 🔥'];
 const comfort=['Ooh, so close! Let\'s think it through together.','Good try! Mistakes help our brains grow. 🌱','Not quite — but I love that you tried!'];
-export function submit(S,g,answer,now){const it=S.current,rec=it?.spot&&S.ts[it.topicId];if(rec&&rec.box0==null)rec.box0=rec.box||0;
+export function submit(S,g,answer,now){if(S.current?.proveIt)return proveSubmit(S,g,answer,now);const it=S.current,rec=it?.spot&&S.ts[it.topicId];if(rec&&rec.box0==null)rec.box0=rec.box||0;
   const x=submit0(S,g,answer,now);if(it?.spot&&x.r?.done)spotDone(S,g,it,x,now);if(it?.gate&&x.r?.done)gateDone(S,it,x.r);return x;}
 function submit0(S,g,answer,now){const it=S.current;if(!it)return{error:'no item'};const ev=[],r={};const isBonus=it.stage==='bonus';const t=g.byId[it.topicId];
   // "idk", "skip", "help", "don't show this"... opens the stuck help instead of being graded wrong
@@ -565,7 +596,9 @@ export function stuck(S,g,now,given){const it=S.current;if(!it)return{error:'no 
   const ev=[{event:'stuck',step:it.stuckStep,topicId:it.topicId,topic:t?.name,subject:t?.subject,mode:it.mode,format:it.format,level:it.lvl,question:it.stage==='bonus'?it.bonus?.q:it.q,given:given||undefined,pack:it.packKey?it.packKey.split(':')[0]:undefined}];
   return{r:{stuck:helpFor(it),jane:['','Hey, want a hint? 💡','Let\'s do one together! 👀','No worries! You can skip this one for now. ⏭️'][it.stuckStep]},ev};}
 // "Skip for now": no heart, no lost streak, no boss miss. The item comes back tomorrow, easier (guided), and the topic is flagged for support.
-export function skip(S,g,pack,now){const it=S.current,x=skip0(S,g,pack,now);if(it?.spot&&S.ts[it.topicId])delete S.ts[it.topicId].box0;if(it?.gate&&x.r?.done)gateDone(S,it,x.r);return x;}
+export function skip(S,g,pack,now){if(S.current?.proveIt){const it=S.current,rec=S.ts[it.topicId];if(rec?.st==='mastered')rec.due=Math.min(rec.due,now+DAY);proveEnd(S);
+    return{r:{done:true,skipped:true,proveIt:{passed:false,bonus:0},jane:'No problem! That review stays on your list for later. 💜'},ev:[{event:'proveIt',topicId:it.topicId,passed:false,skipped:true,bonus:0}]};}
+  const it=S.current,x=skip0(S,g,pack,now);if(it?.spot&&S.ts[it.topicId])delete S.ts[it.topicId].box0;if(it?.gate&&x.r?.done)gateDone(S,it,x.r);return x;}
 function skip0(S,g,pack,now){const it=S.current;if(!it)return{error:'no item'};const t=g.byId[it.topicId],ev=[];
   if(it.stage==='bonus'){S.current=null;return finish(S,{done:true,skipped:true,jane:'No problem! Here\'s a new one. 😊'},ev,true);}
   const sp=sup(S,it.topicId);sp.skipped++;sp.at=now;sp.teachDue=true;(sp.avoid??=[]).push({q:it.q,until:now+DAY});sp.avoid=sp.avoid.filter(x=>x.until>now).slice(-8);
