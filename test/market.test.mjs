@@ -49,6 +49,22 @@ test('skins: 4 slots priced 300–1,500, bought once, equip owned-only and free,
   assert.ok(E.equip(S,g,'ship',null).ok);w=E.walletState(S,g,NOW);assert.equal(w.equipped.ship,undefined);assert.ok(w.owned['ship-pirate'],'still owned after taking it off');
   assert.ok(E.buy(S,g,{pid:pid(21),item:'ship-pirate'},NOW).already,'owned skins are not sold twice');});
 
+// ---------- slice 3: scout flare ----------
+test('scout flare: active < 24 h, gone after; mask, clear and available identical; claimFind still refuses uncleared finds',()=>{
+  const S=rich(1000);const before=E.fogState(S,g,NOW);
+  assert.match(E.buy(S,g,{pid:pid(30),item:'scout-flare',meta:{region:'Atlantis'}},NOW).error,/Pick an island/);
+  const x=E.buy(S,g,{pid:pid(31),item:'scout-flare',meta:{region:'Science'}},NOW);assert.ok(x.ok,x.error);assert.equal(x.row.price,200);assert.equal(x.flare.region,'Science');
+  assert.match(E.buy(S,g,{pid:pid(32),item:'scout-flare',meta:{region:'Science'}},NOW+1).error,/still burning/);
+  const lit=E.fogState(S,g,NOW+23*3600e3);assert.equal(lit.flares.length,1);assert.equal(lit.flares[0].region,'Science');assert.equal(lit.flares[0].secrets,1,'one Science find still hidden');
+  for(const k of ['mask','clear','total','pct','bySubject','available','finds'])assert.deepEqual(lit[k],before[k],k);
+  assert.match(E.claimFind(S,g,'secret-sci-30',NOW).error,/not yet uncovered/);
+  const after=E.fogState(S,g,NOW+24*3600e3+1);assert.deepEqual(after.flares,[],'fog returns after 24 h');assert.equal(after.mask,before.mask);
+  assert.ok(E.buy(S,g,{pid:pid(33),item:'scout-flare',meta:{region:'Science'}},NOW+25*3600e3).ok,'a new flare after the old one burns out');
+  assert.equal(S.wallet.active.flares.length,1,'expired flares are dropped');});
+test('scout flare: a fully cleared island cannot be flared',()=>{
+  const S=rich(1000);for(const t of g.topics.filter(t=>t.subject==='Geography'))S.ts[t.id]={st:'mastered',how:'direct',conf:.9,box:1,due:NOW+DAY};
+  assert.match(E.buy(S,g,{pid:pid(34),item:'scout-flare',meta:{region:'Geography'}},NOW).error,/no fog left/);});
+
 // ---------- server: routes, purchase log, export ----------
 const DATA=tmpDir('jane-market-');let srv,B;
 const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
@@ -71,7 +87,11 @@ test('server: /api/state wallet, GET /api/market, idempotent POST /api/market/bu
   assert.equal(typeof X.market.earned7d,'number');});
 test('server: buy a ship skin, equip it, /api/state carries the look; equip without owning is refused',async()=>{
   assert.equal((await call('/api/market/equip',{slot:'avatar',item:'avatar-fox'})).status,400);
-  const a=await call('/api/market/buy',{pid:'srv-pid-3',item:'ship-gold'});assert.equal(a.status,200);
-  const e=await call('/api/market/equip',{slot:'ship',item:'ship-gold'});assert.equal(e.status,200);assert.equal(e.j.state.wallet.looks.ship.id,'ship-gold');
-  const s=(await call('/api/state')).j;assert.equal(s.wallet.equipped.ship,'ship-gold');assert.equal(s.wallet.balance,s.wallet.earned-s.wallet.spent);assert.equal(s.points,1000);
-  const h=await (await fetch(B+'/parent')).text();assert.match(h,/"wallet":\{"balance":75,"earned":1000,"spent":925/,"parent data carries both earned and spendable");});
+  const a=await call('/api/market/buy',{pid:'srv-pid-3',item:'ship-candy'});assert.equal(a.status,200);
+  const e=await call('/api/market/equip',{slot:'ship',item:'ship-candy'});assert.equal(e.status,200);assert.equal(e.j.state.wallet.looks.ship.id,'ship-candy');
+  const s=(await call('/api/state')).j;assert.equal(s.wallet.equipped.ship,'ship-candy');assert.equal(s.wallet.balance,s.wallet.earned-s.wallet.spent);assert.equal(s.points,1000);
+  const f=await call('/api/market/buy',{pid:'srv-pid-4',item:'scout-flare',meta:{region:'Mathematics'}});assert.equal(f.status,200);assert.equal(f.j.state.fog.flares[0].region,'Mathematics');
+  const m1=(await call('/api/map')).j;assert.equal(m1.fog.flares.length,1);
+  fs.writeFileSync(path.join(DATA,'debug%3AclockOffsetDays.json'),'2');const m2=(await call('/api/map')).j;fs.rmSync(path.join(DATA,'debug%3AclockOffsetDays.json'));
+  assert.deepEqual(m2.fog.flares,[],'two days later the fog is back');assert.equal(m2.fog.mask,m1.fog.mask);
+  const h=await (await fetch(B+'/parent')).text();assert.match(h,/"wallet":\{"balance":475,"earned":1000,"spent":525/,"parent data carries both earned and spendable");});

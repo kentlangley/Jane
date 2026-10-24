@@ -95,7 +95,7 @@ const res={exportedAt:new Date(now).toISOString(),date,timezone:'America/Los_Ang
   quests,termsLookedUp,weakSpots,todayLog:log,learnedToday:log.filter(l=>l.event==='mastered'),
   // household region filter (HIDE_REGIONS): these topics are not in the app, the frontier or the totals; progress on them is kept
   hiddenRegions:{regions:hiddenRegions,topics:Object.keys(g.hidden).length,mastered:Object.keys(g.hidden).filter(id=>S.ts[id]?.st==='mastered').length,medals:(S.medals||[]).filter(m=>g.hidden[m.id]).length},
-  research,frontier,reviewDue,fog:E.fogState(S,g),campaign:E.campaignState(S,g),
+  research,frontier,reviewDue,fog:E.fogState(S,g,now),campaign:E.campaignState(S,g),
   market:E.marketExport(S,g,now), // Points Market: spend vs earn for price tuning (target 50–70% of earned points spent), choices to honor
   progress:S};
 fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,E.withName(JSON.stringify({learner:L,...res},null,1),JSON.stringify(L.name).slice(1,-1)));

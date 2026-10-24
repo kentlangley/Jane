@@ -1,6 +1,6 @@
 # Points Market — spend points on fun, choice and peeks
 
-**Status:** in progress — slices 1–2 done (2026-10-23).
+**Status:** in progress — slices 1–3 done (2026-10-23).
 **Tracking:** [#74](https://github.com/kentlangley/Jane/issues/74)
 **Slices:** [#68](https://github.com/kentlangley/Jane/issues/68) Wallet · [#69](https://github.com/kentlangley/Jane/issues/69) Skins · [#70](https://github.com/kentlangley/Jane/issues/70) Scout flare · [#71](https://github.com/kentlangley/Jane/issues/71) Prove-it · [#72](https://github.com/kentlangley/Jane/issues/72) Pick your path · [#73](https://github.com/kentlangley/Jane/issues/73) Chests + extras
 **Idea credit:** Christopher (Kent's son), who proposed the Points Market items: hidden items, temporary fog push-back, skins, influencing the next question, buying out known reviews.
@@ -182,6 +182,19 @@ points buy things a 5th grader wants (skins, secrets, choices) without breaking 
 - Map: thinned-fog layer + labels for flared region.
 - Done test: as above.
 - Decisions frozen: Design "Scout flare", M0.
+
+#### Outcome (Slice 3) — done 2026-10-23
+- Shipped: `scout-flare` (200, consumable) with `check` (fogged subject island, one live flare per island) and `apply`
+  (`S.wallet.active.flares += {region, at, until: now+24h, pid}`, expired ones dropped). `fogState(S,g,now)` adds `flares`
+  (active only, with `secrets` = unclaimed finds tied to that subject); nothing else in `fogState` changes.
+- Map: flared island fog opacity ×0.3, 🎆 burst, ❓ markers (≤ 3), and when zoomed the names of up to 30 fogged
+  ready/learning stones; tooltip says "lit by your flare (fog comes back)"; subtitle shows hours left. Region picker: a
+  select in the Market confirm dialog, plus a "🎆 Light it up!" button on a zoomed fogged island (same confirm step).
+- Decision: a region is a **subject island** (not a domain): matches how fog is drawn per island and keeps the picker short.
+- Done test: `node --test test/market.test.mjs && npm test` → market 11/11, 183 pass / 0 fail. The clock-offset check runs
+  on the local server (`debug:clockOffsetDays`=2 → `flares: []`, same mask) instead of a live sandbox reset. Headless UI
+  check locally: flare on Science → Map zooms there, 1 flared fog layer, 1 ❓ marker, labels drawn.
+- Deferred: none.
 
 ### Slice 4: The learner can prove it on a due review
 - Ships: on a **due** review topic, buy a **prove-it ticket** (~150) → one harder question now. Right first try = review

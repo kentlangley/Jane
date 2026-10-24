@@ -157,10 +157,12 @@ function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const LK=st
  // directly cleared (mapData.fog mask 'C') or mastered / review due (codes m|v). Fog sits BELOW the nodes so lit and
  // learning stones always show, and a mask punches clear holes around every lit stone. The quiet % chip stays.
  const fog=mapData.fog||{bySubject:{},mask:'',pct:0},mask=fog.mask||'',lit=i=>mask[i]==='C'||codes[i]==='m'||codes[i]==='v';
+ // scout flares (Points Market): a 24 h peek. The fog over a flared island is thinned, never cleared; mask and counts are untouched.
+ const FL=Object.fromEntries((fog.flares||[]).map(f=>[f.region,f]));
  const fogRad=zoomed?ISL[zoomed].r/58*2.6:13;let holes='';const tot={};
  TAX.topics.forEach((t,i)=>{if(zoomed&&t.subject!==zoomed)return;const b=tot[t.subject]??={n:0,lit:0};b.n++;if(lit(i)){b.lit++;const[x,y]=pos[i];holes+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${fogRad.toFixed(1)}"/>`;}});
  let fogS='';for(const [sub,I] of Object.entries(ISL)){if(zoomed&&zoomed!==sub)continue;const b=tot[sub];if(!b||!b.n||b.lit>=b.n)continue;const un=1-b.lit/b.n;
-  fogS+=`<g class="fog-layer" opacity="${(.18+.32*un).toFixed(2)}"><path class="fog-island" d="${blob(I.x,I.y,I.r*1.06,hash(sub)+.9)}" fill="${FOG||'#37474f'}"/>
+  fogS+=`<g class="fog-layer${FL[sub]?' flared':''}" opacity="${((.18+.32*un)*(FL[sub]?.3:1)).toFixed(2)}"><path class="fog-island" d="${blob(I.x,I.y,I.r*1.06,hash(sub)+.9)}" fill="${FOG||'#37474f'}"/>
   <path class="fog-wisp" d="${blob(I.x+I.r*.12,I.y-I.r*.08,I.r*.62,hash(sub)+1.4)}" fill="${FOG||'#546e7a'}" opacity=".5"/></g>`;}
  if(fogS)s+=`<mask id="fogHoles" maskUnits="userSpaceOnUse" x="-500" y="-500" width="2600" height="2100"><rect x="-500" y="-500" width="2600" height="2100" fill="#fff"/><g fill="#000" filter="url(#fogBlur)">${holes}</g></mask>
  <g class="fog" pointer-events="none" mask="url(#fogHoles)">${fogS}</g>`;
@@ -175,14 +177,24 @@ function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const LK=st
  if(zoomed)for(const {d,a} of doms[zoomed]){const I=ISL[zoomed];const lb=d.length>16?d.split(/ & | and /)[0]:d;s+=`<text pointer-events="none" x="${I.x+I.r*1.0*Math.cos(a)}" y="${I.y+I.r*1.0*Math.sin(a)}" font-size="${I.r/(doms[zoomed].length>10?24:17)}" text-anchor="middle" fill="#3e2723" font-weight="800" stroke="#fff8e1" stroke-width="${I.r/80}" paint-order="stroke">${esc(lb)}</text>`;}
  if(!zoomed){s+=ship(250,985,.9,'#42a5f5',22,LK.ship)+ship(1180,960,.9,'#ec407a',28,LK.ship)+ship(1500,560,.8,'#ffca28',25,LK.ship)+compass(1500,110,55);
   for(const [x,y,k,d] of [[200,120,1,70],[800,90,.8,90],[1300,480,.7,80],[400,980,.9,100],[1100,140,.6,75]])s+=cloud(x,y,k,d);}
+ for(const [sub,f] of Object.entries(FL)){const I=ISL[sub];if(!I||(zoomed&&zoomed!==sub))continue;
+  if(zoomed){const lb=[];TAX.topics.forEach((t,i)=>{if(t.subject!==sub||lit(i)||!'rl'.includes(codes[i]))return;const[x,y]=pos[i];if(lb.length<30)lb.push(`<text x="${x.toFixed(1)}" y="${(y-rad*1.6).toFixed(1)}" font-size="${(rad*1.5).toFixed(1)}" text-anchor="middle">${esc(t.sn||t.name)}</text>`);});
+   s+=`<g class="flare-names" pointer-events="none" fill="#fff8e1" stroke="#3e2723" stroke-width="${(rad/5).toFixed(2)}" paint-order="stroke" font-weight="800">${lb.join('')}</g>`;}
+  let mk='';for(let k=0;k<Math.min(3,f.secrets||0);k++){const a=hash(sub+'s'+k)*2*Math.PI,rr=I.r*(.35+.4*hash(sub+'sr'+k));mk+=`<text class="flare-secret" x="${(I.x+rr*Math.cos(a)).toFixed(1)}" y="${(I.y+rr*Math.sin(a)).toFixed(1)}" font-size="${(I.r/(zoomed?7:5)).toFixed(1)}" text-anchor="middle">❓<title>Something's hidden here…</title></text>`;}
+  s+=`<g pointer-events="none">${mk}<text class="flare-burst" x="${I.x+I.r*.85}" y="${I.y-I.r*.85}" font-size="${(I.r/(zoomed?5:3.2)).toFixed(1)}" text-anchor="middle">🎆</text></g>`;}
  const cur=mapData.current&&TAX.idx[mapData.current];if(cur!=null&&pos[cur]&&(!zoomed||TAX.topics[cur].subject===zoomed)){const[x,y]=pos[cur];s+=`<text pointer-events="none" class="boat" x="${x}" y="${y-rad*1.5}" font-size="${rad*6}" text-anchor="middle">⛵</text>`;}
  $('world').innerHTML=s+'</svg>';const svg=$('msvg');
  svg.querySelectorAll('.isl').forEach(g=>g.onclick=()=>{if(!zoomed){zoomed=g.dataset.s;drawMap();}});
  svg.addEventListener('pointermove',tip);svg.addEventListener('click',e=>{const isl=e.target.closest?.('.isl');if(!zoomed&&isl&&!e.target.classList.contains('tp')){zoomed=isl.dataset.s;window.FX?FX.view(drawMap):drawMap();return;}if(e.target.classList.contains('tp')){if(!zoomed){tip(e,true);zoomed=TAX.topics[e.target.dataset.i].subject;drawMap();}else{$('tip').hidden=true;stoneCard(+e.target.dataset.i);}}});
- $('zoomout').hidden=!zoomed;const pr=mapData.progress,fp=mapData.fog?.pct??0,lp=pr.total?Math.round(1000*TAX.topics.reduce((n,t,i)=>n+(mapData.fog?.mask?.[i]==='C'||'mv'.includes(mapData.codes[i]||'_')?1:0),0)/pr.total)/10:0;$('msub').textContent=zoomed?`${zoomed}: tap a stone to see the skill. Fog lifts when you master a skill for real!`:`${pr.done} of ${pr.total} skills · ${lp}% lit · fog clear ${fp}% · ${pr.tot.ready} ready · tap an island`;}
+ $('zoomout').hidden=!zoomed;const pr=mapData.progress,fp=mapData.fog?.pct??0,lp=pr.total?Math.round(1000*TAX.topics.reduce((n,t,i)=>n+(mapData.fog?.mask?.[i]==='C'||'mv'.includes(mapData.codes[i]||'_')?1:0),0)/pr.total)/10:0;const flH=f=>Math.max(1,Math.ceil((f.until-Date.now())/3600e3)),flT=Object.values(FL).map(f=>`🎆 ${ISL[f.region]?.s||f.region} lit (${flH(f)} h left)`).join(' · ');
+ $('msub').textContent=(zoomed?`${zoomed}: tap a stone to see the skill. Fog lifts when you master a skill for real!`:`${pr.done} of ${pr.total} skills · ${lp}% lit · fog clear ${fp}% · ${pr.tot.ready} ready · tap an island`)+(flT?' · '+flT:'');
+ flareBtn(FL,fog);}
+// "Light it up": fire a scout flare at the island you are looking at (it still goes through the Market's confirm step)
+function flareBtn(FL,fog){let b=$('flarebtn');if(!b){b=document.createElement('button');b.id='flarebtn';b.type='button';b.className='ghost';$('zoomout').after(b);b.onclick=async()=>{if(!MK)await loadMarket();const it=MK?.items?.find(i=>i.kind==='flare');if(it)mkFlare(it,zoomed);};}
+ const bs=fog.bySubject?.[zoomed];b.hidden=!zoomed||!bs||bs.clear>=bs.total||!!FL[zoomed];b.textContent='🎆 Light it up!';}
 function tip(e,force){const t=e.target;if(!t.classList?.contains('tp')){if(!force)$('tip').hidden=true;return;}const i=+t.dataset.i,tp=TAX.topics[i],c=mapData.codes[i];
  const box=$('world').getBoundingClientRect(),card=$('world').parentElement.getBoundingClientRect();const el=$('tip');el.hidden=false;
- const cl=mapData.fog?.mask?.[i]==='C',fogged=!!mapData.fog&&!cl&&!'mv'.includes(c||'_');el.innerHTML=`<b>${esc(tp.name)}</b><br><span class="small">${esc(tp.subject)} › ${esc(tp.domain)} · ages ${tp.ageRangeStart}+</span><br>${SN[c]}${fogged?' · 🌫️ under fog':(cl?' · ✨ fog cleared':'')}<br><span class="small">${esc(tp.description).slice(0,140)}…</span>`;
+ const cl=mapData.fog?.mask?.[i]==='C',fogged=!!mapData.fog&&!cl&&!'mv'.includes(c||'_'),flared=fogged&&(mapData.fog.flares||[]).some(f=>f.region===tp.subject);el.innerHTML=`<b>${esc(tp.name)}</b><br><span class="small">${esc(tp.subject)} › ${esc(tp.domain)} · ages ${tp.ageRangeStart}+</span><br>${SN[c]}${flared?' · 🎆 lit by your flare (fog comes back)':fogged?' · 🌫️ under fog':(cl?' · ✨ fog cleared':'')}<br><span class="small">${esc(tp.description).slice(0,140)}…</span>`;
  el.style.left=Math.min(e.clientX-card.left+12,card.width-290)+'px';el.style.top=(e.clientY-card.top+12)+'px';}
 function drawBars(){const pr=mapData.progress;let s=`<div class="big">🌍 ${pr.pct}% of ${pr.total} skills</div><div class="sbar"><div class="track">${seg(pr.tot,pr.total)}</div></div>`;
  for(const [sub,I] of Object.entries(ISL)){const b=pr.by[sub];if(!b)continue;s+=`<div class="sbar"><div class="lbl"><span>${I.e} ${esc(sub)}</span><span>${b.mastered+b.review} / ${b.total}</span></div><div class="track">${seg(b,b.total)}</div></div>`;}
@@ -464,7 +476,7 @@ function paintMarket(){const d=MK;if(!d)return;const W=d.wallet;
  $('mbal').innerHTML=`<div class="mkbal">⭐ ${W.balance.toLocaleString()} <span>to spend</span></div><div class="small">earned ${W.earned.toLocaleString()} · spent ${W.spent.toLocaleString()} · your medals and skills never cost points</div>`;
  const groups={};for(const it of d.items)(groups[it.slot||it.kind]??=[]).push(it);
  $('mlist').innerHTML=Object.entries(groups).map(([k,items])=>`<div class="card mksec"><h3>${esc(MK_GROUP[k]||k)}</h3><div class="mkgrid">${items.map(mkCard).join('')}</div></div>`).join('');
- $('mlist').querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>mkConfirm(d.items.find(i=>i.id===b.dataset.buy)));
+ $('mlist').querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const it=d.items.find(i=>i.id===b.dataset.buy);if(it?.kind==='flare')return mkFlare(it);mkConfirm(it);});
  $('mlist').querySelectorAll('[data-eq]').forEach(b=>b.onclick=()=>mkEquip(b.dataset.slot,b.dataset.eq==='off'?null:b.dataset.eq));}
 function mkCard(it){const bal=MK.wallet.balance;
  const btn=it.owned&&it.slot?(it.equipped?`<button type="button" class="ghost" data-eq="off" data-slot="${esc(it.slot)}">✓ Wearing · take off</button>`:`<button type="button" data-eq="${esc(it.id)}" data-slot="${esc(it.slot)}">Wear it</button>`)
@@ -488,3 +500,10 @@ function mkConfirm(it,opt={}){if(!it||!MK)return;mkClose();_mkFocus=document.act
   mkClose();paintMarket();if(!r.already){if(!(window.FX&&FX.good?.($('mbal'),true)))confetti(30);banner(`🛒 ${esc(it.title)} is yours!`);}opt.after?.(r);};
  setTimeout(()=>yes.focus(),50);}
 async function mkEquip(slot,item){let r;try{r=await api('/api/market/equip',{slot,item});}catch{return;}if(r.error){say(r.error);return;}mkSetWallet(r);paintMarket();}
+// scout flare: pick a fogged island (least clear first), buy, then fly to it on the Map
+function mkFlare(it,pre){const F=st?.fog||mapData?.fog||{},by=F.bySubject||{},on=new Set((F.flares||[]).map(f=>f.region));
+ const opts=Object.entries(by).filter(([k,b])=>b.total&&b.clear<b.total&&!on.has(k)).sort((a,b)=>a[1].clear/a[1].total-b[1].clear/b[1].total);
+ if(!opts.length){say('No foggy islands left to light up right now! ✨');return;}
+ mkConfirm(it,{extra:`<label for="mkreg"><b>Which island?</b></label><br><select id="mkreg">${opts.map(([k,b])=>`<option value="${esc(k)}"${k===pre?' selected':''}>${esc((ISL[k]?.e||'🏝️')+' '+(ISL[k]?.s||k))} · ${Math.round(100*b.clear/b.total)}% clear</option>`).join('')}</select>
+  <div class="small">For 24 hours you'll see skill names and where secrets hide. Then the fog rolls back. Only mastering skills clears it for good!</div>`,
+  meta:o=>({region:o.querySelector('#mkreg').value}),after:r=>{if(r.flare)goMap(r.flare.region);}});}

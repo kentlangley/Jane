@@ -103,11 +103,16 @@ function findEligible(def,counts){const w=def.when||{};
   if(w.clear!=null&&counts.clear<w.clear)return false;
   if(w.subject){const b=counts.bySubject[w.subject];if(!b||!b.total)return false;const pct=Math.round(1000*b.clear/b.total)/10;if(w.pct!=null&&pct<w.pct)return false;if(w.clear!=null&&b.clear<w.clear)return false;}
   return true;}
-export function fogState(S,g){const counts=fogClearCounts(S,g);const claimed=S.fog?.finds||[];
+export function fogState(S,g,now=Date.now()){const counts=fogClearCounts(S,g);const claimed=S.fog?.finds||[];
   const have=new Set(claimed.map(f=>f.id));
   const available=FOG_FINDS.filter(d=>!have.has(d.id)&&findEligible(d,counts)).map(d=>({id:d.id,kind:d.kind,emoji:d.emoji,title:d.title,reward:d.reward}));
   const finds=claimed.map(f=>{const d=FOG_FINDS.find(x=>x.id===f.id);return{id:f.id,kind:f.kind||d?.kind,emoji:f.emoji||d?.emoji,title:f.title||d?.title,claimedAt:f.claimedAt,reward:d?.reward};});
-  return{...counts,finds,available};}
+  return{...counts,finds,available,flares:flaresOf(S,counts,have,now)};}
+// Scout flares (Points Market slice 3): a 24 h peek at one fogged island. Read-only here: mask, clear counts, finds and
+// claim eligibility never change; the Map only thins the fog over the flared island and shows names + "hidden here" markers.
+export const FLARE_HOURS=24;
+function flaresOf(S,counts,have,now){return(S.wallet?.active?.flares||[]).filter(f=>f.until>now&&counts.bySubject[f.region]).map(f=>({region:f.region,at:f.at,until:f.until,
+  secrets:FOG_FINDS.filter(d=>d.when?.subject===f.region&&!have.has(d.id)).length}));}
 // Idempotent claim. Never awards medals, mastery, quest medals, or bypasses teach→practice→graded→boss.
 export function claimFind(S,g,id,now=Date.now()){const def=FOG_FINDS.find(d=>d.id===id);if(!def)return{error:'unknown find'};
   S.fog??={finds:[]};S.fog.finds??=[];
@@ -140,6 +145,12 @@ export const MARKET=[
   {id:'theme-sunset',kind:'skin',slot:'theme',once:true,price:800,emoji:'🌅',title:'Sunset Sea',note:'Your whole Map glows orange and purple.',look:{sea:['#ffcc80','#ff7043','#6a1b9a'],grass:['#c5e1a5','#7cb342'],fog:'#4a148c'}},
   {id:'theme-night',kind:'skin',slot:'theme',once:true,price:1200,emoji:'🌙',title:'Starry Night',note:'A midnight-blue Map under the stars.',look:{sea:['#7986cb','#283593','#0d1338'],grass:['#81c784','#2e7d32'],fog:'#1a1a2e'}},
   {id:'theme-lava',kind:'skin',slot:'theme',once:true,price:1500,emoji:'🌋',title:'Lava World',note:'Hot lava seas. The fog turns to smoke!',look:{sea:['#ffcc80','#e64a19','#3e2723'],grass:['#aed581','#689f38'],fog:'#3e2723'}},
+  // scout flare (slice 3): consumable, meta.region = a fogged subject island
+  {id:'scout-flare',kind:'flare',price:200,emoji:'🎆',title:'Scout Flare',note:'Light up one foggy island for 24 hours: see skill names and where secrets hide. Then the fog rolls back in.',
+    check:(S,g,meta,now)=>{const r=String(meta.region||''),b=fogClearCounts(S,g).bySubject[r];if(!b)return{error:'Pick an island to light up! 🏝️'};
+      if(b.clear>=b.total)return{error:'That island has no fog left: you cleared it! ✨'};
+      if((S.wallet?.active?.flares||[]).some(f=>f.region===r&&f.until>now))return{error:'Your flare is still burning over that island! 🎆'};return{meta:{region:r}};},
+    apply:(S,g,row,now)=>{const A=S.wallet.active;A.flares=[...(A.flares||[]).filter(f=>f.until>now),{region:row.meta.region,at:now,until:now+FLARE_HOURS*3600e3,pid:row.id}];return{flare:{region:row.meta.region,until:now+FLARE_HOURS*3600e3}};}},
 ];
 export const SKIN_SLOTS=['ship','avatar','boss','theme'];
 export const WALLET_DAYS=60;
