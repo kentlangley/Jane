@@ -5,6 +5,8 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-10-24
+
 ### Added
 - **Live map update on grind trail**: after Explore/Practice / Continue-on-trail, stone colors (and fog when cheap) refresh on the client from the answer `map` payload + `/api/map` before Continue is shown. `grindTrail.done` + client `trailDone` exclude stones finished this session so Continue never re-offers them.
 - **Quest complete high-five**: when a quest finishes, a celebratory modal shows the quest medal and Campaign Trail progress (N/12), then three choices — **🧠 Reinforcement** (light practice on quest topics / due reviews via `/api/reinforce`), **🛤️ Grind a Trail** (Map zoomed to a quest subject), **🎲 Mini-games** (free play). Cannot dismiss into silence; fires once when `quest.done` flips. Preview: `/#quest-celebrate-preview`.
@@ -24,6 +26,10 @@ Dates are Pacific Time.
   - **Pick your path** ([#72](https://github.com/kentlangley/Jane/issues/72)): 100 ⭐ picks the next new quest's topic (from 2–3 ready frontier topics offered that Pacific day, one per subject), and another 100 ⭐ picks its story theme (8 themes). One open pick of each kind; Play shows "🧭 Next quest: your pick!". The export lists `market.choices` / `market.openChoices` and adds a MARKET CHOICE line to `quests.nextStep`. A quest pack marks a pick used with `"honors": {"path", "theme"}` (validated by `publish-lessons.mjs`); `"declined"` closes the pick and refunds it with a new ledger row. LESSONS.md "Market choices", NIGHTLY.md and docs/NIGHTLY.md tell the nightly author how.
   - **Hidden chests + cheap extras** ([#73](https://github.com/kentlangley/Jane/issues/73)): mystery chests appear in the Market only after nearby fog clears (20 topics world-wide, 15 % of a subject) and hold a cosmetic prize fixed by the purchase id (rare chest-only skins, stickers, titles). Extras: 🤫 Jane whisper hint token (40, also wires the existing Hint Token fog find), 🛡️ streak shield (60; keeps 🔥 on one missed question, never the ⭐ run or any mastery), 🧊 streak freeze (80; covers one missed day of the new 📅 days-played streak). Stock caps 5/3/2. `POST /api/whisper`; `stats.daysPlayed` in the export.
 - **Campaign Trail + Fog Map** ([#54](https://github.com/kentlangley/Jane/issues/54)): always-on Play trail + taunt, Quest of Quests overlay, literal fog on the Map (direct mastery clears), fog finds (chests/secrets/power-ups, D11 garnish only), and Final Boss unlock persistence with a Finale authoring hook.
+
+### Fixed
+- **Cosmetics, Jane whisper, fog, and review bursts** (Landon feedback, [#95](https://github.com/kentlangley/Jane/pull/95)): worn ship/theme/sticker show where kids look (map hero ship, app background, header sticker chip); whisper is a clear 💡 control that only spends a token when a real trap exists; map fog is darker with safe draw guards; free-play reviews no longer dump randomly or repeat the same overdue topic back-to-back; empty quest strip is honest when none is live.
+- **New subject re-asking the same kid MCQ** ([#96](https://github.com/kentlangley/Jane/pull/96)): "🎨 New subject" no longer re-serves one fixed kid-prompt topic all sitting — skip fixed prompts already in recent when picking focus, and release focus after a fixed quiz item completes.
 
 
 ## [0.6.0] - 2026-10-22
