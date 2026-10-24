@@ -1,6 +1,6 @@
 # Learner profiles: one household, several kids
 
-Status: planned. Tracking issue: (filled in below). Owner: self (the bot), approved by Kent ("option 2: profiles in one app").
+Status: in progress. Tracking issue: #87. Slice issues: #82 #83 #84 #85 #86. Owner: self (the bot), approved by Kent ("option 2: profiles in one app").
 
 ## Problem
 Jane serves exactly one learner per deployment: progress, quests, wallet, campaign trail, fog Map, medals, streaks,
@@ -85,7 +85,7 @@ the Marble team, not something this plan builds.
 
 ## Slices
 
-### Slice 1: Every learner has their own record (data model + migration)
+### Slice 1: Every learner has their own record (data model + migration) (#82)
 - Ships: the Worker and storage resolve a learner per request; all per-learner keys are prefixed for non-primary
   learners; `profiles` registry; `migrate-profiles.mjs` (backup → add registry → verify; `--rollback`); `/api/state`
   gains `profile`. The existing learner's state is unchanged.
@@ -103,7 +103,7 @@ the Marble team, not something this plan builds.
 - Done test: `node --test test/profiles.test.mjs && npm test`
 - Decisions frozen: design sections and resolved open questions apply as written.
 
-### Slice 2: Kids pick who's playing (picker + PIN + remembered device)
+### Slice 2: Kids pick who's playing (picker + PIN + remembered device) (#83)
 - Ships: "Who's playing?" picker with avatars, optional PIN pad, remembered device, "Switch player" link.
 - Touches: `public/picker.js` (new), `public/index.html`, `public/app.js` (gate first load), `public/app.css`,
   `src/worker.js` (`/api/profiles`, `/api/profiles/select`, `/api/profiles/forget`), tests
@@ -117,7 +117,7 @@ the Marble team, not something this plan builds.
 - Done test: `node --test test/profiles.test.mjs && npm test`
 - Decisions frozen: design sections and resolved open questions apply as written.
 
-### Slice 3: The parent sees each kid and adds a learner
+### Slice 3: The parent sees each kid and adds a learner (#84)
 - Ships: parent view switcher with each kid's stats (points, medals, mastered, streak, last played); add-a-learner form
   (name, grade, interests, avatar); set/clear PIN; change avatar.
 - Touches: `src/worker.js` (`/api/parent/profiles*`, `/parent?learner=`), `src/parent.js`, `public/parent.js`,
@@ -131,7 +131,7 @@ the Marble team, not something this plan builds.
 - Done test: `node --test test/profiles.test.mjs && npm test`
 - Decisions frozen: design sections and resolved open questions apply as written.
 
-### Slice 4: Jane plans each kid's night (per-learner export/publish + docs)
+### Slice 4: Jane plans each kid's night (per-learner export/publish + docs) (#85)
 - Ships: `--learner <id>` on export/publish/backup (default primary); export carries `learner` (id, grade, age,
   interests) and `learners` list; docs loop over learners.
 - Touches: `lib-cli.mjs`, `export-progress.mjs`, `publish-lessons.mjs`, `backup-progress.mjs`, `LESSONS.md`,
@@ -146,7 +146,7 @@ the Marble team, not something this plan builds.
 - Done test: `node --test test/profiles.test.mjs && npm test`
 - Decisions frozen: design sections and resolved open questions apply as written.
 
-### Slice 5: A new learner starts at their level (placement quest)
+### Slice 5: A new learner starts at their level (placement quest) (#86)
 - Ships: engine + validator support for `"placement": true` packs (ladders, bands, skip-on-pass, `placementQuest`
   result, `beyondMap`); age-relative built-in diagnostic; LESSONS.md "Placement quests" authoring rules.
 - Touches: `src/engine.js`, `publish-lessons.mjs`, `export-progress.mjs`, `LESSONS.md`, `packs/examples/`, tests
