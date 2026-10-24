@@ -531,6 +531,9 @@ export function pickFocus(S,g,pack,now,opt={}){const packIds=new Set((pack?.topi
   if(opt.subject)c=c.filter(t=>t.subject===opt.subject);if(opt.notSubject)c=c.filter(t=>t.subject!==opt.subject&&t.subject!==opt.notSubject);if(opt.domain)c=c.filter(t=>t.domain===opt.domain);
   if(opt.minAge)c=c.filter(t=>t.ageRangeStart>=opt.minAge);if(opt.maxAge)c=c.filter(t=>t.ageRangeStart<=opt.maxAge);
   if(opt.unseen){const sa=seenAreas(S,g);c=c.filter(t=>!sa.has(t.subject+'|'+t.domain));}
+  // Fixed kid prompts have one question; skip ones already served this sitting so Play / "New subject" don't loop them.
+  const recentFixed=new Set((S.recent||[]).filter(id=>{const t=g.byId[id];return t&&t.kq&&!kindFor(t);}));
+  const fresh=c.filter(t=>!recentFixed.has(t.id));if(fresh.length)c=fresh;
   if(!c.length)return null;const seenA=seenAreas(S,g),sc=new Map(c.map(t=>[t.id,focusScore(S,g,t.id,packIds,seenA)]));c.sort((a,b)=>sc.get(b.id)-sc.get(a.id));return c[0].id;}
 export function next(S,g,pack,now){
   // a new learner with a placement quest skips the pizza starter (it is a 5th-grade question; the placement finds the level)
@@ -562,7 +565,10 @@ export function next(S,g,pack,now){
   const placeNext=()=>placementNext(S,g,pack);
   const order=qa?[[packNext,'learn']]:S.itemsServed%2?[[placeNext,'diagnostic'],[packNext,'learn']]:[[packNext,'learn'],[placeNext,'diagnostic']];
   if(!id)for(const [f,m] of order){const x=f();if(x){id=x;mode=m;break;}}
-  if(!id){if(S.focus&&['ready','learning'].includes(stateOf(S,g,S.focus,now)))id=S.focus;else id=S.focus=pickFocus(S,g,pack,now);mode='learn';}
+  if(!id){if(S.focus&&['ready','learning'].includes(stateOf(S,g,S.focus,now))){const t=g.byId[S.focus];
+    // A fixed kid MCQ already in recent would re-ask the same prompt — drop focus and pick another.
+    if(t?.kq&&!kindFor(t)&&S.recent.includes(S.focus))S.focus=null;else id=S.focus;}
+    if(!id)id=S.focus=pickFocus(S,g,pack,now);mode='learn';}
   if(!id){id=g.topics[0].id;mode='learn';}
   S.sinceReview=mode==='review'?0:S.sinceReview+1;S.itemsServed++;S.recent=[...S.recent.slice(-9),id];
   S.current=buildItem(S,g,id,mode,pack,now);return S.current;}
@@ -691,6 +697,9 @@ function submit0(S,g,answer,now){const it=S.current;if(!it)return{error:'no item
     // legendary only for a real boss fight: ≥ 3 first-try right boss answers on this skill in one day
     if(!it.tries){const md=maybeMedal(S,g,it.topicId,it.format==='boss'&&(rec.bossRun||0)>=BOSS_LEGEND,now);if(md)r.medal=md;}
     if(it.bonus){it.stage='bonus';it.tries=0;r.bonus=it.bonus.q;r.jane+=' Want a bonus challenge?';}else{r.done=true;S.current=null;}
+    // Fixed kid MCQ / check: only one prompt, and same-day repeats do not earn mastery ft. Release focus so
+    // "New subject" (and free-play) do not re-ask the same question for the rest of the sitting.
+    if(it.kind==='quiz'&&r.done&&!r.mastered&&S.focus===it.topicId)S.focus=null;
     return finish(S,r,ev);}
   it.tries++;missStreak(S,it,r);if(it.format==='boss'){rec.bossRun=0;rec.bossDay=ptDay(now);if(it.boss){it.boss=bossHP(rec,it,now);r.boss=it.boss;}}
   const fb=fbFor(it,answer);if(fb)logE.feedback=true;
@@ -710,7 +719,9 @@ function submit0(S,g,answer,now){const it=S.current;if(!it)return{error:'no item
     // retry cap: two boss misses on the same skill pause that boss until tomorrow and re-teach it first
     if(it.format==='boss'&&it.kind==='math'){sp.bossMiss=(sp.bossMiss||0)+1;if(sp.bossMiss>=2){sp.bossMiss=0;sp.bossOff=now+DAY;sp.teachDue=true;r.jane+=' Let\'s practise this one first. The boss can wait! 💪';}}
     if(rec.wrongInRow>=2){rec.wrongInRow=0;sp.teachDue=true;const p=probeDown(S,g,it.topicId);if(p){S.focus=p;r.jane+=` Let's power up with "${g.byId[p].sn||g.byId[p].name}" first.`;}}}
-  r.done=true;S.current=null;return finish(S,r,ev);}
+  r.done=true;S.current=null;
+  if(it.kind==='quiz'&&S.focus===it.topicId)S.focus=null;
+  return finish(S,r,ev);}
 const sup=(S,id)=>(S.support??={})[id]??={stuck:0,skipped:0};
 // a miss resets the 🔥 answer streak, unless a streak shield is up (one shield covers one question). Stars never get
 // shielded: the 3-in-a-row star run restarts on every miss. Hearts, boss HP and mastery are handled elsewhere, unchanged.

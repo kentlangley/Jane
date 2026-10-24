@@ -59,3 +59,16 @@ test('no unseen areas → the same pick as before (no bonus anywhere)',()=>stub(
   assert.ok(C.every(t=>sa.has(t.subject+'|'+t.domain)));assert.equal(E.pickFocus(S,g,null,now),old);
   const S2=JSON.parse(JSON.stringify(S));S2.focus=null;E.choose(S2,g,'different',null,now);const S3=JSON.parse(JSON.stringify(S));
   assert.equal(S2.focus,E.pickFocus(S3,g,null,now,{notSubject:'Mathematics'}));}));
+
+// Landon: "New subject" locked onto a fixed kid MCQ and asked the same prompt forever (same-day ft does not re-count).
+test('choose("different") serves a fixed kid MCQ once, then moves on (no same-question loop)',()=>{
+  const S=E.blank();S.firstDone=true;S.placement.done=true;S.itemsServed=4;S.sinceReview=0;
+  const m=g.topics.find(t=>t.subject==='Mathematics');S.ts[m.id]={st:'learning',how:'direct',c:1,w:0};S.focus=m.id;
+  E.choose(S,g,'different',null,now);
+  const focus0=S.focus;assert.ok(focus0&&g.byId[focus0].kq,'New subject should land on a kid-prompt topic');
+  assert.notEqual(g.byId[focus0].subject,'Mathematics');
+  const a=E.next(S,g,null,now);assert.equal(a.topicId,focus0);assert.equal(a.kind,'quiz');
+  const x=E.submit(S,g,a.answer,now);assert.equal(x.r.correct,true);assert.notEqual(S.ts[focus0].st,'mastered','same-day single MCQ is not mastery');
+  assert.equal(S.focus,null,'focus released so Play will not re-ask the same prompt');
+  const b=E.next(S,g,null,now+1);assert.notEqual(b.topicId,focus0,'next item is a different topic');
+});
