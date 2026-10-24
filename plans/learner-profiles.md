@@ -161,3 +161,13 @@ the Marble team, not something this plan builds.
 
 ## Progress
 (one entry per slice: what shipped, done test + outcome, deferred/discovered)
+
+### Slice 1 — done
+- Shipped: `src/profiles.js` (registry, selection, PIN hash/token helpers), Worker resolves the learner per request
+  (`?learner=` / `jl` cookie / only / primary) and prefixes every per-learner key via `LK`/`K`; `cfg()` re-applies learner
+  settings after each await; `profile` on `/api/state`; `migrate-profiles.mjs` (snapshot + registry, `--rollback`,
+  `--restore <dir> <key>`); `kvList('')` lists all keys.
+- Done test: `node --test test/profiles.test.mjs` (7 pass) && `npm test` (all pass). Local before/after with a copy of the
+  live snapshot: `/api/state`, `/api/trophies`, `/api/quests`, `/api/market`, `/api/map` and the parent head are identical
+  between old `main` and this branch after the migration (only `profile` added).
+- Discovered: the engine's built-in diagnostic placement window is fixed at ages 9-11 (handled in Slice 5).
