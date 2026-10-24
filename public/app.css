@@ -303,7 +303,7 @@ main[hidden]{display:none!important}
 @media (prefers-reduced-motion:reduce){.flare-burst{animation:none}}
 .framebar.f-prove{background:linear-gradient(90deg,#ffd54f,#ff8f00);color:#3e2723}.provelink{font-size:.95rem;margin-left:6px}
 .pickline{background:linear-gradient(90deg,#e8f5e9,#fffde7);border:3px solid #66bb6a;padding:10px 14px;font-size:1.05rem}
-.chip.days{background:#43a047;color:#fff}.mkshelf{font-size:1.6rem;letter-spacing:4px;margin:4px 0}.mkfog{color:#546e7a;font-style:italic}.whisperb{font-size:.95rem;margin-left:6px}
+.chip.days{background:#43a047;color:#fff}.mkshelf{font-size:1.6rem;letter-spacing:4px;margin:4px 0}.mkfog{color:#546e7a;font-style:italic}
 /* "Who's playing?" picker (picker.js) */
 body.picking main,body.picking header{visibility:hidden}
 .who{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#7c4dff,#3b82f6);padding:16px}
@@ -320,3 +320,18 @@ body.picking main,body.picking header{visibility:hidden}
 .who [hidden]{display:none!important}
 .who .whob{color:#2d2250;background:#faf8ff;box-shadow:0 5px 0 #d9cffc;font-size:1.2rem}
 .who .whob:focus-visible{outline:3px solid #7c4dff;outline-offset:3px}
+
+/* worn Map theme also paints the whole app (Points Market skins) */
+body.theme-night{background:linear-gradient(135deg,#283593,#1a237e 45%,#0d1338);color:#e8eaf6}
+body.theme-night .card{background:#e8eaf6ee}
+body.theme-night .bubble{background:#c5cae9;color:#1a237e}
+body.theme-sunset{background:linear-gradient(135deg,#ffcc80,#ff7043 40%,#6a1b9a)}
+body.theme-lava{background:linear-gradient(135deg,#ffcc80,#e64a19 40%,#3e2723);color:#fff8e1}
+body.theme-lava .card{background:#fff3e0ee;color:#3e2723}
+.chip.sticker{background:#fff8e1;cursor:help;border:2px solid #ffc107}
+.chip.me{font-size:1.35rem;padding:2px 10px}
+.whisperb{background:#ffd54f!important;color:#3e2723!important;box-shadow:0 5px 0 #f9a825!important;font-size:1.1rem!important;margin-left:6px}
+.whisper-box{background:#fff8e1;border:3px solid #ffc107;border-radius:16px;padding:10px 14px;margin:8px 0;font-size:1.15rem;font-weight:700;color:#5d4037}
+.whisper-box .wlbl{display:block;font-size:.85rem;color:#f57f17;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.ship-hero text{paint-order:stroke fill;stroke:#fff8e1;stroke-width:3px}
+.qstrip.empty{background:#f3e5f5;border:2px dashed #ce93d8}

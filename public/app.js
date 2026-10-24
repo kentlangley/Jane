@@ -13,7 +13,13 @@ const BOSSES=['🐉','👾','🦖','🐙','🤖','🧌'];
 function say(t){const b=$('jane');b.innerHTML=gl(t);b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');}
 function confetti(n=40){for(let i=0;i<n;i++){const e=document.createElement('div');e.className='confetti';e.textContent=['🎉','⭐','🍕','✨','🎈','💜'][i%6];e.style.left=Math.random()*100+'vw';e.style.animationDuration=1.5+Math.random()*2+'s';document.body.appendChild(e);setTimeout(()=>e.remove(),4000);}}
 function banner(t){const b=document.createElement('div');b.className='banner';b.innerHTML=`<div>${t}</div>`;document.body.appendChild(b);setTimeout(()=>b.remove(),2000);}
-function chips(s){const W=s.wallet;$('pts').textContent='⭐ '+(W?W.balance:s.points)+' pts';$('pts').title=W?`${W.balance} to spend in the Market (earned ${W.earned}, spent ${W.spent})`:'';{const f=W?.looks?.avatar?.face,me=$('me');if(me){me.hidden=!f;me.textContent=f||'';}}$('stars').textContent='🌟 '+s.stars;$('streak').textContent='🔥 '+s.streak+(W?.shield?' 🛡️':'');$('streak').title=W?.shield?`${W.shield} streak shield${W.shield>1?'s':''} ready`:'';{const D=s.days,el=$('days');if(el){el.hidden=!D?.n;el.textContent=`📅 ${D?.n||0}${D?.atRisk?' 🧊':''}`;el.title=D?.n?`${D.n} day${D.n>1?'s':''} in a row (best ${D.best})${D.freeze?` · ${D.freeze} freeze${D.freeze>1?'s':''} saved`:''}${D.atRisk?' · a freeze will save it when you play today':''}`:'';}}$('pct').textContent=`🗺️ ${s.progress.pct}%`;campaignHUD(s);}
+function chips(s){const W=s.wallet;$('pts').textContent='⭐ '+(W?W.balance:s.points)+' pts';$('pts').title=W?`${W.balance} to spend in the Market (earned ${W.earned}, spent ${W.spent})`:'';{const f=W?.looks?.avatar?.face,me=$('me');if(me){me.hidden=!f;me.textContent=f||'';}}$('stars').textContent='🌟 '+s.stars;$('streak').textContent='🔥 '+s.streak+(W?.shield?' 🛡️':'');$('streak').title=W?.shield?`${W.shield} streak shield${W.shield>1?'s':''} ready`:'';{const D=s.days,el=$('days');if(el){el.hidden=!D?.n;el.textContent=`📅 ${D?.n||0}${D?.atRisk?' 🧊':''}`;el.title=D?.n?`${D.n} day${D.n>1?'s':''} in a row (best ${D.best})${D.freeze?` · ${D.freeze} freeze${D.freeze>1?'s':''} saved`:''}${D.atRisk?' · a freeze will save it when you play today':''}`:'';}}$('pct').textContent=`🗺️ ${s.progress.pct}%`;
+ // worn theme paints the whole app (not only the Map sea); stickers show in a header chip with a one-time tip
+ const tid=W?.equipped?.theme||'';document.body.classList.remove('theme-night','theme-sunset','theme-lava');if(tid)document.body.classList.add(tid);
+ const sts=[...(W?.stickers||[])];if(W?.owned?.['test-sticker']&&!sts.some(x=>x.id==='test-sticker'))sts.push({id:'test-sticker',emoji:'🌟',title:'Gold star sticker'});
+ const sk=$('stickers');if(sk){sk.hidden=!sts.length;sk.textContent=sts.map(x=>x.emoji||'🌟').join('')+(sts.length>1?'':'');sk.title=sts.length?('Your stickers: '+sts.map(x=>x.title||'sticker').join(', ')):'';
+  if(sts.length&&!localStorage.getItem('jane-sticker-tip')){localStorage.setItem('jane-sticker-tip','1');say('🌟 Your gold star sticker lives up here next to your stars — tap the chip anytime to see your collection!');}}
+ campaignHUD(s);}
 let LN='Explorer';function setLearner(L){if(!L?.name||L.name===LN&&document.title.includes(LN))return;LN=L.name;document.querySelectorAll('.lname').forEach(e=>e.textContent=LN);document.title=`${LN}'s Learning Adventure with Jane`;}
 // boss hearts: ❤️ = hits the boss still needs in THIS fight (server bossHP: today's first-try boss run on this topic), 🖤 = hits landed
 function bossHTML(b,topicId){if(!b)return'';const BL=st?.wallet?.looks?.boss,BS=BL?.set?.length?BL.set:BOSSES;const max=Math.max(1,b.max|0),hp=Math.max(0,Math.min(max,b.hp|0));
@@ -30,7 +36,9 @@ function render(s){st=s;if(s?.learner)setLearner(s.learner);chips(s);const p=s.i
  if(p.intro){$('intro').hidden=false;$('intro').innerHTML=`<h3>${esc(p.intro.emoji||'✨')} ${gl(p.intro.title||'',new Set())}</h3><div>${gl(p.intro.story||'',new Set())}</div>`;}else $('intro').hidden=true;
  medalRow(s);
  $('steps').innerHTML=p.steps?.length?`<div class="steps"><b>🧭 Start like this:</b><ol>${p.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>`:'';
- const canStuck=p.type!=='card'&&p.type!=='self';$('stuckf').hidden=!canStuck;$('srow').innerHTML=(canStuck&&p.type!=='input'?'<button type="button" class="stuckb" onclick="stuckTap()">I\'m stuck 🤔</button>':'')+(p.gate&&!p.gate.spot?'<button type="button" class="ghost provelink" onclick="openProve()">🎟️ Prove-It tickets</button>':'')+(canStuck&&p.stage!=='bonus'&&s.wallet?.hintTokens?`<button type="button" class="ghost whisperb" onclick="whisperTap()">🤫 Jane whisper (${s.wallet.hintTokens})</button>`:'');showHelp(p.help);
+ const canStuck=p.type!=='card'&&p.type!=='self';$('stuckf').hidden=!canStuck;
+ const nWh=s.wallet?.hintTokens|0,hasWh=!!p.whisper;const whBtn=canStuck&&p.stage!=='bonus'&&(nWh||hasWh)?`<button type="button" class="whisperb" onclick="whisperTap()" ${hasWh?'disabled':''}>💡 ${hasWh?'Whisper used':`Jane whisper (${nWh})`}</button>`:'';
+ $('srow').innerHTML=(canStuck&&p.type!=='input'?'<button type="button" class="stuckb" onclick="stuckTap()">I\'m stuck 🤔</button>':'')+(p.gate&&!p.gate.spot?'<button type="button" class="ghost provelink" onclick="openProve()">🎟️ Prove-It tickets</button>':'')+whBtn;showHelp(p.help);if(p.whisper)showWhisper(p.whisper);
  $('extra').innerHTML=p.stage==='bonus'?'<button class="ghost" onclick="skip()">Skip bonus ➡</button>':'';$('mc').innerHTML='';
  if(INTER[p.type]){$('f').style.display='none';INTER[p.type](p);}
  else if(p.type==='mc'||p.type==='self'){$('f').style.display='none';const ch=p.type==='self'?[['yes',p.choices[0]],['kinda',p.choices[1]],['no',p.choices[2]]]:p.choices.map(c=>[c,c]);
@@ -151,7 +159,7 @@ function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const LK=st
   s+=`<g class="isl" data-s="${sub}"><path d="${blob(I.x,I.y,I.r*1.34,h,40,1.3)}" fill="#80deea" opacity=".45"/><path class="foam" d="${blob(I.x,I.y,I.r*1.2,h+.1,40)}" fill="#b2ebf2" opacity=".7" stroke="#fff" stroke-width="${I.r/40}" stroke-dasharray="${I.r/12} ${I.r/18}"/>
   <path d="${blob(I.x,I.y,I.r*1.12,h)}" fill="#f6d58e" stroke="#e8b960" stroke-width="${I.r/60}"/><path d="${blob(I.x,I.y,I.r*1.02,h+.3)}" fill="url(#grass)"/>
   <path d="${blob(I.x,I.y,I.r*.95,h+.6)}" fill="${I.c}" opacity=".22"/>${hills(I,sub)}
-  ${trails[sub].map(d=>`<path d="${d}" stroke="#e9d3a6" stroke-width="${(I.r/(zoomed?40:70)).toFixed(1)}" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".6"/><path d="${d}" stroke="#fff3" stroke-width="${(I.r/110).toFixed(1)}" fill="none" stroke-dasharray="${I.r/40} ${I.r/40}"/>`).join('')}
+  ${(trails[sub]||[]).map(d=>`<path d="${d}" stroke="#e9d3a6" stroke-width="${(I.r/(zoomed?40:70)).toFixed(1)}" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".6"/><path d="${d}" stroke="#fff3" stroke-width="${(I.r/110).toFixed(1)}" fill="none" stroke-dasharray="${I.r/40} ${I.r/40}"/>`).join('')}
   ${trees(I,sub,Math.round(I.r/14))}${landmark(sub,I.x,I.y-I.r*.04,I.r*.55)}</g>`;}
  if(zoomed){const ids=new Set();TAX.topics.forEach((t)=>{if(t.subject===zoomed)ids.add(t.id)});let ls='';for(const [a,b,h] of TAX.deps){if(!h||!ids.has(a)||!ids.has(b))continue;const ia=TAX.idx[a],ib=TAX.idx[b];const ca=codes[ia],cb=codes[ib];if(cb==='x')continue;
    ls+=`<line x1="${pos[ib][0]}" y1="${pos[ib][1]}" x2="${pos[ia][0]}" y2="${pos[ia][1]}" stroke="${ca==='r'?'#00e676':ca==='m'||ca==='v'?'#fff8e1':'#ffffff55'}" stroke-width="${ca==='r'?1.4:.7}" opacity=".75"/>`;}s+=`<g pointer-events="none">${ls}</g>`;}
@@ -164,8 +172,9 @@ function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const LK=st
  const fogRad=zoomed?ISL[zoomed].r/58*2.6:13;let holes='';const tot={};
  TAX.topics.forEach((t,i)=>{if(zoomed&&t.subject!==zoomed)return;const b=tot[t.subject]??={n:0,lit:0};b.n++;if(lit(i)){b.lit++;const[x,y]=pos[i];holes+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${fogRad.toFixed(1)}"/>`;}});
  let fogS='';for(const [sub,I] of Object.entries(ISL)){if(zoomed&&zoomed!==sub)continue;const b=tot[sub];if(!b||!b.n||b.lit>=b.n)continue;const un=1-b.lit/b.n;
-  fogS+=`<g class="fog-layer${FL[sub]?' flared':''}" opacity="${((.18+.32*un)*(FL[sub]?.3:1)).toFixed(2)}"><path class="fog-island" d="${blob(I.x,I.y,I.r*1.06,hash(sub)+.9)}" fill="${FOG||'#37474f'}"/>
-  <path class="fog-wisp" d="${blob(I.x+I.r*.12,I.y-I.r*.08,I.r*.62,hash(sub)+1.4)}" fill="${FOG||'#546e7a'}" opacity=".5"/></g>`;}
+  // darker see-through mist (was ~0.18–0.50; kids called pale fog "trash"). Lit stones stay punched clear via fogHoles.
+  fogS+=`<g class="fog-layer${FL[sub]?' flared':''}" opacity="${((.52+.36*un)*(FL[sub]?.35:1)).toFixed(2)}"><path class="fog-island" d="${blob(I.x,I.y,I.r*1.06,hash(sub)+.9)}" fill="${FOG||'#263238'}"/>
+  <path class="fog-wisp" d="${blob(I.x+I.r*.12,I.y-I.r*.08,I.r*.62,hash(sub)+1.4)}" fill="${FOG||'#455a64'}" opacity=".65"/></g>`;}
  if(fogS)s+=`<mask id="fogHoles" maskUnits="userSpaceOnUse" x="-500" y="-500" width="2600" height="2100"><rect x="-500" y="-500" width="2600" height="2100" fill="#fff"/><g fill="#000" filter="url(#fogBlur)">${holes}</g></mask>
  <g class="fog" pointer-events="none" mask="url(#fogHoles)">${fogS}</g>`;
  const rad=zoomed?ISL[zoomed].r/58:4.4;const G={m:'',v:'',r:'',l:'',x:''},fl=[];
@@ -178,6 +187,8 @@ function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const LK=st
  for(const [sub,I] of Object.entries(ISL)){if(zoomed&&zoomed!==sub)continue;const b=by[sub],p=b?Math.round(100*(b.mastered+b.review)/b.total):0;const fs=zoomed?I.r/8:Math.max(20,I.r/7);s+=banner2(I,sub,p,fs);}
  if(zoomed)for(const {d,a} of doms[zoomed]){const I=ISL[zoomed];const lb=d.length>16?d.split(/ & | and /)[0]:d;s+=`<text pointer-events="none" x="${I.x+I.r*1.0*Math.cos(a)}" y="${I.y+I.r*1.0*Math.sin(a)}" font-size="${I.r/(doms[zoomed].length>10?24:17)}" text-anchor="middle" fill="#3e2723" font-weight="800" stroke="#fff8e1" stroke-width="${I.r/80}" paint-order="stroke">${esc(lb)}</text>`;}
  if(!zoomed){s+=ship(250,985,.9,'#42a5f5',22,LK.ship)+ship(1180,960,.9,'#ec407a',28,LK.ship)+ship(1500,560,.8,'#ffca28',25,LK.ship)+compass(1500,110,55);
+  // big "your ship" so a worn Golden Galleon (etc.) is obvious — decorative edge boats stay too
+  if(LK.ship)s+=`<g class="ship-hero">${ship(780,980,1.55,'#ffd54f',18,LK.ship)}<text x="780" y="1018" font-size="22" font-weight="800" text-anchor="middle" fill="#5d4037">${esc(LK.ship.emoji||'⛵')} Your ship</text></g>`;
   for(const [x,y,k,d] of [[200,120,1,70],[800,90,.8,90],[1300,480,.7,80],[400,980,.9,100],[1100,140,.6,75]])s+=cloud(x,y,k,d);}
  for(const [sub,f] of Object.entries(FL)){const I=ISL[sub];if(!I||(zoomed&&zoomed!==sub))continue;
   if(zoomed){const lb=[];TAX.topics.forEach((t,i)=>{if(t.subject!==sub||lit(i)||!'rl'.includes(codes[i]))return;const[x,y]=pos[i];if(lb.length<30)lb.push(`<text x="${x.toFixed(1)}" y="${(y-rad*1.6).toFixed(1)}" font-size="${(rad*1.5).toFixed(1)}" text-anchor="middle">${esc(t.sn||t.name)}</text>`);});
@@ -385,8 +396,11 @@ function qpath(Q,{cur=false,big=false}={}){const G=Object.fromEntries((Q.gates||
  return `<div class="qpath${big?' big':''}">${Q.stages.map((x,i)=>`${i?'<i></i>':''}${G[i]?`<span class="qk ${G[i].state}" title="${G[i].state==='open'?'Gate open':'Review gate: answer something from before to pass'}">🗝️</span><i></i>`:''}<span class="qs ${x.complete?'done':cur&&i===Q.current?'cur':''} ${x.boss?'boss':''}" title="${esc(x.name)}">${x.complete&&!big?'✅':esc(x.emoji)}</span>`).join('')}</div>`;}
 function questStrip(s,p){const el=$('qstrip');if(!el)return;const Q=s.quest;
  if(p.mini){el.hidden=false;el.className='qstrip mini';el.innerHTML=`<span>🔍 Exploring: <b>${esc(p.topic.name)}</b> · ${p.mini.n} of ${p.mini.of}</span><button class="ghost sm" onclick="miniQuit()">🗺️ Back to map</button>`;return;}
- if(!Q||!Q.started||Q.completed||(!String(p.ptype||'')&&!p.gate)){el.hidden=true;return;}
- el.hidden=false;el.className='qstrip';el.innerHTML=`<div class="qsh">${esc(Q.emoji)} <b>${esc(Q.title)}</b> <span class="small">Stage ${Math.min(Q.stages.length,Q.current+1)} of ${Q.stages.length}</span></div>${s.quests?.boost?`<div class="boost">${esc(s.quests.boost.emoji)} ${gl(s.quests.boost.message||'')}</div>`:''}${qpath(Q,{cur:true})}`;}
+ if(!Q||!Q.started||Q.completed){// honest empty state (no stale quest title / "behind by a day" confusion)
+  if(!Q&&(p.mode==='review'||p.format==='review')){el.hidden=false;el.className='qstrip empty';el.innerHTML=`<div class="qsh">📝 <b>No quest running right now</b> <span class="small">Jane writes a new one after you finish the last — keep exploring!</span></div>`;return;}
+  el.hidden=true;return;}
+ if(!String(p.ptype||'')&&!p.gate){el.hidden=true;return;}
+ el.hidden=false;el.className='qstrip';el.innerHTML=`<div class="qsh">${esc(Q.emoji)} <b>${esc(Q.title)}</b> <span class="small">Stage ${Math.min(Q.stages.length,Q.current+1)} of ${Q.stages.length}${Q.date?` · ${esc(Q.date)}`:''}</span></div>${s.quests?.boost?`<div class="boost">${esc(s.quests.boost.emoji)} ${gl(s.quests.boost.message||'')}</div>`:''}${qpath(Q,{cur:true})}`;}
 async function miniQuit(){const s=await api('/api/mini/quit',{});render(s);goMap(s.mini?.subject);}
 function goMap(sub){if(window._afterMini){render(window._afterMini);window._afterMini=null;}if(sub)zoomed=sub;document.querySelector('.tab[data-v=map]').click();}
 function miniEnd(r){const m=r.miniDone;$('f').style.display='none';$('mc').innerHTML='';
@@ -542,5 +556,8 @@ function chestReveal(p){const o=document.createElement('div');o.className='freve
  <p class="small">${p.type==='skin'?'A RARE skin! Wear it from the Market.':p.type==='title'?'A new title for your collection!':'A new sticker for your shelf!'}</p><button type="button" id="frok">Awesome!</button></div>`;
  document.body.appendChild(o);confetti(50);const close=()=>{o.remove();};o.querySelector('#frok').onclick=close;o.onclick=e=>{if(e.target===o)close();};setTimeout(()=>$('frok')?.focus(),50);}
 // Jane whisper: spends one hint token on the question on screen (ungraded: never costs a try, a heart or the streak)
+function showWhisper(text){const h=$('help');if(!h)return;h.hidden=false;let box=h.querySelector('.whisper-box');if(!box){box=document.createElement('div');box.className='whisper-box';h.prepend(box);}
+ box.innerHTML=`<span class="wlbl">💡 Jane whisper (not the free pep talk above)</span>${esc(text)}`;}
 async function whisperTap(){if($('pcard').classList.contains('busy'))return;let r;try{r=await api('/api/whisper',{});}catch{return;}if(r.error){say(r.error);return;}
- say(r.whisper);if(r.state){st=r.state;chips(st);}const b=document.querySelector('.whisperb');if(b){b.textContent=`🤫 ${r.tokens} left`;b.disabled=true;}}
+ showWhisper(r.whisper);say('💡 That was a Jane whisper — a trap tip for THIS question (not just a pep talk).');if(r.state){st=r.state;if(st.item)st.item.whisper=r.whisper;chips(st);}
+ const b=document.querySelector('.whisperb');if(b){b.textContent=r.tokens?`💡 Jane whisper (${r.tokens})`:'💡 Whisper used';b.disabled=true;}}

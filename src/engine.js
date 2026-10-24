@@ -91,7 +91,7 @@ export const FOG_FINDS=[
   {id:'chest-world-5',kind:'chest',emoji:'📦',title:'Explorer\'s Chest',when:{clear:5},reward:{type:'fun',note:'A brass compass sticker for your map!'}},
   {id:'chest-math-25',kind:'chest',emoji:'💎',title:'Math Island Treasure',when:{subject:'Mathematics',pct:25},reward:{type:'fun',note:'Sparkly fraction gems (cosmetic).'}},
   {id:'secret-sci-30',kind:'secret',emoji:'🔮',title:'Hidden Lab Path',when:{subject:'Science',pct:30},reward:{type:'path',note:'A ready Science stretch is glowing — explore it on the Map.'}},
-  {id:'power-hint-10',kind:'power',emoji:'💡',title:'Hint Token',when:{clear:10},reward:{type:'hintToken',note:'One extra hint next time you\'re stuck. Never skips teach→practice→graded→boss.'}},
+  {id:'power-hint-10',kind:'power',emoji:'💡',title:'Hint Token',when:{clear:10},reward:{type:'hintToken',note:'Adds one 💡 Jane whisper (trap tip on a question). Never skips teach→practice→graded→boss.'}},
   {id:'chest-eng-20',kind:'chest',emoji:'📜',title:'Story Scroll',when:{subject:'English',pct:20},reward:{type:'skin',note:'A parchment story skin Jane can weave into tomorrow\'s hook.'}},
   {id:'power-fact-15',kind:'power',emoji:'🃏',title:'Fun-Fact Card',when:{clear:15},reward:{type:'funFact',note:'A cool fact card for the next quest intro — garnish only.'}},
 ];
@@ -130,21 +130,22 @@ export function claimFind(S,g,id,now=Date.now()){const def=FOG_FINDS.find(d=>d.i
 // M3 purchases are idempotent by purchase id (pid), one-time items also by item id. M4 prices are knobs in MARKET; a ledger
 // row keeps the price paid, so retuning never rewrites history. Rows with `when` (like FOG_FINDS) show only after fog clears.
 export const MARKET=[
-  {id:'test-sticker',kind:'sticker',once:true,price:25,emoji:'🌟',title:'Gold star sticker',note:'A shiny sticker for your collection.'},
+  {id:'test-sticker',kind:'sticker',once:true,price:25,emoji:'🌟',title:'Gold star sticker',note:'Shows as a 🌟 sticker chip next to your stars at the top (not a new score).',
+    apply:(S,g,row,now)=>{(S.wallet.stickers??=[]).push({id:row.item,emoji:'🌟',title:'Gold star sticker',at:now});}},
   // skins (slice 2, the main sink): bought once, owned forever, equip/unequip free. Purely cosmetic looks the client draws.
-  {id:'ship-candy',kind:'skin',slot:'ship',once:true,price:300,emoji:'🍭',title:'Candy Cruiser',note:'Pink sails and a bubblegum hull for the ships on your Map.',look:{sail:'#f48fb1',hull:'#ce93d8',flag:'#ff4081'}},
-  {id:'ship-pirate',kind:'skin',slot:'ship',once:true,price:400,emoji:'🏴‍☠️',title:'Pirate Fleet',note:'Black sails and a skull flag. Arrr!',look:{sail:'#263238',hull:'#4e342e',flag:'#fafafa'}},
-  {id:'ship-gold',kind:'skin',slot:'ship',once:true,price:900,emoji:'👑',title:'Golden Galleon',note:'Shiny gold sails for a treasure hunter.',look:{sail:'#ffd54f',hull:'#ff8f00',flag:'#d50000'}},
+  {id:'ship-candy',kind:'skin',slot:'ship',once:true,price:300,emoji:'🍭',title:'Candy Cruiser',note:'Pink sails on the ships sailing your My World map.',look:{sail:'#f48fb1',hull:'#ce93d8',flag:'#ff4081'}},
+  {id:'ship-pirate',kind:'skin',slot:'ship',once:true,price:400,emoji:'🏴‍☠️',title:'Pirate Fleet',note:'Black sails on the ships sailing your My World map. Arrr!',look:{sail:'#263238',hull:'#4e342e',flag:'#fafafa'}},
+  {id:'ship-gold',kind:'skin',slot:'ship',once:true,price:900,emoji:'👑',title:'Golden Galleon',note:'Gold sails on your My World ships — look for the big crowned galleon!',look:{sail:'#ffd54f',hull:'#ff8f00',flag:'#d50000'}},
   {id:'avatar-fox',kind:'skin',slot:'avatar',once:true,price:300,emoji:'🦊',title:'Clever Fox',note:'Your badge at the top of the screen.',look:{face:'🦊'}},
-  {id:'avatar-ninja',kind:'skin',slot:'avatar',once:true,price:500,emoji:'🥷',title:'Math Ninja',note:'Silent, quick and very sneaky.',look:{face:'🥷'}},
-  {id:'avatar-astronaut',kind:'skin',slot:'avatar',once:true,price:500,emoji:'🧑‍🚀',title:'Space Explorer',note:'Ready for lift-off!',look:{face:'🧑‍🚀'}},
-  {id:'avatar-dragon',kind:'skin',slot:'avatar',once:true,price:800,emoji:'🐲',title:'Dragon Rider',note:'A dragon badge. Very rare.',look:{face:'🐲'}},
+  {id:'avatar-ninja',kind:'skin',slot:'avatar',once:true,price:500,emoji:'🥷',title:'Math Ninja',note:'Your badge at the top of the screen.',look:{face:'🥷'}},
+  {id:'avatar-astronaut',kind:'skin',slot:'avatar',once:true,price:500,emoji:'🧑‍🚀',title:'Space Explorer',note:'Your badge at the top of the screen.',look:{face:'🧑‍🚀'}},
+  {id:'avatar-dragon',kind:'skin',slot:'avatar',once:true,price:800,emoji:'🐲',title:'Dragon Rider',note:'Your badge at the top of the screen. Very rare.',look:{face:'🐲'}},
   {id:'boss-robots',kind:'skin',slot:'boss',once:true,price:600,emoji:'🤖',title:'Robot Bosses',note:'Bosses turn into robots and UFOs. Same fight, same hearts.',look:{set:['🤖','👾','🛸','🦾'],frame:'robots'}},
   {id:'boss-spooky',kind:'skin',slot:'boss',once:true,price:700,emoji:'👻',title:'Spooky Bosses',note:'Ghosts, pumpkins and bats. Same fight, same hearts.',look:{set:['👻','🎃','🦇','💀'],frame:'spooky'}},
   {id:'boss-sea',kind:'skin',slot:'boss',once:true,price:1000,emoji:'🦈',title:'Sea Monster Bosses',note:'Sharks and krakens from the deep. Same fight, same hearts.',look:{set:['🦈','🐙','🦑','🐊'],frame:'sea'}},
-  {id:'theme-sunset',kind:'skin',slot:'theme',once:true,price:800,emoji:'🌅',title:'Sunset Sea',note:'Your whole Map glows orange and purple.',look:{sea:['#ffcc80','#ff7043','#6a1b9a'],grass:['#c5e1a5','#7cb342'],fog:'#4a148c'}},
-  {id:'theme-night',kind:'skin',slot:'theme',once:true,price:1200,emoji:'🌙',title:'Starry Night',note:'A midnight-blue Map under the stars.',look:{sea:['#7986cb','#283593','#0d1338'],grass:['#81c784','#2e7d32'],fog:'#1a1a2e'}},
-  {id:'theme-lava',kind:'skin',slot:'theme',once:true,price:1500,emoji:'🌋',title:'Lava World',note:'Hot lava seas. The fog turns to smoke!',look:{sea:['#ffcc80','#e64a19','#3e2723'],grass:['#aed581','#689f38'],fog:'#3e2723'}},
+  {id:'theme-sunset',kind:'skin',slot:'theme',once:true,price:800,emoji:'🌅',title:'Sunset Sea',note:'Paints the whole app AND your My World map in sunset colors.',look:{sea:['#ffcc80','#ff7043','#6a1b9a'],grass:['#c5e1a5','#7cb342'],fog:'#4a148c',bg:['#ffcc80','#ff7043','#6a1b9a']}},
+  {id:'theme-night',kind:'skin',slot:'theme',once:true,price:1200,emoji:'🌙',title:'Starry Night',note:'Paints the whole app AND your My World map midnight blue under the stars.',look:{sea:['#5c6bc0','#1a237e','#0a0e27'],grass:['#81c784','#2e7d32'],fog:'#0d1117',bg:['#283593','#1a237e','#0d1338']}},
+  {id:'theme-lava',kind:'skin',slot:'theme',once:true,price:1500,emoji:'🌋',title:'Lava World',note:'Paints the whole app AND your My World map with lava seas and smoky fog.',look:{sea:['#ffcc80','#e64a19','#3e2723'],grass:['#aed581','#689f38'],fog:'#3e2723',bg:['#ff8a65','#e64a19','#3e2723']}},
   // scout flare (slice 3): consumable, meta.region = a fogged subject island
   {id:'scout-flare',kind:'flare',price:200,emoji:'🎆',title:'Scout Flare',note:'Light up one foggy island for 24 hours: see skill names and where secrets hide. Then the fog rolls back in.',
     check:(S,g,meta,now)=>{const r=String(meta.region||''),b=fogClearCounts(S,g).bySubject[r];if(!b)return{error:'Pick an island to light up! 🏝️'};
@@ -167,7 +168,7 @@ export const MARKET=[
       const th=QUEST_THEMES.find(x=>x.id===meta.theme);return th?{meta:{theme:th.id}}:{error:'Pick a theme! 🎭'};},
     apply:(S,g,row,now)=>{const th=QUEST_THEMES.find(x=>x.id===row.meta.theme);S.wallet.choices.theme={id:th.id,title:th.title,emoji:th.emoji,at:now,pid:row.id};return{choice:S.wallet.choices.theme};}},
   // cheap extras (slice 6, 25–100). Stock caps keep them from piling up.
-  {id:'hint-token',kind:'extra',price:40,emoji:'🤫',title:'Jane Whisper',note:'A hint token: Jane whispers the sneaky trap in a question. It never answers for you.',
+  {id:'hint-token',kind:'extra',price:40,emoji:'💡',title:'Jane Whisper',note:'Tap the 💡 Jane whisper button on a question: she names the sneaky trap (uses 1 token). Never answers for you.',
     check:S=>(S.fog?.buffs?.hintToken||0)>=HINT_MAX?{error:`You already have ${HINT_MAX} whispers saved up! 🤫`}:{},apply:S=>{S.fog??={finds:[]};S.fog.buffs??={};S.fog.buffs.hintToken=(S.fog.buffs.hintToken||0)+1;}},
   {id:'streak-shield',kind:'extra',price:60,emoji:'🛡️',title:'Streak Shield',note:'Your next miss keeps your 🔥 streak alive. (Stars still need 3 right in a row.)',
     check:S=>(S.wallet?.active?.shield||0)>=SHIELD_MAX?{error:`You already have ${SHIELD_MAX} shields! 🛡️`}:{},apply:S=>{S.wallet.active.shield=(S.wallet.active.shield||0)+1;}},
@@ -286,12 +287,14 @@ const TRAP={fracadd:'Careful: never add the bottom numbers! Make the bottoms the
   fracmul:'The trap: you do NOT need the same bottoms to multiply. Top × top, bottom × bottom.',fracof:'The trap: "of" means multiply. Find one part first, then take the number of parts.',
   pizza:'The trap: count ALL the equal slices for the bottom number, not just the leftovers.',fracdec:'The trap: tenths, hundredths and thousandths look alike. Line up the places!',
   muldiv:'The trap: line up the places and remember what you carried.',addsub:'The trap: line up ones under ones, and borrow carefully.',place:'The trap: the same digit is worth more in a bigger place. Check each place value!'};
-export function whisper(S,g,now=Date.now()){const it=S.current;if(!it||it.type==='card'||it.type==='self'||it.stage==='bonus')return{error:'Jane whispers on questions only! 🤫'};
+export function whisper(S,g,now=Date.now()){const it=S.current;if(!it||it.type==='card'||it.type==='self'||it.stage==='bonus')return{error:'Jane whispers on questions only! 💡'};
   if(it.whisper)return{ok:true,already:true,whisper:it.whisper,tokens:S.fog?.buffs?.hintToken||0};
   if(!((S.fog?.buffs?.hintToken||0)>0))return{error:'No whispers left. Get one in the Market! 🛒'};
-  const t=g.byId[it.topicId],k=kindFor(t),mc=it.misconception&&String(it.misconception);
-  const w=mc?`🤫 Psst… lots of explorers pick "${mc}" here. Ask yourself why that might be a trap!${it.feedback?.[mc]?' '+it.feedback[mc]:''}`:
-    TRAP[k]?`🤫 Psst… ${TRAP[k]}`:'🤫 Psst… find the most important word in the question, then check every choice against it.';
+  // Only charge when we have a real trap (tagged misconception or a known generator trap). A vague tip is free / refused.
+  const t=g.byId[it.topicId],k=kindFor(t),mc=it.misconception&&String(it.misconception),trap=TRAP[k];
+  if(!mc&&!trap)return{error:'No sneaky trap on file for this one — keep your whisper! Try the hint instead. 💡',tokens:S.fog.buffs.hintToken};
+  const w=mc?`💡 Jane whisper: lots of explorers pick "${mc}" here. Ask yourself why that might be a trap!${it.feedback?.[mc]?' '+it.feedback[mc]:''}`:
+    `💡 Jane whisper: ${trap}`;
   const sig=m0Sig(S),tries=it.tries;S.fog.buffs.hintToken--;it.whisper=w;if(m0Sig(S)!==sig||it.tries!==tries)throw new Error('a whisper must not change grading');
   return{ok:true,whisper:w,tokens:S.fog.buffs.hintToken,ev:[{event:'whisper',topicId:it.topicId,topic:t?.name,question:it.q}]};}
 // ---------- days-played streak + travel freeze (slice 6) ----------
@@ -545,7 +548,12 @@ export function next(S,g,pack,now){
   const qa=questActive(S,pack);
   // review gates: before some later quest stages, 1-2 due reviews open the way (LESSONS.md "Review gates")
   if(qa&&!id){const gi=gateItem(S,g,pack,due,now);if(gi){S.sinceReview=0;S.itemsServed++;S.recent=[...S.recent.slice(-9),gi.topicId];return S.current=gi;}}
-  if(!qa&&due.length&&S.itemsServed>=3&&(S.sinceReview>=9||Math.random()<.08)){const direct=due.filter(t=>S.ts[t.id].how!=='inferred');id=(direct[0]||due[0]).id;mode='review';}
+  // Free-play reviews: every ~9 items, never the random dump, never the same topic twice in a row, prefer a fresh subject.
+  // Caps the "many reviews in a row" feeling when the overdue backlog is large (travel / skipped days).
+  if(!qa&&due.length&&S.itemsServed>=3&&S.sinceReview>=9){const recent=new Set(S.recent.slice(-3)),subs=S.recent.slice(-2).map(x=>g.byId[x]?.subject);
+    const pool=due.filter(t=>S.ts[t.id].how!=='inferred'&&!recent.has(t.id));
+    const varied=pool.filter(t=>!subs.includes(t.subject));
+    const pick=varied[0]||pool[0]||due.find(t=>!recent.has(t.id));if(pick){id=pick.id;mode='review';}}
   const packNext=()=>{if(!pack)return null;
     if(pack.quest){const st=pack.topics.find(t=>g.byId[t.topicId]&&packQ(S,pack,t.topicId));return st?st.topicId:null;} // quests run stage by stage
     const cand=pack.topics.filter(t=>g.byId[t.topicId]&&packQ(S,pack,t.topicId)&&!(S.ts[t.topicId]?.st==='mastered'&&S.ts[t.topicId].how!=='inferred'));
@@ -575,8 +583,8 @@ const gateRec=(S,pack)=>{const q=(S.quests??={})[pack.date]??={};return q.gates?
 export const unverified=(S,id)=>{const r=S.ts[id];return !!r&&r.st==='mastered'&&r.how==='inferred'&&!r.verified;};
 export function spotPick(S,g,used=new Set()){return g.topics.filter(t=>unverified(S,t.id)&&!used.has(t.id))
   .sort((a,b)=>(g.post[b.id]?.length||0)-(g.post[a.id]?.length||0)||(S.ts[a.id].conf??1)-(S.ts[b.id].conf??1)||a.id.localeCompare(b.id))[0]?.id||null;}
-function gatePick(S,g,pack,due,now,used){const inf=id=>S.ts[id].how==='inferred'?1:0;
-  const c=due.filter(t=>!used.has(t.id)).sort((a,b)=>inf(a.id)-inf(b.id)||S.ts[a.id].due-S.ts[b.id].due);if(c.length)return c[0].id;
+function gatePick(S,g,pack,due,now,used){const inf=id=>S.ts[id].how==='inferred'?1:0,recent=new Set(S.recent.slice(-3)),sub=S.recent.slice(-1).map(x=>g.byId[x]?.subject)[0];
+  const c=due.filter(t=>!used.has(t.id)).sort((a,b)=>inf(a.id)-inf(b.id)||(recent.has(a.id)-recent.has(b.id))||((g.byId[a.id]?.subject===sub)-(g.byId[b.id]?.subject===sub))||S.ts[a.id].due-S.ts[b.id].due);if(c.length)return c[0].id;
   // soon-due fallback: a directly mastered topic in box 0-1 due within 2 days
   const soon=g.topics.filter(t=>{const r=S.ts[t.id];return r?.st==='mastered'&&r.how!=='inferred'&&(r.box||0)<=1&&r.due<=now+2*DAY&&!used.has(t.id);}).sort((a,b)=>S.ts[a.id].due-S.ts[b.id].due);
   return soon[0]?.id||null;}
@@ -741,7 +749,7 @@ export function choose(S,g,c,pack,now){const cur=S.focus&&g.byId[S.focus];let ms
   else if(c==='fractions'){id=pickFocus(S,g,pack,now,{domain:'Fractions'});msg='Back to fractions! 🍕';}
   if(id)S.focus=id;S.current=null;return{jane:msg};}
 export function publicItem(it,g,S,now=Date.now()){if(!it)return null;const boss=it.boss&&S?bossHP(S.ts?.[it.topicId],it,now):it.boss;const t=g.byId[it.topicId];const b=it.stage==='bonus';
-  return{id:it.id,topicId:it.topicId,topic:{name:t.sn||t.name,subject:t.subject,domain:t.domain,ic:t.ic},q:b?it.bonus.q:it.q,type:b?'input':it.type,choices:b?null:it.choices,vis:it.vis,ptype:it.ptype,creative:it.creative,placeholder:it.placeholder,pics:it.pics,items:it.items,left:it.left,right:it.right,statements:it.statements,line:it.line,parts:it.parts,blank:it.blank,card:it.card,body:it.body,emoji:it.emoji,scene:it.scene,tpl:it.tpl,mini:it.mini,stage:it.stage,mode:it.mode,format:b?'bonus':it.format,intro:b?null:it.intro,timed:b?null:it.timed,boss,level:it.lvl,issued:it.issued,title:it.title,example:it.example,guided:b?undefined:it.guided,steps:b||!it.guided?undefined:it.steps,requeued:it.requeued,gate:it.gate?{n:it.gate.n,of:it.gate.of,k:it.gate.k,spot:!!it.spot,warm:!!it.gate.warm}:undefined,help:helpFor(it)};}
+  return{id:it.id,topicId:it.topicId,topic:{name:t.sn||t.name,subject:t.subject,domain:t.domain,ic:t.ic},q:b?it.bonus.q:it.q,type:b?'input':it.type,choices:b?null:it.choices,vis:it.vis,ptype:it.ptype,creative:it.creative,placeholder:it.placeholder,pics:it.pics,items:it.items,left:it.left,right:it.right,statements:it.statements,line:it.line,parts:it.parts,blank:it.blank,card:it.card,body:it.body,emoji:it.emoji,scene:it.scene,tpl:it.tpl,mini:it.mini,stage:it.stage,mode:it.mode,format:b?'bonus':it.format,intro:b?null:it.intro,timed:b?null:it.timed,boss,level:it.lvl,issued:it.issued,title:it.title,example:it.example,guided:b?undefined:it.guided,steps:b||!it.guided?undefined:it.steps,requeued:it.requeued,gate:it.gate?{n:it.gate.n,of:it.gate.of,k:it.gate.k,spot:!!it.spot,warm:!!it.gate.warm}:undefined,help:helpFor(it),whisper:it.whisper||undefined};}
 export function medalInfo(m,g){const t=g.byId[m.id]||g.hidden?.[m.id];if(!t)return null;return{id:m.id,tier:m.tier,at:m.at,boss:!!m.boss,name:t.sn||t.name,ic:t.ic,subject:t.subject,domain:t.domain,why:t.kq?`${t.kq} → ${t.ka}`:t.self};}
 // upgrade an in-flight old-style self-check (raw assessmentPrompt) to the kid-friendly item, keeping its mode
 export function refresh(S,g,pack,now){const c=S.current;if(c&&c.kind==='self'&&/Yes, I can/.test(c.choices?.[0]||'')&&g.byId[c.topicId]){S.current=buildItem(S,g,c.topicId,c.mode,pack,now);return true;}return false;}

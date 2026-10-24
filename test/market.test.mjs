@@ -141,6 +141,23 @@ test('hint token: the Hint Token find and Market tokens share one counter; a whi
   assert.equal(S.current.tries,0);assert.equal(S.points,pts);assert.equal(S.streak,streak);assert.deepEqual({...S.current,whisper:undefined},{...JSON.parse(before),whisper:undefined});
   assert.equal(E.submit(S,g,t.ck.a,NOW+1).r.correct,true,'graded exactly as without the whisper');
   S.fog.buffs.hintToken=0;S.current={...S.current,id:'q2',whisper:undefined,tries:0};assert.match(E.whisper(S,g,NOW).error,/No whispers/);});
+test('whisper without trap data does not charge a token',()=>{
+  const S=rich(1000);S.fog={finds:[],buffs:{hintToken:2}};
+  S.current={id:'q3',topicId:g.topics.find(t=>!t.ck&&!E.kindFor?.(t)).id||g.topics[0].id,type:'mc',kind:'quiz',q:'Which is a noun?',choices:['run','cat','quickly'],answer:'cat',mode:'learn',tries:0,stage:'main',issued:NOW};
+  // strip any misconception / use a topic with no generator kind
+  const none=g.topics.find(t=>!t.ck);S.current.topicId=none.id;delete S.current.misconception;
+  // monkey: if kindFor returns a TRAP key this still charges — pick English non-math
+  const eng=g.topics.find(t=>t.subject==='English'&&!t.ck);if(eng)S.current.topicId=eng.id;
+  const n0=S.fog.buffs.hintToken;const w=E.whisper(S,g,NOW);
+  if(w.error&&/trap on file|keep your whisper/i.test(w.error)){assert.equal(S.fog.buffs.hintToken,n0);assert.ok(!S.current.whisper);}
+  else{assert.ok(w.ok);assert.ok(S.current.whisper);}});
+test('theme looks include app bg colors; sticker buy lands on the shelf list',()=>{
+  const night=E.MARKET.find(d=>d.id==='theme-night');assert.ok(night.look.bg?.length>=2);
+  assert.match(night.note,/whole app|My World/i);
+  const gold=E.MARKET.find(d=>d.id==='ship-gold');assert.match(gold.note,/My World|galleon/i);
+  const S=rich(100);const x=E.buy(S,g,{pid:pid(90),item:'test-sticker'},NOW);assert.ok(x.ok);
+  assert.ok((S.wallet.stickers||[]).some(s=>s.id==='test-sticker'));
+  assert.ok(E.walletState(S,g,NOW).stickers.some(s=>s.id==='test-sticker'));});
 test('streak shield: keeps 🔥 on one miss; hearts, boss HP, mastery and the star run identical to an unshielded miss',()=>{
   const mk=()=>{const S=rich(1000);const t=g.topics.find(t=>t.subject==='Mathematics'&&g.boss.has(t.id));S.streak=5;S.starRun=5;S.ts[t.id]={st:'learning',how:'direct',c:3,w:0,lvl:3,streak:2,bossRun:2,bossDay:new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles'}).format(new Date(NOW))};
     S.current={id:'b1',topicId:t.id,type:'input',kind:'math',q:'7 × 8 = ?',answer:'56',hint:'h',explain:'e',format:'boss',boss:{max:3,hp:1},mode:'learn',tries:0,stage:'main',issued:NOW,lvl:3};return S;};

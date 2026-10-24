@@ -14,7 +14,15 @@ test('fog is dark and see-through, sits under the nodes, and has clear holes at 
   const d=js.slice(js.indexOf('function drawMap'),js.indexOf('function tip('));
   assert.ok(d.indexOf('class="fog"')>0&&d.indexOf('class="fog"')<d.indexOf('class="nodes"'),'fog must be drawn before (under) the nodes');
   assert.match(d,/mask="url\(#fogHoles\)"/);assert.match(d,/lit=i=>mask\[i\]==='C'\|\|codes\[i\]==='m'\|\|codes\[i\]==='v'/);
+  assert.match(d,/\.52\+\.36\*un/,'mist must be dark enough to read as fog, not a pale wash');
+  assert.match(d,/trails\[sub\]\|\|\[\]/,'missing island trails must not crash drawMap');
+  assert.match(d,/ship-hero/,'worn ship skin needs a big Your ship marker');
   assert.doesNotMatch(d,/fill="#cfd8dc" filter="url\(#fogBlur\)"/,'no pale opaque fog blanket');});
+test('worn theme paints the app shell and sticker/whisper UI are wired',()=>{
+  assert.match(js,/document\.body\.classList\.add\(tid\)/);
+  assert.match(js,/function showWhisper/);
+  assert.match(js,/class="whisperb"/);
+  assert.match(js,/No quest running right now/);});
 test('boss hearts start full at the start of a fight even with an old streak, drop per first-try hit, reset on a miss',()=>{
   const S=fresh();S.ts[DEC]={st:'learning',how:'direct',c:4,w:0,ft:2,lvl:4,streak:2,bossDay:'2026-10-21',bossRun:2};S.teach={[DEC]:{left:0,power:now}};S.focus=DEC;
   S.current=E.buildItem(S,g,DEC,'learn',null,now);assert.equal(S.current.format,'boss');assert.deepEqual([S.current.boss.max,S.current.boss.hp],[3,3],'yesterday\'s run / lifetime streak must not pre-fill');
