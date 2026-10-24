@@ -119,6 +119,49 @@ export function claimFind(S,g,id,now=Date.now()){const def=FOG_FINDS.find(d=>d.i
   if(def.reward?.type==='hintToken'){S.fog.buffs??={};S.fog.buffs.hintToken=(S.fog.buffs.hintToken||0)+1;}
   if((S.medals||[]).length!==medalsBefore||(S.questMedals||[]).length!==qmBefore)throw new Error('claimFind must not invent medals');
   return{ok:true,find,reward:def.reward};}
+// ---------- Points Market (plans/points-market.md, #74; idea credit: Christopher) ----------
+// M0 points buy fun, choice and peeks: never mastery, medals, boss hearts, gate opening, quest-stage skips or permanent fog clear.
+// M1 S.points is the lifetime EARNED total and is never decremented. M2 balance = S.points − S.wallet.spent, server-side only.
+// M3 purchases are idempotent by purchase id (pid), one-time items also by item id. M4 prices are knobs in MARKET; a ledger
+// row keeps the price paid, so retuning never rewrites history. Rows with `when` (like FOG_FINDS) show only after fog clears.
+export const MARKET=[
+  {id:'test-sticker',kind:'sticker',once:true,price:25,emoji:'🌟',title:'Gold star sticker',note:'A shiny sticker for your collection.'},
+];
+export const WALLET_DAYS=60;
+const PID=/^[A-Za-z0-9_-]{6,64}$/;
+function walletOf(S){const W=S.wallet??={};W.spent??=0;W.ledger??=[];W.owned??={};W.equipped??={};W.active??={};W.choices??={};W.days??={};return W;}
+export const balanceOf=S=>(S.points||0)-(S.wallet?.spent||0);
+// what a purchase may never touch (M0): points earned, medals, quest medals, mastery records, fog finds
+function m0Sig(S){return JSON.stringify([S.points||0,S.medals||[],S.questMedals||[],Object.entries(S.ts||{}).map(([id,r])=>[id,r.st,r.how,r.box,r.due,r.ft]).sort(),(S.fog?.finds||[]).length]);}
+const activeOf=(W,now)=>Object.fromEntries(Object.entries(W?.active||{}).map(([k,v])=>[k,Array.isArray(v)?v.filter(x=>!(x?.until<=now)):v]));
+export function walletState(S,g,now=Date.now()){const W=S.wallet||{};
+  return{balance:balanceOf(S),earned:S.points||0,spent:W.spent||0,owned:{...(W.owned||{})},equipped:{...(W.equipped||{})},active:activeOf(W,now),choices:{...(W.choices||{})}};}
+const visible=(def,counts)=>!def.when||findEligible(def,counts);
+export function marketItems(S,g,now=Date.now()){const counts=fogClearCounts(S,g),bal=balanceOf(S),W=S.wallet||{};
+  return MARKET.filter(d=>visible(d,counts)).map(d=>({id:d.id,kind:d.kind,slot:d.slot,price:d.price,emoji:d.emoji,title:d.title,note:d.note,once:!!d.once,
+    owned:!!W.owned?.[d.id],equipped:!!(d.slot&&W.equipped?.[d.slot]===d.id),affordable:d.price<=bal}));}
+// buy(S,g,{pid,item,meta},now): one ledger row per pid. The client never sends a price.
+export function buy(S,g,{pid,item,meta}={},now=Date.now()){pid=String(pid||'');if(!PID.test(pid))return{error:'bad purchase id'};
+  const prev=(S.wallet?.ledger||[]).find(r=>r.id===pid);if(prev)return{ok:true,already:true,row:prev};
+  const def=MARKET.find(d=>d.id===item);if(!def)return{error:'unknown item'};
+  if(!visible(def,fogClearCounts(S,g)))return{error:'That one is still hidden in the fog! 🌫️'};
+  if(def.once&&S.wallet?.owned?.[def.id])return{ok:true,already:true,owned:true};
+  const m=def.check?def.check(S,g,meta&&typeof meta==='object'?meta:{},now):{};if(m.error)return{error:m.error};
+  const price=def.price,bal=balanceOf(S);if(price>bal)return{error:`Not enough points yet: you need ${price-bal} more ⭐`,need:price-bal};
+  const sig=m0Sig(S),W=walletOf(S);
+  const row={id:pid,item:def.id,kind:def.kind,price,at:now};if(m.meta)row.meta=m.meta;
+  W.ledger.push(row);W.spent+=price;if(def.once)W.owned[def.id]=now;
+  const extra=def.apply?def.apply(S,g,row,now)||{}:{};
+  if(m0Sig(S)!==sig)throw new Error('Market purchases must not change points, medals or mastery');
+  return{ok:true,row,...extra};}
+// M6: one snapshot of the earned total per Pacific day (last WALLET_DAYS days) so the export can show earned7d
+export function snapDay(S,day){const W=walletOf(S);if(W.days[day]===(S.points||0))return;W.days[day]=S.points||0;
+  const ks=Object.keys(W.days).sort();for(const k of ks.slice(0,Math.max(0,ks.length-WALLET_DAYS)))delete W.days[k];}
+export function marketExport(S,g,now=Date.now()){const W=S.wallet||{},ws=walletState(S,g,now),cut=ptDay(now-7*DAY),ds=Object.keys(W.days||{}).sort();
+  const base=[...ds].reverse().find(d=>d<=cut)??ds[0];const ledger=W.ledger||[];
+  return{balance:ws.balance,earned:ws.earned,spent:ws.spent,spent7d:ledger.filter(r=>r.at>=now-7*DAY).reduce((a,r)=>a+r.price,0),
+    earned7d:base!=null?Math.max(0,ws.earned-W.days[base]):null,earnedSince:base??null,ledger:ledger.slice(-30),owned:ws.owned,equipped:ws.equipped,active:ws.active,choices:ws.choices,
+    prices:Object.fromEntries(MARKET.map(d=>[d.id,d.price]))};}
 // medals: one per directly-mastered topic (not inferred, not self-rated); boss wins are legendary
 export function tierOf(g,id,boss){return boss?'legendary':(g.byId[id]||g.hidden?.[id])?.tier||'bronze';}
 function backfillMedals(S,g){S.medals=[];for(const [id,r] of Object.entries(S.ts))if(r.st==='mastered'&&r.how==='direct'&&(g.byId[id]||g.hidden?.[id]))S.medals.push({id,tier:tierOf(g,id,false),at:r.at||Date.now()});S.medals.sort((a,b)=>a.at-b.at);}

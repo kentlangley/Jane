@@ -1,6 +1,6 @@
 # Points Market — spend points on fun, choice and peeks
 
-**Status:** planned (prep only, no code yet) — 2026-10-23.
+**Status:** in progress — slice 1 done (2026-10-23).
 **Tracking:** [#74](https://github.com/kentlangley/Jane/issues/74)
 **Slices:** [#68](https://github.com/kentlangley/Jane/issues/68) Wallet · [#69](https://github.com/kentlangley/Jane/issues/69) Skins · [#70](https://github.com/kentlangley/Jane/issues/70) Scout flare · [#71](https://github.com/kentlangley/Jane/issues/71) Prove-it · [#72](https://github.com/kentlangley/Jane/issues/72) Pick your path · [#73](https://github.com/kentlangley/Jane/issues/73) Chests + extras
 **Idea credit:** Christopher (Kent's son), who proposed the Points Market items: hidden items, temporary fog push-back, skins, influencing the next question, buying out known reviews.
@@ -127,6 +127,15 @@ points buy things a 5th grader wants (skins, secrets, choices) without breaking 
 - Export: `market` block (M6).
 - Done test: `node --test test/market.test.mjs && npm test`
 - Decisions frozen: M0–M7 apply as written.
+
+#### Outcome (Slice 1) — done 2026-10-23
+- Shipped: `MARKET`, `walletState`, `marketItems`, `buy`, `snapDay`, `marketExport` in `src/engine.js`; `GET /api/market`,
+  `POST /api/market/buy`, `wallet` in `/api/state`, `purchase` events, per-day snapshot on every request; export `market`
+  block (+ `earnedSince`, `prices`). Placeholder row `test-sticker` (25). Open-question defaults applied: the whole
+  pre-Market earned total is spendable on day one (Q1).
+- Guard (M0): `buy` throws if points, medals, quest medals, mastery records (st/how/box/due/ft) or fog finds change.
+- Done test: `node --test test/market.test.mjs && npm test` → 7/7 market, 179 pass / 0 fail (1 skipped, pre-existing).
+- Deferred: none. Duplicate pids are not logged a second time (only charged purchases log `purchase`).
 
 ### Slice 2: The learner can buy and wear skins
 - Ships: a **Market** screen (tab/button from Play) showing balance and the skin catalog (ship, avatar, boss skin, map theme);
