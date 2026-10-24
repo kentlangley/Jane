@@ -1,6 +1,6 @@
 # Learner profiles: one household, several kids
 
-Status: in progress. Tracking issue: #87. Slice issues: #82 #83 #84 #85 #86. Owner: self (the bot), approved by Kent ("option 2: profiles in one app").
+Status: done (all 5 slices shipped). Tracking issue: #87. Slice issues: #82 #83 #84 #85 #86. Owner: self (the bot), approved by Kent ("option 2: profiles in one app").
 
 ## Problem
 Jane serves exactly one learner per deployment: progress, quests, wallet, campaign trail, fog Map, medals, streaks,
@@ -200,3 +200,12 @@ the Marble team, not something this plan builds.
   offline and existing commands are byte-for-byte the same calls.
 - Discovered: a remote wrangler call hung ~4 min during the live migration; added a 3-minute timeout.
 - Done test: `node --test test/profiles.test.mjs` (13 pass) && `npm test` (211 pass).
+
+### Slice 5 — done
+- Shipped: engine `placement` packs (`placeSkipped`, `placementSummary`, `subjectCeiling`/`taxonomyCeilings`, first-try
+  results in `S.placeQ`), skipped stages complete in `questInfo`, no gates, no pizza starter; validator rules; export
+  `placementQuest` + `taxonomyCeiling`; age-relative built-in diagnostic; LESSONS.md "Placement quests";
+  `packs/examples/example-placement.json` (generic); `.gitignore` keeps `packs/*/*.json` private but tracks examples.
+- Decision: skipped stages stay visible as "skipped" in the finished quest (not hidden).
+- Done test: `node --test test/placement.test.mjs` (7 pass) && `npm test` (218 pass). Local before/after on the real-data
+  snapshot: all read endpoints still identical for the primary learner.

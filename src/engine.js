@@ -379,14 +379,39 @@ function probeDown(S,g,id){const seen=new Map([[id,0]]),q=[id];while(q.length){c
   const c=[...seen].filter(([x,d])=>d>0&&unknown(S,x));if(!c.length)return null;const max=Math.max(...c.map(x=>x[1])),mid=Math.max(1,Math.ceil(max/2));
   const at=c.filter(x=>x[1]===mid);return pick(at.length?at:c)[0];}
 function probeUp(S,g,id){const sub=g.byId[id].subject,seen=new Map([[id,0]]),q=[id];while(q.length){const x=q.shift();if(seen.get(x)>=4)continue;for(const e of g.post[x])if(!seen.has(e.id)&&g.byId[e.id].subject===sub){seen.set(e.id,seen.get(x)+1);q.push(e.id);}}
-  const a0=Math.max(8,g.byId[id].ageRangeStart),dom=g.byId[id].domain;let c=[...seen].filter(([x,d])=>d>0&&unknown(S,x)&&g.byId[x].ageRangeStart>=a0&&g.byId[x].ageRangeStart<=12);
+  const a0=Math.max(8,g.byId[id].ageRangeStart),a1=Math.max(12,Math.floor(TARGET_AGE)+2),dom=g.byId[id].domain;let c=[...seen].filter(([x,d])=>d>0&&unknown(S,x)&&g.byId[x].ageRangeStart>=a0&&g.byId[x].ageRangeStart<=a1);
   const sd=c.filter(([x])=>g.byId[x].domain===dom);if(sd.length)c=sd;if(!c.length)return null;const max=Math.max(...c.map(x=>x[1])),mid=Math.ceil(max/2);
   const at=c.filter(x=>x[1]===mid);return pick(at.length?at:c)[0];}
 function ancestors(g,id){const s=new Set(),q=[id];while(q.length)for(const e of g.pre[q.pop()])if(!s.has(e.id)){s.add(e.id);q.push(e.id);}return s.size;}
 // ---------- placement ----------
+// the highest ageRangeStart of a subject in this taxonomy (Marble tops out at 10-13 depending on the subject)
+const CEIL=new WeakMap();
+export function subjectCeiling(g,sub){let m=CEIL.get(g);if(!m){m={};for(const t of g.topics)m[t.subject]=Math.max(m[t.subject]??0,t.ageRangeStart||0);CEIL.set(g,m);}return m[sub]??0;}
+export function taxonomyCeilings(g){const out={};for(const t of g.topics)out[t.subject]=subjectCeiling(g,t.subject);return out;}
+// ---------- placement quests (plans/learner-profiles.md, LESSONS.md "Placement quests") ----------
+// A quest pack with "placement": true. Stages carry "ladder" (key) and "band" (level); within a ladder they run from the
+// grade-level band down to fallbacks. A stage is passed with >= 2/3 of its graded questions right on the first try;
+// passing skips the rest of that ladder. Results: S.placeQ[date][topicId] = {r: right first try, a: answered}.
+export const placeNeed=n=>Math.max(1,Math.ceil(n*2/3));
+const ladderOf=(g,t)=>t.ladder||g?.byId?.[t.topicId]?.subject||t.topicId;
+const gradedN=t=>(t.questions||[]).filter(x=>!CARD.includes(x.type)&&!x._skip).length;
+const placePassed=(S,pack,t)=>{const r=S.placeQ?.[pack.date]?.[t.topicId];return !!r&&r.r>=placeNeed(gradedN(t));};
+export function placeSkipped(S,pack,t,g){if(!pack?.placement)return false;const k=ladderOf(g,t);
+  for(const x of pack.topics){if(x===t)return false;if(ladderOf(g,x)===k&&placePassed(S,pack,x))return true;}return false;}
+function placeRecord(S,it,ok){const P=it.place;if(!P||it.placeDone)return;it.placeDone=true;const d=((S.placeQ??={})[P.d]??={})[P.id]??={r:0,a:0};d.a++;if(ok)d.r++;}
+export function placementSummary(S,g,pack,now){const L={},beyond=new Set();
+  for(const t of pack.topics){const k=ladderOf(g,t),tp=g.byId[t.topicId],sub=tp?.subject||null,band=typeof t.band==='number'?t.band:tp?.ageRangeStart??null;
+    const l=L[k]??={subject:sub,passed:false,level:null,topicId:null,tried:[]};if(placeSkipped(S,pack,t,g))continue;
+    const r=S.placeQ?.[pack.date]?.[t.topicId]||{r:0,a:0},n=gradedN(t),pass=r.r>=placeNeed(n);l.tried.push({topicId:t.topicId,band,right:r.r,of:n,passed:pass});
+    if(pass&&!l.passed){l.passed=true;l.level=band;l.topicId=t.topicId;if(l.tried.length===1&&sub&&band!=null&&band>=subjectCeiling(g,sub)-1)beyond.add(sub);}}
+  for(const l of Object.values(L))if(!l.passed&&l.tried.length)l.below=Math.min(...l.tried.map(x=>x.band??99));
+  return{date:pack.date,at:now,ladders:L,beyondMap:[...beyond]};}
 const BUDGET={Mathematics:6,Science:4,English:4,History:3,'Personal & Social Development':2,'Life Skills':2,Computing:2,'Learning to Learn':2};
 function seedPlacement(S,g,pack){const subs=Object.keys(BUDGET),q=[];const packIds=new Set((pack?.topics||[]).map(t=>t.topicId));
-  for(const sub of subs){const c=g.topics.filter(t=>t.subject===sub&&t.ageRangeStart>=9&&t.ageRangeStart<=11&&unknown(S,t.id));
+  // window around the learner's age (ages 9-11 for a 10-10.9 year old); above a subject's taxonomy ceiling, its top band
+  const lo0=Math.floor(TARGET_AGE)-1,hi0=Math.floor(TARGET_AGE)+1;
+  for(const sub of subs){const top=subjectCeiling(g,sub),lo=Math.min(lo0,top-1),hi=Math.max(Math.min(hi0,top),lo);
+    const c=g.topics.filter(t=>t.subject===sub&&t.ageRangeStart>=lo&&t.ageRangeStart<=hi&&unknown(S,t.id));
     c.sort((a,b)=>(packIds.has(b.id)-packIds.has(a.id))*100+(ancestors(g,b.id)-ancestors(g,a.id))-(Math.abs(a.ageRangeStart-TARGET_AGE)-Math.abs(b.ageRangeStart-TARGET_AGE))*2);
     if(c[0])q.push(c[0].id);}
   const m=q.shift();S.placement.queue=[m,...q];}
@@ -408,7 +433,7 @@ function creativeOk(it,a){const n=norm(a);if(!n||n.replace(/[^a-z]/g,'').length<
   const words=n.split(' ');if(words.length>(it.maxWords||5))return false;
   return words.every(w=>/[aeiouy]/.test(w)&&!/(.)\1\1/.test(w)&&w.length<=20&&!/[bcdfghjklmnpqrstvwxz]{5}/.test(w));}
 const norm=s=>String(s).toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9.\/\s-]/g,'').replace(/\b(the|a|an)\b/g,'').replace(/\s+/g,' ').trim();
-function packQ(S,pack,id){if(!pack||questLocked(S,pack))return null;const t=pack.topics.find(x=>x.topicId===id);if(!t)return null;
+function packQ(S,pack,id){if(!pack||questLocked(S,pack))return null;const t=pack.topics.find(x=>x.topicId===id);if(!t)return null;if(pack.placement&&placeSkipped(S,pack,t))return null;
   for(let i=0;i<t.questions.length;i++){const k=`${pack.date}:${id}:${i}`;if(!S.packSeen[k]&&!t.questions[i]._skip)return{t,q:t.questions[i],i,key:k};}return null;}
 const OPEN=['Hey {name}! ','Quick one! ','Ooh, try this! ','Your turn! ',''];
 function opener(q){const o=pick(OPEN);return o&&q.split(' ').length+o.split(' ').length-1<=15?o+q:q;}
@@ -463,6 +488,7 @@ export function buildItem(S,g,id,mode,pack,now){const t=g.byId[id],r=S.ts[id];le
     if(pq.t.format==='boss'&&!S.packSeen[pk]&&!pq.t.questions.some((x,j)=>!CARD.includes(x.type)&&S.packSeen[`${pack.date}:${id}:${j}`]))
       it={kind:'pack',type:'card',card:'powerup',q:'Boss ahead! Here\'s your power-up',title:'Boss ahead! Here\'s your power-up',body:powerText(pack,pq.t),emoji:'🔋',packKey:pk,format:'card'};
     else it=packItem(pq,q);
+    if(pack.placement&&it.type!=='card')it.place={d:pack.date,id};
     if(!S.packSeen[`${pack.date}:${id}:intro`]){it.intro=pq.t.intro;S.packSeen[`${pack.date}:${id}:intro`]=1;}}
   // review (gates, Play review): a check item replaces the kid prompt; on a generator topic it is used for spot-checks
   // of an inferred skill (unverified), where a conceptual check says more than one more sum
@@ -504,6 +530,8 @@ export function pickFocus(S,g,pack,now,opt={}){const packIds=new Set((pack?.topi
   if(opt.unseen){const sa=seenAreas(S,g);c=c.filter(t=>!sa.has(t.subject+'|'+t.domain));}
   if(!c.length)return null;const seenA=seenAreas(S,g),sc=new Map(c.map(t=>[t.id,focusScore(S,g,t.id,packIds,seenA)]));c.sort((a,b)=>sc.get(b.id)-sc.get(a.id));return c[0].id;}
 export function next(S,g,pack,now){
+  // a new learner with a placement quest skips the pizza starter (it is a 5th-grade question; the placement finds the level)
+  if(!S.firstDone&&pack?.placement)S.firstDone=true;
   if(!S.firstDone){S.firstDone=true;const it={kind:'math',type:'input',q:'Your pizza has 8 slices. You eat 3, your friend eats 2. What fraction is left?',answer:'3/8',
     hint:'Count the slices that are still on the plate: 8 − 3 − 2. Put that number over 8, the total slices.',explain:'8 − 3 − 2 = 3 slices left out of 8, so 3/8 of the pizza is left!',
     vis:{type:'pizza',slices:8,eaten:5},bonus:{q:'Bonus ⭐: write 3/8 as a decimal!',a:'0.375'},first:true,format:'explore',lvl:4};
@@ -552,7 +580,7 @@ function gatePick(S,g,pack,due,now,used){const inf=id=>S.ts[id].how==='inferred'
   // soon-due fallback: a directly mastered topic in box 0-1 due within 2 days
   const soon=g.topics.filter(t=>{const r=S.ts[t.id];return r?.st==='mastered'&&r.how!=='inferred'&&(r.box||0)<=1&&r.due<=now+2*DAY&&!used.has(t.id);}).sort((a,b)=>S.ts[a.id].due-S.ts[b.id].due);
   return soon[0]?.id||null;}
-function gateItem(S,g,pack,due,now){if(!pack?.quest||!S.quests?.[pack.date]?.started)return null;const k=pack.topics.findIndex(t=>g.byId[t.topicId]&&packQ(S,pack,t.topicId));if(k<0)return null;
+function gateItem(S,g,pack,due,now){if(!pack?.quest||pack.placement||!S.quests?.[pack.date]?.started)return null;const k=pack.topics.findIndex(t=>g.byId[t.topicId]&&packQ(S,pack,t.topicId));if(k<0)return null;
   const G=gateRec(S,pack),day=gateDay(S,pack,now),left=GATE_DAY_MAX-day.n;
   const used=new Set(Object.values(G).flatMap(x=>x.items||[]));
   const nSpot=g.topics.filter(t=>unverified(S,t.id)&&!used.has(t.id)).length,avail=due.filter(t=>!used.has(t.id)).length;
@@ -636,6 +664,7 @@ function submit0(S,g,answer,now){const it=S.current;if(!it)return{error:'no item
     return finish(S,r,ev);}
   if(ok==='notSimplest'){it.tries++;return finish(S,{correct:false,retry:true,jane:'Yes, that\'s the right amount! Can you simplify it even more? 🤏'},ev);}
   if(it.packKey&&(ok||it.tries>=1))S.packSeen[it.packKey]=1;
+  if(it.place)placeRecord(S,it,!!ok&&!it.tries);
   if(ok){rec.c++;rec.last=now;if(!it.tries&&!it.guided)countFt(rec,it.base||it.q,now);
     if(it.format==='boss'){const d=ptDay(now);if(rec.bossDay!==d){rec.bossDay=d;rec.bossRun=0;}rec.bossRun=it.tries?0:(rec.bossRun||0)+1;}const fast=it.timed&&(now-it.issued)/1000<=it.timed;const pts=(it.tries?5:10+(it.lvl||3)*2)+(fast?5:0)+(it.format==='boss'?5:0);
     S.points+=pts;S.streak++;S.bestStreak=Math.max(S.bestStreak,S.streak);S.solved++;S.starRun=(S.starRun??S.streak-1)+1;if(S.starRun%3===0)S.stars++;r.correct=true;
@@ -732,12 +761,12 @@ export function questLineup(S,packs,today){const Q=S?.quests||{},ds=Object.keys(
   return{current,newQuest,queued,finished:ds.filter(d=>Q[d]?.done).reverse()};}
 export function questInfo(S,g,pack){if(!pack)return null;const Q=pack.quest||{},rec=S.quests?.[pack.date]||{};
   const seen=(t,j)=>S.packSeen[`${pack.date}:${t.topicId}:${j}`];
-  let stages=pack.topics.map((t,i)=>{const live=t.questions.map((q,j)=>[q,j]).filter(([q])=>!q._skip),n=live.length,d=live.filter(([,j])=>seen(t,j)).length,tp=g.byId[t.topicId];
-    return{topicId:t.topicId,name:t.stage?.name||t.intro?.title||tp?.sn||t.topicId,emoji:t.stage?.emoji||t.intro?.emoji||tp?.ic||'⭐',n,done:d,complete:d>=n,boss:t.format==='boss',deep:!!t.deepDive,review:!!t.review};});
+  let stages=pack.topics.map((t,i)=>{const live=t.questions.map((q,j)=>[q,j]).filter(([q])=>!q._skip),n=live.length,sk=placeSkipped(S,pack,t,g),d=sk?n:live.filter(([,j])=>seen(t,j)).length,tp=g.byId[t.topicId];
+    return{topicId:t.topicId,name:t.stage?.name||t.intro?.title||tp?.sn||t.topicId,emoji:t.stage?.emoji||t.intro?.emoji||tp?.ic||'⭐',n,done:d,complete:d>=n,boss:t.format==='boss',deep:!!t.deepDive,review:!!t.review,skipped:sk||undefined};});
   if(pack.quest&&rec.done){const snap=rec.snap?Object.fromEntries(rec.snap.stages.map(x=>[x.topicId,x.n])):null;
     stages=stages.filter(st=>snap?st.topicId in snap:st.done>0||st.complete).map(st=>{const n=snap?snap[st.topicId]:st.n;return{...st,n,done:n,complete:true};});}
   const total=stages.reduce((a,s)=>a+s.n,0),done=stages.reduce((a,s)=>a+s.done,0);
-  const gates=pack.quest?gateStages(pack.topics.length).filter(k=>k<stages.length).map(k=>{const r=rec.gates?.[k],st=pack.topics[k],passed=!r?.open&&!!st&&(st.questions||[]).some((q,j)=>S.packSeen?.[`${pack.date}:${st.topicId}:${j}`]);
+  const gates=pack.quest&&!pack.placement?gateStages(pack.topics.length).filter(k=>k<stages.length).map(k=>{const r=rec.gates?.[k],st=pack.topics[k],passed=!r?.open&&!!st&&(st.questions||[]).some((q,j)=>S.packSeen?.[`${pack.date}:${st.topicId}:${j}`]);
     // a stage the learner already started without meeting this gate (e.g. a quest begun before gates existed) shows it as passed
     return{before:k,state:r?.open||passed?'open':'locked',passed:passed||undefined,items:r?.n||0,of:r?.of??null,right:r?.right||0};}):[];
   return{date:pack.date,isQuest:!!pack.quest,title:Q.title||pack.title||('Adventure '+pack.date),hook:Q.hook||'',emoji:Q.emoji||'🗺️',medal:Q.medal||{name:(pack.title||'Adventure')+' medal',emoji:'🏅'},
@@ -746,6 +775,7 @@ export function questInfo(S,g,pack){if(!pack)return null;const Q=pack.quest||{},
 export function completeQuest(S,g,pack,now){if(!pack?.quest)return null;S.quests??={};const q=S.quests[pack.date]??={};if(q.done)return null;
   const qi=questInfo(S,g,pack);if(!qi.total||qi.done<qi.total)return null;
   q.started??=now;q.done=now;q.snap={stages:qi.stages.map(st=>({topicId:st.topicId,n:st.n})),total:qi.total};if(S.questFocus===pack.date)S.questFocus=null;
+  if(pack.placement)S.placementQuest=placementSummary(S,g,pack,now);
   const m={date:pack.date,title:qi.title,name:qi.medal.name,emoji:qi.medal.emoji,at:now};S.questMedals??=[];if(!S.questMedals.some(x=>x.date===pack.date))S.questMedals.push(m);return m;}
 // ---------- map mini-sessions ("Explore now!" on green/blue stones, "Practice now" on orange ones) ----------
 export function startMini(S,g,id,pack,now){const s=stateOf(S,g,id,now);if(!['ready','learning','review'].includes(s))return{error:'That stone is not open yet!'};

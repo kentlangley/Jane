@@ -433,6 +433,35 @@ Write tomorrow's quest from `weakSpots` and `frontier` (the gates handle `review
 
 Both scripts call the repo's `wrangler` (Node 22; a portable Node in `~/.local/node-v22.20.0-linux-x64` is used if present), read the account and KV ids from `wrangler.toml`, and need `CLOUDFLARE_API_TOKEN` set in the environment (never commit it).
 
+## Placement quests (a new learner starts at their level)
+A new learner (added from the parent view) gets a short **placement quest** before regular quests, so Jane finds their
+level instead of starting from zero. It is a diagnostic, not a lesson. Example: `packs/examples/example-placement.json`.
+- Add `"placement": true` to a normal quest pack. **4-7 stages, at least 3 subjects, 2-4 graded questions per stage**,
+  ≤ 16 graded in total (~6-8 min). No learn cards, guided practice or boss are required (the validator skips those rules).
+- Every stage has `"ladder"` (a short key, e.g. `"math"`, `"science"`, `"english"`) and `"band"` (the topic's level,
+  normally its Marble `ageRangeStart`). **Within a ladder, order stages from the grade-level band down** (e.g. math 13 →
+  12 → 10): grade level first, then fallbacks.
+- A stage is **passed** with ≥ 2/3 of its graded questions right on the first try (2 of 2, 2 of 3, 3 of 4). A pass skips
+  the rest of that ladder (shown as skipped, never answered); a miss serves the next lower stage. Mastery uses the normal
+  rules, so a pass marks that topic (and what it builds on) as known: the adaptive start point.
+- Start each ladder at the learner's grade: age ≈ grade + 5.5 (8th grade ≈ 13.5). Use the topics closest to that age.
+- **Taxonomy ceiling.** Marble topics start at ages 4-13 and the top differs by subject (export `taxonomyCeiling`:
+  Mathematics/Science/History/PSD 13, English 12, Geography 11, Computing/Life Skills/Learning to Learn 10). For a learner
+  at or above a subject's ceiling, start that ladder at the top band. If they pass it, the export's
+  `placementQuest.beyondMap` lists the subject: stretch with the highest topics there (hardest variants, deep dives),
+  and note the gap for the household (content beyond the map is not something to invent as new topic ids).
+- No review gates run inside a placement quest, and the pizza starter question is skipped for a learner whose first
+  pack is a placement quest.
+- After it is finished, the export's `placementQuest` has per-ladder `passed`, `level` (band passed), `topicId`,
+  `tried` and `below` (when nothing passed: start below that band). Plan the next quest from it plus `frontier`.
+- Voice: still "you"; match the learner's age (a teenager gets a grown-up, game-like tone, no baby talk). Theme it on
+  their interests from the export's `profile.interests`. Keep personal details out of public files (packs/<id>/ is
+  gitignored).
+```bash
+node publish-lessons.mjs packs/<id>/placement.json --learner <id> --date <today PT> --dry-run
+node publish-lessons.mjs packs/<id>/placement.json --learner <id> --date <today PT>
+```
+
 ## Several learners (profiles)
 One household app can serve several kids (plans/archive/learner-profiles.md). Each learner has their own progress,
 quests, wallet, trail, fog, medals and logs. The **primary** learner keeps the original keys, so every command above

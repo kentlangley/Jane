@@ -1,0 +1,38 @@
+{
+  "date": "2026-01-05",
+  "title": "Find your level",
+  "placement": true,
+  "quest": {
+    "title": "Find Your Level",
+    "hook": "A quick scouting run so Jane knows where you are. Get one right and you skip ahead!",
+    "emoji": "🧭",
+    "medal": {"name": "Scout's Compass", "emoji": "🧭"}
+  },
+  "topics": [
+    {"topicId": "mt_iEXqN48w3x", "ladder": "math", "band": 12, "stage": {"name": "Percent check", "emoji": "💯"},
+     "questions": [
+      {"type": "numeric", "prompt": "What is 15% of 80?", "answer": "12", "hint": "10% is 8, and 5% is half of that.", "explanation": "10% of 80 is 8 and 5% is 4, so 15% is 12."},
+      {"type": "mc", "prompt": "A $40 game is 25% off. What do you pay?", "choices": ["$30", "$10", "$35"], "answer": "$30", "misconception": "$10", "hint": "Find 25% first, then take it away.", "explanation": "25% of $40 is $10 off, so you pay $30."},
+      {"type": "numeric", "prompt": "A price goes from $50 to $60. What is the percent increase?", "answer": "20%", "hint": "Increase divided by the starting price.", "explanation": "The increase is $10, and 10 out of 50 is 20%."}]},
+    {"topicId": "mt_ALUrJpY0cZ", "ladder": "math", "band": 11, "stage": {"name": "Percents as fractions", "emoji": "🔁"},
+     "questions": [
+      {"type": "match", "prompt": "Match each percent to its fraction.", "pairs": [["50%", "1/2"], ["25%", "1/4"], ["10%", "1/10"]], "hint": "Percent means out of 100.", "explanation": "50/100 = 1/2, 25/100 = 1/4 and 10/100 = 1/10."},
+      {"type": "blank", "prompt": "75% is the same as ___ as a fraction.", "choices": ["3/4", "7/5", "1/75"], "answer": "3/4", "misconception": "7/5", "hint": "75 out of 100, then simplify.", "explanation": "75/100 simplifies to 3/4."}]},
+    {"topicId": "mt_b7T-CjOYUR", "ladder": "math", "band": 10, "stage": {"name": "Fraction warm-up", "emoji": "🍰"},
+     "questions": [
+      {"type": "mc", "prompt": "Which fraction is the same as 6/8?", "choices": ["3/4", "2/3", "6/4"], "answer": "3/4", "misconception": "6/4", "hint": "Divide the top and bottom by the same number.", "explanation": "6 ÷ 2 = 3 and 8 ÷ 2 = 4, so 6/8 = 3/4."},
+      {"type": "numeric", "prompt": "Simplify 10/15. Write it as a fraction.", "answer": "2/3", "form": "fraction", "hint": "Both numbers are in the 5 times table.", "explanation": "10 ÷ 5 = 2 and 15 ÷ 5 = 3, so 10/15 = 2/3."}]},
+    {"topicId": "mt_tXxxCFl32J", "ladder": "science", "band": 12, "stage": {"name": "Forces", "emoji": "🚀"},
+     "questions": [
+      {"type": "truefalse", "prompt": "Forces: true or false?", "statements": [["A bigger force gives a bigger acceleration", true], ["Moving things need a force to keep the same speed", false], ["Heavier objects need more force to speed up the same amount", true]], "hint": "Think force = mass × acceleration.", "explanation": "More force means more acceleration, more mass needs more force, and with no net force a moving object keeps moving."},
+      {"type": "mc", "prompt": "A cart has balanced forces on it. What happens?", "choices": ["Its speed stays the same", "It speeds up", "It always stops"], "answer": "Its speed stays the same", "misconception": "It always stops", "hint": "Balanced means no overall push or pull.", "explanation": "Balanced forces mean no change in motion: it keeps the same speed and direction."}]},
+    {"topicId": "mt_q-1a86ydgU", "ladder": "science", "band": 11, "stage": {"name": "Speed", "emoji": "⏱️"},
+     "questions": [
+      {"type": "numeric", "prompt": "You ride 12 km in 2 hours. What is your average speed in km/h?", "answer": "6", "hint": "Speed = distance ÷ time.", "explanation": "12 km ÷ 2 h = 6 km/h."},
+      {"type": "order", "prompt": "Put these speeds from slowest to fastest.", "items": ["3 km/h", "15 km/h", "40 km/h", "100 km/h"], "hint": "Compare the numbers: same units.", "explanation": "With the same units, the bigger number is faster."}]},
+    {"topicId": "mt_gMSFymQlrW", "ladder": "english", "band": 11, "stage": {"name": "Arguments", "emoji": "🗣️"},
+     "questions": [
+      {"type": "mc", "prompt": "Which sentence is a fact, not an opinion?", "choices": ["The match lasted 90 minutes", "Football is the best sport", "Everyone loves football"], "answer": "The match lasted 90 minutes", "hint": "A fact can be checked.", "explanation": "You can check how long the match lasted; the others are opinions."},
+      {"type": "mc", "prompt": "Which makes an argument stronger?", "choices": ["Evidence from a trusted source", "Saying it louder", "Repeating it three times"], "answer": "Evidence from a trusted source", "hint": "What would convince a fair judge?", "explanation": "Evidence someone can check is what makes an argument strong."}]}
+  ]
+}
