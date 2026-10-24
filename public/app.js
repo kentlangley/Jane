@@ -13,7 +13,7 @@ const BOSSES=['🐉','👾','🦖','🐙','🤖','🧌'];
 function say(t){const b=$('jane');b.innerHTML=gl(t);b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');}
 function confetti(n=40){for(let i=0;i<n;i++){const e=document.createElement('div');e.className='confetti';e.textContent=['🎉','⭐','🍕','✨','🎈','💜'][i%6];e.style.left=Math.random()*100+'vw';e.style.animationDuration=1.5+Math.random()*2+'s';document.body.appendChild(e);setTimeout(()=>e.remove(),4000);}}
 function banner(t){const b=document.createElement('div');b.className='banner';b.innerHTML=`<div>${t}</div>`;document.body.appendChild(b);setTimeout(()=>b.remove(),2000);}
-function chips(s){const W=s.wallet;$('pts').textContent='⭐ '+(W?W.balance:s.points)+' pts';$('pts').title=W?`${W.balance} to spend in the Market (earned ${W.earned}, spent ${W.spent})`:'';{const f=W?.looks?.avatar?.face,me=$('me');if(me){me.hidden=!f;me.textContent=f||'';}}$('stars').textContent='🌟 '+s.stars;$('streak').textContent='🔥 '+s.streak;$('pct').textContent=`🗺️ ${s.progress.pct}%`;campaignHUD(s);}
+function chips(s){const W=s.wallet;$('pts').textContent='⭐ '+(W?W.balance:s.points)+' pts';$('pts').title=W?`${W.balance} to spend in the Market (earned ${W.earned}, spent ${W.spent})`:'';{const f=W?.looks?.avatar?.face,me=$('me');if(me){me.hidden=!f;me.textContent=f||'';}}$('stars').textContent='🌟 '+s.stars;$('streak').textContent='🔥 '+s.streak+(W?.shield?' 🛡️':'');$('streak').title=W?.shield?`${W.shield} streak shield${W.shield>1?'s':''} ready`:'';{const D=s.days,el=$('days');if(el){el.hidden=!D?.n;el.textContent=`📅 ${D?.n||0}${D?.atRisk?' 🧊':''}`;el.title=D?.n?`${D.n} day${D.n>1?'s':''} in a row (best ${D.best})${D.freeze?` · ${D.freeze} freeze${D.freeze>1?'s':''} saved`:''}${D.atRisk?' · a freeze will save it when you play today':''}`:'';}}$('pct').textContent=`🗺️ ${s.progress.pct}%`;campaignHUD(s);}
 let LN='Explorer';function setLearner(L){if(!L?.name||L.name===LN&&document.title.includes(LN))return;LN=L.name;document.querySelectorAll('.lname').forEach(e=>e.textContent=LN);document.title=`${LN}'s Learning Adventure with Jane`;}
 // boss hearts: ❤️ = hits the boss still needs in THIS fight (server bossHP: today's first-try boss run on this topic), 🖤 = hits landed
 function bossHTML(b,topicId){if(!b)return'';const BL=st?.wallet?.looks?.boss,BS=BL?.set?.length?BL.set:BOSSES;const max=Math.max(1,b.max|0),hp=Math.max(0,Math.min(max,b.hp|0));
@@ -30,7 +30,7 @@ function render(s){st=s;if(s?.learner)setLearner(s.learner);chips(s);const p=s.i
  if(p.intro){$('intro').hidden=false;$('intro').innerHTML=`<h3>${esc(p.intro.emoji||'✨')} ${gl(p.intro.title||'',new Set())}</h3><div>${gl(p.intro.story||'',new Set())}</div>`;}else $('intro').hidden=true;
  medalRow(s);
  $('steps').innerHTML=p.steps?.length?`<div class="steps"><b>🧭 Start like this:</b><ol>${p.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>`:'';
- const canStuck=p.type!=='card'&&p.type!=='self';$('stuckf').hidden=!canStuck;$('srow').innerHTML=(canStuck&&p.type!=='input'?'<button type="button" class="stuckb" onclick="stuckTap()">I\'m stuck 🤔</button>':'')+(p.gate&&!p.gate.spot?'<button type="button" class="ghost provelink" onclick="openProve()">🎟️ Prove-It tickets</button>':'');showHelp(p.help);
+ const canStuck=p.type!=='card'&&p.type!=='self';$('stuckf').hidden=!canStuck;$('srow').innerHTML=(canStuck&&p.type!=='input'?'<button type="button" class="stuckb" onclick="stuckTap()">I\'m stuck 🤔</button>':'')+(p.gate&&!p.gate.spot?'<button type="button" class="ghost provelink" onclick="openProve()">🎟️ Prove-It tickets</button>':'')+(canStuck&&p.stage!=='bonus'&&s.wallet?.hintTokens?`<button type="button" class="ghost whisperb" onclick="whisperTap()">🤫 Jane whisper (${s.wallet.hintTokens})</button>`:'');showHelp(p.help);
  $('extra').innerHTML=p.stage==='bonus'?'<button class="ghost" onclick="skip()">Skip bonus ➡</button>':'';$('mc').innerHTML='';
  if(INTER[p.type]){$('f').style.display='none';INTER[p.type](p);}
  else if(p.type==='mc'||p.type==='self'){$('f').style.display='none';const ch=p.type==='self'?[['yes',p.choices[0]],['kinda',p.choices[1]],['no',p.choices[2]]]:p.choices.map(c=>[c,c]);
@@ -41,6 +41,7 @@ function render(s){st=s;if(s?.learner)setLearner(s.learner);chips(s);const p=s.i
 async function send(v){if(!v||$('pcard').classList.contains('busy'))return;$('pcard').classList.add('busy');let r;try{r=await api('/api/answer',{answer:v});}catch(e){$('pcard').classList.remove('busy');say('Oops, the internet hiccuped. Try again! 🔌');return;}$('pcard').classList.remove('busy');say(r.jane);
  if(r.stuck){if(r.state)st=r.state;showHelp(r.stuck);return;}
  if(r.questDone)setTimeout(()=>questMedal(r.questDone),r.medal?2600:300);
+ if(r.shielded)setTimeout(()=>banner(`🛡️ Shield up!<br><small>Your 🔥 ${r.shielded} streak is safe</small>`),300);
  if(r.proveIt?.passed)setTimeout(()=>banner(`🎟️ Proved it!<br><small>${esc(r.proveIt.topic||'')} +${r.proveIt.bonus} bonus</small>`),r.medal?2600:500);
  if(r.miniDone&&!r.reveal){chips(r.state);return miniEnd(r);}
  if(r.correct){const big=!!(r.mastered||r.levelUp||r.medal);if(!(window.FX&&FX.good($('pcard'),big)))confetti(big?80:30);if(r.medal)reveal(r.medal,r.inferred);else if(r.mastered)banner(`🏆 Mastered!<br><small>${esc(r.mastered)}</small>${r.inferred?`<br><small>+${r.inferred} skills lit up on your map!</small>`:''}`);else if(r.levelUp)banner('⬆ Level '+r.levelUp+'!');}
@@ -464,27 +465,27 @@ addEventListener('scroll',()=>gclose(),{passive:true});
  document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;(document.querySelector('.finale #fnok')||document.querySelector('.coverlay #cclose')||document.querySelector('.scard .x')||document.querySelector('.reveal .rbox button'))?.click();});
 })();
 
-// ---------- Points Market (plans/points-market.md, #74; idea credit: Christopher) ----------
+// ---------- Points Market (plans/archive/points-market.md, #74; idea credit: Christopher) ----------
 // Points buy fun, choice and peeks: never mastery, medals or permanent fog clear. The server keeps the wallet
 // (balance = earned − spent) and the prices; the client only sends a purchase id (pid) so a retry never charges twice.
-const MK_GROUP={ship:'⛵ Ships',avatar:'🙂 Avatars',boss:'👾 Boss skins',theme:'🎨 Map themes',sticker:'🌟 Stickers'};
+const MK_GROUP={'skin-ship':'⛵ Ships','skin-avatar':'🙂 Avatars','skin-boss':'👾 Boss skins','skin-theme':'🎨 Map themes',sticker:'🌟 Stickers',flare:'🎆 Peek into the fog',prove:'🎟️ Prove it',path:'🧭 Choose your next quest',theme:'🧭 Choose your next quest',extra:'🎒 Handy extras',chest:'🧰 Mystery chests (found under the fog!)'};
 const mkPid=()=>{const r=globalThis.crypto?.randomUUID?.()||(Date.now().toString(36)+Math.random().toString(36).slice(2,12));return('p'+r).replace(/[^A-Za-z0-9_-]/g,'').slice(0,40);};
 let MK=null,_mkFocus=null;
 async function loadMarket(){let d;try{d=await api('/api/market');}catch{d=null;}if(!d||d.error){$('mlist').innerHTML='<p class="small">The Market is closed for a moment. Try again soon! 🛒</p>';return;}
  MK=d;if(st){st.wallet=d.wallet;chips(st);}paintMarket();}
 function mkSetWallet(r){if(r.wallet&&r.items)MK={...MK,wallet:r.wallet,items:r.items,prove:r.prove?.due?r.prove:MK?.prove,path:r.path?.offers?r.path:MK?.path};if(r.state){st=r.state;chips(st);}}
 function paintMarket(){const d=MK;if(!d)return;const W=d.wallet;
- $('mbal').innerHTML=`<div class="mkbal">⭐ ${W.balance.toLocaleString()} <span>to spend</span></div><div class="small">earned ${W.earned.toLocaleString()} · spent ${W.spent.toLocaleString()} · your medals and skills never cost points</div>`;
- const groups={};for(const it of d.items)(groups[it.slot||it.kind]??=[]).push(it);
+ $('mbal').innerHTML=`<div class="mkbal">⭐ ${W.balance.toLocaleString()} <span>to spend</span></div><div class="small">earned ${W.earned.toLocaleString()} · spent ${W.spent.toLocaleString()} · your medals and skills never cost points</div>${mkShelf(W,d)}`;
+ const groups={};for(const it of d.items)(groups[it.slot?'skin-'+it.slot:it.kind==='theme'?'path':it.kind]??=[]).push(it);
  $('mlist').innerHTML=Object.entries(groups).map(([k,items])=>`<div class="card mksec"><h3>${esc(MK_GROUP[k]||k)}</h3><div class="mkgrid">${items.map(mkCard).join('')}</div></div>`).join('');
- $('mlist').querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const it=d.items.find(i=>i.id===b.dataset.buy);if(it?.kind==='flare')return mkFlare(it);if(it?.kind==='prove')return mkProve(it);if(it?.kind==='path'||it?.kind==='theme')return mkPick(it);mkConfirm(it);});
+ $('mlist').querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const it=d.items.find(i=>i.id===b.dataset.buy);if(it?.kind==='flare')return mkFlare(it);if(it?.kind==='prove')return mkProve(it);if(it?.kind==='path'||it?.kind==='theme')return mkPick(it);mkConfirm(it,it.kind==='chest'?{after:r=>r.prize&&chestReveal(r.prize)}:{});});
  $('mlist').querySelectorAll('[data-eq]').forEach(b=>b.onclick=()=>mkEquip(b.dataset.slot,b.dataset.eq==='off'?null:b.dataset.eq));}
 function mkCard(it){const bal=MK.wallet.balance,PV=MK.prove;
  if(it.kind==='prove'&&PV&&(!PV.due.length||!PV.left))return`<div class="mkcard" id="mkprove"><div class="mkemo" aria-hidden="true">${esc(it.emoji)}</div><b>${esc(it.title)}</b><div class="small">${esc(it.note||'')}</div><div class="mkprice">⭐ ${it.price}</div><button type="button" disabled>${PV.left?'No reviews due right now 🌱':'Come back tomorrow 🌙'}</button></div>`;
  const pk=(it.kind==='path'||it.kind==='theme')&&MK.wallet.choices?.[it.kind],open=pk&&!pk.used;
  if(open||(it.kind==='path'&&MK.path&&!MK.path.offers.length))return`<div class="mkcard${open?' on':''}"><div class="mkemo" aria-hidden="true">${esc(it.emoji)}</div><b>${esc(it.title)}</b><div class="small">${esc(it.note||'')}</div><div class="mkprice">⭐ ${it.price}</div><button type="button" disabled>${open?`✓ Picked: ${esc(pk.name||((pk.emoji||'')+' '+pk.title))}`:'No ready topics right now 🌱'}</button></div>`;
  const btn=it.owned&&it.slot?(it.equipped?`<button type="button" class="ghost" data-eq="off" data-slot="${esc(it.slot)}">✓ Wearing · take off</button>`:`<button type="button" data-eq="${esc(it.id)}" data-slot="${esc(it.slot)}">Wear it</button>`)
-  :it.owned&&it.once?'<span class="mkown">✓ Yours!</span>'
+  :it.owned&&it.once?`<span class="mkown">✓ ${it.kind==='chest'?'Opened!':'Yours!'}</span>`
   :`<button type="button" data-buy="${esc(it.id)}"${it.affordable?'':' disabled'}>${it.affordable?`Buy · ⭐ ${it.price}`:`Need ${it.price-bal} more ⭐`}</button>`;
  return`<div class="mkcard${it.owned?' own':''}${it.equipped?' on':''}"><div class="mkemo" aria-hidden="true">${esc(it.emoji)}</div><b>${esc(it.title)}</b><div class="small">${esc(it.note||'')}</div><div class="mkprice">⭐ ${it.price}</div>${btn}</div>`;}
 function mkClose(){const o=document.querySelector('.mkconfirm');if(!o)return;o.remove();(_mkFocus&&document.contains(_mkFocus)?_mkFocus:$('mbal'))?.focus?.();_mkFocus=null;}
@@ -528,3 +529,17 @@ function pickLine(s){const C=s?.wallet?.choices||{},p=C.path&&!C.path.used?C.pat
  if(!p&&!t){if(el)el.hidden=true;return;}
  if(!el){el=document.createElement('div');el.id='pickline';el.className='card pickline';el.setAttribute('role','status');$('campaign').after(el);}
  el.hidden=false;el.innerHTML=`🧭 <b>Next quest: your pick!</b> ${p?esc(p.name):''}${p&&t?' · ':''}${t?esc((t.emoji||'')+' '+t.title):''}<span class="small"> Jane is building it.</span>`;}
+// stickers, titles, extras in your pocket, and a teaser for rows still hidden in the fog
+function mkShelf(W,d){const st0=(d.items||[]).filter(i=>i.kind==='sticker'&&i.owned).map(i=>({emoji:i.emoji,title:i.title})),sts=[...st0,...(W.stickers||[])];
+ const pk=[W.hintTokens&&`🤫 ×${W.hintTokens}`,W.shield&&`🛡️ ×${W.shield}`,W.freeze&&`🧊 ×${W.freeze}`].filter(Boolean);
+ return(sts.length?`<div class="mkshelf" aria-label="Your stickers">${sts.map(x=>`<span title="${esc(x.title)}">${esc(x.emoji)}</span>`).join('')}</div>`:'')
+  +((W.titles||[]).length?`<div class="small">🏷️ Titles: ${W.titles.map(t=>`<b>${esc(t.title)}</b>`).join(' · ')}</div>`:'')
+  +(pk.length?`<div class="small">🎒 In your pocket: ${pk.join(' · ')}</div>`:'')
+  +(d.hidden?`<div class="small mkfog">🌫️ ${d.hidden} more thing${d.hidden>1?'s are':' is'} hidden in the fog… master skills to find ${d.hidden>1?'them':'it'}!</div>`:'');}
+function chestReveal(p){const o=document.createElement('div');o.className='freveal';
+ o.innerHTML=`<div class="frbox"><div class="fremo">${esc(p.emoji||'🎁')}</div><div class="frnew">🧰 The chest pops open!</div><h3>${esc(p.title||'A prize')}</h3>
+ <p class="small">${p.type==='skin'?'A RARE skin! Wear it from the Market.':p.type==='title'?'A new title for your collection!':'A new sticker for your shelf!'}</p><button type="button" id="frok">Awesome!</button></div>`;
+ document.body.appendChild(o);confetti(50);const close=()=>{o.remove();};o.querySelector('#frok').onclick=close;o.onclick=e=>{if(e.target===o)close();};setTimeout(()=>$('frok')?.focus(),50);}
+// Jane whisper: spends one hint token on the question on screen (ungraded: never costs a try, a heart or the streak)
+async function whisperTap(){if($('pcard').classList.contains('busy'))return;let r;try{r=await api('/api/whisper',{});}catch{return;}if(r.error){say(r.error);return;}
+ say(r.whisper);if(r.state){st=r.state;chips(st);}const b=document.querySelector('.whisperb');if(b){b.textContent=`🤫 ${r.tokens} left`;b.disabled=true;}}

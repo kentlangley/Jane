@@ -303,3 +303,4 @@ main[hidden]{display:none!important}
 @media (prefers-reduced-motion:reduce){.flare-burst{animation:none}}
 .framebar.f-prove{background:linear-gradient(90deg,#ffd54f,#ff8f00);color:#3e2723}.provelink{font-size:.95rem;margin-left:6px}
 .pickline{background:linear-gradient(90deg,#e8f5e9,#fffde7);border:3px solid #66bb6a;padding:10px 14px;font-size:1.05rem}
+.chip.days{background:#43a047;color:#fff}.mkshelf{font-size:1.6rem;letter-spacing:4px;margin:4px 0}.mkfog{color:#546e7a;font-style:italic}.whisperb{font-size:.95rem;margin-left:6px}

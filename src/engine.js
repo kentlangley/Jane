@@ -124,7 +124,7 @@ export function claimFind(S,g,id,now=Date.now()){const def=FOG_FINDS.find(d=>d.i
   if(def.reward?.type==='hintToken'){S.fog.buffs??={};S.fog.buffs.hintToken=(S.fog.buffs.hintToken||0)+1;}
   if((S.medals||[]).length!==medalsBefore||(S.questMedals||[]).length!==qmBefore)throw new Error('claimFind must not invent medals');
   return{ok:true,find,reward:def.reward};}
-// ---------- Points Market (plans/points-market.md, #74; idea credit: Christopher) ----------
+// ---------- Points Market (plans/archive/points-market.md, #74; idea credit: Christopher) ----------
 // M0 points buy fun, choice and peeks: never mastery, medals, boss hearts, gate opening, quest-stage skips or permanent fog clear.
 // M1 S.points is the lifetime EARNED total and is never decremented. M2 balance = S.points − S.wallet.spent, server-side only.
 // M3 purchases are idempotent by purchase id (pid), one-time items also by item id. M4 prices are knobs in MARKET; a ledger
@@ -166,7 +166,28 @@ export const MARKET=[
     check:(S,g,meta)=>{if(S.wallet?.choices?.theme&&!S.wallet.choices.theme.used)return{error:'You already picked a theme for your next quest! 🎭'};
       const th=QUEST_THEMES.find(x=>x.id===meta.theme);return th?{meta:{theme:th.id}}:{error:'Pick a theme! 🎭'};},
     apply:(S,g,row,now)=>{const th=QUEST_THEMES.find(x=>x.id===row.meta.theme);S.wallet.choices.theme={id:th.id,title:th.title,emoji:th.emoji,at:now,pid:row.id};return{choice:S.wallet.choices.theme};}},
+  // cheap extras (slice 6, 25–100). Stock caps keep them from piling up.
+  {id:'hint-token',kind:'extra',price:40,emoji:'🤫',title:'Jane Whisper',note:'A hint token: Jane whispers the sneaky trap in a question. It never answers for you.',
+    check:S=>(S.fog?.buffs?.hintToken||0)>=HINT_MAX?{error:`You already have ${HINT_MAX} whispers saved up! 🤫`}:{},apply:S=>{S.fog??={finds:[]};S.fog.buffs??={};S.fog.buffs.hintToken=(S.fog.buffs.hintToken||0)+1;}},
+  {id:'streak-shield',kind:'extra',price:60,emoji:'🛡️',title:'Streak Shield',note:'Your next miss keeps your 🔥 streak alive. (Stars still need 3 right in a row.)',
+    check:S=>(S.wallet?.active?.shield||0)>=SHIELD_MAX?{error:`You already have ${SHIELD_MAX} shields! 🛡️`}:{},apply:S=>{S.wallet.active.shield=(S.wallet.active.shield||0)+1;}},
+  {id:'streak-freeze',kind:'extra',price:80,emoji:'🧊',title:'Streak Freeze',note:'Going on a trip? A freeze saves your 📅 days-played streak for one missed day.',
+    check:S=>(S.wallet?.active?.freeze||0)>=FREEZE_MAX?{error:`You already have ${FREEZE_MAX} freezes! 🧊`}:{},apply:S=>{S.wallet.active.freeze=(S.wallet.active.freeze||0)+1;}},
+  // hidden mystery chests (slice 6): appear only after nearby fog clears (`when`, like FOG_FINDS). One each; the prize
+  // is rolled from a fixed cosmetic table, seeded by the purchase id, so a retry gives the same prize.
+  {id:'chest-world-20',kind:'chest',once:true,price:300,emoji:'🧰',title:'Explorer\'s Mystery Chest',note:'Found under the fog! What\'s inside?',when:{clear:20}},
+  {id:'chest-math-15',kind:'chest',once:true,price:350,emoji:'💠',title:'Math Island Mystery Chest',note:'Washed up on Math Island when the fog lifted.',when:{subject:'Mathematics',pct:15}},
+  {id:'chest-sci-15',kind:'chest',once:true,price:350,emoji:'🧪',title:'Science Lab Mystery Chest',note:'Hidden in the Science fog. It\'s bubbling…',when:{subject:'Science',pct:15}},
+  {id:'chest-eng-15',kind:'chest',once:true,price:350,emoji:'📕',title:'Story Vault Mystery Chest',note:'Locked in the English fog. It\'s humming a tune…',when:{subject:'English',pct:15}},
+  // chest-only rare skins: never sold, only won from a chest; once owned they equip like any skin
+  {id:'ship-ghost',kind:'skin',slot:'ship',once:true,chest:true,price:0,emoji:'👻',title:'Ghost Ship',note:'A rare see-through ship from a mystery chest.',look:{sail:'#e0f7fa',hull:'#90a4ae',flag:'#80deea'}},
+  {id:'avatar-unicorn',kind:'skin',slot:'avatar',once:true,chest:true,price:0,emoji:'🦄',title:'Rainbow Unicorn',note:'A rare badge from a mystery chest.',look:{face:'🦄'}},
+  {id:'theme-candy',kind:'skin',slot:'theme',once:true,chest:true,price:0,emoji:'🍬',title:'Candy Sea',note:'A rare strawberry-milk Map from a mystery chest.',look:{sea:['#f8bbd0','#f06292','#880e4f'],grass:['#e6ee9c','#9ccc65'],fog:'#6a1b4d'}},
 ];
+export const HINT_MAX=5,SHIELD_MAX=3,FREEZE_MAX=2;
+export const CHEST_PRIZES=[{type:'skin',id:'ship-ghost'},{type:'skin',id:'avatar-unicorn'},{type:'skin',id:'theme-candy'},
+  {type:'sticker',id:'st-comet',emoji:'☄️',title:'Comet sticker'},{type:'sticker',id:'st-crown',emoji:'👑',title:'Tiny crown sticker'},{type:'sticker',id:'st-octo',emoji:'🐙',title:'Octopus sticker'},
+  {type:'title',id:'t-fogbuster',title:'Fog Buster'},{type:'title',id:'t-captain',title:'Captain of the Map'},{type:'title',id:'t-wizard',title:'Number Wizard'}];
 export const QUEST_THEMES=[{id:'pirates',emoji:'🏴‍☠️',title:'Pirates'},{id:'space',emoji:'🚀',title:'Outer space'},{id:'dungeon',emoji:'🐉',title:'Dragon dungeon'},
   {id:'jungle',emoji:'🌴',title:'Jungle expedition'},{id:'ocean',emoji:'🌊',title:'Deep ocean'},{id:'dinosaurs',emoji:'🦕',title:'Dinosaur valley'},{id:'detective',emoji:'🕵️',title:'Detective mystery'},{id:'sports',emoji:'⚽',title:'Sports championship'}];
 export const SKIN_SLOTS=['ship','avatar','boss','theme'];
@@ -179,20 +200,24 @@ function m0Sig(S){return JSON.stringify([S.points||0,S.medals||[],S.questMedals|
 const activeOf=(W,now)=>Object.fromEntries(Object.entries(W?.active||{}).map(([k,v])=>[k,Array.isArray(v)?v.filter(x=>!(x?.until<=now)):v]));
 export function walletState(S,g,now=Date.now()){const W=S.wallet||{};
   const looks={};for(const [slot,id] of Object.entries(W.equipped||{})){const d=MARKET.find(x=>x.id===id&&x.slot===slot);if(d)looks[slot]={id,emoji:d.emoji,...d.look};}
-  return{balance:balanceOf(S),earned:S.points||0,spent:W.spent||0,owned:{...(W.owned||{})},equipped:{...(W.equipped||{})},looks,active:activeOf(W,now),choices:{...(W.choices||{})}};}
+  return{balance:balanceOf(S),earned:S.points||0,spent:W.spent||0,owned:{...(W.owned||{})},equipped:{...(W.equipped||{})},looks,active:activeOf(W,now),choices:{...(W.choices||{})},
+    hintTokens:S.fog?.buffs?.hintToken||0,shield:W.active?.shield||0,freeze:W.active?.freeze||0,stickers:W.stickers||[],titles:W.titles||[]};}
 // equip (free): only an owned skin, only in its own slot; item null/'' takes the slot off
 export function equip(S,g,slot,item){if(!SKIN_SLOTS.includes(slot))return{error:'unknown slot'};
   if(!item){if(S.wallet?.equipped?.[slot])delete S.wallet.equipped[slot];return{ok:true,slot,item:null};}
   const d=MARKET.find(x=>x.id===item);if(!d||d.slot!==slot)return{error:'That does not go there!'};if(!S.wallet?.owned?.[item])return{error:'Buy it first! 🛒'};
   const sig=m0Sig(S);walletOf(S).equipped[slot]=item;if(m0Sig(S)!==sig)throw new Error('equip must not change points, medals or mastery');return{ok:true,slot,item};}
 const visible=(def,counts)=>!def.when||findEligible(def,counts);
+const listed=(def,counts,W)=>def.chest?!!W.owned?.[def.id]:visible(def,counts);
+export const hiddenCount=(S,g)=>{const c=fogClearCounts(S,g);return MARKET.filter(d=>d.when&&!visible(d,c)).length;};
 export function marketItems(S,g,now=Date.now()){const counts=fogClearCounts(S,g),bal=balanceOf(S),W=S.wallet||{};
-  return MARKET.filter(d=>visible(d,counts)).map(d=>({id:d.id,kind:d.kind,slot:d.slot,price:d.price,emoji:d.emoji,title:d.title,note:d.note,once:!!d.once,
+  return MARKET.filter(d=>listed(d,counts,W)).map(d=>({id:d.id,kind:d.kind,slot:d.slot,price:d.price,emoji:d.emoji,title:d.title,note:d.note,once:!!d.once,
     owned:!!W.owned?.[d.id],equipped:!!(d.slot&&W.equipped?.[d.slot]===d.id),affordable:d.price<=bal}));}
 // buy(S,g,{pid,item,meta},now): one ledger row per pid. The client never sends a price.
 export function buy(S,g,{pid,item,meta}={},now=Date.now()){pid=String(pid||'');if(!PID.test(pid))return{error:'bad purchase id'};
   const prev=(S.wallet?.ledger||[]).find(r=>r.id===pid);if(prev)return{ok:true,already:true,row:prev};
   const def=MARKET.find(d=>d.id===item);if(!def)return{error:'unknown item'};
+  if(def.chest)return{error:'That one only comes out of a mystery chest! 🧰'};
   if(!visible(def,fogClearCounts(S,g)))return{error:'That one is still hidden in the fog! 🌫️'};
   if(def.once&&S.wallet?.owned?.[def.id])return{ok:true,already:true,owned:true};
   const m=def.check?def.check(S,g,meta&&typeof meta==='object'?meta:{},now):{};if(m.error)return{error:m.error};
@@ -200,7 +225,7 @@ export function buy(S,g,{pid,item,meta}={},now=Date.now()){pid=String(pid||'');i
   const sig=m0Sig(S),W=walletOf(S);
   const row={id:pid,item:def.id,kind:def.kind,price,at:now};if(m.meta)row.meta=m.meta;
   W.ledger.push(row);W.spent+=price;if(def.once)W.owned[def.id]=now;
-  const extra=def.apply?def.apply(S,g,row,now)||{}:{};
+  const extra=def.kind==='chest'?openChest(S,row,now):def.apply?def.apply(S,g,row,now)||{}:{};
   if(m0Sig(S)!==sig)throw new Error('Market purchases must not change points, medals or mastery');
   return{ok:true,row,...extra};}
 // ---------- prove-it (slice 4) ----------
@@ -226,9 +251,9 @@ function proveSubmit(S,g,answer,now){const it=S.current,t=g.byId[it.topicId];if(
     if(!x.r.done)return x;x.r.askChoice=false;if(first){S.points+=PROVE_BONUS;x.r.jane+=` 🎟️ PROVED IT! +${PROVE_BONUS} bonus points!`;}
     x.r.proveIt={passed:first,bonus:first?PROVE_BONUS:0,topic:t.sn||t.name};x.ev.push({event:'proveIt',topicId:it.topicId,topic:t.name,passed:first,bonus:first?PROVE_BONUS:0});proveEnd(S);return x;}
   const rec=S.ts[it.topicId],ev=[{topicId:it.topicId,topic:t.name,subject:t.subject,mode:'review',format:'prove',qtype:it.ptype||it.kind,level:it.lvl,stage:'main',question:it.q,expected:it.answer,given:String(answer),correct:false,try:it.tries+1,elapsedSec:Math.round((now-it.issued)/1000),proveIt:true}];
-  S.streak=0;if(rec){rec.streak=0;rec.last=now;if(rec.st==='mastered')rec.due=Math.min(rec.due,now+DAY);}
+  const r0={};missStreak(S,it,r0);if(rec){rec.streak=0;rec.last=now;if(rec.st==='mastered')rec.due=Math.min(rec.due,now+DAY);}
   ev.push({event:'reviewMiss',topicId:it.topicId,topic:t.name},{event:'proveIt',topicId:it.topicId,topic:t.name,passed:false,bonus:0});proveEnd(S);
-  return{r:{done:true,correct:false,reveal:it.answer,proveIt:{passed:false,bonus:0,topic:t.sn||t.name},jane:`Good try! ${it.explain} This review stays on your list. You'll get it next time! 💪`},ev};}
+  return{r:{...r0,done:true,correct:false,reveal:it.answer,proveIt:{passed:false,bonus:0,topic:t.sn||t.name},jane:`Good try! ${it.explain} This review stays on your list. You'll get it next time! 💪`},ev};}
 // ---------- pick your path (slice 5) ----------
 // Offers: up to 3 READY topics (every hard prerequisite mastered), nearest the target age, one per subject, the same all
 // Pacific day (seeded by the date, so reloading doesn't reroll them). Hidden-region and pending topics are not in g.
@@ -246,6 +271,39 @@ export function honorChoices(S,packs,now=Date.now()){const C=S.wallet?.choices;i
     const declined=packs[d].honors[k]==='declined';ch.used={date:d,at:now,declined:declined||undefined,note:packs[d].honors.note||undefined};done.push({kind:k,date:d,declined});
     if(declined){const row=S.wallet.ledger.find(r=>r.id===ch.pid);if(row&&!S.wallet.ledger.some(r=>r.id==='refund-'+ch.pid)){S.wallet.ledger.push({id:'refund-'+ch.pid,item:row.item,kind:'refund',price:-row.price,at:now,meta:{date:d}});S.wallet.spent-=row.price;}}}
   return done;}
+// ---------- mystery chests (slice 6) ----------
+function openChest(S,row,now){const W=S.wallet,n=CHEST_PRIZES.length,start=Math.floor(dayHash(row.id+'|'+row.item)*n);let prize=CHEST_PRIZES[start];
+  for(let k=0;k<n;k++){const p=CHEST_PRIZES[(start+k)%n];if(p.type==='skin'&&W.owned[p.id])continue;if(p.type!=='skin'&&(W.stickers||[]).concat(W.titles||[]).some(x=>x.id===p.id))continue;prize=p;break;}
+  if(prize.type==='skin'){if(!W.owned[prize.id])W.owned[prize.id]=now;const d=MARKET.find(x=>x.id===prize.id);prize={...prize,emoji:d.emoji,title:d.title,slot:d.slot};}
+  else if(prize.type==='sticker'){(W.stickers??=[]).push({id:prize.id,emoji:prize.emoji,title:prize.title,at:now});}
+  else{(W.titles??=[]).push({id:prize.id,title:prize.title,at:now});}
+  row.meta={...(row.meta||{}),prize:{type:prize.type,id:prize.id}};return{prize};}
+// ---------- Jane whisper (slice 6): spend one hint token on the question on screen ----------
+// Names the top misconception (a pack question's tagged "misconception" choice, a check item's first wrong choice, or the
+// generator's classic trap). Ungraded: tries, points, streak, hearts and boss HP never change. One token per question.
+const TRAP={fracadd:'Careful: never add the bottom numbers! Make the bottoms the same first, then add the tops.',compare:'The trap: a bigger bottom number means SMALLER pieces. Picture the slices!',
+  equiv:'The trap: whatever you do to the top, do the same to the bottom.',fracdiv:'The trap: dividing by a fraction is not dividing the tops and bottoms. Flip the second one and multiply!',
+  fracmul:'The trap: you do NOT need the same bottoms to multiply. Top × top, bottom × bottom.',fracof:'The trap: "of" means multiply. Find one part first, then take the number of parts.',
+  pizza:'The trap: count ALL the equal slices for the bottom number, not just the leftovers.',fracdec:'The trap: tenths, hundredths and thousandths look alike. Line up the places!',
+  muldiv:'The trap: line up the places and remember what you carried.',addsub:'The trap: line up ones under ones, and borrow carefully.',place:'The trap: the same digit is worth more in a bigger place. Check each place value!'};
+export function whisper(S,g,now=Date.now()){const it=S.current;if(!it||it.type==='card'||it.type==='self'||it.stage==='bonus')return{error:'Jane whispers on questions only! 🤫'};
+  if(it.whisper)return{ok:true,already:true,whisper:it.whisper,tokens:S.fog?.buffs?.hintToken||0};
+  if(!((S.fog?.buffs?.hintToken||0)>0))return{error:'No whispers left. Get one in the Market! 🛒'};
+  const t=g.byId[it.topicId],k=kindFor(t),mc=it.misconception&&String(it.misconception);
+  const w=mc?`🤫 Psst… lots of explorers pick "${mc}" here. Ask yourself why that might be a trap!${it.feedback?.[mc]?' '+it.feedback[mc]:''}`:
+    TRAP[k]?`🤫 Psst… ${TRAP[k]}`:'🤫 Psst… find the most important word in the question, then check every choice against it.';
+  const sig=m0Sig(S),tries=it.tries;S.fog.buffs.hintToken--;it.whisper=w;if(m0Sig(S)!==sig||it.tries!==tries)throw new Error('a whisper must not change grading');
+  return{ok:true,whisper:w,tokens:S.fog.buffs.hintToken,ev:[{event:'whisper',topicId:it.topicId,topic:t?.name,question:it.q}]};}
+// ---------- days-played streak + travel freeze (slice 6) ----------
+// A Pacific day counts as played when the learner answers a question. A freeze (bought ahead) covers exactly one missed day.
+const dayN=d=>Math.round(Date.parse(d+'T12:00:00Z')/DAY);
+export function playDay(S,now=Date.now()){const today=ptDay(now),D=S.days??={n:0,best:0,last:null};if(D.last===today)return null;const W=S.wallet;
+  const gap=D.last?dayN(today)-dayN(D.last)-1:0,fz=W?.active?.freeze||0;let used=0;
+  if(!D.last||gap<0)D.n=1;else if(gap===0)D.n++;else if(gap<=fz){used=gap;W.active.freeze-=gap;D.n++;(D.frozen??=[]).push(...Array.from({length:gap},(_,i)=>ptDay(Date.parse(D.last+'T12:00:00Z')+(i+1)*DAY)));D.frozen=D.frozen.slice(-10);}
+  else D.n=1;D.last=today;D.best=Math.max(D.best||0,D.n);return{n:D.n,frozeDays:used||undefined};}
+// what the chip shows before today's first answer: the streak is alive if yesterday was played or freezes cover the gap
+export function dayStreak(S,now=Date.now()){const D=S.days;if(!D?.last)return{n:0,best:0,today:false,freeze:S.wallet?.active?.freeze||0};const gap=dayN(ptDay(now))-dayN(D.last)-1,fz=S.wallet?.active?.freeze||0;
+  return{n:gap<0||gap<=fz?D.n:0,best:D.best||D.n,today:gap<0,atRisk:gap>0&&gap<=fz||undefined,freeze:fz};}
 // M6: one snapshot of the earned total per Pacific day (last WALLET_DAYS days) so the export can show earned7d
 export function snapDay(S,day){const W=walletOf(S);if(W.days[day]===(S.points||0))return;W.days[day]=S.points||0;
   const ks=Object.keys(W.days).sort();for(const k of ks.slice(0,Math.max(0,ks.length-WALLET_DAYS)))delete W.days[k];}
@@ -253,7 +311,7 @@ export function marketExport(S,g,now=Date.now()){const W=S.wallet||{},ws=walletS
   const base=[...ds].reverse().find(d=>d<=cut)??ds[0];const ledger=W.ledger||[];
   return{balance:ws.balance,earned:ws.earned,spent:ws.spent,spent7d:ledger.filter(r=>r.at>=now-7*DAY).reduce((a,r)=>a+r.price,0),
     earned7d:base!=null?Math.max(0,ws.earned-W.days[base]):null,earnedSince:base??null,ledger:ledger.slice(-30),owned:ws.owned,equipped:ws.equipped,active:ws.active,choices:ws.choices,
-    openChoices:Object.fromEntries(Object.entries(ws.choices).filter(([,c])=>c&&!c.used)),
+    openChoices:Object.fromEntries(Object.entries(ws.choices).filter(([,c])=>c&&!c.used)),hintTokens:ws.hintTokens,shield:ws.shield,freeze:ws.freeze,stickers:ws.stickers,titles:ws.titles,days:dayStreak(S,now),hiddenRows:hiddenCount(S,g),
     prices:Object.fromEntries(MARKET.map(d=>[d.id,d.price]))};}
 // medals: one per directly-mastered topic (not inferred, not self-rated); boss wins are legendary
 export function tierOf(g,id,boss){return boss?'legendary':(g.byId[id]||g.hidden?.[id])?.tier||'bronze';}
@@ -359,7 +417,7 @@ function kidMcq(g,id){const t=g.byId[id];if(!t.kq)return null;const ch=[t.ka,...
 // check-understanding item (data/checks, slice 6): a kid-voice mc written from the research's two-tier assessment.
 // Review gates and spot-checks prefer it over the kid prompt; the "why" tier, when present, is the explanation.
 function checkItem(g,id){const t=g.byId[id],c=t?.ck;if(!c)return null;const ch=shuf([c.a,...c.w]);
-  return{kind:'quiz',type:'mc',ptype:'check',check:true,q:c.q,base:c.q,choices:ch,answer:c.a,hint:'Read every choice. Which one really fits the idea?',explain:c.y?`It's "${c.a}": ${c.y.a.replace(/^./,x=>x.toLowerCase())}.`:`It's "${c.a}".`};}
+  return{kind:'quiz',type:'mc',ptype:'check',check:true,q:c.q,base:c.q,choices:ch,answer:c.a,misconception:c.w[0],hint:'Read every choice. Which one really fits the idea?',explain:c.y?`It's "${c.a}": ${c.y.a.replace(/^./,x=>x.toLowerCase())}.`:`It's "${c.a}".`};}
 function selfCheck(g,id){const t=g.byId[id];
   return{kind:'self',type:'self',q:t.self||`Hey {name}! Could you explain ${t.sn||t.name}?`,choices:['👍 Got it!','🤔 Sort of','🌱 Not yet']};}
 // interactive pack formats -> internal item. Answers stay server-side; the client only gets what it must render.
@@ -372,7 +430,7 @@ function choiceFeedback(q){const f=q.feedback,ch=q.type==='picture'?(q.choices||
   return Object.keys(o).length?o:undefined;}
 const fbFor=(it,a)=>it.feedback?.[String(a??'').trim()];
 function packItem(pq,q){const graded=pq.t.questions.filter(x=>!CARD.includes(x.type)&&!x._skip).length;
-  const it={kind:'pack',packN:graded,deep:!!pq.t.deepDive,packReview:!!pq.t.review,ptype:q.type,q:q.prompt,hint:q.hint,explain:q.explanation,feedback:choiceFeedback(q),packKey:pq.key,format:q.format||pq.t.format,scene:q.scene,tpl:q.template,stage:'main',guided:q.guided||undefined,steps:q.steps,example:q.example};
+  const it={kind:'pack',packN:graded,deep:!!pq.t.deepDive,packReview:!!pq.t.review,ptype:q.type,q:q.prompt,hint:q.hint,explain:q.explanation,feedback:choiceFeedback(q),packKey:pq.key,format:q.format||pq.t.format,scene:q.scene,tpl:q.template,stage:'main',guided:q.guided||undefined,steps:q.steps,example:q.example,misconception:q.misconception};
   if(q.guided&&!q.format)it.format='guided';
   switch(q.type){
    case 'mc':return{...it,type:'mc',choices:q.choices,answer:q.answer};
@@ -552,7 +610,8 @@ function grade(it,ans,isBonus){const a=String(ans??'').trim();if(isBonus){const 
   return [it.answer,...(it.accept||[])].some(x=>norm(x)===norm(a)||(it.fuzzy&&it.kind==='pack'&&fuzzyEq(x,a)));}
 const praise=['Amazing, {name}! 🎉','You nailed it! 🌟','Brilliant thinking! 🧠','Wow, superstar! ⭐','That\'s exactly right! 🙌','You\'re on fire! 🔥'];
 const comfort=['Ooh, so close! Let\'s think it through together.','Good try! Mistakes help our brains grow. 🌱','Not quite — but I love that you tried!'];
-export function submit(S,g,answer,now){if(S.current?.proveIt)return proveSubmit(S,g,answer,now);const it=S.current,rec=it?.spot&&S.ts[it.topicId];if(rec&&rec.box0==null)rec.box0=rec.box||0;
+export function submit(S,g,answer,now){const x=submit1(S,g,answer,now);if(x?.ev?.some(e=>!e.event&&e.topicId)){const d=playDay(S,now);if(d?.frozeDays)x.ev.push({event:'streakFreeze',days:d.frozeDays});}return x;}
+function submit1(S,g,answer,now){if(S.current?.proveIt)return proveSubmit(S,g,answer,now);const it=S.current,rec=it?.spot&&S.ts[it.topicId];if(rec&&rec.box0==null)rec.box0=rec.box||0;
   const x=submit0(S,g,answer,now);if(it?.spot&&x.r?.done)spotDone(S,g,it,x,now);if(it?.gate&&x.r?.done)gateDone(S,it,x.r);return x;}
 function submit0(S,g,answer,now){const it=S.current;if(!it)return{error:'no item'};const ev=[],r={};const isBonus=it.stage==='bonus';const t=g.byId[it.topicId];
   // "idk", "skip", "help", "don't show this"... opens the stuck help instead of being graded wrong
@@ -579,7 +638,7 @@ function submit0(S,g,answer,now){const it=S.current;if(!it)return{error:'no item
   if(it.packKey&&(ok||it.tries>=1))S.packSeen[it.packKey]=1;
   if(ok){rec.c++;rec.last=now;if(!it.tries&&!it.guided)countFt(rec,it.base||it.q,now);
     if(it.format==='boss'){const d=ptDay(now);if(rec.bossDay!==d){rec.bossDay=d;rec.bossRun=0;}rec.bossRun=it.tries?0:(rec.bossRun||0)+1;}const fast=it.timed&&(now-it.issued)/1000<=it.timed;const pts=(it.tries?5:10+(it.lvl||3)*2)+(fast?5:0)+(it.format==='boss'?5:0);
-    S.points+=pts;S.streak++;S.bestStreak=Math.max(S.bestStreak,S.streak);S.solved++;if(S.streak%3===0)S.stars++;r.correct=true;
+    S.points+=pts;S.streak++;S.bestStreak=Math.max(S.bestStreak,S.streak);S.solved++;S.starRun=(S.starRun??S.streak-1)+1;if(S.starRun%3===0)S.stars++;r.correct=true;
     r.jane=`${pick(praise)} +${pts} points${fast?' (speed bonus ⚡)':''}${S.streak>=3?` — ${S.streak} in a row!`:''}`;
     if(ok==='creative'){const g0=String(answer).trim();r.creative=true;r.jane=(it.celebrate||'Nice! "{given}" works! "{answer}" is the classic one, but your idea is great too. 🎨').replace(/\{given\}/g,g0).replace(/\{answer\}/g,it.answer)+` +${pts} points`;}
     if(it.guided){guidedDone(S,it);r.guided=true;r.jane+=' Practice done! ✅';}
@@ -596,7 +655,7 @@ function submit0(S,g,answer,now){const it=S.current;if(!it)return{error:'no item
     if(!it.tries){const md=maybeMedal(S,g,it.topicId,it.format==='boss'&&(rec.bossRun||0)>=BOSS_LEGEND,now);if(md)r.medal=md;}
     if(it.bonus){it.stage='bonus';it.tries=0;r.bonus=it.bonus.q;r.jane+=' Want a bonus challenge?';}else{r.done=true;S.current=null;}
     return finish(S,r,ev);}
-  it.tries++;S.streak=0;if(it.format==='boss'){rec.bossRun=0;rec.bossDay=ptDay(now);if(it.boss){it.boss=bossHP(rec,it,now);r.boss=it.boss;}}
+  it.tries++;missStreak(S,it,r);if(it.format==='boss'){rec.bossRun=0;rec.bossDay=ptDay(now);if(it.boss){it.boss=bossHP(rec,it,now);r.boss=it.boss;}}
   const fb=fbFor(it,answer);if(fb)logE.feedback=true;
   if(it.tries===1){r.retry=true;r.hint=fb||it.hint;r.correct=false;r.jane=fb?`${pick(comfort)} ${fb}`:`${pick(comfort)} Here's a hint: ${it.hint}`;return finish(S,r,ev);}
   rec.streak=0;rec.last=now;r.correct=false;r.reveal=it.answer;
@@ -616,6 +675,9 @@ function submit0(S,g,answer,now){const it=S.current;if(!it)return{error:'no item
     if(rec.wrongInRow>=2){rec.wrongInRow=0;sp.teachDue=true;const p=probeDown(S,g,it.topicId);if(p){S.focus=p;r.jane+=` Let's power up with "${g.byId[p].sn||g.byId[p].name}" first.`;}}}
   r.done=true;S.current=null;return finish(S,r,ev);}
 const sup=(S,id)=>(S.support??={})[id]??={stuck:0,skipped:0};
+// a miss resets the 🔥 answer streak, unless a streak shield is up (one shield covers one question). Stars never get
+// shielded: the 3-in-a-row star run restarts on every miss. Hearts, boss HP and mastery are handled elsewhere, unchanged.
+function missStreak(S,it,r){S.starRun=0;if(it.shielded)return;const A=S.wallet?.active;if(S.streak>0&&A?.shield>0){A.shield--;it.shielded=true;r.shielded=S.streak;return;}S.streak=0;}
 function guidedDone(S,it){const T=S.teach?.[it.topicId];if(T?.left>0)T.left--;}
 function helpFor(it){if(!it?.stuckStep)return null;const sc=scaffold(it),two=it.stuckStep>=2;return{step:it.stuckStep,hint:sc.hint,example:two?sc.example:null,start:two?sc.start:[],canSkip:two};}
 // "I'm stuck 🤔": each tap goes one step further: 1 a hint, 2 a worked example + how to start this one, with "Skip for now".

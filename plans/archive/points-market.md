@@ -1,6 +1,6 @@
 # Points Market — spend points on fun, choice and peeks
 
-**Status:** in progress — slices 1–5 done (2026-10-23).
+**Status:** done — all six slices shipped 2026-10-23 (PRs #76–#80 + slice 6); archived.
 **Tracking:** [#74](https://github.com/kentlangley/Jane/issues/74)
 **Slices:** [#68](https://github.com/kentlangley/Jane/issues/68) Wallet · [#69](https://github.com/kentlangley/Jane/issues/69) Skins · [#70](https://github.com/kentlangley/Jane/issues/70) Scout flare · [#71](https://github.com/kentlangley/Jane/issues/71) Prove-it · [#72](https://github.com/kentlangley/Jane/issues/72) Pick your path · [#73](https://github.com/kentlangley/Jane/issues/73) Chests + extras
 **Idea credit:** Christopher (Kent's son), who proposed the Points Market items: hidden items, temporary fog push-back, skins, influencing the next question, buying out known reviews.
@@ -289,3 +289,34 @@ points buy things a 5th grader wants (skins, secrets, choices) without breaking 
 - Streak shield + day streak + freeze per open questions 4–5 (skip any Kent drops).
 - Done test: as above. After this slice passes, move this plan to `plans/archive/`.
 - Decisions frozen: Design "Hidden items", "Cheap extras", M0.
+
+#### Outcome (Slice 6) — done 2026-10-23
+- Shipped, **hidden chests**: four `once` chest rows with a `when` (reusing `findEligible`): 20 topics cleared world-wide (300),
+  15 % of Mathematics / Science / English (350 each). A chest row isn't listed or buyable until its threshold; the Market
+  shows "🌫️ N more things are hidden in the fog…" (`hidden` on `GET /api/market`). The prize is rolled from `CHEST_PRIZES`
+  (3 rare chest-only skins, 3 stickers, 3 titles) by a hash of the `pid` (skipping prizes already owned) and stored on the
+  ledger row, so a retry with the same `pid` returns the same prize. Chest-only skins are never sold, are listed only once
+  owned, and equip like any skin. Prize reveal pop-up; a sticker/title shelf sits on the Market balance card.
+- Shipped, **cheap extras**: `hint-token` 40 (cap 5), `streak-shield` 60 (cap 3), `streak-freeze` 80 (cap 2).
+  - Jane whisper: `POST /api/whisper` spends one token on the question on screen ("🤫 Jane whisper (N)" next to I'm stuck).
+    It names the likely trap (the item's misconception, else a trap line for its kind, else a generic tip). One token per
+    question; it is ungraded and changes no try, heart, point or streak (it throws if grading would change).
+  - The existing **Hint Token** fog find now works: it and bought tokens share the `S.fog.buffs.hintToken` counter.
+  - Streak shield: on a miss with 🔥 > 0, one shield keeps the 🔥 streak; "🛡️ Shield up!" banner; 🛡️ on the streak chip.
+  - Days played: `S.days = {n, best, last, frozen}`, +1 per Pacific day with a graded answer (📅 chip). A bought freeze
+    covers one missed day; the export has `stats.daysPlayed` and the market block has tokens/shield/freeze/days.
+- Decisions (brief needed a call):
+  - The whisper is its own button, not an automatic spend inside "I'm stuck". Stuck stays free and unchanged; a token is
+    only spent when the kid taps it.
+  - The shield covers **one question**: a second miss on the same question stays covered. Stars now count a separate
+    `starRun` that resets on every miss, so the 3-in-a-row ⭐ is never shielded (default). Hearts, boss HP, mastery,
+    support and Leitner state are byte-identical to an unshielded miss (tested).
+  - Freezes are bought ahead and spent automatically. A gap of k missed days uses k freezes if held (k ≤ freezes);
+    otherwise the day streak restarts at 1 and the freezes are kept.
+  - Stock caps (5/3/2) so a balance can't be dumped into a pile of extras.
+- Deferred: a separate sticker book page (stickers/titles show on the Market balance card for now).
+- Done test: `node --test test/market.test.mjs && npm test` → market 26/26 (hidden row absent → present at 20 cleared; same
+  pid → same prize; whisper −1 once, grading identical; shield keeps 🔥 with identical hearts/boss/mastery, stars not
+  shielded; freeze covers exactly one missed PT day, two missed → reset; caps) and 198 pass / 0 fail. Local headless:
+  extras bought, pocket/hidden teaser shown, whisper bubble shown, 🛡️ on the streak chip, no page errors.
+

@@ -1,4 +1,4 @@
-// Points Market (plans/points-market.md, #74; idea credit: Christopher). Points buy fun, choice and peeks:
+// Points Market (plans/archive/points-market.md, #74; idea credit: Christopher). Points buy fun, choice and peeks:
 // never mastery, medals or permanent fog clear. balance = earned − spent; purchases are server-side and idempotent.
 import {test,before,after} from 'node:test';import assert from 'node:assert/strict';import {spawn,execFileSync} from 'node:child_process';
 import fs from 'node:fs';import path from 'node:path';import net from 'node:net';import {ROOT,tmpDir,loadEngine,validate,example} from './helpers.mjs';
@@ -38,7 +38,7 @@ test('day snapshots: one per PT day, capped; export has a market block with earn
 
 // ---------- slice 2: skins ----------
 test('skins: 4 slots priced 300–1,500, bought once, equip owned-only and free, unequip; looks go out with the wallet',()=>{
-  const skins=E.MARKET.filter(d=>d.kind==='skin');assert.deepEqual([...new Set(skins.map(d=>d.slot))].sort(),['avatar','boss','ship','theme']);
+  const skins=E.MARKET.filter(d=>d.kind==='skin'&&!d.chest);assert.deepEqual([...new Set(skins.map(d=>d.slot))].sort(),['avatar','boss','ship','theme']);
   assert.ok(skins.every(d=>d.once&&d.price>=300&&d.price<=1500&&d.look),'skin prices 300–1,500');
   const S=rich(2000);assert.match(E.equip(S,g,'ship','ship-pirate').error,/Buy it first/);
   assert.ok(E.buy(S,g,{pid:pid(20),item:'ship-pirate'},NOW).ok);const spent=S.wallet.spent;
@@ -118,6 +118,49 @@ test('publish: "honors" is validated (topic must be a stage, theme from the tabl
   const p=example();p.honors={path:p.topics[0].topicId,theme:'pirates',note:'You picked it!'};assert.equal(validate(p).status,0,validate(p).stderr);
   const bad=example();bad.honors={path:'mt_nope',theme:'unicorns',x:1};const r=validate(bad);assert.notEqual(r.status,0);assert.match(r.stdout+r.stderr,/honors\.path/);assert.match(r.stdout+r.stderr,/honors\.theme/);
   assert.equal(execFileSync(process.execPath,['publish-lessons.mjs','packs/examples/example-quest.json','--dry-run','--offline'],{cwd:ROOT,encoding:'utf8'}).length>0,true);});
+
+// ---------- slice 6: hidden chests + cheap extras ----------
+const clearN=(S,n,sub)=>{for(const t of g.topics.filter(t=>!sub||t.subject===sub).slice(0,n))S.ts[t.id]={st:'mastered',how:'direct',conf:.9,box:1,due:NOW+9*DAY,c:3,ft:3};};
+test('hidden chest rows: absent until the fog threshold, present after; same pid → same prize; chest-only skins are never sold',()=>{
+  const S=rich(2000);assert.ok(!E.marketItems(S,g,NOW).some(i=>i.id==='chest-world-20'));assert.match(E.buy(S,g,{pid:pid(70),item:'chest-world-20'},NOW).error,/hidden in the fog/);
+  assert.ok(E.hiddenCount(S,g)>=4);clearN(S,20);assert.ok(E.marketItems(S,g,NOW).some(i=>i.id==='chest-world-20'),'appears after 20 clear');
+  const A=JSON.parse(JSON.stringify(S)),B=JSON.parse(JSON.stringify(S));
+  const a=E.buy(A,g,{pid:'same-pid-123',item:'chest-world-20'},NOW),b=E.buy(B,g,{pid:'same-pid-123',item:'chest-world-20'},NOW+999);assert.deepEqual(a.prize,b.prize,'deterministic by pid');
+  const again=E.buy(A,g,{pid:'same-pid-123',item:'chest-world-20'},NOW+1);assert.ok(again.already);assert.deepEqual(again.row.meta.prize,{type:a.prize.type,id:a.prize.id});assert.equal(A.wallet.spent,300);
+  assert.match(E.buy(S,g,{pid:pid(71),item:'ship-ghost'},NOW).error,/mystery chest/);assert.ok(!E.marketItems(S,g,NOW).some(i=>i.id==='ship-ghost'));
+  const C=rich(2000);C.wallet={spent:0,ledger:[],owned:{},equipped:{},active:{},choices:{},days:{}};clearN(C,20);
+  let skinPid;for(let i=0;i<200&&!skinPid;i++){const T=JSON.parse(JSON.stringify(C));if(E.buy(T,g,{pid:'roll-'+i+'-xx',item:'chest-world-20'},NOW).prize.type==='skin')skinPid='roll-'+i+'-xx';}
+  const x=E.buy(C,g,{pid:skinPid,item:'chest-world-20'},NOW);assert.ok(C.wallet.owned[x.prize.id]);assert.ok(E.equip(C,g,x.prize.slot,x.prize.id).ok,'a chest skin equips like any skin');
+  assert.ok(E.marketItems(C,g,NOW).some(i=>i.id===x.prize.id&&i.equipped));});
+test('hint token: the Hint Token find and Market tokens share one counter; a whisper uses one per question and never changes grading',()=>{
+  const S=rich(1000);clearN(S,10);assert.ok(E.claimFind(S,g,'power-hint-10',NOW).ok);assert.equal(E.walletState(S,g,NOW).hintTokens,1);
+  assert.ok(E.buy(S,g,{pid:pid(72),item:'hint-token'},NOW).ok);assert.equal(S.fog.buffs.hintToken,2);
+  const t=g.topics.find(t=>t.ck?.w);S.current={id:'q1',topicId:t.id,type:'mc',kind:'quiz',q:t.ck.q,choices:[t.ck.a,...t.ck.w],answer:t.ck.a,misconception:t.ck.w[0],mode:'review',tries:0,stage:'main',issued:NOW};
+  const before=JSON.stringify(S.current),pts=S.points,streak=S.streak;const w=E.whisper(S,g,NOW);assert.ok(w.ok);assert.match(w.whisper,new RegExp(t.ck.w[0].replace(/[.*+?^${}()|[\]\\]/g,'\\$&')));
+  assert.equal(S.fog.buffs.hintToken,1);const w2=E.whisper(S,g,NOW);assert.ok(w2.already);assert.equal(S.fog.buffs.hintToken,1,'once per question');
+  assert.equal(S.current.tries,0);assert.equal(S.points,pts);assert.equal(S.streak,streak);assert.deepEqual({...S.current,whisper:undefined},{...JSON.parse(before),whisper:undefined});
+  assert.equal(E.submit(S,g,t.ck.a,NOW+1).r.correct,true,'graded exactly as without the whisper');
+  S.fog.buffs.hintToken=0;S.current={...S.current,id:'q2',whisper:undefined,tries:0};assert.match(E.whisper(S,g,NOW).error,/No whispers/);});
+test('streak shield: keeps 🔥 on one miss; hearts, boss HP, mastery and the star run identical to an unshielded miss',()=>{
+  const mk=()=>{const S=rich(1000);const t=g.topics.find(t=>t.subject==='Mathematics'&&g.boss.has(t.id));S.streak=5;S.starRun=5;S.ts[t.id]={st:'learning',how:'direct',c:3,w:0,lvl:3,streak:2,bossRun:2,bossDay:new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles'}).format(new Date(NOW))};
+    S.current={id:'b1',topicId:t.id,type:'input',kind:'math',q:'7 × 8 = ?',answer:'56',hint:'h',explain:'e',format:'boss',boss:{max:3,hp:1},mode:'learn',tries:0,stage:'main',issued:NOW,lvl:3};return S;};
+  const A=mk(),B=mk();assert.ok(E.buy(A,g,{pid:pid(73),item:'streak-shield'},NOW).ok);
+  const ra=E.submit(A,g,'1',NOW+1).r,rb=E.submit(B,g,'1',NOW+1).r;assert.equal(A.streak,5,'shielded');assert.equal(B.streak,0);assert.equal(ra.shielded,5);assert.equal(A.wallet.active.shield,0);
+  const strip=S=>JSON.stringify([S.ts,S.support,S.current?.boss,S.current?.tries,S.stars,S.starRun,S.points]);assert.equal(strip(A),strip(B),'hearts/boss HP/mastery identical');assert.deepEqual(ra.boss,rb.boss);
+  E.submit(A,g,'2',NOW+2);assert.equal(A.streak,5,'the same question stays covered');
+  A.current={...mk().current,id:'b2',tries:0};E.submit(A,g,'1',NOW+3);assert.equal(A.streak,0,'no shield left → reset');
+  const C=mk();C.wallet={spent:0,ledger:[],owned:{},equipped:{},active:{shield:1},choices:{},days:{}};E.submit(C,g,'1',NOW);C.current={...mk().current,id:'b3',tries:0,format:'quest',boss:null};
+  const s0=C.stars;E.submit(C,g,'56',NOW+5);assert.equal(C.streak,6);assert.equal(C.stars,s0,'6 in the 🔥 chip, but no star: the star run restarted at the miss');});
+test('days played: +1 per PT day, a freeze covers exactly one missed day, two missed days reset it',()=>{
+  const D=d=>Date.parse(d+'T19:00:00Z');const S=rich(1000);S.wallet={spent:0,ledger:[],owned:{},equipped:{},active:{},choices:{},days:{}};
+  E.playDay(S,D('2026-10-01'));E.playDay(S,D('2026-10-01'));E.playDay(S,D('2026-10-02'));assert.equal(S.days.n,2);
+  E.playDay(S,D('2026-10-04'));assert.equal(S.days.n,1,'one missed day, no freeze → reset');
+  assert.ok(E.buy(S,g,{pid:pid(74),item:'streak-freeze'},D('2026-10-04')).ok);assert.equal(E.dayStreak(S,D('2026-10-06')).atRisk,true);
+  E.playDay(S,D('2026-10-06'));assert.equal(S.days.n,2,'freeze covered 10-05');assert.deepEqual(S.days.frozen,['2026-10-05']);assert.equal(S.wallet.active.freeze,0);
+  E.buy(S,g,{pid:pid(75),item:'streak-freeze'},D('2026-10-06'));E.playDay(S,D('2026-10-09'));assert.equal(S.days.n,1,'two missed days, one freeze → reset');assert.equal(S.wallet.active.freeze,1,'freeze kept');
+  assert.equal(S.days.best,2);assert.equal(E.dayStreak(S,D('2026-10-12')).n,0);});
+test('extras have stock caps and cost 25–100',()=>{const ex=E.MARKET.filter(d=>d.kind==='extra');assert.equal(ex.length,3);assert.ok(ex.every(d=>d.price>=25&&d.price<=100));
+  const S=rich(5000);for(let i=0;i<E.SHIELD_MAX;i++)assert.ok(E.buy(S,g,{pid:pid(80+i),item:'streak-shield'},NOW).ok);assert.match(E.buy(S,g,{pid:pid(89),item:'streak-shield'},NOW).error,/already have/);});
 
 // ---------- server: routes, purchase log, export ----------
 const DATA=tmpDir('jane-market-');let srv,B;
