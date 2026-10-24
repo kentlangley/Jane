@@ -1,4 +1,4 @@
-// Learner profiles (plans/learner-profiles.md): per-learner records, registry migration, isolation between kids.
+// Learner profiles (plans/archive/learner-profiles.md): per-learner records, registry migration, isolation between kids.
 // Runs the Worker in-process with file storage in a temp dir (no network, no live data).
 import {test} from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';
 import {execFileSync} from 'node:child_process';

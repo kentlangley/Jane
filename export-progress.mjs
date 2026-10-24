@@ -82,8 +82,9 @@ try{const R=await import('./research.mjs');
   if(research.available)for(const t of frontier)if(R.briefData(t.id).research)t.research=true;
 }catch(e){research.note=`research briefs skipped: ${e.message}`;}
 const quests={current:cur,queued:LQ.queued,active:activeList.length,list:activeList,completed:Object.entries(S.quests||{}).filter(([,q])=>q.done).map(([d])=>d),
-  nextStep:cur?`REFRESH: quest ${cur.date} ("${cur.title}", ${cur.pct}% done) is in progress. Do not publish a new quest. Copy ${cur.packFile} to packs/quest-${cur.date}.json, keep "date", "quest" and stages 1-${cur.reachedStages} unchanged, rewrite stages ${cur.reachedStages+1}+ (${cur.refreshableStages.length} now) from tonight's export, then: node publish-lessons.mjs packs/quest-${cur.date}.json --refresh --date ${cur.date} --dry-run (and again without --dry-run)`
-    :'NEW QUEST: no quest in progress. Write tomorrow\'s quest and publish it normally.'};
+  // placement quests (LESSONS.md "Placement quests") are never refreshed or replaced: the learner finishes it first
+  nextStep:(()=>{const pd=LQ.current,pp=pd&&QP[pd];return pp?.placement&&!S.quests?.[pd]?.done?`PLACEMENT WAITING: placement quest ${pd} is ${LQ.newQuest?'published but not started':'in progress'}. Do not publish or refresh a quest for this learner tonight (a new quest would replace it); after it is finished the export shows placementQuest.`:null;})()||(cur?`REFRESH: quest ${cur.date} ("${cur.title}", ${cur.pct}% done) is in progress. Do not publish a new quest. Copy ${cur.packFile} to packs/quest-${cur.date}.json, keep "date", "quest" and stages 1-${cur.reachedStages} unchanged, rewrite stages ${cur.reachedStages+1}+ (${cur.refreshableStages.length} now) from tonight's export, then: node publish-lessons.mjs packs/quest-${cur.date}.json --refresh --date ${cur.date} --dry-run (and again without --dry-run)`
+    :'NEW QUEST: no quest in progress. Write tomorrow\'s quest and publish it normally.')};
 // Points Market picks (LESSONS.md "Market choices"): the next NEW QUEST is built around the learner's pick
 E.honorChoices(S,QP,now); // in memory only: shows picks a published pack already honored
 {const oc=Object.fromEntries(Object.entries(S.wallet?.choices||{}).filter(([,c])=>c&&!c.used));

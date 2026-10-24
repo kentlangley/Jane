@@ -1,4 +1,4 @@
-// "Who's playing?" (plans/learner-profiles.md Slice 2). Runs before app.js: with 2+ profiles and no remembered player on
+// "Who's playing?" (plans/archive/learner-profiles.md Slice 2). Runs before app.js: with 2+ profiles and no remembered player on
 // this device it shows the picker (and a PIN pad for profiles with a PIN), remembers the pick, then reloads into the app.
 // window.janeWho resolves to the /api/profiles answer; app.js waits for it and does not load state while the picker shows.
 (()=>{const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));

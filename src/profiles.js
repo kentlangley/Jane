@@ -1,4 +1,4 @@
-// Learner profiles (plans/learner-profiles.md): one household, several kids in one app.
+// Learner profiles (plans/archive/learner-profiles.md): one household, several kids in one app.
 // Registry (KV key "profiles"): {v:1, primary, learners:[{id, name, grade, age?, interests[], avatar, pin:{salt,hash}|null, prefix, created}]}.
 // The primary learner keeps the original unprefixed keys (prefix ""); every other learner's keys start with "L:<id>:".
 // No registry (fresh install / before migrate-profiles.mjs): a one-learner registry is synthesised from [vars].

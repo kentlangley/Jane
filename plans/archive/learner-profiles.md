@@ -1,6 +1,6 @@
 # Learner profiles: one household, several kids
 
-Status: done (all 5 slices shipped). Tracking issue: #87. Slice issues: #82 #83 #84 #85 #86. Owner: self (the bot), approved by Kent ("option 2: profiles in one app").
+Status: done (all 5 slices shipped, archived). Tracking issue: #87. Slice issues: #82 #83 #84 #85 #86. Owner: self (the bot), approved by Kent ("option 2: profiles in one app").
 
 ## Problem
 Jane serves exactly one learner per deployment: progress, quests, wallet, campaign trail, fog Map, medals, streaks,
@@ -209,3 +209,15 @@ the Marble team, not something this plan builds.
 - Decision: skipped stages stay visible as "skipped" in the finished quest (not hidden).
 - Done test: `node --test test/placement.test.mjs` (7 pass) && `npm test` (218 pass). Local before/after on the real-data
   snapshot: all read endpoints still identical for the primary learner.
+
+### Wrap-up
+- Live: deployed after Slice 1 (59883f8a, then the migration), Slice 2 (c7c6969f), Slice 3 (e8a66070) and Slice 5
+  (b0b41c13). Each deploy backed up progress first; the primary record's sha256 never changed
+  (ae4b2642…); live sandbox-copy `/api/state` for the primary learner matched the pre-migration state apart from
+  `profile` after every step.
+- After verification, a second learner's profile was created on live from the parent endpoint and their placement
+  quest published with `--learner` (details private; not in this repo).
+- Found while onboarding: an unstarted placement quest would be replaced by the next nightly quest, so the export's
+  `nextStep` now says `PLACEMENT WAITING` (tested).
+- Deferred (as planned): shared family trail / seeing siblings' Maps; multi-household or classroom. Open questions 1-6
+  keep their defaults (no `PARENT_PIN` set).

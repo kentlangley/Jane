@@ -6,7 +6,7 @@ export const ptDate=(ms=Date.now())=>new Intl.DateTimeFormat('en-CA',{timeZone:'
 const J0=(o,s=200,name=E.learner().name,h={})=>new Response(E.withName(JSON.stringify(o),JSON.stringify(name).slice(1,-1)),{status:s,headers:{'content-type':'application/json','cache-control':'no-store',...h}});
 // Sandbox (for testing/screenshots without touching the learner's real progress): open /api/sandbox?on=1 (cookie sbx=1, 24 h),
 // POST /api/sandbox/reset {offsetDays} copies the real progress into sandbox:* keys. /api/sandbox?on=0 leaves it.
-// Learner profiles (plans/learner-profiles.md): every per-learner key goes through LK (learner prefix) or K (sandbox + prefix).
+// Learner profiles (plans/archive/learner-profiles.md): every per-learner key goes through LK (learner prefix) or K (sandbox + prefix).
 // The primary learner's prefix is "" (the original keys). Engine settings are module-global, so cfg() re-applies this
 // request's learner after every await, and responses fill {name} from the per-request NM.
 export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=u.pathname,KV=env.JANE_KV;
@@ -18,7 +18,7 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
  const LK=k=>pfx+k,K=k=>(sbx?'sandbox:':'')+pfx+k;
  if(P==='/healthz')return new Response(JSON.stringify({ok:true,version:VERSION}),{headers:{'content-type':'application/json','cache-control':'no-store'}});
  if(!P.startsWith('/api/')&&P!=='/parent'){const r=await env.ASSETS.fetch(req);if(sbxQ==null)return r;const h=new Headers(r.headers);h.append('set-cookie',`sbx=${sbxQ==='1'?1:0}; Path=/; SameSite=Lax${sbxQ==='1'?'':'; Max-Age=0'}`);return new Response(r.body,{status:r.status,headers:h});}
- // ---- profiles (plans/learner-profiles.md Slice 2): picker, PIN, remembered device ----
+ // ---- profiles (plans/archive/learner-profiles.md Slice 2): picker, PIN, remembered device ----
  const ck=(n,v,age)=>`${n}=${encodeURIComponent(v)}; Path=/; SameSite=Lax; HttpOnly; Max-Age=${age}`;
  const JC=(o,s,cookies)=>{const h=new Headers({'content-type':'application/json','cache-control':'no-store'});for(const c of cookies||[])h.append('set-cookie',c);return new Response(JSON.stringify(o),{status:s,headers:h});};
  if(P==='/api/profiles'){const rem=PF.byId(REG,PF.cookieOf(req,'jl')||''),cur=rem&&await PF.unlocked(req,rem)?rem.id:null;

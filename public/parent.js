@@ -67,7 +67,7 @@ function medals(){const M=D.medals;const TC={legendary:'🌈',gold:'🥇',silver
  return M.length?`<div class="chips">${Object.entries(c).map(([t,n])=>`<span class="chip">${TC[t]||'🏅'} ${n} ${t}</span>`).join('')}</div><div class="medals">${M.map(m=>`<div class="md t-${m.tier}"><div class="mi">${esc(m.ic||'⭐')}</div><div><b>${esc(m.name)}</b><div class="muted small">${TC[m.tier]||''} ${esc(m.tier)} · ${esc(m.subject)} · ${new Date(m.at).toLocaleDateString('en-US',{timeZone:TZ,month:'short',day:'numeric'})}</div></div></div>`).join('')}</div>`:'<p>No medals yet.</p>';}
 // ---------- page ----------
 const NAV=[['overview','Overview'],['highlights','How it\'s going'],['charts','Trends'],['subjects','Subjects'],['coverage','Coverage'],['quests','Quests'],['reviews','Reviews'],['log','Answer log'],['medals','Medals']];
-// ---- learner profiles (plans/learner-profiles.md Slice 3): one card per kid + manage players ----
+// ---- learner profiles (plans/archive/learner-profiles.md Slice 3): one card per kid + manage players ----
 function kidsBar(){const P=D.profiles;if(!P)return'';const L=P.learners;const ago=d=>d?fmtD(d):'not yet';
   const cards=L.map(k=>`<a class="kid${k.id===P.current?' on':''}" href="/parent?learner=${encodeURIComponent(k.id)}" aria-current="${k.id===P.current?'page':'false'}"><span class="kav">${esc(k.avatar)}</span><span class="kmain"><b>${esc(k.name)}${k.hasPin?' <span title="has a PIN">🔒</span>':''}</b><span class="muted small">${esc(k.grade||'')}</span>
     <span class="kst small">⭐ ${k.points.toLocaleString()} · 🏅 ${k.medals} · ✅ ${k.mastered} mastered · 📅 ${k.days}-day streak · last played ${ago(k.lastPlayed)}</span></span></a>`).join('');

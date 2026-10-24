@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Learner profiles migration (plans/learner-profiles.md, Slice 1). Idempotent and reversible.
+// Learner profiles migration (plans/archive/learner-profiles.md, Slice 1). Idempotent and reversible.
 //   node migrate-profiles.mjs [--local] [--dry-run]   snapshot every KV key, then add the "profiles" registry
 //   node migrate-profiles.mjs --rollback [--local]     delete the "profiles" registry (nothing else is touched)
 // The primary learner keeps its original unprefixed keys, so the migration ONLY adds one key ("profiles"): it never
