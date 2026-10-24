@@ -92,6 +92,8 @@ E.honorChoices(S,QP,now); // in memory only: shows picks a published pack alread
 const tl={};for(const l of logs)if(l.event==='term'){const k=l.term.toLowerCase();const x=tl[k]??={term:l.term,count:0,topics:new Set()};x.count++;if(l.topic)x.topics.add(l.topic);}
 const termsLookedUp=Object.values(tl).map(x=>({...x,topics:[...x.topics]})).sort((a,b)=>b.count-a.count);
 const res={exportedAt:new Date(now).toISOString(),date,timezone:'America/Los_Angeles',learner:S.name,summary:sm,
+  // placement (LESSONS.md "Placement quests"): null until the learner finishes a placement quest; ceilings = top ageRangeStart per subject
+  placementQuest:S.placementQuest||null,taxonomyCeiling:E.taxonomyCeilings(g),
   stats:{points:S.points,stars:S.stars,streak:S.streak,bestStreak:S.bestStreak,daysPlayed:E.dayStreak(S,now),solved:S.solved,badges:S.badges,placement:S.placement},
   unverifiedInferred:reviewHealth.unverifiedInferred, // inferred skills a gate spot-check has not confirmed yet
   coverage:areaCoverage(S,g,logs,{age:L.age,now}), // areas (Marble domains) seen per subject + starters for untouched ones (LESSONS.md "Coverage")

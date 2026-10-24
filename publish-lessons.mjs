@@ -81,7 +81,7 @@ if(pack.honors!=null){const H=pack.honors;if(typeof H!=='object'||Array.isArray(
     if(H.note!=null)str(H.note,'honors.note');}}
 if(Q){str(Q.title,'quest.title');str(Q.hook,'quest.hook');str(Q.emoji,'quest.emoji',false);if(!Q.medal||!str(Q.medal.name,'quest.medal.name')||!str(Q.medal.emoji,'quest.medal.emoji'))E('quest.medal','{name, emoji} required');
   if(wc(Q.hook)>30)W('quest.hook',`${wc(Q.hook)} words (aim ≤ 30)`);if(third(Q.hook))W('quest.hook',YOU);
-  const last=pack.topics?.[pack.topics.length-1];if(last&&last.format!=='boss')E('topics[last]','a quest ends with a boss finale: set "format":"boss" on the last stage');
+  const last=pack.topics?.[pack.topics.length-1];if(last&&last.format!=='boss'&&!pack.placement)E('topics[last]','a quest ends with a boss finale: set "format":"boss" on the last stage');
   if((pack.topics||[]).filter(t=>t.format==='boss').length>1)W('topics','more than one boss stage; only the last is the finale');
   (pack.topics||[]).forEach((t,i)=>{if(!t.stage?.name)E(`topics[${i}].stage.name`,'every quest stage needs a name');if(!t.stage?.emoji)W(`topics[${i}].stage.emoji`,'add an emoji for the quest path');});}
 else W('quest','no "quest" block: this pack will show as a plain adventure (see LESSONS.md "Quests")');
@@ -127,9 +127,9 @@ const seen=new Set();let nq=0,nGraded=0,nReview=0,nDeep=0,nCards=0;const typesUs
      else if(tt.length!==2||qs[last]?.twoTier!=='why'||qs[last-1]?.twoTier!=='answer')E(P,'a two-tier finale is exactly two questions at the end of the boss: "twoTier": "answer", then "twoTier": "why"');}}
   if(t.deepDive){nDeep++;if(graded<3)E(P,`deep dive needs ≥ 3 graded questions (has ${graded})`);if(graded>4)W(P,`deep dive has ${graded} graded questions (aim 3-4 to keep quests short)`);if(!qs.some(q=>q.type==='why'||q.type==='learn'))E(P,'deep dive needs a "why" or "learn" card');
     if(new Set(qs.map(q=>q.type).filter(x=>!CARDS.includes(x))).size<3)W(P,'deep dive: mix at least 3 question types');}
-  if(tp&&tp.ageRangeStart<LRN.age-2)W(P,`"${tp.name}" starts at age ${tp.ageRangeStart}: below the target level (${LRN.grade}, ~age ${LRN.age})`);
+  if(tp&&tp.ageRangeStart<LRN.age-2&&!pack.placement)W(P,`"${tp.name}" starts at age ${tp.ageRangeStart}: below the target level (${LRN.grade}, ~age ${LRN.age})`);
   // teach → guided practice → graded, for every new (not mastered) skill; boss stages only test what was taught, practised or mastered
-  if(Q&&tp&&!stageDone(t)){const done=stageDone(t),isNew=!mastered(t.topicId)&&!t.review;
+  if(Q&&tp&&!stageDone(t)&&!pack.placement){const done=stageDone(t),isNew=!mastered(t.topicId)&&!t.review;
     if(t.format==='boss'){for(const id of new Set([t.topicId,...qs.map(q=>q.skill).filter(Boolean)]))if(!mastered(id)&&!taught.has(id))E(P,`boss tests "${byId[id]?.name||id}" but no earlier stage taught or practised it (add "teaches": ["${id}"] to an earlier stage with a learn card and guided practice) and it isn't mastered yet`);
       if(!t.powerup)W(P+'.powerup','add a short "Boss ahead! Here\'s your power-up" recap (the app builds one from the earlier learn card otherwise)');
       qs.forEach((q,j)=>{if(!CARDS.includes(q.type)&&tooHard(q.answer))E(`${P}.questions[${j}]`,`"${q.answer}" is too hard for a boss (more than 3 decimal places or a decimal percent). Teach it in a guided stage instead`);});}
@@ -171,6 +171,19 @@ const seen=new Set();let nq=0,nGraded=0,nReview=0,nDeep=0,nCards=0;const typesUs
      case 'numberline':if(!num(q.min)||!num(q.max)||!(q.max>q.min))E(Qp,'numeric min < max required');else{if(q.step!=null&&!(q.step>0))E(Qp+'.step','> 0');const a=parseNum(ans);if(!need()||isNaN(a))E(Qp+'.answer','number');else if(a<q.min||a>q.max)E(Qp+'.answer','must be on the line');
        else if(q.step&&Math.abs(Math.round((a-q.min)/q.step)*q.step+q.min-a)>1e-9)E(Qp+'.answer','must land on a step');if((q.max-q.min)/(q.step||1)>40)W(Qp,'more than 40 steps is hard to drag on a phone');}break;
      case 'fracbar':if(!Number.isInteger(q.parts)||q.parts<2||q.parts>12)E(Qp+'.parts','integer 2-12');else if(need()){const a=parseNum(ans);if(isNaN(a)||a<0||a>1)E(Qp+'.answer','fraction 0-1 like 3/4');else if(Math.abs(Math.round(a*q.parts)-a*q.parts)>1e-9)E(Qp+'.answer',`can't be shaded with ${q.parts} parts`);}break;}});});
+// Placement quests (LESSONS.md "Placement quests"): a diagnostic for a new learner. Ladders run from the grade-level band
+// down to fallbacks; passing a stage skips the rest of its ladder. No teach cards, guided practice or boss required.
+if(pack.placement!=null){const T=pack.topics||[];if(pack.placement!==true)E('placement','true (or leave it out)');if(!Q)E('placement','a placement pack is a quest: add the "quest" block');
+  if(pack.honors)E('honors','a placement quest cannot honor a Market pick');if(T.length<4||T.length>7)E('placement',`4-7 stages (has ${T.length})`);
+  const subs=new Set(T.map(t=>byId[t.topicId]?.subject).filter(Boolean));if(subs.size<3)E('placement',`cover at least 3 subjects (has ${subs.size})`);
+  const lastBand={};T.forEach((t,i)=>{const P=`topics[${i}]`,tp=byId[t.topicId];
+    if(typeof t.ladder!=='string'||!/^[a-z][a-z0-9-]{0,23}$/.test(t.ladder))E(P+'.ladder','a short lowercase key such as "math" (stages of one subject share it)');
+    if(typeof t.band!=='number'||!(t.band>=4&&t.band<=18))E(P+'.band','the level (age band 4-18), normally the topic\'s ageRangeStart');
+    else{if(tp&&Math.abs(t.band-tp.ageRangeStart)>1)W(P+'.band',`band ${t.band} but "${tp.name}" starts at age ${tp.ageRangeStart}`);
+      if(t.ladder in lastBand&&t.band>lastBand[t.ladder])E(P+'.band',`ladder "${t.ladder}" must run from the highest band down (${t.band} after ${lastBand[t.ladder]})`);lastBand[t.ladder]=t.band;}
+    const gq=(t.questions||[]).filter(q=>!CARDS.includes(q.type)).length;if(gq<2||gq>4)E(P,`placement stage: 2-4 graded questions (has ${gq})`);
+    if(t.deepDive)E(P+'.deepDive','no deep dives in a placement quest');});}
+else if(Q&&(pack.topics||[]).some(t=>t.ladder!=null||t.band!=null))W('topics','"ladder"/"band" only matter in a placement quest ("placement": true)');
 // Researched stages (warnings): an mc/picture/blank-choice question needs a wrong choice from a misconception, and a
 // stage on a topic the learner got stuck on should scaffold down to a prerequisite the research says to re-teach.
 let nResearched=0;
