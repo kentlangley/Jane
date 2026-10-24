@@ -3,14 +3,14 @@
 // Usage: node export-progress.mjs [--out file.json] [--date YYYY-MM-DD] [--days 7] [--local]   (default out: exports/progress-<date>.json;
 //        with --local or STORAGE=file it reads the standalone server's DATA_DIR and writes DATA_DIR/exports/)
 // Adds weakSpots (per topic + per domain: misses, hints, slow answers, failed reviews, unsure self-checks), strengths and goDeeper suggestions.
-import fs from 'fs';import path from 'path';import {kvGet,loadTax,ptDate,DIR,activeQuests,questReached,learnerConfig,outDir} from './lib-cli.mjs';import * as E from './src/engine.js';import {coverage as areaCoverage} from './src/coverage.js';import {checkRegionFilter} from './lib-regions.mjs';
+import fs from 'fs';import path from 'path';import {kvGet,loadTax,ptDate,DIR,activeQuests,questReached,learnerConfig,learnerDir,lk,learnerFull,profiles} from './lib-cli.mjs';import * as E from './src/engine.js';import {coverage as areaCoverage} from './src/coverage.js';import {checkRegionFilter} from './lib-regions.mjs';
 E.configure(learnerConfig());const L=E.learner();
 const args=process.argv.slice(2),opt=k=>args.includes(k)?args[args.indexOf(k)+1]:null;
-const date=opt('--date')||ptDate(),out=opt('--out')||path.join(outDir('exports'),`progress-${date}.json`);
+const date=opt('--date')||ptDate(),out=opt('--out')||path.join(learnerDir('exports'),`progress-${date}.json`);
 const TAX=loadTax(),hiddenRegions=checkRegionFilter(TAX,DIR),g=E.graph(TAX),now=Date.now();
-const S=E.migrate(kvGet('progress'),g),log=kvGet('log:'+date)||[],pack=kvGet('lessons:'+date);
+const S=E.migrate(kvGet(lk('progress')),g),log=kvGet(lk('log:')+date)||[],pack=kvGet(lk('lessons:')+date);
 const days=+(opt('--days')||7),dayList=[...Array(days)].map((_,i)=>ptDate(Date.parse(date+'T12:00:00Z')-i*864e5));
-const logs=[log,...dayList.slice(1).map(d=>kvGet('log:'+d)||[])].flat();
+const logs=[log,...dayList.slice(1).map(d=>kvGet(lk('log:')+d)||[])].flat();
 const full=(t,extra={})=>({...t,state:E.stateOf(S,g,t.id,now),record:S.ts[t.id]||null,
   prerequisites:g.pre[t.id].map(e=>({id:e.id,name:g.byId[e.id].name,strength:e.h?'hard':'soft',state:E.stateOf(S,g,e.id,now)})),
   unlocks:g.post[t.id].map(e=>({id:e.id,name:g.byId[e.id].name,strength:e.h?'hard':'soft'})),...extra});
@@ -60,17 +60,17 @@ const needsSupport=Object.entries(S.support||{}).filter(([id,v])=>g.byId[id]&&(v
 const requeued=(S.requeue||[]).map(x=>({topicId:x.item.topicId,name:g.byId[x.item.topicId]?.name,question:x.item.q,answer:x.item.answer,comesBackAfter:new Date(x.notBefore).toISOString(),times:x.n}));
 const weakSpots={window:`${dayList[dayList.length-1]}..${date}`,rules:{slowSec:SLOW,idleIgnoredSec:IDLE,score:'misses×3 + hints×2 + slow + failedReviews×3 + unsure×2 + stuck×2 + skipped×3'},topics:weakTopics,domains,goDeeper,strengths,needsSupport,requeued};
 // ---------- quests (v0.5: ONE current quest; newer packs wait queued) + glossary lookups ----------
-const A=activeQuests(S);const qinfo=d=>{const p=kvGet('lessons:'+d);if(!p?.quest)return null;const b=kvGet('boost:'+d);const pp=b?E.applyBoost(p,b):p;const qi=E.questInfo(S,g,pp);
+const A=activeQuests(S);const qinfo=d=>{const p=kvGet(lk('lessons:')+d);if(!p?.quest)return null;const b=kvGet(lk('boost:')+d);const pp=b?E.applyBoost(p,b):p;const qi=E.questInfo(S,g,pp);
   const rr=S.quests?.[d]?.started?questReached(S,p):0;
   return{date:d,title:qi.title,startedAt:S.quests?.[d]?.started?new Date(S.quests[d].started).toISOString():null,done:qi.done,total:qi.total,pct:qi.pct,
     reachedStages:rr,lockedStages:qi.stages.slice(0,rr).map((s,i)=>({i,topicId:s.topicId,name:s.name})),refreshableStages:qi.stages.slice(rr).map((s,i)=>({i:i+rr,topicId:s.topicId,name:s.name,boss:s.boss})),
     remainingStages:qi.stages.map((s,i)=>({i,topicId:s.topicId,name:s.name,left:s.n-s.done,boss:s.boss})).filter(s=>s.left>0)};};
 const qDates=[...new Set([...A,...dayList,ptDate(Date.parse(date+'T12:00:00Z')+864e5)])].filter(d=>d<=date).sort();
-const QP=Object.fromEntries(qDates.map(d=>[d,kvGet('lessons:'+d)])),LQ=E.questLineup(S,QP,date);
+const QP=Object.fromEntries(qDates.map(d=>[d,kvGet(lk('lessons:')+d)])),LQ=E.questLineup(S,QP,date);
 const activeList=A.map(qinfo).filter(Boolean),cur=LQ.current&&!LQ.newQuest?qinfo(LQ.current):null;
 // REFRESH starts from a copy of the stored pack (LESSONS.md "Refreshing the current quest"): exports/quest-<date>.json
-if(cur){cur.packFile=path.join(path.dirname(out),`quest-${cur.date}.json`);fs.mkdirSync(path.dirname(cur.packFile),{recursive:true});fs.writeFileSync(cur.packFile,JSON.stringify(kvGet('lessons:'+cur.date),null,1));}
-reviewHealth.gatesAhead=A.reduce((a,d)=>{const p=kvGet('lessons:'+d);return a+(p?.quest?E.questInfo(S,g,p).gates.filter(x=>x.state==='locked').length:0);},0); // stage gates not reached yet in active quests
+if(cur){cur.packFile=path.join(path.dirname(out),`quest-${cur.date}.json`);fs.mkdirSync(path.dirname(cur.packFile),{recursive:true});fs.writeFileSync(cur.packFile,JSON.stringify(kvGet(lk('lessons:')+cur.date),null,1));}
+reviewHealth.gatesAhead=A.reduce((a,d)=>{const p=kvGet(lk('lessons:')+d);return a+(p?.quest?E.questInfo(S,g,p).gates.filter(x=>x.state==='locked').length:0);},0); // stage gates not reached yet in active quests
 // ---------- teaching research (offline authoring input; research.mjs, LESSONS.md "Research briefs") ----------
 // Compact briefs for the topics tonight's pack is most likely to touch; frontier entries with research get research:true.
 // research.mjs and the research file are not in the Docker image: then the section says so and the export goes on.
@@ -103,7 +103,7 @@ const res={exportedAt:new Date(now).toISOString(),date,timezone:'America/Los_Ang
   research,frontier,reviewDue,fog:E.fogState(S,g,now),campaign:E.campaignState(S,g),
   market:E.marketExport(S,g,now), // Points Market: spend vs earn for price tuning (target 50–70% of earned points spent), choices to honor
   progress:S};
-fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,E.withName(JSON.stringify({learner:L,...res},null,1),JSON.stringify(L.name).slice(1,-1)));
+fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,E.withName(JSON.stringify({learner:L,profile:(F=>({id:F.id,primary:F.primary,...L,interests:F.interests||[]}))(learnerFull()),learners:profiles().learners.map(l=>({id:l.id,name:l.name,grade:l.grade})),...res},null,1),JSON.stringify(L.name).slice(1,-1)));
 console.log(`  📚 research briefs: ${research.available?`${Object.keys(research.briefs).length} attached, ${research.pointers.length} more as pointers (npm run research -- <topicId>)`:research.note}`);
 const fog=res.fog;if(fog)console.log(`  🌫️ fog: ${fog.clear}/${fog.total} clear (${fog.pct}%), ${fog.finds.length} finds claimed, ${(fog.available||[]).length} waiting`);
 if(hiddenRegions.length)console.log(`  🌏 hidden regions: ${hiddenRegions.join(',')} (${res.hiddenRegions.topics} topics left out of the app and this export; never put them in a pack)`);

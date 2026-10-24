@@ -9,19 +9,19 @@
 // it would only wait queued): --refresh it instead. A refresh keeps every reached stage and the quest block byte-identical
 // and may change, add or drop the stages after them; the size budget applies to those remaining stages.
 // Catch-up boosts are retired (exit 1); the app still honours a boost:<date> key published before v0.5.
-import fs from 'fs';import {kvPut,kvGet,kvList,loadTax,activeQuests,questReached,learnerConfig,LOCAL,DIR} from './lib-cli.mjs';import {checkRegionFilter} from './lib-regions.mjs';import * as EN from './src/engine.js';import {coverage,seenAreas} from './src/coverage.js';
+import fs from 'fs';import {kvPut,kvGet,kvList,loadTax,activeQuests,questReached,learnerConfig,LOCAL,DIR,lk,learner,optValues} from './lib-cli.mjs';import {checkRegionFilter} from './lib-regions.mjs';import * as EN from './src/engine.js';import {coverage,seenAreas} from './src/coverage.js';
 // Learner settings from wrangler.toml [vars]. Packs may write {name}; the app fills it in. Prompts must talk to the learner as "you".
 EN.configure(learnerConfig());const LRN=EN.learner();
 const NAMES=[LRN.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'\\{name\\}','the learner'].join('|');
 const THIRD=new RegExp(`(?:^|[^\\w{])(?:${NAMES}) (?:can|is|has|does|should|wants|gets|saves)\\b|\\bCan (?:${NAMES})|\\bhe\\b|\\bhis\\b`,'i');
 const YOU='talk to the learner as "you"';
-const args=process.argv.slice(2);const file=args.find(a=>!a.startsWith('--')&&args[args.indexOf(a)-1]!=='--date');
+const args=process.argv.slice(2);const file=args.find(a=>!a.startsWith('--')&&!optValues.has(a));
 const dateArg=args.includes('--date')?args[args.indexOf('--date')+1]:null,dry=args.includes('--dry-run'),force=args.includes('--force'),refreshArg=args.includes('--refresh');
 if(!file){console.error('Usage: node publish-lessons.mjs <pack.json> [--date YYYY-MM-DD] [--dry-run]');process.exit(2);}
 const pack=JSON.parse(fs.readFileSync(file,'utf8'));if(dateArg)pack.date=dateArg;
 // Finished quests are locked (LESSONS.md "Finished quests are locked"): never overwrite or boost one, even with --force.
 // Reads the learner's progress read-only; --offline skips the lookup.
-let PROG=null;if(!args.includes('--offline'))try{PROG=kvGet('progress');}catch{}
+let PROG=null;if(!args.includes('--offline'))try{PROG=kvGet(lk('progress'));}catch{}
 const LOCKED=4,lockedQuest=d=>!!PROG?.quests?.[d]?.done;
 const refuseLocked=d=>{console.error(`⛔ quest ${d} is finished and locked. Nothing was written: put new material in the next quest.`);process.exit(LOCKED);};
 const wcount=x=>String(x||'').trim().split(/\s+/).filter(Boolean).length;
@@ -32,21 +32,21 @@ function checkTerms(terms,P,E,W){if(terms==null)return;if(typeof terms!=='object
 if(pack.boostFor){if(lockedQuest(pack.boostFor))refuseLocked(pack.boostFor);
   console.error(`❌ catch-up boosts are retired (one quest at a time since v0.5). Refresh the quest's unreached stages instead:\n   node publish-lessons.mjs <pack.json> --refresh --date ${pack.boostFor}   (see LESSONS.md "Refreshing the current quest")`);process.exit(1);const errs=[],warns=[];const E=(p,m)=>errs.push(`${p}: ${m}`),W=(p,m)=>warns.push(`${p}: ${m}`);
   if(!/^\d{4}-\d{2}-\d{2}$/.test(pack.boostFor))E('boostFor','quest date YYYY-MM-DD');if(!pack.message)E('message','a short, fun encouragement is required');else if(wcount(pack.message)>25)W('message','≤ 25 words');
-  const q=dry&&args.includes('--offline')?null:kvGet('lessons:'+pack.boostFor);if(!dry&&!q?.quest)E('boostFor',`no quest published at lessons:${pack.boostFor}`);
+  const q=dry&&args.includes('--offline')?null:kvGet(lk('lessons:')+pack.boostFor);if(!dry&&!q?.quest)E('boostFor',`no quest published at lessons:${pack.boostFor}`);
   const ids=new Set((q?.topics||[]).map(t=>t.topicId));
   for(const [id,n] of Object.entries(pack.trim||{})){if(q&&!ids.has(id))E(`trim.${id}`,'not a stage of that quest');if(!Number.isInteger(n)||n<1)E(`trim.${id}`,'integer ≥ 1 (max graded questions left in that stage)');}
   for(const [id,h] of Object.entries(pack.hints||{})){if(q&&!ids.has(id))E(`hints.${id}`,'not a stage of that quest');if(typeof h!=='string'||!h.trim())E(`hints.${id}`,'string');else if(wcount(h)>15)W(`hints.${id}`,'≤ 15 words');}
   checkTerms(pack.terms,'terms',E,W);
   if(warns.length)console.warn('⚠️  '+warns.join('\n  '));if(errs.length){console.error(`❌ ${errs.length} problem(s):\n  `+errs.join('\n  '));process.exit(1);}
   if(dry){console.log(`✅ valid boost for quest ${pack.boostFor} (dry run)`);process.exit(0);}
-  kvPut('boost:'+pack.boostFor,pack);console.log(`✅ published${LOCAL?' (local)':''} boost:${pack.boostFor} — ${Object.keys(pack.trim||{}).length} trimmed stages, ${Object.keys(pack.hints||{}).length} extra hints`);process.exit(0);}
+  kvPut(lk('boost:')+pack.boostFor,pack);console.log(`✅ published${LOCAL?' (local)':''} boost:${pack.boostFor} — ${Object.keys(pack.trim||{}).length} trimmed stages, ${Object.keys(pack.hints||{}).length} extra hints`);process.exit(0);}
 if(pack.quest&&lockedQuest(pack.date))refuseLocked(pack.date);
 // ---------- refresh (v0.5): the started, unfinished quest at this date; reached stages are immutable ----------
 const SIX=6,startedHere=!!(pack.quest&&PROG?.quests?.[pack.date]?.started),REFRESH=refreshArg||startedHere;let RR=0,PREV=null;
 if(refreshArg&&!dateArg){console.error('❌ --refresh needs --date <quest date> (the date of the quest in progress)');process.exit(2);}
 if(refreshArg&&(!PROG||!pack.quest)){console.error(`❌ --refresh needs ${!pack.quest?'a quest pack':'the learner\'s progress (drop --offline)'}`);process.exit(2);}
 if(refreshArg&&!startedHere){console.error(`❌ quest ${pack.date} isn't in progress, so there is nothing to refresh. Publish it normally${PROG?.quests?.[pack.date]?'':' (or check the date)'}.`);process.exit(1);}
-if(REFRESH){try{PREV=kvGet('lessons:'+pack.date);}catch{}if(!PREV?.quest){console.error(`❌ no quest published at lessons:${pack.date} to refresh`);process.exit(1);}
+if(REFRESH){try{PREV=kvGet(lk('lessons:')+pack.date);}catch{}if(!PREV?.quest){console.error(`❌ no quest published at lessons:${pack.date} to refresh`);process.exit(1);}
   RR=questReached(PROG,PREV);const bad=[];
   if(JSON.stringify(pack.quest)!==JSON.stringify(PREV.quest))bad.push('the quest block (title, hook, medal) changed');
   for(let i=0;i<RR;i++){const a=PREV.topics[i],b=(pack.topics||[])[i];if(JSON.stringify(a)!==JSON.stringify(b))bad.push(`stage ${i+1} "${a.stage?.name||a.topicId}" ${b?'changed':'is missing'}`);}
@@ -197,8 +197,8 @@ let newAreas=null;if(Q&&PROG){const CG=EN.graph(tax),SP=EN.migrate(JSON.parse(JS
 const inter=[...typesUsed].filter(x=>!['mc','numeric','text'].includes(x));if(inter.length<3)W('formats',`only ${inter.length} interactive format(s) used; mix in order/match/picture/blank/numberline/fracbar/truefalse/why/fact`);
 if(warns.length)console.warn(`⚠️  ${warns.length} warning(s) (see LESSONS.md):\n  `+warns.join('\n  '));
 if(errs.length){console.error(`❌ ${errs.length} problem(s) in ${file}:\n  `+errs.join('\n  '));process.exit(1);}
-if(Q&&!REFRESH&&!force&&PROG){const A=activeQuests(PROG,pack.date).filter(d=>kvList('lessons:'+d).length);
+if(Q&&!REFRESH&&!force&&PROG){const A=activeQuests(PROG,pack.date).filter(d=>kvList(lk('lessons:')+d).length);
   if(A.length){console.error(`⛔ quest ${A[0]} is in progress (one quest at a time). Not publishing a new quest: it would only wait hidden.\n   Refresh its unreached stages instead: node publish-lessons.mjs <pack.json> --refresh --date ${A[0]}   (see LESSONS.md "Refreshing the current quest")`);process.exit(3);}}
 const sum=`${REFRESH?`refresh: stages 1-${RR} locked, ${pack.topics.length-RR} remaining, `:''}${pack.topics.length} ${Q?'stages':'topics'}, ${nq} items (~${estMin} min, ${nGraded} graded${nReview?`, ${nReview} in review stages`:''}, review via gates, ${nDeep} deep dive${nDeep===1?'':'s'}${RS?`, ${nResearched} researched stage${nResearched===1?'':'s'}`:''}${newAreas?`, new areas: ${newAreas.length}${newAreas.length?` (${newAreas.map(a=>a.replace('|',' / ')).join(', ')})`:''}`:''}), formats: ${[...typesUsed].join(', ')}`;
 if(dry){console.log(`✅ valid${Q?` quest "${Q.title}"`:''}: ${sum} for ${pack.date} (dry run, nothing written)`);process.exit(0);}
-kvPut('lessons:'+pack.date,pack);console.log(`✅ published${LOCAL?' (local)':''} lessons:${pack.date}${Q?` quest "${Q.title}"`:''}: ${sum}`);
+kvPut(lk('lessons:')+pack.date,pack);console.log(`✅ published${LOCAL?' (local)':''} lessons:${pack.date}${Q?` quest "${Q.title}"`:''}: ${sum}`);

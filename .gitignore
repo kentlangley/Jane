@@ -18,6 +18,7 @@ backups/
 local-data/
 exports/
 packs/*.json
+packs/*/*.json
 !packs/examples/
 progress*.json
 answers*.jsonl

@@ -24,6 +24,10 @@ flowchart LR
 > time*. What it writes is validated by `publish-lessons.mjs` before the app can show it, and the app itself never calls
 > a model while the kid plays. See [README → Philosophy](../README.md#philosophy).
 
+> **Several kids?** The cycle runs once per learner: `export-progress.mjs --learner <id>` → one quest at that kid's
+> level → `publish-lessons.mjs <pack> --learner <id>`. Without `--learner` both scripts act on the primary learner, as
+> they always did. See [LESSONS.md → Several learners](../LESSONS.md#several-learners-profiles).
+
 ## 1. Schedule (about 1:00 AM local time)
 The routine runs once a night, around **1:00 AM local time**, after the kid's day is over and before the next one starts.
 Dates are Pacific Time days (`ptDate` in the code). In this deployment a scheduled Grok Bot routine runs it. For your

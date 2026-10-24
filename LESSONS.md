@@ -404,6 +404,7 @@ node publish-lessons.mjs packs/2026-10-17.json --dry-run      # validate only
 node publish-lessons.mjs packs/2026-10-17.json                # validate + write lessons:2026-10-17
 node publish-lessons.mjs my-pack.json --date 2026-10-18       # override the date
 node publish-lessons.mjs refresh.json --refresh --date 2026-10-17   # refresh the quest in progress (unreached stages only)
+node publish-lessons.mjs packs/<id>/2026-10-18.json --learner <id>   # another learner's quest (see "Several learners")
 ```
 A finished quest is locked: the script exits with code 4 and writes nothing (see "Finished quests are locked").
 A new quest while one is in progress exits 3; a refresh that touches a reached stage exits 6 (see "Refreshing the current quest").
@@ -431,6 +432,28 @@ the needsSupport, goDeeper, quest-refresh, stretch and top frontier topics; see 
 Write tomorrow's quest from `weakSpots` and `frontier` (the gates handle `reviewDue`) using the rules above, dry-run, fix every warning, then publish it.
 
 Both scripts call the repo's `wrangler` (Node 22; a portable Node in `~/.local/node-v22.20.0-linux-x64` is used if present), read the account and KV ids from `wrangler.toml`, and need `CLOUDFLARE_API_TOKEN` set in the environment (never commit it).
+
+## Several learners (profiles)
+One household app can serve several kids (plans/archive/learner-profiles.md). Each learner has their own progress,
+quests, wallet, trail, fog, medals and logs. The **primary** learner keeps the original keys, so every command above
+without `--learner` works on the primary learner exactly as before. For every other learner pass `--learner <id>`:
+```bash
+node export-progress.mjs --learner <id>                     # → exports/<id>/progress-<today PT>.json
+node publish-lessons.mjs packs/<id>/<date>.json --learner <id> --dry-run
+node publish-lessons.mjs packs/<id>/<date>.json --learner <id>        # → L:<id>:lessons:<date>
+node backup-progress.mjs --learner <id>                     # → backups/<PT date>/<id>/progress-*.json
+```
+**Nightly loop over learners.** The export's `learners` lists every profile (`id`, `name`, `grade`); `profile` describes
+the learner it was run for (`id`, `primary`, `name`, `age`, `grade`, `interests`). Each night:
+1. `node export-progress.mjs` (primary) and read `learners`.
+2. For **each** learner: export with `--learner <id>`, plan **one quest for that kid at their own level** (their
+   `profile.age`/`grade`, their `frontier`, their `weakSpots`, their `interests` for themes), dry-run and publish with the
+   same `--learner <id>`. Never copy one kid's quest to another; never mix their exports.
+3. A learner with no placement result yet (`placementQuest` missing in the export) gets the **placement quest** first
+   (see "Placement quests").
+Packs for added learners live in `packs/<id>/` (gitignored like `packs/*.json`). The voice rules apply to everyone: talk to
+the learner as "you"; for an older learner keep the tone grown-up (no baby talk), same rules otherwise.
+**Privacy:** kids' names beyond the primary's, grades, interests and balances never go into public issues, PRs or docs.
 
 ## Testing without touching the learner's progress
 Open `https://<your-worker>.<your-subdomain>.workers.dev/api/sandbox?on=1` (sets a 24 h cookie, redirects to the app), then
