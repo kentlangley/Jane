@@ -66,7 +66,7 @@ const A=activeQuests(S);const qinfo=d=>{const p=kvGet('lessons:'+d);if(!p?.quest
     reachedStages:rr,lockedStages:qi.stages.slice(0,rr).map((s,i)=>({i,topicId:s.topicId,name:s.name})),refreshableStages:qi.stages.slice(rr).map((s,i)=>({i:i+rr,topicId:s.topicId,name:s.name,boss:s.boss})),
     remainingStages:qi.stages.map((s,i)=>({i,topicId:s.topicId,name:s.name,left:s.n-s.done,boss:s.boss})).filter(s=>s.left>0)};};
 const qDates=[...new Set([...A,...dayList,ptDate(Date.parse(date+'T12:00:00Z')+864e5)])].filter(d=>d<=date).sort();
-const LQ=E.questLineup(S,Object.fromEntries(qDates.map(d=>[d,kvGet('lessons:'+d)])),date);
+const QP=Object.fromEntries(qDates.map(d=>[d,kvGet('lessons:'+d)])),LQ=E.questLineup(S,QP,date);
 const activeList=A.map(qinfo).filter(Boolean),cur=LQ.current&&!LQ.newQuest?qinfo(LQ.current):null;
 // REFRESH starts from a copy of the stored pack (LESSONS.md "Refreshing the current quest"): exports/quest-<date>.json
 if(cur){cur.packFile=path.join(path.dirname(out),`quest-${cur.date}.json`);fs.mkdirSync(path.dirname(cur.packFile),{recursive:true});fs.writeFileSync(cur.packFile,JSON.stringify(kvGet('lessons:'+cur.date),null,1));}
@@ -84,6 +84,11 @@ try{const R=await import('./research.mjs');
 const quests={current:cur,queued:LQ.queued,active:activeList.length,list:activeList,completed:Object.entries(S.quests||{}).filter(([,q])=>q.done).map(([d])=>d),
   nextStep:cur?`REFRESH: quest ${cur.date} ("${cur.title}", ${cur.pct}% done) is in progress. Do not publish a new quest. Copy ${cur.packFile} to packs/quest-${cur.date}.json, keep "date", "quest" and stages 1-${cur.reachedStages} unchanged, rewrite stages ${cur.reachedStages+1}+ (${cur.refreshableStages.length} now) from tonight's export, then: node publish-lessons.mjs packs/quest-${cur.date}.json --refresh --date ${cur.date} --dry-run (and again without --dry-run)`
     :'NEW QUEST: no quest in progress. Write tomorrow\'s quest and publish it normally.'};
+// Points Market picks (LESSONS.md "Market choices"): the next NEW QUEST is built around the learner's pick
+E.honorChoices(S,QP,now); // in memory only: shows picks a published pack already honored
+{const oc=Object.fromEntries(Object.entries(S.wallet?.choices||{}).filter(([,c])=>c&&!c.used));
+  if(Object.keys(oc).length)quests.marketChoice=`${cur?'(after this quest) ':''}MARKET CHOICE: the learner paid points to pick the next new quest:${oc.path?` topic ${oc.path.topicId} ("${oc.path.name}", ${oc.path.subject})`:''}${oc.path&&oc.theme?' and':''}${oc.theme?` story theme "${oc.theme.id}" (${oc.theme.title})`:''}. Build it around that (still learn → guided → graded → boss), and add "honors": {${[oc.path&&`"path": "${oc.path.topicId}"`,oc.theme&&`"theme": "${oc.theme.id}"`].filter(Boolean).join(', ')}} to the pack. If no valid quest fits, use "declined" for that key (refunds the pick) and say why in the hook.`;
+  if(!cur&&quests.marketChoice)quests.nextStep+=' '+quests.marketChoice;}
 const tl={};for(const l of logs)if(l.event==='term'){const k=l.term.toLowerCase();const x=tl[k]??={term:l.term,count:0,topics:new Set()};x.count++;if(l.topic)x.topics.add(l.topic);}
 const termsLookedUp=Object.values(tl).map(x=>({...x,topics:[...x.topics]})).sort((a,b)=>b.count-a.count);
 const res={exportedAt:new Date(now).toISOString(),date,timezone:'America/Los_Angeles',learner:S.name,summary:sm,
@@ -103,6 +108,6 @@ console.log(`  📚 research briefs: ${research.available?`${Object.keys(researc
 const fog=res.fog;if(fog)console.log(`  🌫️ fog: ${fog.clear}/${fog.total} clear (${fog.pct}%), ${fog.finds.length} finds claimed, ${(fog.available||[]).length} waiting`);
 if(hiddenRegions.length)console.log(`  🌏 hidden regions: ${hiddenRegions.join(',')} (${res.hiddenRegions.topics} topics left out of the app and this export; never put them in a pack)`);
 {const m=res.market;console.log(`  🛒 market: balance ${m.balance}, spent ${m.spent} (7d: spent ${m.spent7d} / earned ${m.earned7d??'?'})`);}
-console.log(`  🗺️ quests: ${quests.nextStep}`);if(termsLookedUp.length)console.log(`  📘 looked up: ${termsLookedUp.slice(0,10).map(t=>t.term+'×'+t.count).join(', ')}`);
+console.log(`  🗺️ quests: ${quests.nextStep}`);if(quests.marketChoice&&cur)console.log(`  🧭 ${quests.marketChoice}`);if(termsLookedUp.length)console.log(`  📘 looked up: ${termsLookedUp.slice(0,10).map(t=>t.term+'×'+t.count).join(', ')}`);
 for(const x of goDeeper)console.log(`  🔎 go deeper${x.needsSupport?' (GENTLE, the kid got stuck)':''}: ${x.name} (${x.domain}): ${x.why}`);for(const x of strengths)console.log(`  💪 strength: ${x.domain} → stretch to ${x.stretchTo.map(t=>t.name).join(', ')||'(nothing ready)'}`);
 console.log(`✅ wrote ${out}: ${sm.done}/${sm.total} mastered (${sm.pct}%), ${frontier.length} frontier, ${reviewDue.length} review due, ${log.filter(l=>!l.event).length} answers today`);

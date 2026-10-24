@@ -73,6 +73,12 @@ function tpl(t,P){if(t==null)return;if(typeof t!=='object'||!TPL[t.type]){E(P+'.
 if(!/^\d{4}-\d{2}-\d{2}$/.test(pack.date||''))E('date','must be YYYY-MM-DD (or pass --date)');
 str(pack.title,'title',false);if(!Array.isArray(pack.topics)||!pack.topics.length)E('topics','must be a non-empty array');
 const Q=pack.quest;
+// Points Market picks (LESSONS.md "Market choices"): "honors": {"path": topicId|"declined", "theme": themeId|"declined", "note"}
+if(pack.honors!=null){const H=pack.honors;if(typeof H!=='object'||Array.isArray(H))E('honors','an object like {"path": "<topicId>", "theme": "pirates"}');
+  else{for(const k of Object.keys(H))if(!['path','theme','note'].includes(k))E('honors.'+k,'only "path", "theme" and "note"');if(!pack.quest)E('honors','only a quest pack can honor a Market pick');
+    if(H.path!=null&&H.path!=='declined'){if(!byId[H.path])E('honors.path',unknownTopic(H.path));else if(!(pack.topics||[]).some(t=>t.topicId===H.path))E('honors.path','the picked topic must be a stage of this quest');}
+    if(H.theme!=null&&H.theme!=='declined'&&!EN.QUEST_THEMES.some(t=>t.id===H.theme))E('honors.theme','one of '+EN.QUEST_THEMES.map(t=>t.id).join('|')+' or "declined"');
+    if(H.note!=null)str(H.note,'honors.note');}}
 if(Q){str(Q.title,'quest.title');str(Q.hook,'quest.hook');str(Q.emoji,'quest.emoji',false);if(!Q.medal||!str(Q.medal.name,'quest.medal.name')||!str(Q.medal.emoji,'quest.medal.emoji'))E('quest.medal','{name, emoji} required');
   if(wc(Q.hook)>30)W('quest.hook',`${wc(Q.hook)} words (aim ≤ 30)`);if(third(Q.hook))W('quest.hook',YOU);
   const last=pack.topics?.[pack.topics.length-1];if(last&&last.format!=='boss')E('topics[last]','a quest ends with a boss finale: set "format":"boss" on the last stage');

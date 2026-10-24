@@ -302,3 +302,4 @@ main[hidden]{display:none!important}
 .flare-burst{animation:pulse 1.6s infinite}.flare-secret{filter:drop-shadow(0 0 4px #ffd54f)}#flarebtn{margin-left:6px}
 @media (prefers-reduced-motion:reduce){.flare-burst{animation:none}}
 .framebar.f-prove{background:linear-gradient(90deg,#ffd54f,#ff8f00);color:#3e2723}.provelink{font-size:.95rem;margin-left:6px}
+.pickline{background:linear-gradient(90deg,#e8f5e9,#fffde7);border:3px solid #66bb6a;padding:10px 14px;font-size:1.05rem}

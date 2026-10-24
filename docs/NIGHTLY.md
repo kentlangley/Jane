@@ -73,6 +73,10 @@ There is only one quest at a time. The routine reads `quests.nextStep`:
      `--dry-run`. Exit **6** means a reached stage or the quest block changed: nothing was written; copy them unchanged.
 - **`NEW QUEST: …`** (none in progress): write a **new quest** for tomorrow (step 4) and publish it normally. A new
   quest while one is in progress is refused (exit **3**). Catch-up boosts are retired (exit 1).
+- **Market picks.** If the learner bought **Pick Your Path** or **Pick a Story Theme** in the app's Market, the
+  export lists it in `market.openChoices`, and `quests.nextStep` (or `quests.marketChoice` while a quest runs) names
+  it. Honor it on the next **new** quest (never on a refresh) and add `"honors"` to the pack. If no valid quest fits,
+  mark it `"declined"`, which refunds the pick. Rules: LESSONS.md "Market choices".
 
 ## 4. Write the pack (rules in LESSONS.md)
 - **Visit a new area.** One stretch stage from `coverage.untouched` (a `starters` topic), rotating subjects with math

@@ -1,6 +1,6 @@
 # Points Market — spend points on fun, choice and peeks
 
-**Status:** in progress — slices 1–4 done (2026-10-23).
+**Status:** in progress — slices 1–5 done (2026-10-23).
 **Tracking:** [#74](https://github.com/kentlangley/Jane/issues/74)
 **Slices:** [#68](https://github.com/kentlangley/Jane/issues/68) Wallet · [#69](https://github.com/kentlangley/Jane/issues/69) Skins · [#70](https://github.com/kentlangley/Jane/issues/70) Scout flare · [#71](https://github.com/kentlangley/Jane/issues/71) Prove-it · [#72](https://github.com/kentlangley/Jane/issues/72) Pick your path · [#73](https://github.com/kentlangley/Jane/issues/73) Chests + extras
 **Idea credit:** Christopher (Kent's son), who proposed the Points Market items: hidden items, temporary fog push-back, skins, influencing the next question, buying out known reviews.
@@ -252,6 +252,25 @@ points buy things a 5th grader wants (skins, secrets, choices) without breaking 
 - Docs: LESSONS.md "Market choices" section; NIGHTLY.md note.
 - Done test: as above.
 - Decisions frozen: Design "Pick your path", open question 8 answer.
+
+#### Outcome (Slice 5) — done 2026-10-23
+- Shipped: `pick-path` (100) and `pick-theme` (100) rows, `pathOffers` (≤ 3 `ready` topics at target age − 2 or above, nearest
+  the target age, one per subject, seeded by the PT date so a reload can't reroll), `QUEST_THEMES` (8),
+  `S.wallet.choices = {path:{topicId,name,subject,at,pid}, theme:{id,title,emoji,at,pid}}`, `honorChoices` (run on every
+  request with the recent packs, and in memory by the export), `choiceHonored` events. `GET /api/market` adds `path`.
+- Marking used: a quest pack dated after the pick's PT day with `"honors": {"path": id | "declined", "theme": id |
+  "declined", "note"}`. `publish-lessons.mjs` validates it: the topic must be a stage of the pack, the theme must be from
+  the table, and only quest packs may carry it.
+- Export: `market.choices`, `market.openChoices`; `quests.nextStep` gains a MARKET CHOICE sentence on NEW QUEST
+  (`quests.marketChoice` while a quest is still running, for after it).
+- Decisions (brief needed a call):
+  - One open pick **per kind** (a topic and a theme can both be open). "One open choice at a time" holds per kind.
+  - "Unless no valid quest fits": `"declined"` closes the pick and **refunds** it with a new negative ledger row
+    (append-only, `spent` goes down). The kid paid for a choice the author couldn't honor, and no earlier row is rewritten.
+- Docs: LESSONS.md "Market choices" (+ `honors` in the schema), NIGHTLY.md note, docs/NIGHTLY.md step 3 note.
+- Done test: `node --test test/market.test.mjs && npm test` → market 22/22, 193 pass / 0 fail; `npm run publish:dry` ✅;
+  export `--local` (server test) shows `market.choices.path` with the pick and MARKET CHOICE in `quests.nextStep`; offers
+  are all `ready`; a second open pick is refused.
 
 ### Slice 6: Hidden chests and cheap extras
 - Ships: Market rows that **appear only after nearby fog clears** (mystery chests with cosmetic contents, deterministic by

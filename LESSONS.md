@@ -326,6 +326,7 @@ solved problem for the stuck help), `skill` (the topic a boss question tests).
     "medal": { "name": "Comet Treasure Medal", "emoji": "💎" }
   },
   "terms": { "Kraken": {"d": "A giant sea monster from old sailor stories.", "e": "🐙"} },  // optional extra glossary words
+  "honors": { "path": "mt_hJW7hVflm3", "theme": "pirates" }, // optional: the learner's Market picks this quest honors ("Market choices")
   "topics": [                                // the quest path, in order; topicIds unique
     {
       "topicId": "mt_hJW7hVflm3",            // a Marble topic id (public/tax.json or the export's frontier)
@@ -353,6 +354,24 @@ before/after counts), then `node migrate-medals.mjs --backup <file>` (needs a fr
 `--local` for the Node server). Topics that lose mastery become unverified and due now, so review gates re-check them.
 **Legendary policy (default):** legendary medals that were already awarded are always kept as legendary, and their
 topics keep their mastery; everything else is re-scored. `--no-keep-legendary` re-scores legendary medals strictly too.
+
+## Market choices (the learner picks the next quest)
+
+In the app's 🛒 Market (plans/points-market.md) the learner can spend points to pick the **next new quest**: one topic from
+the 2-3 ready frontier topics the app offered (`pick-path`), and/or a **story theme** (`pick-theme`: pirates, space,
+dungeon, jungle, ocean, dinosaurs, detective, sports). Open picks are in the export as `market.openChoices`
+(`market.choices` keeps used ones too), and `quests.nextStep` (or `quests.marketChoice` while a quest is still running)
+spells out what to do.
+- **Honor it on the next NEW QUEST**, not on a refresh of the current quest's stages. A picked topic becomes a real stage
+  (learn card → guided → graded, and the boss may test it). The pick is a choice, never a skip: every rule above still applies.
+  A theme sets the quest's story world (title, hook, stage names, intro stories).
+- **Mark it used:** add `"honors": {"path": "<the picked topicId>", "theme": "<the picked theme id>"}` to the quest pack
+  (only the keys that were picked). The app marks the pick used when it loads a quest pack dated after the pick that
+  honors it. `publish-lessons.mjs` checks that the topic is a stage of the pack and the theme is from the table.
+- **No valid quest fits?** (e.g. the topic was mastered by inference since): use `"declined"` for that key and add
+  `"note": "<why, in kid voice>"`. The app closes the pick and refunds its points (a new ledger row; history is never
+  rewritten). Say why in the quest's hook too.
+- Points never buy medals, mastery, skipped stages or open gates; nothing in the pack should hint otherwise.
 
 ## Fog finds (secrets under the Map)
 
