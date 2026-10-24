@@ -34,7 +34,7 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
    quest:pack?.quest?E.questInfo(S,g,pack):null,newQuest:(()=>{const L=LU();return L.newQuest&&pack?.date===L.current;})(),
    quests:(()=>{const L=LU();return{current:L.current,nextUp:L.queued.length>0,boost:pack?.boost||null};})(),
    terms:pack?.terms||null,mini:S.mini?{topicId:S.mini.topicId,subject:S.mini.ret}:null,
-   campaign:E.campaignState(S,g),fog:E.fogState(S,g,now),wallet:E.walletState(S,g,now),finaleReveal:finaleJust||undefined};};
+   campaign:E.campaignState(S,g),fog:E.fogState(S,g,now),wallet:E.walletState(S,g,now),days:E.dayStreak(S,now),finaleReveal:finaleJust||undefined};};
  const questCheck=r=>{const m=E.completeQuest(S,g,pack,now);if(m){r.questDone=m;ev.push({event:'questDone',date:pack.date,quest:m.title});}};
  if(P==='/parent'){ // read-only: returns before any KV write
    const ds=[...Array(14)].map((_,i)=>ptDate(now-(13-i)*864e5));const logs={};await Promise.all(ds.map(async d=>logs[d]=(await KV.get(K('log:'+d),'json'))||[]));
@@ -65,10 +65,11 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
  else if(P==='/api/skipbonus'&&req.method==='POST'){S.current=null;E.next(S,g,pack,now);out=pub();}
  else if(P==='/api/choice'&&req.method==='POST'){const r=E.choose(S,g,body.choice,pack,now);E.next(S,g,pack,now);out={...r,state:pub()};}
  else if(P==='/api/fog/claim'&&req.method==='POST'){const x=E.claimFind(S,g,String(body.id||''),now);if(x.error)return J(x,400);ev.push({event:'fogFind',id:x.find?.id,kind:x.find?.kind,already:!!x.already});out={...x,state:pub(),fog:E.fogState(S,g,now)};}
- // Points Market (plans/points-market.md): balance = earned − spent, server-side; idempotent by purchase id
- else if(P==='/api/market'){out={wallet:E.walletState(S,g,now),items:E.marketItems(S,g,now),prove:E.proveOffers(S,g,now),path:{offers:E.pathOffers(S,g,now),themes:E.QUEST_THEMES}};}
+ // Points Market (plans/archive/points-market.md): balance = earned − spent, server-side; idempotent by purchase id
+ else if(P==='/api/market'){out={wallet:E.walletState(S,g,now),items:E.marketItems(S,g,now),prove:E.proveOffers(S,g,now),path:{offers:E.pathOffers(S,g,now),themes:E.QUEST_THEMES},hidden:E.hiddenCount(S,g)};}
  else if((P==='/api/market/buy'||P==='/api/market/prove')&&req.method==='POST'){const x=P==='/api/market/prove'?E.buy(S,g,{pid:body.pid,item:'prove-it',meta:{topicId:body.topicId}},now):E.buy(S,g,{pid:body.pid,item:String(body.item||''),meta:body.meta},now);if(x.error)return J(x,400);
    if(!x.already)ev.push({event:'purchase',pid:x.row.id,item:x.row.item,kind:x.row.kind,price:x.row.price,meta:x.row.meta});out={...x,wallet:E.walletState(S,g,now),items:E.marketItems(S,g,now),prove:E.proveOffers(S,g,now),path:{offers:E.pathOffers(S,g,now),themes:E.QUEST_THEMES},state:pub()};}
+ else if(P==='/api/whisper'&&req.method==='POST'){const x=E.whisper(S,g,now);if(x.error)return J(x,400);if(x.ev)ev.push(...x.ev);out={ok:true,already:x.already,whisper:x.whisper,tokens:x.tokens,state:pub()};}
  else if(P==='/api/market/equip'&&req.method==='POST'){const x=E.equip(S,g,String(body.slot||''),body.item?String(body.item):null);if(x.error)return J(x,400);out={...x,wallet:E.walletState(S,g,now),items:E.marketItems(S,g,now),prove:E.proveOffers(S,g,now),path:{offers:E.pathOffers(S,g,now),themes:E.QUEST_THEMES},state:pub()};}
  else return J({error:'not found'},404);
  E.snapDay(S,today);

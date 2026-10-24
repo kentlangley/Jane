@@ -357,7 +357,7 @@ topics keep their mastery; everything else is re-scored. `--no-keep-legendary` r
 
 ## Market choices (the learner picks the next quest)
 
-In the app's 🛒 Market (plans/points-market.md) the learner can spend points to pick the **next new quest**: one topic from
+In the app's 🛒 Market (plans/archive/points-market.md) the learner can spend points to pick the **next new quest**: one topic from
 the 2-3 ready frontier topics the app offered (`pick-path`), and/or a **story theme** (`pick-theme`: pirates, space,
 dungeon, jungle, ocean, dinosaurs, detective, sports). Open picks are in the export as `market.openChoices`
 (`market.choices` keeps used ones too), and `quests.nextStep` (or `quests.marketChoice` while a quest is still running)
