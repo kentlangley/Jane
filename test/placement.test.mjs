@@ -1,4 +1,4 @@
-// Placement quests (plans/learner-profiles.md Slice 5, LESSONS.md "Placement quests"): ladders from the grade-level band
+// Placement quests (plans/archive/learner-profiles.md Slice 5, LESSONS.md "Placement quests"): ladders from the grade-level band
 // down; a pass skips the rest of the ladder; the result is recorded once the quest is done; beyondMap at the ceiling.
 import {test} from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';
 import {ROOT,loadEngine,validate} from './helpers.mjs';
@@ -42,3 +42,8 @@ test('built-in diagnostic: same window for a 10.5-year-old, top band for an olde
   E.configure({LEARNER_AGE:'13.5'});const S2=E.blank();E.next(S2,g,null,Date.now());S2.current=null;E.next(S2,g,null,Date.now());const b=S2.placement.queue.map(id=>g.byId[id]).filter(Boolean);
   for(const t of b){const top=E.subjectCeiling(g,t.subject);assert.ok(t.ageRangeStart>=Math.min(12,top-1),`${t.subject} ${t.ageRangeStart}`);}
   E.configure({});});
+test('export says PLACEMENT WAITING while a placement quest is unfinished (never replace it)',async()=>{const {execFileSync}=await import('node:child_process');const os=await import('node:os');
+  const D=fs.mkdtempSync(path.join(os.tmpdir(),'jane-plx-'));const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+  const env={...process.env,DATA_DIR:D,STORAGE:'file'};execFileSync(process.execPath,['publish-lessons.mjs','packs/examples/example-placement.json','--date',today,'--local'],{cwd:ROOT,env});
+  const ex=execFileSync(process.execPath,['export-progress.mjs','--local'],{cwd:ROOT,env,encoding:'utf8'});const X=JSON.parse(fs.readFileSync(ex.match(/wrote (\S+\.json)/)[1],'utf8'));
+  assert.match(X.quests.nextStep,/^PLACEMENT WAITING/);assert.equal(X.placementQuest,null);assert.equal(X.taxonomyCeiling.Mathematics,13);fs.rmSync(D,{recursive:true,force:true});});

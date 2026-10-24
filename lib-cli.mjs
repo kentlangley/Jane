@@ -31,7 +31,7 @@ export function activeQuests(S,except){const Q=S?.quests||{};return Object.entri
 function varsConfig(){const v={};if(!LOCAL)try{const t=fs.readFileSync(path.join(DIR,'wrangler.toml'),'utf8');const m=t.match(/^\[vars\]([\s\S]*?)(?=^\[|$(?![\s\S]))/m);
   if(m)for(const l of m[1].split('\n')){const x=l.match(/^\s*(LEARNER_[A-Z]+)\s*=\s*"([^"]*)"/);if(x)v[x[1]]=x[2];}}catch{}
   for(const k of ['LEARNER_NAME','LEARNER_AGE','LEARNER_GRADE'])if(process.env[k])v[k]=process.env[k];return v;}
-// ---- learner profiles (plans/learner-profiles.md Slice 4) ----
+// ---- learner profiles (plans/archive/learner-profiles.md Slice 4) ----
 // --learner <id> (or LEARNER_ID) picks the learner; default = the primary learner (the original keys), so commands
 // without --learner behave exactly as before. lk(key) adds the learner's key prefix ("" for the primary, "L:<id>:" else).
 const ai=process.argv.indexOf('--learner');export const LEARNER_ARG=(ai>=0?process.argv[ai+1]:null)||process.env.LEARNER_ID||null;

@@ -1,4 +1,4 @@
-// Learner profiles (plans/learner-profiles.md): per-learner records, registry migration, isolation between kids.
+// Learner profiles (plans/archive/learner-profiles.md): per-learner records, registry migration, isolation between kids.
 // Runs the Worker in-process with file storage in a temp dir (no network, no live data).
 import {test} from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';
 import {execFileSync} from 'node:child_process';
@@ -114,7 +114,7 @@ test('PARENT_PIN (optional) guards the parent writes',async()=>{const {env}=mk()
 const cli=(dir,...a)=>execFileSync(process.execPath,a,{cwd:ROOT,env:{...process.env,DATA_DIR:dir,STORAGE:'file',LEARNER_NAME:'Sam',LEARNER_AGE:'10.5',LEARNER_GRADE:'5th grade'},encoding:'utf8'});
 test('publish/export/backup per learner; without --learner they act on the primary exactly as before',async()=>{const {dir,env}=mk();runMig(dir);addKid(env);
   await call(env,'/api/state');await call(env,'/api/state?learner=kid');
-  const o=cli(dir,'publish-lessons.mjs','--learner','kid','packs/examples/example-quest.json','--date',today,'--local');assert.match(o,/published \(local\) lessons:/);
+  const o=cli(dir,'publish-lessons.mjs','--learner','kid','packs/examples/example-quest.json','--date',today,'--local');assert.match(o,/published \(local\) L:kid:lessons:/);
   assert.ok(fs.existsSync(path.join(dir,`L%3Akid%3Alessons%3A${today}.json`)));assert.ok(!fs.existsSync(path.join(dir,`lessons%3A${today}.json`)));
   assert.equal((await call(env,'/api/state?learner=kid')).json.newQuest,true);assert.ok(!(await call(env,'/api/state')).json.quest);
   const ex=cli(dir,'export-progress.mjs','--local','--learner','kid');const xf=ex.match(/wrote (\S+\.json)/)[1];assert.match(xf,/exports\/kid\//);

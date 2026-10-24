@@ -39,7 +39,7 @@ if(pack.boostFor){if(lockedQuest(pack.boostFor))refuseLocked(pack.boostFor);
   checkTerms(pack.terms,'terms',E,W);
   if(warns.length)console.warn('⚠️  '+warns.join('\n  '));if(errs.length){console.error(`❌ ${errs.length} problem(s):\n  `+errs.join('\n  '));process.exit(1);}
   if(dry){console.log(`✅ valid boost for quest ${pack.boostFor} (dry run)`);process.exit(0);}
-  kvPut(lk('boost:')+pack.boostFor,pack);console.log(`✅ published${LOCAL?' (local)':''} boost:${pack.boostFor} — ${Object.keys(pack.trim||{}).length} trimmed stages, ${Object.keys(pack.hints||{}).length} extra hints`);process.exit(0);}
+  kvPut(lk('boost:')+pack.boostFor,pack);console.log(`✅ published${LOCAL?' (local)':''} ${lk('boost:')}${pack.boostFor} — ${Object.keys(pack.trim||{}).length} trimmed stages, ${Object.keys(pack.hints||{}).length} extra hints`);process.exit(0);}
 if(pack.quest&&lockedQuest(pack.date))refuseLocked(pack.date);
 // ---------- refresh (v0.5): the started, unfinished quest at this date; reached stages are immutable ----------
 const SIX=6,startedHere=!!(pack.quest&&PROG?.quests?.[pack.date]?.started),REFRESH=refreshArg||startedHere;let RR=0,PREV=null;
@@ -214,4 +214,4 @@ if(Q&&!REFRESH&&!force&&PROG){const A=activeQuests(PROG,pack.date).filter(d=>kvL
   if(A.length){console.error(`⛔ quest ${A[0]} is in progress (one quest at a time). Not publishing a new quest: it would only wait hidden.\n   Refresh its unreached stages instead: node publish-lessons.mjs <pack.json> --refresh --date ${A[0]}   (see LESSONS.md "Refreshing the current quest")`);process.exit(3);}}
 const sum=`${REFRESH?`refresh: stages 1-${RR} locked, ${pack.topics.length-RR} remaining, `:''}${pack.topics.length} ${Q?'stages':'topics'}, ${nq} items (~${estMin} min, ${nGraded} graded${nReview?`, ${nReview} in review stages`:''}, review via gates, ${nDeep} deep dive${nDeep===1?'':'s'}${RS?`, ${nResearched} researched stage${nResearched===1?'':'s'}`:''}${newAreas?`, new areas: ${newAreas.length}${newAreas.length?` (${newAreas.map(a=>a.replace('|',' / ')).join(', ')})`:''}`:''}), formats: ${[...typesUsed].join(', ')}`;
 if(dry){console.log(`✅ valid${Q?` quest "${Q.title}"`:''}: ${sum} for ${pack.date} (dry run, nothing written)`);process.exit(0);}
-kvPut(lk('lessons:')+pack.date,pack);console.log(`✅ published${LOCAL?' (local)':''} lessons:${pack.date}${Q?` quest "${Q.title}"`:''}: ${sum}`);
+kvPut(lk('lessons:')+pack.date,pack);console.log(`✅ published${LOCAL?' (local)':''} ${lk('lessons:')}${pack.date}${Q?` quest "${Q.title}"`:''}: ${sum}`);

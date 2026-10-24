@@ -452,6 +452,8 @@ level instead of starting from zero. It is a diagnostic, not a lesson. Example: 
   and note the gap for the household (content beyond the map is not something to invent as new topic ids).
 - No review gates run inside a placement quest, and the pizza starter question is skipped for a learner whose first
   pack is a placement quest.
+- While it is unfinished, the export's `quests.nextStep` says `PLACEMENT WAITING`: publish nothing for that learner
+  (a newer quest would replace an unstarted one).
 - After it is finished, the export's `placementQuest` has per-ladder `passed`, `level` (band passed), `topicId`,
   `tried` and `below` (when nothing passed: start below that band). Plan the next quest from it plus `frontier`.
 - Voice: still "you"; match the learner's age (a teenager gets a grown-up, game-like tone, no baby talk). Theme it on

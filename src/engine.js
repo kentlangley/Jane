@@ -388,7 +388,7 @@ function ancestors(g,id){const s=new Set(),q=[id];while(q.length)for(const e of 
 const CEIL=new WeakMap();
 export function subjectCeiling(g,sub){let m=CEIL.get(g);if(!m){m={};for(const t of g.topics)m[t.subject]=Math.max(m[t.subject]??0,t.ageRangeStart||0);CEIL.set(g,m);}return m[sub]??0;}
 export function taxonomyCeilings(g){const out={};for(const t of g.topics)out[t.subject]=subjectCeiling(g,t.subject);return out;}
-// ---------- placement quests (plans/learner-profiles.md, LESSONS.md "Placement quests") ----------
+// ---------- placement quests (plans/archive/learner-profiles.md, LESSONS.md "Placement quests") ----------
 // A quest pack with "placement": true. Stages carry "ladder" (key) and "band" (level); within a ladder they run from the
 // grade-level band down to fallbacks. A stage is passed with >= 2/3 of its graded questions right on the first try;
 // passing skips the rest of that ladder. Results: S.placeQ[date][topicId] = {r: right first try, a: answered}.
