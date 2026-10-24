@@ -65,12 +65,40 @@ test('scout flare: a fully cleared island cannot be flared',()=>{
   const S=rich(1000);for(const t of g.topics.filter(t=>t.subject==='Geography'))S.ts[t.id]={st:'mastered',how:'direct',conf:.9,box:1,due:NOW+DAY};
   assert.match(E.buy(S,g,{pid:pid(34),item:'scout-flare',meta:{region:'Geography'}},NOW).error,/no fog left/);});
 
+// ---------- slice 4: prove-it ticket ----------
+const whyT=g.topics.find(t=>t.ck?.y),genT=g.topics.find(t=>t.subject==='Mathematics'&&t.domain==='Multiplication & Division'&&!t.ck);
+const dueRec=(lvl=3)=>({st:'mastered',how:'direct',conf:.9,box:1,due:NOW-DAY,at:NOW-9*DAY,c:3,w:0,ft:3,lvl});
+const proveSetup=()=>{const S=rich(1000);S.ts[whyT.id]=dueRec();S.ts[genT.id]=dueRec(3);S.medals=[{id:whyT.id,tier:'bronze',at:1},{id:genT.id,tier:'bronze',at:1}];S.current={id:'hold',topicId:genT.id,q:'held',type:'input',kind:'math',answer:'1',mode:'learn',tries:0,stage:'main',issued:NOW};return S;};
+test('prove-it: a not-due or unknown topic is refused',()=>{const S=proveSetup();S.ts[whyT.id].due=NOW+DAY;
+  assert.match(E.buy(S,g,{pid:pid(40),item:'prove-it',meta:{topicId:whyT.id}},NOW).error,/due right now/);
+  assert.match(E.buy(S,g,{pid:pid(41),item:'prove-it',meta:{topicId:'nope'}},NOW).error,/Pick a review/);assert.equal(S.wallet?.spent||0,0);});
+test('prove-it: right first try → box +1, new due, normal points + bonus; the held item comes back',()=>{
+  const S=proveSetup(),medals=JSON.stringify(S.medals),p0=S.points;const x=E.buy(S,g,{pid:pid(42),item:'prove-it',meta:{topicId:whyT.id}},NOW);assert.ok(x.ok,x.error);
+  assert.equal(S.current.format,'prove');assert.equal(S.current.mode,'review');assert.match(S.current.q,/WHY/);assert.equal(S.current.answer,whyT.ck.y.a);assert.equal(S.proveHold.id,'hold');
+  const y=E.submit(S,g,S.current.answer,NOW+5000);assert.equal(y.r.correct,true);assert.equal(y.r.proveIt.passed,true);
+  const r=S.ts[whyT.id];assert.equal(r.box,2);assert.equal(r.due,NOW+5000+7*DAY);assert.equal(r.st,'mastered');assert.equal(r.how,'direct');
+  assert.ok(S.points>=p0+E.PROVE_BONUS+10,'normal review points + bonus (earned)');assert.equal(S.wallet.spent,150,'spent stays spent');
+  assert.equal(S.current.id,'hold');assert.equal(S.proveHold,undefined);assert.equal(JSON.stringify(S.medals),medals);
+  assert.ok(y.ev.some(e=>e.event==='proveIt'&&e.passed));});
+test('prove-it: wrong → review stays due (≤ now + 1 day), not demoted, no refund',()=>{
+  const S=proveSetup();E.buy(S,g,{pid:pid(43),item:'prove-it',meta:{topicId:whyT.id}},NOW);const wrong=S.current.choices.find(c=>c!==S.current.answer);
+  const y=E.submit(S,g,wrong,NOW+5000);assert.equal(y.r.done,true);assert.equal(y.r.correct,false);assert.equal(y.r.reveal,whyT.ck.y.a);
+  const r=S.ts[whyT.id];assert.ok(r.due<=NOW+5000+DAY);assert.equal(r.st,'mastered');assert.equal(r.box,1);assert.equal(S.wallet.spent,150);assert.equal(S.current.id,'hold');});
+test('prove-it: a generator topic gets a question one level up; skip forfeits the ticket',()=>{
+  const S=proveSetup();E.buy(S,g,{pid:pid(44),item:'prove-it',meta:{topicId:genT.id}},NOW);assert.equal(S.current.lvl,4);assert.equal(S.current.type,'input');assert.equal(S.current.bonus,null);
+  const k=E.skip(S,g,null,NOW+1);assert.equal(k.r.skipped,true);assert.equal(S.current.id,'hold');assert.equal(S.ts[genT.id].box,1);assert.equal(S.wallet.spent,150);});
+test('prove-it: max 2 per Pacific day, offers list only due provable topics',()=>{
+  const S=proveSetup();assert.equal(E.proveOffers(S,g,NOW).due.length,2);
+  for(const i of [0,1]){assert.ok(E.buy(S,g,{pid:pid(50+i),item:'prove-it',meta:{topicId:whyT.id}},NOW+i).ok);E.skip(S,g,null,NOW+i);}
+  assert.match(E.buy(S,g,{pid:pid(52),item:'prove-it',meta:{topicId:whyT.id}},NOW+2).error,/tomorrow/);assert.equal(E.proveOffers(S,g,NOW+2).left,0);
+  assert.ok(E.buy(S,g,{pid:pid(53),item:'prove-it',meta:{topicId:whyT.id}},NOW+DAY).ok,'a new day, a new ticket');});
+
 // ---------- server: routes, purchase log, export ----------
 const DATA=tmpDir('jane-market-');let srv,B;
 const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
 const freePort=()=>new Promise(r=>{const s=net.createServer().listen(0,'127.0.0.1',()=>{const p=s.address().port;s.close(()=>r(p));});});
 const call=async(p,body)=>{const r=await fetch(B+p,body===undefined?{}:{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});return{status:r.status,j:await r.json()};};
-before(async()=>{const S=rich(1000);S.placement.done=true;fs.writeFileSync(path.join(DATA,'progress.json'),JSON.stringify(S));
+before(async()=>{const S=rich(1000);S.placement.done=true;S.ts[whyT.id]={...dueRec(),due:Date.now()-DAY};S.medals=[{id:whyT.id,tier:'bronze',at:1}];fs.writeFileSync(path.join(DATA,'progress.json'),JSON.stringify(S));
   const port=await freePort();B=`http://127.0.0.1:${port}`;
   srv=spawn(process.execPath,['server/index.mjs'],{cwd:ROOT,env:{...process.env,PORT:String(port),HOST:'127.0.0.1',DATA_DIR:DATA,LEARNER_NAME:'Sam'},stdio:['ignore','pipe','inherit']});
   for(let i=0;i<100;i++){try{if((await fetch(B+'/healthz')).ok)return;}catch{}await new Promise(r=>setTimeout(r,100));}throw new Error('server did not start');});
@@ -95,3 +123,9 @@ test('server: buy a ship skin, equip it, /api/state carries the look; equip with
   fs.writeFileSync(path.join(DATA,'debug%3AclockOffsetDays.json'),'2');const m2=(await call('/api/map')).j;fs.rmSync(path.join(DATA,'debug%3AclockOffsetDays.json'));
   assert.deepEqual(m2.fog.flares,[],'two days later the fog is back');assert.equal(m2.fog.mask,m1.fog.mask);
   const h=await (await fetch(B+'/parent')).text();assert.match(h,/"wallet":\{"balance":475,"earned":1000,"spent":525/,"parent data carries both earned and spendable");});
+test('server: POST /api/market/prove serves the harder question; answering it right clears the review',async()=>{
+  const m=(await call('/api/market')).j;assert.ok(m.prove.due.some(d=>d.topicId===whyT.id));
+  const a=await call('/api/market/prove',{pid:'srv-pid-5',topicId:whyT.id});assert.equal(a.status,200,JSON.stringify(a.j));assert.equal(a.j.state.item.format,'prove');
+  const r=(await call('/api/answer',{answer:whyT.ck.y.a})).j;assert.equal(r.proveIt.passed,true);assert.equal(r.state.wallet.spent,675);
+  assert.ok(r.state.points>=1000+20);assert.equal(r.state.wallet.balance,r.state.wallet.earned-r.state.wallet.spent);
+  assert.equal((await call('/api/market/prove',{pid:'srv-pid-6',topicId:whyT.id})).status,400,'no longer due');});

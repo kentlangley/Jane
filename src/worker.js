@@ -64,10 +64,10 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
  else if(P==='/api/choice'&&req.method==='POST'){const r=E.choose(S,g,body.choice,pack,now);E.next(S,g,pack,now);out={...r,state:pub()};}
  else if(P==='/api/fog/claim'&&req.method==='POST'){const x=E.claimFind(S,g,String(body.id||''),now);if(x.error)return J(x,400);ev.push({event:'fogFind',id:x.find?.id,kind:x.find?.kind,already:!!x.already});out={...x,state:pub(),fog:E.fogState(S,g,now)};}
  // Points Market (plans/points-market.md): balance = earned − spent, server-side; idempotent by purchase id
- else if(P==='/api/market'){out={wallet:E.walletState(S,g,now),items:E.marketItems(S,g,now)};}
- else if(P==='/api/market/buy'&&req.method==='POST'){const x=E.buy(S,g,{pid:body.pid,item:String(body.item||''),meta:body.meta},now);if(x.error)return J(x,400);
-   if(!x.already)ev.push({event:'purchase',pid:x.row.id,item:x.row.item,kind:x.row.kind,price:x.row.price,meta:x.row.meta});out={...x,wallet:E.walletState(S,g,now),items:E.marketItems(S,g,now),state:pub()};}
- else if(P==='/api/market/equip'&&req.method==='POST'){const x=E.equip(S,g,String(body.slot||''),body.item?String(body.item):null);if(x.error)return J(x,400);out={...x,wallet:E.walletState(S,g,now),items:E.marketItems(S,g,now),state:pub()};}
+ else if(P==='/api/market'){out={wallet:E.walletState(S,g,now),items:E.marketItems(S,g,now),prove:E.proveOffers(S,g,now)};}
+ else if((P==='/api/market/buy'||P==='/api/market/prove')&&req.method==='POST'){const x=P==='/api/market/prove'?E.buy(S,g,{pid:body.pid,item:'prove-it',meta:{topicId:body.topicId}},now):E.buy(S,g,{pid:body.pid,item:String(body.item||''),meta:body.meta},now);if(x.error)return J(x,400);
+   if(!x.already)ev.push({event:'purchase',pid:x.row.id,item:x.row.item,kind:x.row.kind,price:x.row.price,meta:x.row.meta});out={...x,wallet:E.walletState(S,g,now),items:E.marketItems(S,g,now),prove:E.proveOffers(S,g,now),state:pub()};}
+ else if(P==='/api/market/equip'&&req.method==='POST'){const x=E.equip(S,g,String(body.slot||''),body.item?String(body.item):null);if(x.error)return J(x,400);out={...x,wallet:E.walletState(S,g,now),items:E.marketItems(S,g,now),prove:E.proveOffers(S,g,now),state:pub()};}
  else return J({error:'not found'},404);
  E.snapDay(S,today);
  if(migrated&&raw?.topics&&!sbx){/* keep a copy of the pre-v2 record */await KV.put('progress:v1-backup',JSON.stringify(raw));}

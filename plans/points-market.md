@@ -1,6 +1,6 @@
 # Points Market — spend points on fun, choice and peeks
 
-**Status:** in progress — slices 1–3 done (2026-10-23).
+**Status:** in progress — slices 1–4 done (2026-10-23).
 **Tracking:** [#74](https://github.com/kentlangley/Jane/issues/74)
 **Slices:** [#68](https://github.com/kentlangley/Jane/issues/68) Wallet · [#69](https://github.com/kentlangley/Jane/issues/69) Skins · [#70](https://github.com/kentlangley/Jane/issues/70) Scout flare · [#71](https://github.com/kentlangley/Jane/issues/71) Prove-it · [#72](https://github.com/kentlangley/Jane/issues/72) Pick your path · [#73](https://github.com/kentlangley/Jane/issues/73) Chests + extras
 **Idea credit:** Christopher (Kent's son), who proposed the Points Market items: hidden items, temporary fog push-back, skins, influencing the next question, buying out known reviews.
@@ -212,6 +212,28 @@ points buy things a 5th grader wants (skins, secrets, choices) without breaking 
 - Enforce daily cap (open question 6 default).
 - Done test: as above.
 - Decisions frozen: Design "Prove-it ticket", M0, gates unchanged.
+
+#### Outcome (Slice 4) — done 2026-10-23
+- Shipped: `prove-it` row (150), `PROVE_BONUS`=20, `PROVE_DAY_MAX`=2 (Q6 defaults), `proveOffers` (due + provable, most
+  overdue first, `left` today) on `GET /api/market`, `POST /api/market/prove {pid, topicId}` (same as buy with item
+  `prove-it`). The ticket swaps in a `format:'prove'`, `mode:'review'` item and holds the current one (`S.proveHold`),
+  which comes back after the answer or a skip.
+- Grading: right first try → `submit0`'s normal review pass (box +1, new due, normal points, first-try count) + 20 bonus
+  to `S.points` (earned). Any miss → one try only: answer revealed, `due = min(due, now+1 day)`, `reviewMiss` + `proveIt`
+  events, no refund.
+- Decisions (brief needed a call):
+  - A miss does **not** demote the topic (a normal Play review miss would set it back to learning). The plan says
+    "review stays due", and demoting would make the ticket a way to lose mastery tiers. It's treated like the pack
+    memory-check miss instead.
+  - "Harder" = a check item's why tier (89 topics) or a generator one level up. Topics with only a self-check, a plain
+    kid MCQ or a check with no why tier are not offered, because they have no harder question.
+  - Refused during a Map mini-session or while a Prove-It question is already open. Skipping it uses up the ticket.
+  - "On the review gate card": a "🎟️ Prove-It tickets" button on a gate item opens the Market's ticket, and the gate's own
+    topic is left out of the picker. The gate item, its count and its opening are untouched (gates unchanged).
+- Done test: `node --test test/market.test.mjs && npm test` → market 17/17, 189 pass / 0 fail. Covers not-due refused;
+  right → box 1→2, due +7 d, bonus, hold restored, medals unchanged; wrong → due ≤ now+1 d, still mastered, spent stays;
+  generator level +1; skip forfeits; daily cap 2, next day OK; server prove → answer → passed. Local headless check:
+  Market → ticket → Play shows the 🎟️ frame and the WHY question.
 
 ### Slice 5: The learner picks his path (and the nightly author honors it)
 - Ships: buy **pick your path** — choose 1 of 2–3 ready frontier topics for the next new quest, or a **theme flavor**;
