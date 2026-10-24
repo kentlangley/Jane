@@ -1,6 +1,6 @@
 # Points Market — spend points on fun, choice and peeks
 
-**Status:** in progress — slice 1 done (2026-10-23).
+**Status:** in progress — slices 1–2 done (2026-10-23).
 **Tracking:** [#74](https://github.com/kentlangley/Jane/issues/74)
 **Slices:** [#68](https://github.com/kentlangley/Jane/issues/68) Wallet · [#69](https://github.com/kentlangley/Jane/issues/69) Skins · [#70](https://github.com/kentlangley/Jane/issues/70) Scout flare · [#71](https://github.com/kentlangley/Jane/issues/71) Prove-it · [#72](https://github.com/kentlangley/Jane/issues/72) Pick your path · [#73](https://github.com/kentlangley/Jane/issues/73) Chests + extras
 **Idea credit:** Christopher (Kent's son), who proposed the Points Market items: hidden items, temporary fog push-back, skins, influencing the next question, buying out known reviews.
@@ -153,6 +153,18 @@ points buy things a 5th grader wants (skins, secrets, choices) without breaking 
 - Apply equipped skins in `drawMap` (ships, theme), boss render (`BOSSES`), avatar badge.
 - Done test: as above.
 - Decisions frozen: Design "Skins", M3, M4.
+
+#### Outcome (Slice 2) — done 2026-10-23
+- Shipped: 13 skin rows (`look` = colours / emoji the client draws): ships `ship-candy` 300, `ship-pirate` 400, `ship-gold` 900;
+  avatars `avatar-fox` 300, `avatar-ninja` 500, `avatar-astronaut` 500, `avatar-dragon` 800; boss skins `boss-robots` 600,
+  `boss-spooky` 700, `boss-sea` 1000; map themes `theme-sunset` 800, `theme-night` 1200, `theme-lava` 1500. `equip(S,g,slot,item)`
+  (owned-only, own slot, free, null = take off), `POST /api/market/equip`, `wallet.looks` on `/api/state`.
+- UI: 🛒 Market tab (`#market`), confirm dialog (Esc / focus trap / focus restore), a bought skin is worn right away. HUD ⭐ chip
+  = balance (Q2 default); new avatar chip; parent report "Market wallet" card shows spendable + earned − spent.
+- Done test: `node --test test/market.test.mjs && npm test` → market 9/9, 181 pass / 0 fail. UI check on a local server with
+  synthetic progress (headless Chrome): buy Pirate Fleet → confirm → worn; Map draws 6 black-sail paths; chip 2400 → 1700.
+  The live check uses a write-blocked headless browser (no live purchases; Landon may be playing) instead of a live sandbox buy.
+- Deferred: the sticker row has no shelf yet (it shows "✓ Yours!" in the Market only).
 
 ### Slice 3: The learner can fire a scout flare into the fog
 - Ships: buy a **scout flare** (~200), pick a fogged region on the Map, see it thinned for 24 h with topic names and

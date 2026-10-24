@@ -36,6 +36,19 @@ test('day snapshots: one per PT day, capped; export has a market block with earn
   assert.equal(X.balance,475);assert.equal(X.earned,500);assert.equal(X.spent,25);assert.equal(X.spent7d,25);assert.equal(X.earned7d,200);assert.equal(X.earnedSince,'2026-10-16');
   assert.equal(X.ledger.length,1);assert.ok(X.prices['test-sticker']);});
 
+// ---------- slice 2: skins ----------
+test('skins: 4 slots priced 300–1,500, bought once, equip owned-only and free, unequip; looks go out with the wallet',()=>{
+  const skins=E.MARKET.filter(d=>d.kind==='skin');assert.deepEqual([...new Set(skins.map(d=>d.slot))].sort(),['avatar','boss','ship','theme']);
+  assert.ok(skins.every(d=>d.once&&d.price>=300&&d.price<=1500&&d.look),'skin prices 300–1,500');
+  const S=rich(2000);assert.match(E.equip(S,g,'ship','ship-pirate').error,/Buy it first/);
+  assert.ok(E.buy(S,g,{pid:pid(20),item:'ship-pirate'},NOW).ok);const spent=S.wallet.spent;
+  assert.match(E.equip(S,g,'avatar','ship-pirate').error,/does not go there/);assert.match(E.equip(S,g,'hat','ship-pirate').error,/unknown slot/);
+  const before=m0(S);assert.ok(E.equip(S,g,'ship','ship-pirate').ok);assert.equal(S.wallet.spent,spent,'equip is free');assert.equal(m0(S),before);
+  let w=E.walletState(S,g,NOW);assert.equal(w.equipped.ship,'ship-pirate');assert.equal(w.looks.ship.sail,'#263238');
+  assert.ok(E.marketItems(S,g,NOW).find(i=>i.id==='ship-pirate').equipped);
+  assert.ok(E.equip(S,g,'ship',null).ok);w=E.walletState(S,g,NOW);assert.equal(w.equipped.ship,undefined);assert.ok(w.owned['ship-pirate'],'still owned after taking it off');
+  assert.ok(E.buy(S,g,{pid:pid(21),item:'ship-pirate'},NOW).already,'owned skins are not sold twice');});
+
 // ---------- server: routes, purchase log, export ----------
 const DATA=tmpDir('jane-market-');let srv,B;
 const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
@@ -56,3 +69,9 @@ test('server: /api/state wallet, GET /api/market, idempotent POST /api/market/bu
   const ex=execFileSync(process.execPath,['export-progress.mjs','--local'],{cwd:ROOT,env:{...process.env,DATA_DIR:DATA},encoding:'utf8'});
   const X=JSON.parse(fs.readFileSync(ex.match(/wrote (\S+\.json)/)[1],'utf8'));assert.equal(X.market.spent,25);assert.equal(X.market.balance,975);assert.equal(X.market.ledger.length,1);
   assert.equal(typeof X.market.earned7d,'number');});
+test('server: buy a ship skin, equip it, /api/state carries the look; equip without owning is refused',async()=>{
+  assert.equal((await call('/api/market/equip',{slot:'avatar',item:'avatar-fox'})).status,400);
+  const a=await call('/api/market/buy',{pid:'srv-pid-3',item:'ship-gold'});assert.equal(a.status,200);
+  const e=await call('/api/market/equip',{slot:'ship',item:'ship-gold'});assert.equal(e.status,200);assert.equal(e.j.state.wallet.looks.ship.id,'ship-gold');
+  const s=(await call('/api/state')).j;assert.equal(s.wallet.equipped.ship,'ship-gold');assert.equal(s.wallet.balance,s.wallet.earned-s.wallet.spent);assert.equal(s.points,1000);
+  const h=await (await fetch(B+'/parent')).text();assert.match(h,/"wallet":\{"balance":75,"earned":1000,"spent":925/,"parent data carries both earned and spendable");});
