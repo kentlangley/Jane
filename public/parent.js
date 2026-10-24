@@ -67,9 +67,32 @@ function medals(){const M=D.medals;const TC={legendary:'🌈',gold:'🥇',silver
  return M.length?`<div class="chips">${Object.entries(c).map(([t,n])=>`<span class="chip">${TC[t]||'🏅'} ${n} ${t}</span>`).join('')}</div><div class="medals">${M.map(m=>`<div class="md t-${m.tier}"><div class="mi">${esc(m.ic||'⭐')}</div><div><b>${esc(m.name)}</b><div class="muted small">${TC[m.tier]||''} ${esc(m.tier)} · ${esc(m.subject)} · ${new Date(m.at).toLocaleDateString('en-US',{timeZone:TZ,month:'short',day:'numeric'})}</div></div></div>`).join('')}</div>`:'<p>No medals yet.</p>';}
 // ---------- page ----------
 const NAV=[['overview','Overview'],['highlights','How it\'s going'],['charts','Trends'],['subjects','Subjects'],['coverage','Coverage'],['quests','Quests'],['reviews','Reviews'],['log','Answer log'],['medals','Medals']];
+// ---- learner profiles (plans/learner-profiles.md Slice 3): one card per kid + manage players ----
+function kidsBar(){const P=D.profiles;if(!P)return'';const L=P.learners;const ago=d=>d?fmtD(d):'not yet';
+  const cards=L.map(k=>`<a class="kid${k.id===P.current?' on':''}" href="/parent?learner=${encodeURIComponent(k.id)}" aria-current="${k.id===P.current?'page':'false'}"><span class="kav">${esc(k.avatar)}</span><span class="kmain"><b>${esc(k.name)}${k.hasPin?' <span title="has a PIN">🔒</span>':''}</b><span class="muted small">${esc(k.grade||'')}</span>
+    <span class="kst small">⭐ ${k.points.toLocaleString()} · 🏅 ${k.medals} · ✅ ${k.mastered} mastered · 📅 ${k.days}-day streak · last played ${ago(k.lastPlayed)}</span></span></a>`).join('');
+  const av=(name,cur)=>`<select name="${name}" aria-label="Avatar">${P.avatars.map(a=>`<option${a===cur?' selected':''}>${a}</option>`).join('')}</select>`;
+  const pp=P.parentPin?'<input name="parentPin" type="password" inputmode="numeric" placeholder="Parent PIN" aria-label="Parent PIN" required>':'';
+  const rows=L.map(k=>`<form class="kidrow" data-id="${esc(k.id)}"><b>${esc(k.avatar)} ${esc(k.name)}</b>${av('avatar',k.avatar)}
+    <input name="interests" value="${esc((k.interests||[]).join(', '))}" placeholder="Interests (comma-separated)" aria-label="Interests">
+    <input name="pin" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="New 4-digit PIN" aria-label="New PIN for ${esc(k.name)}">${pp}
+    <button class="btn" name="save">Save</button>${k.hasPin?'<button class="btn ghost" name="clearpin" type="button">Clear PIN</button>':''}</form>`).join('');
+  return`<div class="wrap kids" role="navigation" aria-label="Kids">${L.length>1?cards:''}
+  <details class="kidman"><summary>👪 Players${L.length>1?'':': add a learner'}</summary><div class="kidbody">${rows}
+   <form class="kidnew"><h3>Add a learner</h3><input name="name" placeholder="Name" required maxlength="30" aria-label="Name"><input name="grade" placeholder="Grade (e.g. 6th grade)" required maxlength="20" aria-label="Grade">
+    <input name="interests" placeholder="Interests (comma-separated)" aria-label="Interests">${av('avatar','⭐')}${pp}<button class="btn">Add</button>
+    <p class="muted small">Jane gives a new learner a short placement quest first, so they start at their level. A PIN is optional (a kid-level guard).</p></form>
+   <div class="kidmsg small" aria-live="polite"></div></div></details></div>`;}
+async function kidPost(p,b){const r=await fetch(p,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(b)});const j=await r.json().catch(()=>({}));
+  if(!r.ok||j.error){document.querySelector('.kidmsg').textContent='⚠️ '+(j.error||'Something went wrong');return null;}return j;}
+document.addEventListener('submit',async e=>{const f=e.target;if(!f.closest?.('.kidman'))return;e.preventDefault();const v=Object.fromEntries(new FormData(f));
+  if(f.classList.contains('kidnew')){const j=await kidPost('/api/parent/profiles',v);if(j)location.href='/parent?learner='+encodeURIComponent(j.profile.id);return;}
+  const b={id:f.dataset.id,avatar:v.avatar,interests:v.interests,parentPin:v.parentPin};if(v.pin)b.pin=v.pin;if(await kidPost('/api/parent/profiles/update',b))location.reload();});
+document.addEventListener('click',async e=>{const b=e.target.closest?.('button[name=clearpin]');if(!b)return;const f=b.form;const pp=f.querySelector('[name=parentPin]')?.value;
+  if(await kidPost('/api/parent/profiles/update',{id:f.dataset.id,pin:null,parentPin:pp}))location.reload();});
 document.getElementById('app').innerHTML=`<header class="top"><div class="wrap"><div class="brand"><div class="logo">🗺️</div><div><h1>${esc(D.name)}'s learning report</h1><div class="muted small">Updated ${fmtDT(D.generated)} PT${D.sandbox?' · <b>sandbox</b>':''} · read-only</div></div></div>
  <div class="actions"><button class="btn ghost" onclick="openAll();print()">🖨️ Print</button><a class="btn ghost" href="/">Open the app ›</a></div></div>
- </header><nav class="navbar"><div class="wrap tabs">${NAV.map(([id,l])=>`<a href="#${id}">${l}</a>`).join('')}</div></nav>
+ ${kidsBar()}</header><nav class="navbar"><div class="wrap tabs">${NAV.map(([id,l])=>`<a href="#${id}">${l}</a>`).join('')}</div></nav>
  <main class="wrap">${sec('overview','Overview',overview(),`${fmtD(D.today)}`)}${sec('highlights',`How ${esc(D.name)} is doing`,highlights(),'last 7 days')}${sec('charts','Trends',charts(),'recent days')}
  ${sec('subjects','Progress by subject',subjects(),'tap a subject, then a domain')}${D.coverage?sec('coverage','Coverage by area',coverage(),`${D.coverage.seen}/${D.coverage.total} areas explored`):''}${sec('quests','Quest history',quests(),`${D.quests.length} quest${D.quests.length===1?'':'s'}`)}${sec('reviews','Upcoming reviews',reviews(),`${D.reviews.filter(r=>r.overdue).length} due now`)}
  ${sec('log','Answer log',logSec(),`${D.log.length} answers, last 14 days`)}${sec('medals','Medals earned',medals(),`${D.medals.length} total`)}

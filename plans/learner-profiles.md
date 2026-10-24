@@ -183,3 +183,11 @@ the Marble team, not something this plan builds.
 - Done test: `node --test test/profiles.test.mjs` (10 pass) && `npm test`. Headless Chrome against a LOCAL dev server
   with test profiles: picker shown with 2 buttons, no `/api/state` before the pick, PIN pad, wrong PIN refused, right PIN
   loads the app as that profile, Switch player link present.
+
+### Slice 3 — done
+- Shipped: parent switcher cards with per-kid stats (`PR.kidStats`), `/parent?learner=`, "👪 Players" (add a learner,
+  avatar/interests/PIN set + clear), `POST /api/parent/profiles` and `/update`, optional `PARENT_PIN`.
+- Decisions: ids are the name slug (`-2`, `-3` when taken); 8 learners max; the primary learner's name/grade stay in
+  `[vars]` (only avatar, interests and PIN are editable for it); HTML-ish characters stripped from names/interests.
+- Done test: `node --test test/profiles.test.mjs` (12 pass) && `npm test`; parent view rendered headlessly against a LOCAL
+  dev server with test profiles.

@@ -27,6 +27,24 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
    if(l.pin&&!await PF.checkPin(l,String(b.pin??''))){await new Promise(r=>setTimeout(r,1000));return JC({error:"That PIN doesn't match. Try again!",needPin:true},403);}
    const c=[ck('jl',l.id,31536000)];if(l.pin)c.push(ck('jlp_'+l.id,await PF.pinToken(l),31536000));return JC({ok:true,profile:PF.publicProfile(l)},200,c);}
  if(P==='/api/profiles/forget'&&req.method==='POST')return JC({ok:true},200,[ck('jl','',0)]);
+ // parent: add a learner, change avatar/PIN/interests (Slice 3). Optional PARENT_PIN secret guards these writes.
+ if(P.startsWith('/api/parent/profiles')&&req.method==='POST'){const b=await req.json().catch(()=>({}));
+   if(env.PARENT_PIN&&String(b.parentPin||'')!==String(env.PARENT_PIN))return JC({error:'Parent PIN needed',needParentPin:true},403);
+   const R={v:1,primary:REG.primary,learners:REG.learners.map(l=>({...l}))};const txt=(v,n)=>String(v??'').replace(/[<>]/g,'').trim().slice(0,n);
+   const ints=v=>(Array.isArray(v)?v:String(v??'').split(',')).map(x=>txt(x,30)).filter(Boolean).slice(0,8);
+   if(P==='/api/parent/profiles'){const name=txt(b.name,30),grade=txt(b.grade,20);if(!name||!grade)return JC({error:'name and grade are required'},400);
+     if(R.learners.length>=8)return JC({error:'8 learners at most'},400);let id=PF.slug(name)||'learner';for(let i=2;PF.byId(R,id);i++)id=`${(PF.slug(name)||'learner').slice(0,20)}-${i}`;
+     const l={id,name,grade,interests:ints(b.interests),avatar:PF.AVATARS.includes(b.avatar)?b.avatar:PF.DEFAULT_AVATAR,pin:null,prefix:PF.prefixFor(id),created:Date.now()};
+     if(b.age!=null&&b.age!==''){const a=parseFloat(b.age);if(!(a>=4&&a<=18))return JC({error:'age 4-18'},400);l.age=a;}
+     if(b.pin!=null&&b.pin!==''){if(!PF.PIN_RE.test(String(b.pin)))return JC({error:'PIN = 4 digits'},400);l.pin=await PF.makePin(String(b.pin));}
+     R.learners.push(l);await KV.put('profiles',JSON.stringify(R));return JC({ok:true,profile:PF.publicProfile(l)},200);}
+   if(P==='/api/parent/profiles/update'){const l=PF.byId(R,String(b.id||''));if(!l)return JC({error:'unknown learner'},404);
+     if(b.avatar!=null){if(!PF.AVATARS.includes(b.avatar))return JC({error:'pick one of the avatars'},400);l.avatar=b.avatar;}
+     if('pin' in b){if(b.pin===null||b.pin==='')l.pin=null;else if(PF.PIN_RE.test(String(b.pin)))l.pin=await PF.makePin(String(b.pin));else return JC({error:'PIN = 4 digits'},400);}
+     if(b.interests!=null)l.interests=ints(b.interests);
+     if(l.id!==R.primary){if(b.name!=null&&txt(b.name,30))l.name=txt(b.name,30);if(b.grade!=null&&txt(b.grade,20))l.grade=txt(b.grade,20);}
+     await KV.put('profiles',JSON.stringify(R));return JC({ok:true,profile:PF.publicProfile(l)},200);}
+   return JC({error:'not found'},404);}
  // a PIN-protected learner needs the PIN cookie for the kid APIs (the parent view is separate)
  if(P.startsWith('/api/')&&LR.pin&&!await PF.unlocked(req,LR))return JC({error:'Enter your PIN to play',needPin:true,learner:LR.id},401);
  cfg();
@@ -60,7 +78,9 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
    const ds=[...Array(14)].map((_,i)=>ptDate(now-(13-i)*864e5));const logs={};await Promise.all(ds.map(async d=>logs[d]=(await KV.get(K('log:'+d),'json'))||[]));
    const qp={};for(const d of recent)if(PC[d]?.quest)qp[d]=PC[d];const boosts={};await Promise.all(Object.keys(qp).map(async d=>boosts[d]=await KV.get(LK('boost:')+d,'json')));
    const tomorrowPack=await KV.get(LK('lessons:')+ptDate(now+864e5),'json');cfg();
+   const kids=await Promise.all(REG.learners.map(async l=>[l,l.id===LR.id?S:await KV.get(l.prefix+'progress','json')]));cfg();
    const data=PR.parentData({S,g,now,today,logs,packs:qp,tomorrowPack,boosts});data.sandbox=sbx||undefined;
+   data.profiles={current:LR.id,primary:REG.primary,avatars:PF.AVATARS,parentPin:!!env.PARENT_PIN,learners:kids.map(([l,x])=>({...PF.publicProfile(l),grade:l.id===REG.primary?(env.LEARNER_GRADE||l.grade||''):l.grade,interests:l.interests||[],primary:l.id===REG.primary,...PR.kidStats(x&&E.migrate(JSON.parse(JSON.stringify(x)),g),g,now)}))};
    return new Response(PR.parentShell(data),{headers:{'content-type':'text/html; charset=utf-8','cache-control':'no-store'}});}
  if(P==='/api/state'){if(!S.current)E.next(S,g,pack,now);out=pub();}
  else if(P==='/api/trophies'){out=E.trophies(S,g);}
