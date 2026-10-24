@@ -299,3 +299,5 @@ main[hidden]{display:none!important}
 .mkconfirm select{font:inherit;font-size:1.05rem;padding:6px 10px;border-radius:12px;margin:6px 0;max-width:100%}
 .hp.bskin-robots .boss,.hp.bskin-sea .boss{filter:drop-shadow(0 0 6px #00e5ff)}.hp.bskin-spooky .boss{filter:drop-shadow(0 0 6px #ff9100)}
 @media (prefers-reduced-motion:reduce){.mkconfirm,.mkconfirm .mkbox{animation:none}}
+.flare-burst{animation:pulse 1.6s infinite}.flare-secret{filter:drop-shadow(0 0 4px #ffd54f)}#flarebtn{margin-left:6px}
+@media (prefers-reduced-motion:reduce){.flare-burst{animation:none}}
