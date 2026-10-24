@@ -191,3 +191,12 @@ the Marble team, not something this plan builds.
   `[vars]` (only avatar, interests and PIN are editable for it); HTML-ish characters stripped from names/interests.
 - Done test: `node --test test/profiles.test.mjs` (12 pass) && `npm test`; parent view rendered headlessly against a LOCAL
   dev server with test profiles.
+
+### Slice 4 — done
+- Shipped: `lib-cli` `--learner`/`LEARNER_ID`, `lk()`, `learnerFull()`, per-learner `learnerConfig()`, export/backup
+  sub-folders; all four scripts prefixed; export `profile` + `learners` (the old `learner` field keeps its value);
+  `packs/*/*.json` gitignored (examples stay tracked); docs in LESSONS.md, NIGHTLY.md, docs/NIGHTLY.md.
+- Decision: without `--learner` the registry is not read at all (primary prefix is always ""), so `--offline` runs stay
+  offline and existing commands are byte-for-byte the same calls.
+- Discovered: a remote wrangler call hung ~4 min during the live migration; added a 3-minute timeout.
+- Done test: `node --test test/profiles.test.mjs` (13 pass) && `npm test` (211 pass).

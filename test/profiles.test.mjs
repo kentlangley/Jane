@@ -109,3 +109,17 @@ test('parent adds a learner (generic onboarding), sees each kid, sets and clears
   assert.ok(!JSON.stringify(D).includes('"hash"'),'no PIN hashes in the parent page');});
 test('PARENT_PIN (optional) guards the parent writes',async()=>{const {env}=mk();env.PARENT_PIN='9090';
   assert.equal((await call(env,'/api/parent/profiles',{name:'A',grade:'2'})).status,403);assert.equal((await call(env,'/api/parent/profiles',{name:'A',grade:'2',parentPin:'9090'})).status,200);});
+
+// ---- Slice 4: per-learner nightly (export / publish / backup take --learner; default = primary) ----
+const cli=(dir,...a)=>execFileSync(process.execPath,a,{cwd:ROOT,env:{...process.env,DATA_DIR:dir,STORAGE:'file',LEARNER_NAME:'Sam',LEARNER_AGE:'10.5',LEARNER_GRADE:'5th grade'},encoding:'utf8'});
+test('publish/export/backup per learner; without --learner they act on the primary exactly as before',async()=>{const {dir,env}=mk();runMig(dir);addKid(env);
+  await call(env,'/api/state');await call(env,'/api/state?learner=kid');
+  const o=cli(dir,'publish-lessons.mjs','--learner','kid','packs/examples/example-quest.json','--date',today,'--local');assert.match(o,/published \(local\) lessons:/);
+  assert.ok(fs.existsSync(path.join(dir,`L%3Akid%3Alessons%3A${today}.json`)));assert.ok(!fs.existsSync(path.join(dir,`lessons%3A${today}.json`)));
+  assert.equal((await call(env,'/api/state?learner=kid')).json.newQuest,true);assert.ok(!(await call(env,'/api/state')).json.quest);
+  const ex=cli(dir,'export-progress.mjs','--local','--learner','kid');const xf=ex.match(/wrote (\S+\.json)/)[1];assert.match(xf,/exports\/kid\//);
+  const X=JSON.parse(fs.readFileSync(xf,'utf8'));assert.equal(X.profile.id,'kid');assert.equal(X.profile.name,'Robin');assert.equal(X.profile.grade,'7th grade');assert.equal(X.profile.age,12.5);assert.deepEqual(X.profile.interests,['chess']);
+  assert.deepEqual(X.learners.map(l=>l.id),['sam','kid']);
+  const ex0=cli(dir,'export-progress.mjs','--local');const X0=JSON.parse(fs.readFileSync(ex0.match(/wrote (\S+\.json)/)[1],'utf8'));assert.equal(X0.profile.id,'sam');assert.equal(X0.profile.primary,true);assert.equal(X0.profile.name,'Sam');
+  assert.match(cli(dir,'backup-progress.mjs','--local','--learner','kid'),/backups\/\d{4}-\d{2}-\d{2}\/kid\/progress-/);
+  assert.throws(()=>cli(dir,'export-progress.mjs','--local','--learner','nobody'),/unknown learner/);});
