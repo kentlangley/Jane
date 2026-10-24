@@ -72,3 +72,12 @@ const pt=ms=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles'}).f
 test('an item in flight is never interrupted by a warm-up',()=>{const pack=longQuest();const S=resumeMid(pack,2,1);S.quests[D].gateDay={day:pt(now),n:0,warm:true};const it=E.next(S,g,pack,now);assert.notEqual(it.format,'gate');
   // the learner leaves mid-item and comes back the next day: the same item is still current
   assert.equal(S.current,it);const again=S.current||E.next(S,g,pack,DAY2);assert.equal(again,it);E.submit(S,g,it.answer,DAY2);const nx=E.next(S,g,pack,DAY2);assert.equal(nx.format,'gate');});
+
+// ---- free-play review pacing (no active quest): no random dump, no same-topic streak ----
+test('free-play reviews skip a topic just served and wait ~9 items between reviews',()=>{
+  const S=E.blank();S.firstDone=true;S.placement.done=true;S.itemsServed=3;S.sinceReview=9;
+  const dueIds=g.topics.filter(t=>t.subject==='Mathematics').slice(0,6).map(t=>t.id);
+  dueIds.forEach((id,i)=>{S.ts[id]={st:'mastered',how:'direct',c:3,w:0,lvl:3,box:2,due:now-DAY*(i+1)};});
+  const a=E.next(S,g,null,now);assert.equal(a.mode,'review');const first=a.topicId;S.current=null;S.sinceReview=9;S.recent=[first,first,first];
+  const b=E.next(S,g,null,now+1);assert.equal(b.mode,'review');assert.notEqual(b.topicId,first,'must not repeat the same overdue topic back-to-back');
+  S.current=null;S.sinceReview=2;S.itemsServed=10;const c=E.next(S,g,null,now+2);assert.notEqual(c.mode,'review','sinceReview < 9 → no free-play review');});
