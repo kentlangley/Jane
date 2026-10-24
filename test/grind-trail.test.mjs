@@ -58,3 +58,52 @@ test('client offers Continue on this trail as the primary action after a mini',(
   assert.match(js,/else setTimeout\(\(\)=>\{if\(!\$\('play'\)\.hidden&&\$\('extra'\)\.querySelector\('\.miniend'\)\)goMap\(m\.subject\);\},4500\);/);
   assert.doesNotMatch(js,/A quick mini-adventure, then back to your map!/);
 });
+
+test('nextTrailTopic skips stones finished earlier in this grind session',()=>{
+  const S=fresh();
+  // Unlock a wide Mathematics frontier so we have ≥3 open stones after marking two done
+  for(const t of math){if(t.ageRangeStart<=11)S.ts[t.id]={st:'mastered',how:'direct',c:3,w:0,ft:2,lvl:3,box:0,due:now+7*864e5,at:now};}
+  const open=math.filter(t=>['ready','learning','review'].includes(E.stateOf(S,g,t.id,now))).map(t=>t.id);
+  assert.ok(open.length>=3,'need ≥3 open math stones, got '+open.length);
+  const a=open[0],b=open[1];
+  S.ts[a]={st:'learning',how:'direct',c:1,w:0,lvl:3,at:now};
+  S.ts[b]={st:'learning',how:'direct',c:1,w:0,lvl:3,at:now};
+  S.grindTrail={subject:'Mathematics',done:[a,b]};
+  const n=E.nextTrailTopic(S,g,'Mathematics',b,now);
+  assert.ok(n,'expected another open stone');
+  assert.notEqual(n.topicId,a);assert.notEqual(n.topicId,b);
+  assert.ok(!S.grindTrail.done.includes(n.topicId));
+});
+
+test('miniAfter records the finished stone on grindTrail so Continue will not re-offer it',()=>{
+  const S=fresh();const ids=unlockTrail(S);assert.ok(ids.length>=2);
+  E.startMini(S,g,ids[0],null,now);assert.ok(S.mini);
+  S.mini.left=0;
+  const summary=E.miniAfter(S,g,null,now,{ok:true});
+  assert.ok(summary);assert.ok(S.grindTrail?.done?.includes(ids[0]));
+  if(summary.next)assert.notEqual(summary.next.topicId,ids[0]);
+  // Continue path keeps the session
+  E.startMini(S,g,summary.next?.topicId||ids[1],null,now,{continue:true});
+  assert.ok(S.grindTrail.done.includes(ids[0]),'continue must keep prior done list');
+  // Fresh Explore from the map resets the session
+  E.clearGrind(S);E.startMini(S,g,ids[1],null,now,{});
+  assert.deepEqual(S.grindTrail.done,[]);
+});
+
+test('mapPayload exposes codes so the client can recolor stones live',()=>{
+  const S=fresh();const ids=unlockTrail(S);
+  S.ts[ids[0]]={st:'mastered',how:'direct',c:3,w:0,ft:2,lvl:3,box:0,due:now+7*864e5,at:now};
+  const m=E.mapPayload(S,g,now);
+  assert.ok(typeof m.codes==='string'&&m.codes.length===g.topics.length);
+  assert.equal(m.codes[g.topics.findIndex(t=>t.id===ids[0])],'m');
+  assert.ok(m.progress&&m.fog);
+});
+
+test('client refreshes map after mini and filters trailDone next',()=>{
+  assert.match(js,/function applyMap\(/);
+  assert.match(js,/async function refreshMap\(/);
+  assert.match(js,/await refreshMap\(\)/);
+  assert.match(js,/trailDone\.has\(n\.topicId\)/);
+  assert.match(js,/continue:true/);
+  assert.match(js,/r\.map\)applyMap/);
+});
