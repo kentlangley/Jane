@@ -395,7 +395,7 @@ const INTER={
 function qpath(Q,{cur=false,big=false}={}){const G=Object.fromEntries((Q.gates||[]).map(x=>[x.before,x]));
  return `<div class="qpath${big?' big':''}">${Q.stages.map((x,i)=>`${i?'<i></i>':''}${G[i]?`<span class="qk ${G[i].state}" title="${G[i].state==='open'?'Gate open':'Review gate: answer something from before to pass'}">🗝️</span><i></i>`:''}<span class="qs ${x.complete?'done':cur&&i===Q.current?'cur':''} ${x.boss?'boss':''}" title="${esc(x.name)}">${x.complete&&!big?'✅':esc(x.emoji)}</span>`).join('')}</div>`;}
 function questStrip(s,p){const el=$('qstrip');if(!el)return;const Q=s.quest;
- if(p.mini){el.hidden=false;el.className='qstrip mini';el.innerHTML=`<span>🔍 Exploring: <b>${esc(p.topic.name)}</b> · ${p.mini.n} of ${p.mini.of}</span><button class="ghost sm" onclick="miniQuit()">🗺️ Back to map</button>`;return;}
+ if(p.mini){el.hidden=false;el.className='qstrip mini';el.innerHTML=`<span>🛤️ Trail: <b>${esc(p.topic.name)}</b> · ${p.mini.n} of ${p.mini.of}</span><button class="ghost sm" onclick="miniQuit()">🗺️ Back to map</button>`;return;}
  if(!Q||!Q.started||Q.completed){// honest empty state (no stale quest title / "behind by a day" confusion)
   if(!Q&&(p.mode==='review'||p.format==='review')){el.hidden=false;el.className='qstrip empty';el.innerHTML=`<div class="qsh">📝 <b>No quest running right now</b> <span class="small">Jane writes a new one after you finish the last — keep exploring!</span></div>`;return;}
   el.hidden=true;return;}
@@ -404,12 +404,18 @@ function questStrip(s,p){const el=$('qstrip');if(!el)return;const Q=s.quest;
 async function miniQuit(){const s=await api('/api/mini/quit',{});render(s);goMap(s.mini?.subject);}
 function goMap(sub){if(window._afterMini){render(window._afterMini);window._afterMini=null;}if(sub)zoomed=sub;document.querySelector('.tab[data-v=map]').click();}
 function miniEnd(r){const m=r.miniDone;$('f').style.display='none';$('mc').innerHTML='';
- $('extra').innerHTML=`<div class="miniend"><div class="big">${m.mastered?'🏆':'🌟'}</div><b>${m.mastered?`You conquered "${esc(m.name)}"!`:`Nice exploring, "${esc(m.name)}" is on your map!`}</b><br><button onclick="goMap('${esc(m.subject)}')">🗺️ Back to my map</button></div>`;
- confetti(m.mastered?70:30);window._afterMini=r.state;setTimeout(()=>{if(!$('play').hidden&&$('extra').querySelector('.miniend'))goMap(m.subject);},4500);}
+ const n=m.next;const title=m.mastered?`You conquered "${esc(m.name)}"!`:`Nice exploring — "${esc(m.name)}" is on your map!`;
+ const cont=n?`<button class="bigbtn trailgo" id="trailgo">🛤️ Continue on this trail<span class="small">Next: ${esc(n.name)}</span></button>`:'';
+ const back=`<button class="${n?'ghost':'bigbtn'}" id="trailback">🗺️ Back to map</button>`;
+ $('extra').innerHTML=`<div class="miniend"><div class="big">${m.mastered?'🏆':'🌟'}</div><b>${title}</b>${n?`<p class="small">Keep grinding ${esc(m.subject)} as long as you want.</p>`:''}<div class="trailacts">${cont}${back}</div></div>`;
+ confetti(m.mastered?70:30);window._afterMini=r.state;
+ $('trailback').onclick=()=>goMap(m.subject);
+ if(n)$('trailgo').onclick=async()=>{const s=await api('/api/explore',{topicId:n.topicId});if(s.error){say(s.error);return goMap(m.subject);}document.querySelector('.tab[data-v=play]').click();render(s);say(`Trail continues: ${n.name}! 🛤️`);};
+ else setTimeout(()=>{if(!$('play').hidden&&$('extra').querySelector('.miniend'))goMap(m.subject);},4500);}
 function stoneCard(i){const t=TAX.topics[i],c=mapData.codes[i];const o=document.createElement('div');o.className='scard';
  const act=c==='r'||c==='l'?['🚀 Explore now!','explore']:c==='v'?['🧠 Practice now','practice']:null;
  o.innerHTML=`<div class="scbox s-${c}"><button class="x" aria-label="close">✕</button><div class="scemo">${esc(t.ic||'⭐')}</div><h3>${esc(t.sn||t.name)}</h3><div class="pill p-${c}">${SN[c]}</div><p class="small">${esc(t.domain)} · ages ${t.ageRangeStart}+</p>
- ${act?`<button class="bigbtn ${act[1]}" id="scgo">${act[0]}</button><div class="small">${act[1]==='explore'?'A quick mini-adventure, then back to your map!':'A quick memory check to keep it shiny!'}</div>`:c==='m'?'<p>⭐ You already mastered this one!</p>':'<p>🔒 Unlock the stones before it first!</p>'}</div>`;
+ ${act?`<button class="bigbtn ${act[1]}" id="scgo">${act[0]}</button><div class="small">${act[1]==='explore'?'A quick mini-adventure — then keep going on this trail if you want!':'A quick memory check to keep it shiny!'}</div>`:c==='m'?'<p>⭐ You already mastered this one!</p>':'<p>🔒 Unlock the stones before it first!</p>'}</div>`;
  document.body.appendChild(o);const close=()=>o.remove();o.querySelector('.x').onclick=close;o.onclick=e=>{if(e.target===o)close();};
  if(act)$('scgo').onclick=async()=>{const s=await api('/api/explore',{topicId:t.id});close();if(s.error){say(s.error);return;}document.querySelector('.tab[data-v=play]').click();render(s);say(act[1]==='explore'?`Let's explore "${t.sn||t.name}"! 🚀`:`Memory check: "${t.sn||t.name}"! 🧠`);};}
 
