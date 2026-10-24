@@ -6,6 +6,8 @@ Dates are Pacific Time.
 ## [Unreleased]
 
 ### Added
+- **Points Market** ([#74](https://github.com/kentlangley/Jane/issues/74), idea credit: Christopher): points buy fun, choice and peeks, never mastery, medals or permanent fog clear.
+  - **Wallet** ([#68](https://github.com/kentlangley/Jane/issues/68)): `S.wallet` spend ledger; balance = earned (`S.points`, never decremented) − spent, computed server-side. `GET /api/market`, idempotent `POST /api/market/buy {pid,item,meta}` (same purchase id → one charge; one-time items → `already`), `wallet` on `/api/state`, `purchase` log events, a per-PT-day earned snapshot (last 60 days) and a `market` block in the export (`spent7d`/`earned7d` for price tuning). The whole pre-Market earned total is spendable on day one.
 - **Campaign Trail + Fog Map** ([#54](https://github.com/kentlangley/Jane/issues/54)): always-on Play trail + taunt, Quest of Quests overlay, literal fog on the Map (direct mastery clears), fog finds (chests/secrets/power-ups, D11 garnish only), and Final Boss unlock persistence with a Finale authoring hook.
 
 

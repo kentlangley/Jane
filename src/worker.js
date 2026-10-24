@@ -32,7 +32,7 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
    quest:pack?.quest?E.questInfo(S,g,pack):null,newQuest:(()=>{const L=LU();return L.newQuest&&pack?.date===L.current;})(),
    quests:(()=>{const L=LU();return{current:L.current,nextUp:L.queued.length>0,boost:pack?.boost||null};})(),
    terms:pack?.terms||null,mini:S.mini?{topicId:S.mini.topicId,subject:S.mini.ret}:null,
-   campaign:E.campaignState(S,g),fog:E.fogState(S,g),finaleReveal:finaleJust||undefined};};
+   campaign:E.campaignState(S,g),fog:E.fogState(S,g),wallet:E.walletState(S,g,now),finaleReveal:finaleJust||undefined};};
  const questCheck=r=>{const m=E.completeQuest(S,g,pack,now);if(m){r.questDone=m;ev.push({event:'questDone',date:pack.date,quest:m.title});}};
  if(P==='/parent'){ // read-only: returns before any KV write
    const ds=[...Array(14)].map((_,i)=>ptDate(now-(13-i)*864e5));const logs={};await Promise.all(ds.map(async d=>logs[d]=(await KV.get(K('log:'+d),'json'))||[]));
@@ -63,7 +63,12 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
  else if(P==='/api/skipbonus'&&req.method==='POST'){S.current=null;E.next(S,g,pack,now);out=pub();}
  else if(P==='/api/choice'&&req.method==='POST'){const r=E.choose(S,g,body.choice,pack,now);E.next(S,g,pack,now);out={...r,state:pub()};}
  else if(P==='/api/fog/claim'&&req.method==='POST'){const x=E.claimFind(S,g,String(body.id||''),now);if(x.error)return J(x,400);ev.push({event:'fogFind',id:x.find?.id,kind:x.find?.kind,already:!!x.already});out={...x,state:pub(),fog:E.fogState(S,g)};}
+ // Points Market (plans/points-market.md): balance = earned − spent, server-side; idempotent by purchase id
+ else if(P==='/api/market'){out={wallet:E.walletState(S,g,now),items:E.marketItems(S,g,now)};}
+ else if(P==='/api/market/buy'&&req.method==='POST'){const x=E.buy(S,g,{pid:body.pid,item:String(body.item||''),meta:body.meta},now);if(x.error)return J(x,400);
+   if(!x.already)ev.push({event:'purchase',pid:x.row.id,item:x.row.item,kind:x.row.kind,price:x.row.price,meta:x.row.meta});out={...x,wallet:E.walletState(S,g,now),items:E.marketItems(S,g,now),state:pub()};}
  else return J({error:'not found'},404);
+ E.snapDay(S,today);
  if(migrated&&raw?.topics&&!sbx){/* keep a copy of the pre-v2 record */await KV.put('progress:v1-backup',JSON.stringify(raw));}
  if(JSON.stringify(S)!==S0)await KV.put(K('progress'),JSON.stringify(S));
  if(ev.length){const k=K('log:'+today);const log=(await KV.get(k,'json'))||[];const ts=new Date(now).toISOString();log.push(...ev.map(e=>({ts,...e})));await KV.put(k,JSON.stringify(log));}
