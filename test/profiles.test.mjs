@@ -64,3 +64,29 @@ test('concurrent requests for two learners never mix names or ages',async()=>{co
 test('sandbox stays per learner',async()=>{const {dir,env}=mk();runMig(dir);addKid(env);await call(env,'/api/state?learner=kid');
   await call(env,'/api/sandbox/reset?learner=kid',{offsetDays:0},'sbx=1');assert.ok(fs.existsSync(path.join(dir,'sandbox%3AL%3Akid%3Aprogress.json')));
   assert.ok(!fs.existsSync(path.join(dir,'sandbox%3Aprogress.json')));});
+
+// ---- Slice 2: picker, PIN, remembered device ----
+const cookies=r=>r.headers.getSetCookie().map(c=>c.split(';')[0]).join('; ');
+test('/api/profiles: one learner → no picker; two → picker until a player is remembered',async()=>{const {dir,env}=mk();
+  let p=(await call(env,'/api/profiles')).json;assert.equal(p.picker,false);assert.equal(p.learners.length,1);
+  runMig(dir);addKid(env);p=(await call(env,'/api/profiles')).json;assert.equal(p.picker,true);assert.deepEqual(p.learners.map(l=>l.id),['sam','kid']);
+  assert.ok(p.learners.every(l=>!('pin' in l)),'no PIN data in the public list');
+  const s=await call(env,'/api/profiles/select',{id:'kid'});assert.equal(s.status,200);const c=cookies(s);assert.match(c,/jl=kid/);
+  assert.match(s.headers.getSetCookie()[0],/HttpOnly/);assert.match(s.headers.getSetCookie()[0],/Max-Age=31536000/);
+  p=(await call(env,'/api/profiles',undefined,c)).json;assert.equal(p.picker,false);assert.equal(p.current,'kid');
+  assert.equal((await call(env,'/api/state',undefined,c)).json.name,'Robin');
+  const f=await call(env,'/api/profiles/forget',{},c);assert.match(f.headers.getSetCookie()[0],/jl=; .*Max-Age=0/);
+  assert.equal((await call(env,'/api/profiles/select',{id:'nobody'})).status,404);});
+
+test('PIN profile: kid APIs need the PIN cookie; wrong PIN refused; right PIN remembered',async()=>{const {dir,env}=mk();runMig(dir);addKid(env,{pin:await PF.makePin('2468')});
+  assert.equal((await call(env,'/api/profiles')).json.learners[1].hasPin,true);
+  const locked=await call(env,'/api/state?learner=kid');assert.equal(locked.status,401);assert.equal(locked.json.needPin,true);
+  assert.ok(!fs.existsSync(path.join(dir,'L%3Akid%3Aprogress.json')),'nothing written while locked');
+  const bad=await call(env,'/api/profiles/select',{id:'kid',pin:'1111'});assert.equal(bad.status,403);assert.equal(bad.headers.getSetCookie().length,0);
+  const ok=await call(env,'/api/profiles/select',{id:'kid',pin:'2468'});assert.equal(ok.status,200);const c=cookies(ok);assert.match(c,/jlp_kid=/);
+  assert.equal((await call(env,'/api/state',undefined,c)).json.name,'Robin');assert.equal((await call(env,'/api/profiles',undefined,c)).json.current,'kid');
+  // a remembered player whose PIN cookie is missing gets the picker again; the other kid is unaffected
+  assert.equal((await call(env,'/api/profiles',undefined,'jl=kid')).json.picker,true);assert.equal((await call(env,'/api/state')).json.name,'Sam');});
+
+test('the kid app loads picker.js before app.js and app.js waits for it',()=>{const h=fs.readFileSync(path.join(ROOT,'public/index.html'),'utf8');
+  assert.ok(h.indexOf('/picker.js')>0&&h.indexOf('/picker.js')<h.indexOf('/app.js'));assert.match(fs.readFileSync(path.join(ROOT,'public/app.js'),'utf8'),/window\.janeWho/);});

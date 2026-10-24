@@ -18,6 +18,18 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
  const LK=k=>pfx+k,K=k=>(sbx?'sandbox:':'')+pfx+k;
  if(P==='/healthz')return new Response(JSON.stringify({ok:true,version:VERSION}),{headers:{'content-type':'application/json','cache-control':'no-store'}});
  if(!P.startsWith('/api/')&&P!=='/parent'){const r=await env.ASSETS.fetch(req);if(sbxQ==null)return r;const h=new Headers(r.headers);h.append('set-cookie',`sbx=${sbxQ==='1'?1:0}; Path=/; SameSite=Lax${sbxQ==='1'?'':'; Max-Age=0'}`);return new Response(r.body,{status:r.status,headers:h});}
+ // ---- profiles (plans/learner-profiles.md Slice 2): picker, PIN, remembered device ----
+ const ck=(n,v,age)=>`${n}=${encodeURIComponent(v)}; Path=/; SameSite=Lax; HttpOnly; Max-Age=${age}`;
+ const JC=(o,s,cookies)=>{const h=new Headers({'content-type':'application/json','cache-control':'no-store'});for(const c of cookies||[])h.append('set-cookie',c);return new Response(JSON.stringify(o),{status:s,headers:h});};
+ if(P==='/api/profiles'){const rem=PF.byId(REG,PF.cookieOf(req,'jl')||''),cur=rem&&await PF.unlocked(req,rem)?rem.id:null;
+   return JC({learners:REG.learners.map(PF.publicProfile),primary:REG.primary,current:cur,picker:!cur&&(REG.learners.length>1||REG.learners.some(l=>l.pin))},200);}
+ if(P==='/api/profiles/select'&&req.method==='POST'){const b=await req.json().catch(()=>({}));const l=PF.byId(REG,String(b.id||''));if(!l)return JC({error:'unknown player'},404);
+   if(l.pin&&!await PF.checkPin(l,String(b.pin??''))){await new Promise(r=>setTimeout(r,1000));return JC({error:"That PIN doesn't match. Try again!",needPin:true},403);}
+   const c=[ck('jl',l.id,31536000)];if(l.pin)c.push(ck('jlp_'+l.id,await PF.pinToken(l),31536000));return JC({ok:true,profile:PF.publicProfile(l)},200,c);}
+ if(P==='/api/profiles/forget'&&req.method==='POST')return JC({ok:true},200,[ck('jl','',0)]);
+ // a PIN-protected learner needs the PIN cookie for the kid APIs (the parent view is separate)
+ if(P.startsWith('/api/')&&LR.pin&&!await PF.unlocked(req,LR))return JC({error:'Enter your PIN to play',needPin:true,learner:LR.id},401);
+ cfg();
  const g=await graph(env);
  if(P==='/api/sandbox'){const on=u.searchParams.get('on')!=='0';return new Response(null,{status:302,headers:{location:'/','set-cookie':`sbx=${on?1:0}; Path=/; SameSite=Lax${on?'; Max-Age=86400':'; Max-Age=0'}`}});}
  if(sbx&&P==='/api/sandbox/reset'&&req.method==='POST'){const b=await req.json().catch(()=>({}));await KV.put(K('progress'),(await KV.get(LK('progress')))||'null');await KV.put(K('debug:clockOffsetDays'),String(+b.offsetDays||0));return J({ok:true,sandbox:true,offsetDays:+b.offsetDays||0});}

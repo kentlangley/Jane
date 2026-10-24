@@ -204,7 +204,8 @@ function drawBars(){const pr=mapData.progress;let s=`<div class="big">🌍 ${pr.
 const seg=(b,t)=>[['mastered','m'],['review','v'],['learning','l'],['ready','r']].map(([k,c])=>`<i style="width:0;background:${COL[c]};opacity:${c==='r'?.45:1}" data-w="${(100*b[k]/t).toFixed(2)}%" title="${k}: ${b[k]}"></i>`).join('');
 $('zoomout').onclick=()=>{zoomed=null;drawMap();};
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{const sw=()=>{document.querySelectorAll('.tab').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-selected',x===b);x.tabIndex=x===b?0:-1;});for(const v of['play','map','trophies','quests','market'])$(v).hidden=b.dataset.v!==v;};window.FX?FX.view(sw):sw();if(b.dataset.v==='map')loadMap();if(b.dataset.v==='market')loadMarket();if(b.dataset.v==='trophies')loadTrophies();if(b.dataset.v==='quests')loadQuests();});
-loadGloss().finally(()=>api('/api/state').then(s=>{render(s);questDot(s);if(s.finaleReveal)finaleReveal(s.campaign);else if(s.newQuest&&!location.hash&&s.quest)questReveal(s.quest);}));
+// learner profiles: wait for picker.js; while "Who's playing?" shows, nothing loads (the pick reloads the page)
+loadGloss().finally(()=>Promise.resolve(window.janeWho).then(w=>{if(w?.picker)return;return api('/api/state').then(s=>{render(s);questDot(s);if(s.finaleReveal)finaleReveal(s.campaign);else if(s.newQuest&&!location.hash&&s.quest)questReveal(s.quest);});}));
 if(location.hash==='#quests')document.querySelector('.tab[data-v=quests]').click();
 if(location.hash==='#market')document.querySelector('.tab[data-v=market]').click();
 if(location.hash==='#trophies')document.querySelector('.tab[data-v=trophies]').click();

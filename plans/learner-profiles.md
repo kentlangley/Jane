@@ -171,3 +171,15 @@ the Marble team, not something this plan builds.
   live snapshot: `/api/state`, `/api/trophies`, `/api/quests`, `/api/market`, `/api/map` and the parent head are identical
   between old `main` and this branch after the migration (only `profile` added).
 - Discovered: the engine's built-in diagnostic placement window is fixed at ages 9-11 (handled in Slice 5).
+- Live (PR #89, deployed version 59883f8a): `./deploy.sh` backup `backups/2026-10-23/progress-174510.json` (sha256 ae4b2642…);
+  `node migrate-profiles.mjs` snapshot `backups/2026-10-23/pre-profiles-174531/` (19 keys) + registry, progress sha
+  unchanged. Live sandbox-copy `/api/state` before deploy vs after migration: identical except `profile`.
+  Rollback: `node migrate-profiles.mjs --rollback` (deletes `profiles` only).
+
+### Slice 2 — done
+- Shipped: `/api/profiles`, `/api/profiles/select`, `/api/profiles/forget`; PIN gate (401 `needPin`) on kid APIs;
+  `public/picker.js` (picker, PIN pad, Switch player) loaded before `app.js`, which waits for it.
+- Decision: the picker also shows for a single learner who has a PIN and no PIN cookie (otherwise the app would 401).
+- Done test: `node --test test/profiles.test.mjs` (10 pass) && `npm test`. Headless Chrome against a LOCAL dev server
+  with test profiles: picker shown with 2 buttons, no `/api/state` before the pick, PIN pad, wrong PIN refused, right PIN
+  loads the app as that profile, Switch player link present.
