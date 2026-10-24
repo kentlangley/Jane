@@ -304,3 +304,19 @@ main[hidden]{display:none!important}
 .framebar.f-prove{background:linear-gradient(90deg,#ffd54f,#ff8f00);color:#3e2723}.provelink{font-size:.95rem;margin-left:6px}
 .pickline{background:linear-gradient(90deg,#e8f5e9,#fffde7);border:3px solid #66bb6a;padding:10px 14px;font-size:1.05rem}
 .chip.days{background:#43a047;color:#fff}.mkshelf{font-size:1.6rem;letter-spacing:4px;margin:4px 0}.mkfog{color:#546e7a;font-style:italic}.whisperb{font-size:.95rem;margin-left:6px}
+/* "Who's playing?" picker (picker.js) */
+body.picking main,body.picking header{visibility:hidden}
+.who{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#7c4dff,#3b82f6);padding:16px}
+.whobox{background:#fff;border-radius:24px;padding:24px 20px;max-width:560px;width:100%;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.whojane{font-size:2.6rem}.whobox h2{margin:.2em 0 .6em;font-size:1.8rem}
+.whogrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px}
+.whob{display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px 10px;border-radius:20px;border:3px solid #e9e2ff;background:#faf8ff;cursor:pointer;font:inherit;position:relative}
+.whob:hover,.whob:focus-visible{border-color:#7c4dff;transform:translateY(-2px)}.whoav{font-size:3.4rem;line-height:1}.whon{font-weight:800;font-size:1.2rem}
+.whol{position:absolute;top:8px;right:10px;font-size:1rem}
+.whopin{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center}.whopin label{width:100%;font-weight:700}
+.whopin input{font-size:1.6rem;letter-spacing:.4em;width:7em;text-align:center;padding:8px;border-radius:14px;border:2px solid #c9bdfc}
+.whoerr{width:100%;min-height:1.2em;color:#b91c1c;font-weight:700}
+@media (prefers-reduced-motion: reduce){.whob:hover,.whob:focus-visible{transform:none}}
+.who [hidden]{display:none!important}
+.who .whob{color:#2d2250;background:#faf8ff;box-shadow:0 5px 0 #d9cffc;font-size:1.2rem}
+.who .whob:focus-visible{outline:3px solid #7c4dff;outline-offset:3px}
