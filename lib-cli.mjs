@@ -19,7 +19,7 @@ export function kvPut(key,obj){if(FS)return FS.putSync(key,JSON.stringify(obj));
 export function kvDel(key){if(FS)return FS.deleteSync(key);wr(['kv','key','delete','--binding','JANE_KV','--remote',key]);}
 export const loadTax=()=>JSON.parse(fs.readFileSync(path.join(DIR,'public/tax.json'),'utf8'));
 export const ptDate=(ms=Date.now())=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(ms));
-export function kvList(prefix){if(FS)return FS.listSync(prefix);const out=wr(['kv','key','list','--binding','JANE_KV','--remote','--prefix',prefix]);return JSON.parse(out).map(k=>k.name);}
+export function kvList(prefix){if(FS)return FS.listSync(prefix);const out=wr(['kv','key','list','--binding','JANE_KV','--remote',...(prefix?['--prefix',prefix]:[])]);return JSON.parse(out).map(k=>k.name);}
 // active quests = started, not finished (v0.5: one at a time; older states may still hold several)
 // v0.5 refresh: how many leading stages of a quest the learner has reached. A stage is reached when any of its
 // questions (or its boss power-up card) was seen, or it holds the item on screen; every earlier stage counts too.
