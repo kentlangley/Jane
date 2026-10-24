@@ -542,6 +542,11 @@ export function next(S,g,pack,now){
     hint:'Count the slices that are still on the plate: 8 − 3 − 2. Put that number over 8, the total slices.',explain:'8 − 3 − 2 = 3 slices left out of 8, so 3/8 of the pizza is left!',
     vis:{type:'pizza',slices:8,eaten:5},bonus:{q:'Bonus ⭐: write 3/8 as a decimal!',a:'0.375'},first:true,format:'explore',lvl:4};
     S.current={...it,id:now+'-0',topicId:PIZZA_ID,mode:'diagnostic',tries:0,stage:'main',issued:now};return S.current;}
+  // Post-quest reinforcement: light practice queue (reviews / quest topics), never a new quest.
+  if(S.reinforce?.queue?.length&&!questActive(S,pack)&&!S.mini){const id=S.reinforce.queue.shift();S.reinforce.n++;const n=S.reinforce.n,of=S.reinforce.of;
+    if(!S.reinforce.queue.length)S.reinforce=null;const mode=stateOf(S,g,id,now)==='review'?'review':'learn';
+    S.sinceReview=mode==='review'?0:S.sinceReview+1;S.itemsServed++;S.recent=[...S.recent.slice(-9),id];
+    const it=buildItem(S,g,id,mode,pack,now);if(mode==='learn'){it.format='guided';it.guided=true;}it.reinforce={n,of};return S.current=it;}
   // a skipped item comes back a day later, guided (steps visible) and never as a boss
   const rq=(S.requeue||[]).findIndex(x=>x.notBefore<=now&&g.byId[x.item?.topicId]);
   if(rq>=0&&!questActive(S,pack)&&!S.mini){const x=S.requeue.splice(rq,1)[0],so=solve(x.item.q);S.itemsServed++;S.recent=[...S.recent.slice(-9),x.item.topicId];
@@ -760,7 +765,7 @@ export function choose(S,g,c,pack,now){const cur=S.focus&&g.byId[S.focus];let ms
   else if(c==='fractions'){id=pickFocus(S,g,pack,now,{domain:'Fractions'});msg='Back to fractions! 🍕';}
   if(id)S.focus=id;S.current=null;return{jane:msg};}
 export function publicItem(it,g,S,now=Date.now()){if(!it)return null;const boss=it.boss&&S?bossHP(S.ts?.[it.topicId],it,now):it.boss;const t=g.byId[it.topicId];const b=it.stage==='bonus';
-  return{id:it.id,topicId:it.topicId,topic:{name:t.sn||t.name,subject:t.subject,domain:t.domain,ic:t.ic},q:b?it.bonus.q:it.q,type:b?'input':it.type,choices:b?null:it.choices,vis:it.vis,ptype:it.ptype,creative:it.creative,placeholder:it.placeholder,pics:it.pics,items:it.items,left:it.left,right:it.right,statements:it.statements,line:it.line,parts:it.parts,blank:it.blank,card:it.card,body:it.body,emoji:it.emoji,scene:it.scene,tpl:it.tpl,mini:it.mini,stage:it.stage,mode:it.mode,format:b?'bonus':it.format,intro:b?null:it.intro,timed:b?null:it.timed,boss,level:it.lvl,issued:it.issued,title:it.title,example:it.example,guided:b?undefined:it.guided,steps:b||!it.guided?undefined:it.steps,requeued:it.requeued,gate:it.gate?{n:it.gate.n,of:it.gate.of,k:it.gate.k,spot:!!it.spot,warm:!!it.gate.warm}:undefined,help:helpFor(it),whisper:it.whisper||undefined};}
+  return{id:it.id,topicId:it.topicId,topic:{name:t.sn||t.name,subject:t.subject,domain:t.domain,ic:t.ic},q:b?it.bonus.q:it.q,type:b?'input':it.type,choices:b?null:it.choices,vis:it.vis,ptype:it.ptype,creative:it.creative,placeholder:it.placeholder,pics:it.pics,items:it.items,left:it.left,right:it.right,statements:it.statements,line:it.line,parts:it.parts,blank:it.blank,card:it.card,body:it.body,emoji:it.emoji,scene:it.scene,tpl:it.tpl,mini:it.mini,reinforce:it.reinforce,stage:it.stage,mode:it.mode,format:b?'bonus':it.format,intro:b?null:it.intro,timed:b?null:it.timed,boss,level:it.lvl,issued:it.issued,title:it.title,example:it.example,guided:b?undefined:it.guided,steps:b||!it.guided?undefined:it.steps,requeued:it.requeued,gate:it.gate?{n:it.gate.n,of:it.gate.of,k:it.gate.k,spot:!!it.spot,warm:!!it.gate.warm}:undefined,help:helpFor(it),whisper:it.whisper||undefined};}
 export function medalInfo(m,g){const t=g.byId[m.id]||g.hidden?.[m.id];if(!t)return null;return{id:m.id,tier:m.tier,at:m.at,boss:!!m.boss,name:t.sn||t.name,ic:t.ic,subject:t.subject,domain:t.domain,why:t.kq?`${t.kq} → ${t.ka}`:t.self};}
 // upgrade an in-flight old-style self-check (raw assessmentPrompt) to the kid-friendly item, keeping its mode
 export function refresh(S,g,pack,now){const c=S.current;if(c&&c.kind==='self'&&/Yes, I can/.test(c.choices?.[0]||'')&&g.byId[c.topicId]){S.current=buildItem(S,g,c.topicId,c.mode,pack,now);return true;}return false;}
@@ -795,10 +800,28 @@ export function completeQuest(S,g,pack,now){if(!pack?.quest)return null;S.quests
   const qi=questInfo(S,g,pack);if(!qi.total||qi.done<qi.total)return null;
   q.started??=now;q.done=now;q.snap={stages:qi.stages.map(st=>({topicId:st.topicId,n:st.n})),total:qi.total};if(S.questFocus===pack.date)S.questFocus=null;
   if(pack.placement)S.placementQuest=placementSummary(S,g,pack,now);
-  const m={date:pack.date,title:qi.title,name:qi.medal.name,emoji:qi.medal.emoji,at:now};S.questMedals??=[];if(!S.questMedals.some(x=>x.date===pack.date))S.questMedals.push(m);return m;}
+  const topicIds=pack.topics.map(t=>t.topicId).filter(id=>g.byId[id]);
+  const subjects=[...new Set(topicIds.map(id=>g.byId[id].subject))];
+  S.questMedals??=[];const row={date:pack.date,title:qi.title,name:qi.medal.name,emoji:qi.medal.emoji,at:now};
+  if(!S.questMedals.some(x=>x.date===pack.date))S.questMedals.push(row);
+  const C=campaignState(S,g); // after the medal so trail N/12 includes this win
+  return{...row,questEmoji:qi.emoji,subjects,preferSubject:subjects[0]||null,topicIds,trail:{filled:C.filled,trailLen:C.trailLen},stages:qi.stages.length};}
+// After a quest win: short light practice (quest topics + due reviews), not a new quest.
+export function startReinforce(S,g,topicIds,now){const ids=(topicIds||[]).filter(id=>g.byId[id]);
+  const due=g.topics.filter(t=>stateOf(S,g,t.id,now)==='review').sort((a,b)=>S.ts[a.id].due-S.ts[b.id].due).map(t=>t.id);
+  const open=id=>{const s=stateOf(S,g,id,now);return s==='review'||s==='learning'||s==='ready';};
+  const fromQ=ids.filter(open);
+  const queue=[...fromQ.filter(id=>stateOf(S,g,id,now)==='review'),...due.filter(id=>!fromQ.includes(id)).slice(0,2),
+    ...fromQ.filter(id=>stateOf(S,g,id,now)!=='review')].filter((id,i,a)=>a.indexOf(id)===i).slice(0,4);
+  if(!queue.length)return{error:'Nothing light to practice right now — try grinding a trail or mini-games! 🗺️'};
+  S.reinforce={queue:[...queue],n:0,of:queue.length};S.current=null;return{ok:true,of:queue.length};}
 // ---------- map mini-sessions ("Explore now!" on green/blue stones, "Practice now" on orange ones) ----------
-export function startMini(S,g,id,pack,now){const s=stateOf(S,g,id,now);if(!['ready','learning','review'].includes(s))return{error:'That stone is not open yet!'};
+export function clearGrind(S){if(S)S.grindTrail=null;}
+// Map free-play grind: keep a session list of stones just finished so Continue never re-offers them
+// (a stone left in "learning" is still "open" by stateOf, which would otherwise wrap back).
+export function startMini(S,g,id,pack,now,opts={}){const s=stateOf(S,g,id,now);if(!['ready','learning','review'].includes(s))return{error:'That stone is not open yet!'};
   const t=g.byId[id],math=!!kindFor(t),review=s==='review';
+  if(!opts.continue||S.grindTrail?.subject!==t.subject)S.grindTrail={subject:t.subject,done:[]};
   S.mini={topicId:id,mode:review?'review':'learn',left:review?(math?2:1):(math?3:2),n:0,ret:t.subject,startedAt:now};
   S.miniHold=S.current&&S.current.topicId!==id?S.current:null;return miniItem(S,g,pack,now);}
 function miniItem(S,g,pack,now){const M=S.mini;let mode=M.mode,it;
@@ -809,19 +832,26 @@ function miniItem(S,g,pack,now){const M=S.mini;let mode=M.mode,it;
 // after an answer is done: next mini item, or end the mini-session (returns summary)
 // Next open stone on the same subject's map trail (domain → age → id, matching My World).
 // Free-play grind: after a map mini-session, the UI offers "Continue on this trail".
-export function nextTrailTopic(S,g,subject,afterId,now){const open=id=>['ready','learning','review'].includes(stateOf(S,g,id,now));
+export function nextTrailTopic(S,g,subject,afterId,now,exclude){const skip=new Set(exclude||S.grindTrail?.done||[]);
+  if(afterId)skip.add(afterId);
+  const open=id=>!skip.has(id)&&['ready','learning','review'].includes(stateOf(S,g,id,now));
   const pack=t=>({topicId:t.id,name:t.sn||t.name,subject:t.subject,domain:t.domain,state:stateOf(S,g,t.id,now)});
   const all=g.topics.filter(t=>t.subject===subject).sort((a,b)=>a.domain.localeCompare(b.domain)||a.ageRangeStart-b.ageRangeStart||a.id.localeCompare(b.id));
   if(!all.length)return null;const cur=g.byId[afterId];const i=all.findIndex(t=>t.id===afterId);
   // Prefer forward in the same domain (stay on this trail), then forward in the subject, then wrap.
   if(cur&&i>=0){for(let k=i+1;k<all.length;k++){const t=all[k];if(t.domain!==cur.domain)break;if(open(t.id))return pack(t);}}
-  const start=i>=0?i+1:0;for(let k=start;k<all.length;k++){if(all[k].id!==afterId&&open(all[k].id))return pack(all[k]);}
-  for(let k=0;k<(i>=0?i:0);k++){if(all[k].id!==afterId&&open(all[k].id))return pack(all[k]);}
+  const start=i>=0?i+1:0;for(let k=start;k<all.length;k++){if(open(all[k].id))return pack(all[k]);}
+  for(let k=0;k<(i>=0?i:0);k++){if(open(all[k].id))return pack(all[k]);}
   return null;}
+// Live map payload for the client after a mini ends (codes + fog) so stones recolor without a tab switch.
+export function mapPayload(S,g,now){const sm=summary(S,g,now);return{codes:sm.codes,progress:{...sm,codes:undefined},fog:fogState(S,g,now)};}
 export function miniAfter(S,g,pack,now,r){const M=S.mini;if(!M)return null;
   const st=stateOf(S,g,M.topicId,now),mastered=M.mode==='learn'&&S.ts[M.topicId]?.st==='mastered';
   if(M.left>0&&!mastered&&!(M.mode==='review'&&st==='mastered'&&M.n>=1&&!kindFor(g.byId[M.topicId]))){miniItem(S,g,pack,now);return null;}
   const t=g.byId[M.topicId],subj=M.ret,tid=M.topicId;S.mini=null;S.current=S.miniHold||null;S.miniHold=null;
+  // Remember this stone for the rest of the grind session so Continue never loops back to it.
+  if(!S.grindTrail||S.grindTrail.subject!==subj)S.grindTrail={subject:subj,done:[]};
+  if(!S.grindTrail.done.includes(tid))S.grindTrail.done.push(tid);
   const next=nextTrailTopic(S,g,subj,tid,now);
   return{topicId:tid,name:t.sn||t.name,subject:subj,state:st,mastered:!!mastered||(M.mode==='review'&&st==='mastered'),next};}
 // catch-up boost for an unfinished quest (KV boost:<questDate>): shorter remaining stages, extra hints, a cheer message

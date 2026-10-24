@@ -124,6 +124,23 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #009624}
 .fb{width:100%;height:auto}.fb rect{fill:#ffecb3;stroke:#e65100;stroke-width:3;cursor:pointer}.fb rect.on{fill:#ff9800}
 .miniend{text-align:center;font-size:1.3rem;background:#e8f5e9;border-radius:20px;padding:12px}.miniend button{margin-top:8px}
 .miniend .trailacts{display:flex;flex-direction:column;align-items:stretch;gap:8px;margin-top:10px}.miniend .trailgo{display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.2}.miniend .trailgo .small{opacity:.85;font-weight:600}
+/* Quest complete high-five: medal + trail + Reinforcing / Grind / Mini-games (must pick one) */
+.qcelebrate{position:fixed;inset:0;z-index:70;background:radial-gradient(circle,#1b5e20cc,#000e);display:flex;align-items:center;justify-content:center;padding:16px;animation:fadein .3s;overflow:auto}
+.qcelebrate.out{animation:fadeout .4s forwards}
+.qcelebrate .rays{position:absolute;width:160vmax;height:160vmax;background:repeating-conic-gradient(#69f0ae33 0 10deg,transparent 10deg 20deg);animation:spin 16s linear infinite;pointer-events:none}
+.qcelebrate .qcbox{position:relative;background:linear-gradient(165deg,#e8f5e9,#fff8e1);border-radius:28px;padding:20px 18px 16px;max-width:400px;width:100%;text-align:center;border:4px solid #00c853;box-shadow:0 12px 40px #0006;animation:pop .4s}
+.qcelebrate .qchi{font-size:3rem;line-height:1;animation:pop .5s}
+.qcelebrate .qcnew{font-weight:900;font-size:1.45rem;color:#1b5e20;margin:.2em 0 .4em}
+.qcelebrate .qcmedal{margin:4px auto}
+.qcelebrate .qcname{font-weight:800;font-size:1.15rem;margin:.3em 0}
+.qcelebrate .qctrail{display:inline-block;background:#fff;border-radius:999px;padding:4px 12px;font-weight:700;font-size:.95rem;margin:.4em 0;border:2px solid #a5d6a7}
+.qcelebrate .qcask{font-weight:700;margin:10px 0 6px}
+.qcelebrate .qcacts{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.qcelebrate .qcacts .bigbtn,.qcelebrate .qcacts .ghost{display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.2;width:100%}
+.qcelebrate .qcacts .small{opacity:.85;font-weight:600}
+.qstrip.reinforce{background:#e3f2fd;border-color:#90caf9}
+@media (prefers-reduced-motion:reduce){.qcelebrate,.qcelebrate .qcbox,.qcelebrate .qchi,.qcelebrate .rays{animation:none}}
+
 .scard,.qreveal{position:fixed;inset:0;z-index:45;display:flex;align-items:center;justify-content:center;padding:16px;background:#0009;animation:fadein .25s}
 .scbox{background:#fff;border-radius:26px;padding:18px;max-width:360px;width:100%;text-align:center;position:relative;animation:pop .35s;border:5px solid #00e676}.scbox.s-v{border-color:#ff6d00}.scbox.s-m{border-color:#ffc400}.scbox.s-x{border-color:#b0bec5}.scbox.s-l{border-color:#2979ff}
 .scbox .x{position:absolute;top:8px;right:8px;background:#eceff1;color:#455a64;box-shadow:none;padding:2px 10px;font-size:1rem}.scemo{font-size:3.2rem}.scbox h3{margin:.1em 0;font-size:1.6rem}

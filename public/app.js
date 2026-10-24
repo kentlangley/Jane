@@ -48,14 +48,17 @@ function render(s){st=s;if(s?.learner)setLearner(s.learner);chips(s);const p=s.i
   timerInt=setInterval(()=>{const left=Math.max(0,end-Date.now());$('tb').style.transform=`scaleX(${left/(p.timed*1000)})`;$('tl').textContent=left?`⚡ ${Math.ceil(left/1000)}s for a speed bonus!`:'Time\'s up for the bonus — but keep going, you can still get it!';if(!left)clearInterval(timerInt);},200);}}
 async function send(v){if(!v||$('pcard').classList.contains('busy'))return;$('pcard').classList.add('busy');let r;try{r=await api('/api/answer',{answer:v});}catch(e){$('pcard').classList.remove('busy');say('Oops, the internet hiccuped. Try again! 🔌');return;}$('pcard').classList.remove('busy');say(r.jane);
  if(r.stuck){if(r.state)st=r.state;showHelp(r.stuck);return;}
- if(r.questDone)setTimeout(()=>questMedal(r.questDone),r.medal?2600:300);
  if(r.shielded)setTimeout(()=>banner(`🛡️ Shield up!<br><small>Your 🔥 ${r.shielded} streak is safe</small>`),300);
  if(r.proveIt?.passed)setTimeout(()=>banner(`🎟️ Proved it!<br><small>${esc(r.proveIt.topic||'')} +${r.proveIt.bonus} bonus</small>`),r.medal?2600:500);
  if(r.miniDone&&!r.reveal){chips(r.state);return miniEnd(r);}
- if(r.correct){const big=!!(r.mastered||r.levelUp||r.medal);if(!(window.FX&&FX.good($('pcard'),big)))confetti(big?80:30);if(r.medal)reveal(r.medal,r.inferred);else if(r.mastered)banner(`🏆 Mastered!<br><small>${esc(r.mastered)}</small>${r.inferred?`<br><small>+${r.inferred} skills lit up on your map!</small>`:''}`);else if(r.levelUp)banner('⬆ Level '+r.levelUp+'!');}
+ if(r.correct){const big=!!(r.mastered||r.levelUp||r.medal);if(!(window.FX&&FX.good($('pcard'),big)))confetti(big?80:30);if(!r.questDone){if(r.medal)reveal(r.medal,r.inferred);else if(r.mastered)banner(`🏆 Mastered!<br><small>${esc(r.mastered)}</small>${r.inferred?`<br><small>+${r.inferred} skills lit up on your map!</small>`:''}`);else if(r.levelUp)banner('⬆ Level '+r.levelUp+'!');}}
  else if(r.formNudge){/* right value, wrong form: a gentle nudge, no shake */}
  else if(window.FX&&!FX.reduced()){FX.bad($('pcard'));}else{$('pcard').classList.remove('shake');void $('pcard').offsetWidth;$('pcard').classList.add('shake');}
  if(r.boss){if(st?.item)st.item.boss=r.boss;$('bossbar').innerHTML=bossHTML(r.boss,st?.item?.topicId);$('bossbar').querySelector('.boss')?.classList.add('shake');}
+ // Quest complete: celebratory high-five BEFORE free play — hold state until they pick an option.
+ if(r.questDone){chips(r.state);window._afterQuest=r.state;const go=()=>questCelebrate(r.questDone,r.state);
+  if(r.reveal){$('f').style.display='none';$('mc').innerHTML='';$('extra').innerHTML=`<p style="font-size:1.3rem">✅ Answer: <b>${esc(String(r.reveal).replace(/\|/g,' → '))}</b></p><button onclick="next()">Next ➡</button>`;window._next=r.state;window._questDone=r.questDone;window._mini=null;return;}
+  if(r.medal){reveal(r.medal,r.inferred,go);return;}setTimeout(go,400);return;}
  if(r.askChoice){chips(r.state);return ask(r.jane);}
  if(r.reveal){$('f').style.display='none';$('mc').innerHTML='';$('extra').innerHTML=`<p style="font-size:1.3rem">✅ Answer: <b>${esc(String(r.reveal).replace(/\|/g,' → '))}</b></p><button onclick="next()">Next ➡</button>`;window._next=r.state;window._mini=r.miniDone?r:null;chips(r.state);return;}
  if(r.retry){if(st.item.type==='input')$('a').select();else if(INTER[st.item.type])setTimeout(()=>render(st),900);return;}
@@ -68,7 +71,7 @@ async function skip(){render(await api('/api/skipbonus',{}));say('No problem! He
 async function stuckTap(){if($('pcard').classList.contains('busy'))return;$('pcard').classList.add('busy');let r;try{r=await api('/api/stuck',{});}finally{$('pcard').classList.remove('busy');}
  if(!r||r.error)return;say(r.jane);if(r.state)st=r.state;showHelp(r.stuck);}
 async function skipNow(){if($('pcard').classList.contains('busy'))return;$('pcard').classList.add('busy');let r;try{r=await api('/api/skip',{});}finally{$('pcard').classList.remove('busy');}
- if(!r||r.error)return;say(r.jane);if(r.questDone)setTimeout(()=>questMedal(r.questDone),300);if(r.miniDone){chips(r.state);return miniEnd(r);}render(r.state);}
+ if(!r||r.error)return;say(r.jane);if(r.questDone){chips(r.state);window._afterQuest=r.state;setTimeout(()=>questCelebrate(r.questDone,r.state),300);return;}if(r.miniDone){chips(r.state);return miniEnd(r);}render(r.state);}
 function tryAgain(){if(st?.item?.type==='input'){$('a').focus();$('a').select();}else $('mc').scrollIntoView({behavior:'smooth',block:'center'});}
 function showHelp(h){const el=$('help');if(!h){el.hidden=true;el.innerHTML='';return;}el.hidden=false;const li=a=>(a||[]).map(x=>`<li>${esc(x)}</li>`).join('');
  el.innerHTML=h.step<2?`<div class="help"><div class="hl">💡 Hint</div><p>${gl(h.hint,new Set())}</p><div class="hb"><button type="button" class="ghost" onclick="tryAgain()">✏️ I'll try</button><button type="button" class="stuckb" onclick="stuckTap()">Still stuck 🤔</button></div></div>`
@@ -76,7 +79,7 @@ function showHelp(h){const el=$('help');if(!h){el.hidden=true;el.innerHTML='';re
   <div class="hb"><button type="button" onclick="tryAgain()">✏️ I'll try!</button><button type="button" class="skipb" onclick="skipNow()">⏭️ Skip for now</button></div><div class="small">Skipping is OK! No hearts lost. We'll come back to it later.</div></div>`;
  if(window.FX)FX.enter(el);}
 $('stuckf').onclick=()=>stuckTap();
-async function next(){if(window._mini){const m=window._mini;window._mini=null;return miniEnd(m);}render(window._next||await api('/api/next',{}));window._next=null;}
+async function next(){if(window._questDone){const q=window._questDone;window._questDone=null;const s=window._next;window._next=null;chips(s);return questCelebrate(q,s);}if(window._mini){const m=window._mini;window._mini=null;return miniEnd(m);}render(window._next||await api('/api/next',{}));window._next=null;}
 $('f').onsubmit=e=>{e.preventDefault();send($('a').value.trim());};
 // ---------- world map ----------
 const ISL={Science:{x:290,y:540,r:250,e:'🔬',c:'#66bb6a'},Mathematics:{x:950,y:340,r:240,e:'🔢',c:'#42a5f5'},English:{x:1280,y:740,r:180,e:'📚',c:'#ab47bc'},History:{x:680,y:860,r:105,e:'🏛️',c:'#8d6e63'},
@@ -90,6 +93,14 @@ const hash=s=>{let h=2166136261;for(const c of s)h=Math.imul(h^c.charCodeAt(0),1
 let layout=null,mapData=null,zoomed=null;
 async function loadMap(){if(!TAX)TAX=await (await fetch('/tax.json')).json();if(!layout){ensureIslands();layout=doLayout();TAX.idx=Object.fromEntries(TAX.topics.map((t,i)=>[t.id,i]));}
  mapData=await api('/api/map');try{drawMap();}catch(e){console.error(e);$('world').innerHTML='<p class="small">Oops, the map got lost in the fog. Try again in a moment! 🧭</p>';}drawBars();}
+// Live map merge after a grind mini ends: patch codes/progress/fog and redraw without requiring a tab click.
+function applyMap(m){if(!m||(!m.codes&&!m.progress&&!m.fog))return;
+ if(!mapData)mapData={codes:m.codes||'',focus:null,current:null,progress:m.progress||{},fog:m.fog||null};
+ else{if(m.codes!=null)mapData.codes=m.codes;if(m.progress)mapData.progress=m.progress;if(m.fog)mapData.fog=m.fog;if(m.current!==undefined)mapData.current=m.current;if(m.focus!==undefined)mapData.focus=m.focus;}
+ if(layout&&mapData.codes){try{drawMap();drawBars();}catch(e){console.error(e);}}
+ if(m.fog&&typeof paintFogFinds==='function')paintFogFinds(m.fog);}
+async function refreshMap(){try{const m=await api('/api/map');applyMap(m);}catch(e){console.error(e);}}
+let trailDone=new Set(); // client-side session exclude (mirrors S.grindTrail.done)
 function blob(cx,cy,r,seed,n=48,amp=1){let d='';const P=[];for(let i=0;i<n;i++){const a=i/n*2*Math.PI,k=1+amp*(.07*Math.sin(a*3+seed*9)+.05*Math.sin(a*5+seed*4)+.025*Math.sin(a*11+seed*17));P.push([cx+r*k*Math.cos(a),cy+r*k*Math.sin(a)]);}
  // smooth closed curve through points (Catmull-Rom → cubic Bézier)
  for(let i=0;i<n;i++){const p0=P[(i-1+n)%n],p1=P[i],p2=P[(i+1)%n],p3=P[(i+2)%n];if(!i)d+=`M${p1[0].toFixed(1)},${p1[1].toFixed(1)}`;
@@ -308,9 +319,9 @@ function medalSVG(m,size=64){const id='m'+(MID++),T=TIER[m.tier]||TIER.bronze,c=
  <g clip-path="url(#${id}c)"><rect class="shine" x="-60" y="0" width="22" height="112" fill="#fff" opacity=".55" transform="skewX(-20)"/></g>${sp}</svg>`;}
 function medalRow(s){const M=s.medals||[];$('badges').innerHTML=s.medalCount?`<button class="mrow" onclick="openTrophies()"><span class="mlbl">🏆 ${s.medalCount} medal${s.medalCount>1?'s':''}</span>${M.map(m=>medalSVG(m,40)).join('')}${s.medalCount>M.length?`<span class="more">+${s.medalCount-M.length}</span>`:''}<span class="go">See all ›</span></button>`:'<div class="small mhint">🏅 Master a skill to win your first medal!</div>';}
 function openTrophies(){document.querySelector('.tab[data-v=trophies]').click();}
-function reveal(m,inf){const o=document.createElement('div');o.className='reveal r-'+m.tier;const T=TIER[m.tier];
+function reveal(m,inf,onClose){const o=document.createElement('div');o.className='reveal r-'+m.tier;const T=TIER[m.tier];
  o.innerHTML=`<div class="rays"></div><div class="rbox"><div class="rtier">${m.tier==='legendary'?'🌈 LEGENDARY!':'✨ New '+T.n+' medal!'}</div><div class="rmedal">${medalSVG(m,170)}</div><div class="rname">${esc(m.name)}</div><div class="small">${esc(m.subject)}${inf?` · +${inf} skills lit up!`:''}</div><button>Collect it! 🏆</button></div>`;
- document.body.appendChild(o);confetti(m.tier==='legendary'?140:90);const close=()=>{o.classList.add('out');setTimeout(()=>o.remove(),350);};o.querySelector('button').onclick=close;o.onclick=e=>{if(e.target===o)close();};}
+ document.body.appendChild(o);confetti(m.tier==='legendary'?140:90);const close=()=>{o.classList.add('out');setTimeout(()=>{o.remove();onClose&&onClose();},350);};o.querySelector('button').onclick=close;o.onclick=e=>{if(e.target===o)close();};}
 // Trophy Case: medal-type chips are filter buttons (public/trophies.js); the grid keeps its cells and AutoAnimate moves them
 let tFilter='all',tAnim=false;
 async function loadTrophies(){const d=await api('/api/trophies');const TF=window.TrophyFilter,M=d.medals||[];if(!TF.chips(M,tFilter).some(c=>c.tier===tFilter))tFilter='all';
@@ -396,28 +407,37 @@ function qpath(Q,{cur=false,big=false}={}){const G=Object.fromEntries((Q.gates||
  return `<div class="qpath${big?' big':''}">${Q.stages.map((x,i)=>`${i?'<i></i>':''}${G[i]?`<span class="qk ${G[i].state}" title="${G[i].state==='open'?'Gate open':'Review gate: answer something from before to pass'}">🗝️</span><i></i>`:''}<span class="qs ${x.complete?'done':cur&&i===Q.current?'cur':''} ${x.boss?'boss':''}" title="${esc(x.name)}">${x.complete&&!big?'✅':esc(x.emoji)}</span>`).join('')}</div>`;}
 function questStrip(s,p){const el=$('qstrip');if(!el)return;const Q=s.quest;
  if(p.mini){el.hidden=false;el.className='qstrip mini';el.innerHTML=`<span>🛤️ Trail: <b>${esc(p.topic.name)}</b> · ${p.mini.n} of ${p.mini.of}</span><button class="ghost sm" onclick="miniQuit()">🗺️ Back to map</button>`;return;}
+ if(p.reinforce){el.hidden=false;el.className='qstrip reinforce';el.innerHTML=`<span>🧠 Reinforcement: <b>${esc(p.topic.name)}</b> · ${p.reinforce.n} of ${p.reinforce.of}</span>`;return;}
  if(!Q||!Q.started||Q.completed){// honest empty state (no stale quest title / "behind by a day" confusion)
   if(!Q&&(p.mode==='review'||p.format==='review')){el.hidden=false;el.className='qstrip empty';el.innerHTML=`<div class="qsh">📝 <b>No quest running right now</b> <span class="small">Jane writes a new one after you finish the last — keep exploring!</span></div>`;return;}
   el.hidden=true;return;}
  if(!String(p.ptype||'')&&!p.gate){el.hidden=true;return;}
  el.hidden=false;el.className='qstrip';el.innerHTML=`<div class="qsh">${esc(Q.emoji)} <b>${esc(Q.title)}</b> <span class="small">Stage ${Math.min(Q.stages.length,Q.current+1)} of ${Q.stages.length}${Q.date?` · ${esc(Q.date)}`:''}</span></div>${s.quests?.boost?`<div class="boost">${esc(s.quests.boost.emoji)} ${gl(s.quests.boost.message||'')}</div>`:''}${qpath(Q,{cur:true})}`;}
-async function miniQuit(){const s=await api('/api/mini/quit',{});render(s);goMap(s.mini?.subject);}
-function goMap(sub){if(window._afterMini){render(window._afterMini);window._afterMini=null;}if(sub)zoomed=sub;document.querySelector('.tab[data-v=map]').click();}
-function miniEnd(r){const m=r.miniDone;$('f').style.display='none';$('mc').innerHTML='';
- const n=m.next;const title=m.mastered?`You conquered "${esc(m.name)}"!`:`Nice exploring — "${esc(m.name)}" is on your map!`;
+async function miniQuit(){const s=await api('/api/mini/quit',{});trailDone=new Set();render(s);goMap(s.mini?.subject);}
+function goMap(sub){trailDone=new Set();if(window._afterMini){render(window._afterMini);window._afterMini=null;}if(sub)zoomed=sub;document.querySelector('.tab[data-v=map]').click();}
+async function miniEnd(r){const m=r.miniDone;$('f').style.display='none';$('mc').innerHTML='';
+ // Update map stone colors + fog immediately from the answer payload, then confirm with /api/map.
+ if(m.topicId)trailDone.add(m.topicId);
+ if(r.map)applyMap(r.map);
+ else if(m.topicId&&mapData?.codes&&TAX?.idx){const i=TAX.idx[m.topicId];if(i!=null){const code={mastered:'m',review:'v',ready:'r',learning:'l',locked:'x'}[m.state]||mapData.codes[i];
+  mapData.codes=mapData.codes.slice(0,i)+code+mapData.codes.slice(i+1);if(layout){try{drawMap();drawBars();}catch(e){}}}}
+ await refreshMap();
+ // Never re-offer a stone just finished this session (server grindTrail + client belt-and-suspenders).
+ let n=m.next;if(n&&trailDone.has(n.topicId))n=null;
+ const title=m.mastered?`You conquered "${esc(m.name)}"!`:`Nice exploring — "${esc(m.name)}" is on your map!`;
  const cont=n?`<button class="bigbtn trailgo" id="trailgo">🛤️ Continue on this trail<span class="small">Next: ${esc(n.name)}</span></button>`:'';
  const back=`<button class="${n?'ghost':'bigbtn'}" id="trailback">🗺️ Back to map</button>`;
  $('extra').innerHTML=`<div class="miniend"><div class="big">${m.mastered?'🏆':'🌟'}</div><b>${title}</b>${n?`<p class="small">Keep grinding ${esc(m.subject)} as long as you want.</p>`:''}<div class="trailacts">${cont}${back}</div></div>`;
  confetti(m.mastered?70:30);window._afterMini=r.state;
  $('trailback').onclick=()=>goMap(m.subject);
- if(n)$('trailgo').onclick=async()=>{const s=await api('/api/explore',{topicId:n.topicId});if(s.error){say(s.error);return goMap(m.subject);}document.querySelector('.tab[data-v=play]').click();render(s);say(`Trail continues: ${n.name}! 🛤️`);};
+ if(n)$('trailgo').onclick=async()=>{const s=await api('/api/explore',{topicId:n.topicId,continue:true});if(s.error){say(s.error);return goMap(m.subject);}document.querySelector('.tab[data-v=play]').click();render(s);say(`Trail continues: ${n.name}! 🛤️`);};
  else setTimeout(()=>{if(!$('play').hidden&&$('extra').querySelector('.miniend'))goMap(m.subject);},4500);}
 function stoneCard(i){const t=TAX.topics[i],c=mapData.codes[i];const o=document.createElement('div');o.className='scard';
  const act=c==='r'||c==='l'?['🚀 Explore now!','explore']:c==='v'?['🧠 Practice now','practice']:null;
  o.innerHTML=`<div class="scbox s-${c}"><button class="x" aria-label="close">✕</button><div class="scemo">${esc(t.ic||'⭐')}</div><h3>${esc(t.sn||t.name)}</h3><div class="pill p-${c}">${SN[c]}</div><p class="small">${esc(t.domain)} · ages ${t.ageRangeStart}+</p>
  ${act?`<button class="bigbtn ${act[1]}" id="scgo">${act[0]}</button><div class="small">${act[1]==='explore'?'A quick mini-adventure — then keep going on this trail if you want!':'A quick memory check to keep it shiny!'}</div>`:c==='m'?'<p>⭐ You already mastered this one!</p>':'<p>🔒 Unlock the stones before it first!</p>'}</div>`;
  document.body.appendChild(o);const close=()=>o.remove();o.querySelector('.x').onclick=close;o.onclick=e=>{if(e.target===o)close();};
- if(act)$('scgo').onclick=async()=>{const s=await api('/api/explore',{topicId:t.id});close();if(s.error){say(s.error);return;}document.querySelector('.tab[data-v=play]').click();render(s);say(act[1]==='explore'?`Let's explore "${t.sn||t.name}"! 🚀`:`Memory check: "${t.sn||t.name}"! 🧠`);};}
+ if(act)$('scgo').onclick=async()=>{trailDone=new Set();const s=await api('/api/explore',{topicId:t.id});close();if(s.error){say(s.error);return;}document.querySelector('.tab[data-v=play]').click();render(s);say(act[1]==='explore'?`Let's explore "${t.sn||t.name}"! 🚀`:`Memory check: "${t.sn||t.name}"! 🧠`);};}
 
 // ---------- quests: reveal, tab, medal ----------
 function questDot(s){const d=document.querySelector('.tab[data-v=quests] .dot');if(d)d.hidden=!s.newQuest;}
@@ -439,8 +459,36 @@ async function loadQuests(){const d=await api('/api/quests');const el=$('qlist')
   +(d.nextUp?'<div class="qcard nextup"><div class="qch"><span class="qemo">❓</span><div><b>Next up: ???</b><div class="small">🗝️ Finish your quest to unlock it!</div></div></div></div>':'')
   +(d.finished.length?`<h3 class="qfin">🏅 Finished quests</h3>${d.finished.map(f=>qcardHTML(f,false)).join('')}`:'');
  const b=el.querySelector('.qgo');if(b)b.onclick=async()=>{if(!q.started)return questReveal(q);const s=await api('/api/quest/start',{date:q.date});document.querySelector('.tab[data-v=play]').click();if(s.error)return say(s.error);render(s);say(`Back to "${q.title}"! You've got this! 💪`);};}
-function questMedal(m){reveal({tier:'quest',name:m.name,ic:m.emoji,subject:'Quest: '+m.title},0);}
+function questMedal(m){questCelebrate(m,st);} // back-compat
+// High-five when a quest finishes: medal + trail progress, then Reinforcing / Grind a Trail / Mini-games.
+function questCelebrate(m,state){document.querySelectorAll('.qcelebrate').forEach(x=>x.remove());
+ const o=document.createElement('div');o.className='qcelebrate';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-labelledby','qctitle');
+ const trail=m.trail?`🗡️ Campaign Trail ${m.trail.filled} / ${m.trail.trailLen}`:'';
+ const sub=m.preferSubject||(m.subjects&&m.subjects[0])||'';
+ const subLbl=sub?(ISL[sub]?.e||'🗺️')+' '+sub:'🗺️ My World';
+ o.innerHTML=`<div class="rays"></div><div class="qcbox">
+  <div class="qchi">🙌</div><div class="qcnew" id="qctitle">High five — quest complete!</div>
+  <div class="qcmedal">${medalSVG({tier:'quest',name:m.name,ic:m.emoji||'🏅',subject:m.title},120)}</div>
+  <div class="qcname">${esc(m.emoji||m.questEmoji||'🏅')} ${esc(m.name)}</div>
+  <p class="small">You finished <b>${esc(m.title)}</b>${m.stages?` · ${m.stages} stages`:''}</p>
+  ${trail?`<div class="qctrail">${esc(trail)}</div>`:''}
+  <p class="qcask">What do you want to do next?</p>
+  <div class="qcacts">
+   <button type="button" class="bigbtn" id="qc-reinforce">🧠 Reinforcement<span class="small">Light practice on what you just learned</span></button>
+   <button type="button" class="bigbtn trailgo" id="qc-grind">🛤️ Grind a Trail<span class="small">Explore ${esc(subLbl)} on the Map</span></button>
+   <button type="button" class="ghost" id="qc-play">🎲 Mini-games<span class="small">Free play — random practice</span></button>
+  </div></div>`;
+ document.body.appendChild(o);confetti(120);say(`🙌 High five! You finished "${m.title}"!`);
+ const close=()=>{o.classList.add('out');setTimeout(()=>o.remove(),400);};
+ // Must pick an option — no silent dismiss by clicking the backdrop.
+ $('qc-reinforce').onclick=async()=>{const s=await api('/api/reinforce',{topicIds:m.topicIds||[]});close();
+  if(s.error){say(s.error);render(state||window._afterQuest||s);return;}document.querySelector('.tab[data-v=play]').click();render(s);say('🧠 Reinforcement time — quick practice on what you covered!');window._afterQuest=null;};
+ $('qc-grind').onclick=()=>{close();window._afterQuest=null;trailDone=new Set();goMap(sub||undefined);say(`🛤️ Grind time — pick a stone on ${subLbl}!`);};
+ $('qc-play').onclick=()=>{close();const s=state||window._afterQuest;window._afterQuest=null;document.querySelector('.tab[data-v=play]').click();if(s)render(s);else api('/api/next',{}).then(render);say('🎲 Mini-games! Have fun!');};
+}
 if(location.hash==='#quest-preview')api('/api/state').then(s=>s.quest&&questReveal(s.quest));
+if(location.hash==='#quest-celebrate-preview'){document.querySelector('.tab[data-v=play]')?.click();
+ api('/api/state').then(s=>{campaignHUD(s);questCelebrate({date:'preview',title:(s.quest?.title)||'Captain Comet\'s Lost Treasure',name:(s.quest?.medal?.name)||'Comet Treasure Medal',emoji:(s.quest?.medal?.emoji)||'💎',questEmoji:s.quest?.emoji||'🏴‍☠️',subjects:['Mathematics','Science'],preferSubject:'Mathematics',topicIds:[],trail:{filled:s.campaign?.filled||3,trailLen:s.campaign?.trailLen||12},stages:s.quest?.stages?.length||5},s);});}
 
 // ---------- glossary: dotted key terms with kid definitions (hover on desktop, tap on phones) ----------
 let GLOSS={},GRE=null,PACKT={},GUSED=new Set();
