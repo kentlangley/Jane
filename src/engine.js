@@ -156,7 +156,19 @@ export const MARKET=[
   {id:'prove-it',kind:'prove',price:150,emoji:'🎟️',title:'Prove-It Ticket',note:'Answer one HARDER question on a review that is due. Right first try: review cleared + 20 bonus points!',
     check:(S,g,meta,now)=>{const id=String(meta.topicId||'');const e=proveError(S,g,id,now);return e?{error:e}:{meta:{topicId:id}};},
     apply:(S,g,row,now)=>{if(S.current&&!S.current.proveIt)S.proveHold=S.current;S.current=proveItem(S,g,row.meta.topicId,now,row.id);return{proving:{topicId:row.meta.topicId}};}},
+  // pick your path (slice 5): choose the NEXT new quest's topic (1 of 2–3 ready frontier topics) or its story theme.
+  // Choice, never skipping: the topic still runs teach → practice → graded → boss. One open pick per kind.
+  {id:'pick-path',kind:'path',price:100,emoji:'🧭',title:'Pick Your Path',note:'Choose what your NEXT new quest is about, from 2–3 ready topics.',
+    check:(S,g,meta,now)=>{if(S.wallet?.choices?.path&&!S.wallet.choices.path.used)return{error:'You already picked your next quest! 🧭'};
+      const id=String(meta.topicId||''),o=pathOffers(S,g,now);if(!o.some(x=>x.topicId===id))return{error:'Pick one of the topics on offer today! 🧭'};return{meta:{topicId:id}};},
+    apply:(S,g,row,now)=>{const t=g.byId[row.meta.topicId];S.wallet.choices.path={topicId:t.id,name:t.sn||t.name,subject:t.subject,at:now,pid:row.id};return{choice:S.wallet.choices.path};}},
+  {id:'pick-theme',kind:'theme',price:100,emoji:'🎭',title:'Pick a Story Theme',note:'Choose the story world for your NEXT new quest: pirates, space, dinosaurs and more.',
+    check:(S,g,meta)=>{if(S.wallet?.choices?.theme&&!S.wallet.choices.theme.used)return{error:'You already picked a theme for your next quest! 🎭'};
+      const th=QUEST_THEMES.find(x=>x.id===meta.theme);return th?{meta:{theme:th.id}}:{error:'Pick a theme! 🎭'};},
+    apply:(S,g,row,now)=>{const th=QUEST_THEMES.find(x=>x.id===row.meta.theme);S.wallet.choices.theme={id:th.id,title:th.title,emoji:th.emoji,at:now,pid:row.id};return{choice:S.wallet.choices.theme};}},
 ];
+export const QUEST_THEMES=[{id:'pirates',emoji:'🏴‍☠️',title:'Pirates'},{id:'space',emoji:'🚀',title:'Outer space'},{id:'dungeon',emoji:'🐉',title:'Dragon dungeon'},
+  {id:'jungle',emoji:'🌴',title:'Jungle expedition'},{id:'ocean',emoji:'🌊',title:'Deep ocean'},{id:'dinosaurs',emoji:'🦕',title:'Dinosaur valley'},{id:'detective',emoji:'🕵️',title:'Detective mystery'},{id:'sports',emoji:'⚽',title:'Sports championship'}];
 export const SKIN_SLOTS=['ship','avatar','boss','theme'];
 export const WALLET_DAYS=60;
 const PID=/^[A-Za-z0-9_-]{6,64}$/;
@@ -217,6 +229,23 @@ function proveSubmit(S,g,answer,now){const it=S.current,t=g.byId[it.topicId];if(
   S.streak=0;if(rec){rec.streak=0;rec.last=now;if(rec.st==='mastered')rec.due=Math.min(rec.due,now+DAY);}
   ev.push({event:'reviewMiss',topicId:it.topicId,topic:t.name},{event:'proveIt',topicId:it.topicId,topic:t.name,passed:false,bonus:0});proveEnd(S);
   return{r:{done:true,correct:false,reveal:it.answer,proveIt:{passed:false,bonus:0,topic:t.sn||t.name},jane:`Good try! ${it.explain} This review stays on your list. You'll get it next time! 💪`},ev};}
+// ---------- pick your path (slice 5) ----------
+// Offers: up to 3 READY topics (every hard prerequisite mastered), nearest the target age, one per subject, the same all
+// Pacific day (seeded by the date, so reloading doesn't reroll them). Hidden-region and pending topics are not in g.
+const dayHash=s=>{let h=2166136261;for(const c of s)h=Math.imul(h^c.charCodeAt(0),16777619);return(h>>>0)/4294967296;};
+export function pathOffers(S,g,now=Date.now()){const day=ptDay(now),seen=new Set(),out=[];
+  const c=g.topics.filter(t=>stateOf(S,g,t.id,now)==='ready'&&t.ageRangeStart>=TARGET_AGE-2).map(t=>[t,Math.abs(t.ageRangeStart-TARGET_AGE)+dayHash(day+t.id)*1.5]).sort((a,b)=>a[1]-b[1]);
+  for(const [t] of c){if(seen.has(t.subject))continue;seen.add(t.subject);out.push({topicId:t.id,name:t.sn||t.name,subject:t.subject,domain:t.domain,ic:t.ic,age:t.ageRangeStart});if(out.length>=3)break;}
+  return out;}
+// the nightly author marks a pick used by publishing a quest pack (dated after the pick) with
+// "honors": {"path": "<topicId>" | "declined", "theme": "<themeId>" | "declined", "note": "..."}. "declined" (no valid quest
+// fits) closes the pick and refunds its price as a new ledger row; earlier rows are never rewritten.
+export function honorChoices(S,packs,now=Date.now()){const C=S.wallet?.choices;if(!C)return[];const done=[];
+  for(const k of['path','theme']){const ch=C[k];if(!ch||ch.used)continue;const want=k==='path'?ch.topicId:ch.id;
+    const d=Object.keys(packs||{}).sort().find(d=>{const h=packs[d]?.quest&&packs[d].honors;return h&&d>ptDay(ch.at)&&(h[k]===want||h[k]==='declined');});if(!d)continue;
+    const declined=packs[d].honors[k]==='declined';ch.used={date:d,at:now,declined:declined||undefined,note:packs[d].honors.note||undefined};done.push({kind:k,date:d,declined});
+    if(declined){const row=S.wallet.ledger.find(r=>r.id===ch.pid);if(row&&!S.wallet.ledger.some(r=>r.id==='refund-'+ch.pid)){S.wallet.ledger.push({id:'refund-'+ch.pid,item:row.item,kind:'refund',price:-row.price,at:now,meta:{date:d}});S.wallet.spent-=row.price;}}}
+  return done;}
 // M6: one snapshot of the earned total per Pacific day (last WALLET_DAYS days) so the export can show earned7d
 export function snapDay(S,day){const W=walletOf(S);if(W.days[day]===(S.points||0))return;W.days[day]=S.points||0;
   const ks=Object.keys(W.days).sort();for(const k of ks.slice(0,Math.max(0,ks.length-WALLET_DAYS)))delete W.days[k];}
@@ -224,6 +253,7 @@ export function marketExport(S,g,now=Date.now()){const W=S.wallet||{},ws=walletS
   const base=[...ds].reverse().find(d=>d<=cut)??ds[0];const ledger=W.ledger||[];
   return{balance:ws.balance,earned:ws.earned,spent:ws.spent,spent7d:ledger.filter(r=>r.at>=now-7*DAY).reduce((a,r)=>a+r.price,0),
     earned7d:base!=null?Math.max(0,ws.earned-W.days[base]):null,earnedSince:base??null,ledger:ledger.slice(-30),owned:ws.owned,equipped:ws.equipped,active:ws.active,choices:ws.choices,
+    openChoices:Object.fromEntries(Object.entries(ws.choices).filter(([,c])=>c&&!c.used)),
     prices:Object.fromEntries(MARKET.map(d=>[d.id,d.price]))};}
 // medals: one per directly-mastered topic (not inferred, not self-rated); boss wins are legendary
 export function tierOf(g,id,boss){return boss?'legendary':(g.byId[id]||g.hidden?.[id])?.tier||'bronze';}

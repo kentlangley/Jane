@@ -1,7 +1,7 @@
 // Points Market (plans/points-market.md, #74; idea credit: Christopher). Points buy fun, choice and peeks:
 // never mastery, medals or permanent fog clear. balance = earned − spent; purchases are server-side and idempotent.
 import {test,before,after} from 'node:test';import assert from 'node:assert/strict';import {spawn,execFileSync} from 'node:child_process';
-import fs from 'node:fs';import path from 'node:path';import net from 'node:net';import {ROOT,tmpDir,loadEngine} from './helpers.mjs';
+import fs from 'node:fs';import path from 'node:path';import net from 'node:net';import {ROOT,tmpDir,loadEngine,validate,example} from './helpers.mjs';
 const {E,g}=await loadEngine();const DAY=864e5,NOW=Date.parse('2026-10-23T19:00:00Z');
 const rich=(pts=1000)=>{const S=E.blank();S.points=pts;S.firstDone=true;return S;};
 const pid=(n=0)=>'test-pid-'+n;
@@ -93,6 +93,32 @@ test('prove-it: max 2 per Pacific day, offers list only due provable topics',()=
   assert.match(E.buy(S,g,{pid:pid(52),item:'prove-it',meta:{topicId:whyT.id}},NOW+2).error,/tomorrow/);assert.equal(E.proveOffers(S,g,NOW+2).left,0);
   assert.ok(E.buy(S,g,{pid:pid(53),item:'prove-it',meta:{topicId:whyT.id}},NOW+DAY).ok,'a new day, a new ticket');});
 
+// ---------- slice 5: pick your path ----------
+test('pick your path: 2–3 READY topics, one per subject, stable all day; only an offered topic can be picked; one open pick per kind',()=>{
+  const S=rich(1000);const o=E.pathOffers(S,g,NOW);assert.ok(o.length>=2&&o.length<=3,'2–3 offers');
+  assert.ok(o.every(x=>E.stateOf(S,g,x.topicId,NOW)==='ready'),'prereqs met');assert.equal(new Set(o.map(x=>x.subject)).size,o.length);
+  assert.deepEqual(E.pathOffers(S,g,NOW+3600e3),o,'same offers later the same day');
+  const notOffered=g.topics.find(t=>E.stateOf(S,g,t.id,NOW)==='locked');
+  assert.match(E.buy(S,g,{pid:pid(60),item:'pick-path',meta:{topicId:notOffered.id}},NOW).error,/on offer/);
+  const x=E.buy(S,g,{pid:pid(61),item:'pick-path',meta:{topicId:o[0].topicId}},NOW);assert.ok(x.ok,x.error);assert.equal(S.wallet.choices.path.topicId,o[0].topicId);
+  assert.match(E.buy(S,g,{pid:pid(62),item:'pick-path',meta:{topicId:o[1].topicId}},NOW).error,/already picked/);
+  assert.ok(E.buy(S,g,{pid:pid(63),item:'pick-theme',meta:{theme:'pirates'}},NOW).ok);assert.match(E.buy(S,g,{pid:pid(64),item:'pick-theme',meta:{theme:'space'}},NOW).error,/already picked/);
+  assert.match(E.buy(rich(500),g,{pid:pid(65),item:'pick-theme',meta:{theme:'nope'}},NOW).error,/Pick a theme/);
+  assert.equal(S.wallet.spent,200);});
+test('pick your path: a later quest pack with "honors" marks it used; "declined" refunds with a new ledger row',()=>{
+  const S=rich(1000);const o=E.pathOffers(S,g,NOW);E.buy(S,g,{pid:pid(66),item:'pick-path',meta:{topicId:o[0].topicId}},NOW);E.buy(S,g,{pid:pid(67),item:'pick-theme',meta:{theme:'space'}},NOW);
+  const day=E.walletState(S,g,NOW).choices.path.at,d0=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles'}).format(new Date(day));
+  assert.deepEqual(E.honorChoices(S,{[d0]:{date:d0,quest:{},honors:{path:o[0].topicId}}},NOW),[],'a pack from the same day does not count');
+  const d1='2099-01-01';const done=E.honorChoices(S,{[d1]:{date:d1,quest:{title:'x'},honors:{path:o[0].topicId,theme:'declined',note:'no space quest fits'}}},NOW+DAY);
+  assert.equal(done.length,2);assert.equal(S.wallet.choices.path.used.date,d1);assert.equal(S.wallet.choices.theme.used.declined,true);
+  assert.equal(S.wallet.spent,100,'theme refunded');assert.equal(S.wallet.ledger.length,3);assert.equal(S.wallet.ledger[2].price,-100);assert.equal(S.wallet.ledger[1].price,100,'earlier rows untouched');
+  assert.equal(E.honorChoices(S,{[d1]:{date:d1,quest:{},honors:{theme:'declined'}}},NOW+DAY).length,0,'idempotent');assert.equal(S.wallet.spent,100);
+  assert.ok(E.buy(S,g,{pid:pid(68),item:'pick-path',meta:{topicId:E.pathOffers(S,g,NOW+DAY)[0].topicId}},NOW+DAY).ok,'a new pick after the old one was used');});
+test('publish: "honors" is validated (topic must be a stage, theme from the table); publish:dry still passes',()=>{
+  const p=example();p.honors={path:p.topics[0].topicId,theme:'pirates',note:'You picked it!'};assert.equal(validate(p).status,0,validate(p).stderr);
+  const bad=example();bad.honors={path:'mt_nope',theme:'unicorns',x:1};const r=validate(bad);assert.notEqual(r.status,0);assert.match(r.stdout+r.stderr,/honors\.path/);assert.match(r.stdout+r.stderr,/honors\.theme/);
+  assert.equal(execFileSync(process.execPath,['publish-lessons.mjs','packs/examples/example-quest.json','--dry-run','--offline'],{cwd:ROOT,encoding:'utf8'}).length>0,true);});
+
 // ---------- server: routes, purchase log, export ----------
 const DATA=tmpDir('jane-market-');let srv,B;
 const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
@@ -129,3 +155,10 @@ test('server: POST /api/market/prove serves the harder question; answering it ri
   const r=(await call('/api/answer',{answer:whyT.ck.y.a})).j;assert.equal(r.proveIt.passed,true);assert.equal(r.state.wallet.spent,675);
   assert.ok(r.state.points>=1000+20);assert.equal(r.state.wallet.balance,r.state.wallet.earned-r.state.wallet.spent);
   assert.equal((await call('/api/market/prove',{pid:'srv-pid-6',topicId:whyT.id})).status,400,'no longer due');});
+test('server: buy a pick; /api/state shows it; export carries market.choices and the MARKET CHOICE step',async()=>{
+  const m=(await call('/api/market')).j;assert.ok(m.path.offers.length>=2);assert.ok(m.path.themes.length>=4);
+  const a=await call('/api/market/buy',{pid:'srv-pid-7',item:'pick-path',meta:{topicId:m.path.offers[0].topicId}});assert.equal(a.status,200,JSON.stringify(a.j));
+  assert.equal(a.j.state.wallet.choices.path.topicId,m.path.offers[0].topicId);
+  const ex=execFileSync(process.execPath,['export-progress.mjs','--local'],{cwd:ROOT,env:{...process.env,DATA_DIR:DATA},encoding:'utf8'});
+  const X=JSON.parse(fs.readFileSync(ex.match(/wrote (\S+\.json)/)[1],'utf8'));assert.equal(X.market.choices.path.topicId,m.path.offers[0].topicId);
+  assert.equal(X.market.openChoices.path.topicId,m.path.offers[0].topicId);assert.match(X.quests.nextStep,/MARKET CHOICE/);assert.match(X.quests.nextStep,/"honors"/);});

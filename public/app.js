@@ -233,7 +233,7 @@ function paintFogFinds(fog){const host=$('ffinds');if(!host)return;const avail=f
  host.querySelectorAll('.ffbtn').forEach(b=>b.onclick=()=>claimFogFind(b.dataset.id));}
 // refresh find strip whenever map fog or state fog updates
 const _loadMap=loadMap;loadMap=async function(){await _loadMap();paintFogFinds(mapData?.fog||st?.fog);}
-const _chipsFog=chips;chips=function(s){_chipsFog(s);if(s?.fog)paintFogFinds(s.fog);}
+const _chipsFog=chips;chips=function(s){_chipsFog(s);if(s?.fog)paintFogFinds(s.fog);pickLine(s);}
 
 // ---------- campaign trail HUD + Quest of Quests overlay (slices 2–3 / #56 #57) ----------
 function cTrailHTML(C,{big=false}={}){const nodes=C.nodes.map((n,i)=>{const done=!!n,cur=!done&&i===C.filled;
@@ -472,15 +472,17 @@ const mkPid=()=>{const r=globalThis.crypto?.randomUUID?.()||(Date.now().toString
 let MK=null,_mkFocus=null;
 async function loadMarket(){let d;try{d=await api('/api/market');}catch{d=null;}if(!d||d.error){$('mlist').innerHTML='<p class="small">The Market is closed for a moment. Try again soon! 🛒</p>';return;}
  MK=d;if(st){st.wallet=d.wallet;chips(st);}paintMarket();}
-function mkSetWallet(r){if(r.wallet&&r.items)MK={...MK,wallet:r.wallet,items:r.items,prove:r.prove?.due?r.prove:MK?.prove};if(r.state){st=r.state;chips(st);}}
+function mkSetWallet(r){if(r.wallet&&r.items)MK={...MK,wallet:r.wallet,items:r.items,prove:r.prove?.due?r.prove:MK?.prove,path:r.path?.offers?r.path:MK?.path};if(r.state){st=r.state;chips(st);}}
 function paintMarket(){const d=MK;if(!d)return;const W=d.wallet;
  $('mbal').innerHTML=`<div class="mkbal">⭐ ${W.balance.toLocaleString()} <span>to spend</span></div><div class="small">earned ${W.earned.toLocaleString()} · spent ${W.spent.toLocaleString()} · your medals and skills never cost points</div>`;
  const groups={};for(const it of d.items)(groups[it.slot||it.kind]??=[]).push(it);
  $('mlist').innerHTML=Object.entries(groups).map(([k,items])=>`<div class="card mksec"><h3>${esc(MK_GROUP[k]||k)}</h3><div class="mkgrid">${items.map(mkCard).join('')}</div></div>`).join('');
- $('mlist').querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const it=d.items.find(i=>i.id===b.dataset.buy);if(it?.kind==='flare')return mkFlare(it);if(it?.kind==='prove')return mkProve(it);mkConfirm(it);});
+ $('mlist').querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const it=d.items.find(i=>i.id===b.dataset.buy);if(it?.kind==='flare')return mkFlare(it);if(it?.kind==='prove')return mkProve(it);if(it?.kind==='path'||it?.kind==='theme')return mkPick(it);mkConfirm(it);});
  $('mlist').querySelectorAll('[data-eq]').forEach(b=>b.onclick=()=>mkEquip(b.dataset.slot,b.dataset.eq==='off'?null:b.dataset.eq));}
 function mkCard(it){const bal=MK.wallet.balance,PV=MK.prove;
  if(it.kind==='prove'&&PV&&(!PV.due.length||!PV.left))return`<div class="mkcard" id="mkprove"><div class="mkemo" aria-hidden="true">${esc(it.emoji)}</div><b>${esc(it.title)}</b><div class="small">${esc(it.note||'')}</div><div class="mkprice">⭐ ${it.price}</div><button type="button" disabled>${PV.left?'No reviews due right now 🌱':'Come back tomorrow 🌙'}</button></div>`;
+ const pk=(it.kind==='path'||it.kind==='theme')&&MK.wallet.choices?.[it.kind],open=pk&&!pk.used;
+ if(open||(it.kind==='path'&&MK.path&&!MK.path.offers.length))return`<div class="mkcard${open?' on':''}"><div class="mkemo" aria-hidden="true">${esc(it.emoji)}</div><b>${esc(it.title)}</b><div class="small">${esc(it.note||'')}</div><div class="mkprice">⭐ ${it.price}</div><button type="button" disabled>${open?`✓ Picked: ${esc(pk.name||((pk.emoji||'')+' '+pk.title))}`:'No ready topics right now 🌱'}</button></div>`;
  const btn=it.owned&&it.slot?(it.equipped?`<button type="button" class="ghost" data-eq="off" data-slot="${esc(it.slot)}">✓ Wearing · take off</button>`:`<button type="button" data-eq="${esc(it.id)}" data-slot="${esc(it.slot)}">Wear it</button>`)
   :it.owned&&it.once?'<span class="mkown">✓ Yours!</span>'
   :`<button type="button" data-buy="${esc(it.id)}"${it.affordable?'':' disabled'}>${it.affordable?`Buy · ⭐ ${it.price}`:`Need ${it.price-bal} more ⭐`}</button>`;
@@ -516,3 +518,13 @@ function mkProve(it){const gt=st?.item?.gate?st.item.topicId:null,due=(MK?.prove
  mkConfirm(it,{extra:`<label for="mkpv"><b>Which review?</b></label><br><select id="mkpv">${due.map(d=>`<option value="${esc(d.topicId)}">${esc((d.ic||ISL[d.subject]?.e||'🧠')+' '+d.name)}${d.overdueDays?` · due ${d.overdueDays} day${d.overdueDays>1?'s':''} ago`:' · due now'}</option>`).join('')}</select>
   <div class="small">One HARDER question, one try. Right: the review is cleared + ${MK.prove.bonus} bonus points. Wrong: the review stays, and the ticket is used up. ${MK.prove.left} left today.</div>`,
   meta:o=>({topicId:o.querySelector('#mkpv').value}),after:r=>{if(r.state?.item?.format==='prove'){document.querySelector('.tab[data-v=play]').click();render(r.state);say('🎟️ Here is your Prove-It question. Show me what you know!');}}});}
+// pick your path: the NEXT new quest is built around the pick (the nightly author honors it); Play shows it until then
+function mkPick(it){const P=MK?.path||{offers:[],themes:[]},path=it.kind==='path',opts=path?P.offers.map(o=>[o.topicId,`${o.ic||ISL[o.subject]?.e||'📚'} ${o.name} · ${o.subject}`]):P.themes.map(t=>[t.id,`${t.emoji} ${t.title}`]);
+ if(!opts.length){say('Nothing to pick right now. Check back tomorrow! 🌱');return;}
+ mkConfirm(it,{extra:`<label for="mkpk"><b>${path?'Your next quest will be about…':'Your next quest happens in…'}</b></label><br><select id="mkpk">${opts.map(([v,l])=>`<option value="${esc(v)}">${esc(l)}</option>`).join('')}</select>
+  <div class="small">${path?'You still learn it step by step: learn card, practice, then the boss!':'Jane writes the story in that world.'} It shows up in your next NEW quest.</div>`,
+  meta:o=>path?{topicId:o.querySelector('#mkpk').value}:{theme:o.querySelector('#mkpk').value},after:()=>pickLine(st)});}
+function pickLine(s){const C=s?.wallet?.choices||{},p=C.path&&!C.path.used?C.path:null,t=C.theme&&!C.theme.used?C.theme:null;let el=$('pickline');
+ if(!p&&!t){if(el)el.hidden=true;return;}
+ if(!el){el=document.createElement('div');el.id='pickline';el.className='card pickline';el.setAttribute('role','status');$('campaign').after(el);}
+ el.hidden=false;el.innerHTML=`🧭 <b>Next quest: your pick!</b> ${p?esc(p.name):''}${p&&t?' · ':''}${t?esc((t.emoji||'')+' '+t.title):''}<span class="small"> Jane is building it.</span>`;}
