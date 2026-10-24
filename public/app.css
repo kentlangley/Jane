@@ -123,6 +123,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #009624}
 .nlw{background:#f3e5f5;border-radius:18px;padding:6px}.nl{width:100%;height:auto;touch-action:none}.nlv,.fb+.nlv{text-align:center;font-size:1.4rem;font-weight:800;color:#4a148c}
 .fb{width:100%;height:auto}.fb rect{fill:#ffecb3;stroke:#e65100;stroke-width:3;cursor:pointer}.fb rect.on{fill:#ff9800}
 .miniend{text-align:center;font-size:1.3rem;background:#e8f5e9;border-radius:20px;padding:12px}.miniend button{margin-top:8px}
+.miniend .trailacts{display:flex;flex-direction:column;align-items:stretch;gap:8px;margin-top:10px}.miniend .trailgo{display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.2}.miniend .trailgo .small{opacity:.85;font-weight:600}
 .scard,.qreveal{position:fixed;inset:0;z-index:45;display:flex;align-items:center;justify-content:center;padding:16px;background:#0009;animation:fadein .25s}
 .scbox{background:#fff;border-radius:26px;padding:18px;max-width:360px;width:100%;text-align:center;position:relative;animation:pop .35s;border:5px solid #00e676}.scbox.s-v{border-color:#ff6d00}.scbox.s-m{border-color:#ffc400}.scbox.s-x{border-color:#b0bec5}.scbox.s-l{border-color:#2979ff}
 .scbox .x{position:absolute;top:8px;right:8px;background:#eceff1;color:#455a64;box-shadow:none;padding:2px 10px;font-size:1rem}.scemo{font-size:3.2rem}.scbox h3{margin:.1em 0;font-size:1.6rem}

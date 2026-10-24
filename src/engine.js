@@ -807,11 +807,23 @@ function miniItem(S,g,pack,now){const M=S.mini;let mode=M.mode,it;
   it.mini={n:M.n+1,of:M.n+M.left,mode:M.mode};if(M.mode==='review'&&M.n>0)it.practice=true;if(M.mode==='learn'&&it.format==='review')it.format='explore';
   M.n++;M.left--;S.current=it;return it;}
 // after an answer is done: next mini item, or end the mini-session (returns summary)
+// Next open stone on the same subject's map trail (domain → age → id, matching My World).
+// Free-play grind: after a map mini-session, the UI offers "Continue on this trail".
+export function nextTrailTopic(S,g,subject,afterId,now){const open=id=>['ready','learning','review'].includes(stateOf(S,g,id,now));
+  const pack=t=>({topicId:t.id,name:t.sn||t.name,subject:t.subject,domain:t.domain,state:stateOf(S,g,t.id,now)});
+  const all=g.topics.filter(t=>t.subject===subject).sort((a,b)=>a.domain.localeCompare(b.domain)||a.ageRangeStart-b.ageRangeStart||a.id.localeCompare(b.id));
+  if(!all.length)return null;const cur=g.byId[afterId];const i=all.findIndex(t=>t.id===afterId);
+  // Prefer forward in the same domain (stay on this trail), then forward in the subject, then wrap.
+  if(cur&&i>=0){for(let k=i+1;k<all.length;k++){const t=all[k];if(t.domain!==cur.domain)break;if(open(t.id))return pack(t);}}
+  const start=i>=0?i+1:0;for(let k=start;k<all.length;k++){if(all[k].id!==afterId&&open(all[k].id))return pack(all[k]);}
+  for(let k=0;k<(i>=0?i:0);k++){if(all[k].id!==afterId&&open(all[k].id))return pack(all[k]);}
+  return null;}
 export function miniAfter(S,g,pack,now,r){const M=S.mini;if(!M)return null;
   const st=stateOf(S,g,M.topicId,now),mastered=M.mode==='learn'&&S.ts[M.topicId]?.st==='mastered';
   if(M.left>0&&!mastered&&!(M.mode==='review'&&st==='mastered'&&M.n>=1&&!kindFor(g.byId[M.topicId]))){miniItem(S,g,pack,now);return null;}
-  const t=g.byId[M.topicId];S.mini=null;S.current=S.miniHold||null;S.miniHold=null;
-  return{topicId:M.topicId,name:t.sn||t.name,subject:M.ret,state:st,mastered:!!mastered||(M.mode==='review'&&st==='mastered')};}
+  const t=g.byId[M.topicId],subj=M.ret,tid=M.topicId;S.mini=null;S.current=S.miniHold||null;S.miniHold=null;
+  const next=nextTrailTopic(S,g,subj,tid,now);
+  return{topicId:tid,name:t.sn||t.name,subject:subj,state:st,mastered:!!mastered||(M.mode==='review'&&st==='mastered'),next};}
 // catch-up boost for an unfinished quest (KV boost:<questDate>): shorter remaining stages, extra hints, a cheer message
 export function applyBoost(pack,b){const p=JSON.parse(JSON.stringify(pack));const CARDS=CARD;
   for(const t of p.topics){const n=b.trim?.[t.topicId];if(n>0){let g=0;for(const q of t.questions)if(!CARDS.includes(q.type)&&++g>n)q._skip=1;}
