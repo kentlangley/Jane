@@ -13,12 +13,12 @@ const BOSSES=['🐉','👾','🦖','🐙','🤖','🧌'];
 function say(t){const b=$('jane');b.innerHTML=gl(t);b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');}
 function confetti(n=40){for(let i=0;i<n;i++){const e=document.createElement('div');e.className='confetti';e.textContent=['🎉','⭐','🍕','✨','🎈','💜'][i%6];e.style.left=Math.random()*100+'vw';e.style.animationDuration=1.5+Math.random()*2+'s';document.body.appendChild(e);setTimeout(()=>e.remove(),4000);}}
 function banner(t){const b=document.createElement('div');b.className='banner';b.innerHTML=`<div>${t}</div>`;document.body.appendChild(b);setTimeout(()=>b.remove(),2000);}
-function chips(s){$('pts').textContent='⭐ '+s.points+' pts';$('stars').textContent='🌟 '+s.stars;$('streak').textContent='🔥 '+s.streak;$('pct').textContent=`🗺️ ${s.progress.pct}%`;campaignHUD(s);}
+function chips(s){const W=s.wallet;$('pts').textContent='⭐ '+(W?W.balance:s.points)+' pts';$('pts').title=W?`${W.balance} to spend in the Market (earned ${W.earned}, spent ${W.spent})`:'';{const f=W?.looks?.avatar?.face,me=$('me');if(me){me.hidden=!f;me.textContent=f||'';}}$('stars').textContent='🌟 '+s.stars;$('streak').textContent='🔥 '+s.streak;$('pct').textContent=`🗺️ ${s.progress.pct}%`;campaignHUD(s);}
 let LN='Explorer';function setLearner(L){if(!L?.name||L.name===LN&&document.title.includes(LN))return;LN=L.name;document.querySelectorAll('.lname').forEach(e=>e.textContent=LN);document.title=`${LN}'s Learning Adventure with Jane`;}
 // boss hearts: ❤️ = hits the boss still needs in THIS fight (server bossHP: today's first-try boss run on this topic), 🖤 = hits landed
-function bossHTML(b,topicId){if(!b)return'';const max=Math.max(1,b.max|0),hp=Math.max(0,Math.min(max,b.hp|0));
+function bossHTML(b,topicId){if(!b)return'';const BL=st?.wallet?.looks?.boss,BS=BL?.set?.length?BL.set:BOSSES;const max=Math.max(1,b.max|0),hp=Math.max(0,Math.min(max,b.hp|0));
  const msg=hp?`Hit it ${hp} more time${hp>1?'s':''} in a row!`:'Boss defeated! 💥';
- return`<div class="hp" aria-label="Boss: ${hp} of ${max} hearts left"><span class="boss">${BOSSES[String(topicId||'').charCodeAt(4)%BOSSES.length||0]}</span>${'❤️'.repeat(hp)}${'🖤'.repeat(max-hp)}<span class="small">${msg}</span></div>`;}
+ return`<div class="hp${BL?.frame?' bskin-'+esc(BL.frame):''}" aria-label="Boss: ${hp} of ${max} hearts left"><span class="boss">${BS[String(topicId||'').charCodeAt(4)%BS.length||0]}</span>${'❤️'.repeat(hp)}${'🖤'.repeat(max-hp)}<span class="small">${msg}</span></div>`;}
 function bossBar(p){$('bossbar').innerHTML=p?.boss?bossHTML(p.boss,p.topicId):'';}
 function render(s){st=s;if(s?.learner)setLearner(s.learner);chips(s);const p=s.item;clearInterval(timerInt);$('timer').innerHTML='';if(!p)return;
  const f=p.format||'quest';$('frame').className='framebar f-'+f;$('frame').textContent=p.gate?(p.gate.warm?`🔥 Warm-up! A quick one you learned before (${p.gate.n}/${p.gate.of})`:p.gate.spot?`🗝️ Gate! Quick check: show me you know this one (${p.gate.n}/${p.gate.of})`:`🗝️ Gate! Unlock it with something you learned before (${p.gate.n}/${p.gate.of})`):FRAMES[f]||'🗡️ Quest';$('pcard').className='card '+f;
@@ -129,16 +129,17 @@ function compass(x,y,r){return`<g transform="translate(${x},${y})" class="compas
  <path d="M0 ${-r*.9} L${r*.16} 0 L0 ${r*.9} L${-r*.16} 0Z" fill="#5d4037"/><path d="M0 ${-r*.9} L${r*.16} 0 L${-r*.16} 0Z" fill="#e53935"/><path d="M${-r*.9} 0 L0 ${r*.16} L${r*.9} 0 L0 ${-r*.16}Z" fill="#8d6e63" opacity=".8"/>
  <text y="${-r*1.08}" font-size="${r*.38}" text-anchor="middle" font-weight="800" fill="#5d4037">N</text></g>`;}
 function cloud(x,y,s,d){return`<g class="cloud" style="animation-duration:${d}s;animation-delay:${-d*hash(x+'c')}s"><g transform="translate(${x},${y}) scale(${s})" opacity=".85"><ellipse cx="0" cy="0" rx="60" ry="22" fill="#fff"/><circle cx="-22" cy="-12" r="22" fill="#fff"/><circle cx="12" cy="-20" r="28" fill="#fff"/><circle cx="38" cy="-6" r="18" fill="#fff"/></g></g>`;}
-function ship(x,y,s,c,d){return`<g class="ship" style="animation-duration:${d}s"><g transform="translate(${x},${y}) scale(${s})"><path d="M-30 0 L30 0 L20 14 L-20 14Z" fill="#8d6e63" stroke="#4e342e" stroke-width="2"/><line x1="0" y1="0" x2="0" y2="-44" stroke="#4e342e" stroke-width="3"/><path d="M2 -42 Q26 -24 2 -6Z" fill="#fff" stroke="#bdbdbd"/><path d="M-2 -38 Q-20 -24 -2 -10Z" fill="${c}"/><path d="M0 -44 l12 4 l-12 4Z" fill="#e53935"/><path d="M-36 16 q8 -5 16 0 t16 0 t16 0 t16 0" stroke="#fff" stroke-width="2" fill="none" opacity=".8"/></g></g>`;}
+// L = the equipped ship skin's look (Points Market): sail / hull / flag colours, cosmetic only
+function ship(x,y,s,c,d,L){return`<g class="ship${L?' skinned':''}" style="animation-duration:${d}s"><g transform="translate(${x},${y}) scale(${s})"><path d="M-30 0 L30 0 L20 14 L-20 14Z" fill="${L?.hull||'#8d6e63'}" stroke="#4e342e" stroke-width="2"/><line x1="0" y1="0" x2="0" y2="-44" stroke="#4e342e" stroke-width="3"/><path d="M2 -42 Q26 -24 2 -6Z" fill="${L?.sail||'#fff'}" stroke="#bdbdbd"/><path d="M-2 -38 Q-20 -24 -2 -10Z" fill="${L?.sail||c}"/><path d="M0 -44 l12 4 l-12 4Z" fill="${L?.flag||'#e53935'}"/><path d="M-36 16 q8 -5 16 0 t16 0 t16 0 t16 0" stroke="#fff" stroke-width="2" fill="none" opacity=".8"/></g></g>`;}
 function banner2(I,sub,p,fs){const w=fs*((I.s||sub).length*.56+6.5),x=I.x,y=I.y-I.r*1.2-fs*.2;
  return`<g class="banner2" transform="translate(${x.toFixed(1)},${y.toFixed(1)})"><path d="M${-w/2-fs} ${-fs*.55} l${fs*.6} ${fs*.6} l${-fs*.6} ${fs*.6} h${fs*1.4} v${-fs*1.2}Z M${w/2+fs} ${-fs*.55} l${-fs*.6} ${fs*.6} l${fs*.6} ${fs*.6} h${-fs*1.4} v${-fs*1.2}Z" fill="#a1887f"/>
  <rect x="${-w/2}" y="${-fs*.85}" width="${w}" height="${fs*1.7}" rx="${fs*.3}" fill="${I.c}" stroke="#fff" stroke-width="${fs/9}"/>
  <text y="${fs*.12}" font-size="${fs}" text-anchor="middle" font-weight="800" fill="#fff" stroke="#0005" stroke-width="${fs/12}" paint-order="stroke">${I.e} ${esc(I.s||sub)} · ${p}%</text>
  <rect x="${-w/2+fs*.4}" y="${fs*.38}" width="${w-fs*.8}" height="${fs*.22}" rx="${fs*.11}" fill="#0003"/><rect x="${-w/2+fs*.4}" y="${fs*.38}" width="${((w-fs*.8)*p/100).toFixed(1)}" height="${fs*.22}" rx="${fs*.11}" fill="#ffd54f"/></g>`;}
-function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const vb=zoomed?`${ISL[zoomed].x-ISL[zoomed].r*1.3} ${ISL[zoomed].y-ISL[zoomed].r*1.42} ${ISL[zoomed].r*2.6} ${ISL[zoomed].r*2.72}`:'0 0 1600 1050';
- let s=`<svg viewBox="${vb}" id="msvg" class="${zoomed?'zoom':''}"><defs><radialGradient id="sea" cx="50%" cy="40%" r="75%"><stop offset="0" stop-color="#4dd0e1"/><stop offset=".6" stop-color="#0288d1"/><stop offset="1" stop-color="#01579b"/></radialGradient>
+function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const LK=st?.wallet?.looks||{},TH=LK.theme||{},SEA=TH.sea||['#4dd0e1','#0288d1','#01579b'],GR=TH.grass||['#9ccc65','#558b2f'],FOG=TH.fog;const vb=zoomed?`${ISL[zoomed].x-ISL[zoomed].r*1.3} ${ISL[zoomed].y-ISL[zoomed].r*1.42} ${ISL[zoomed].r*2.6} ${ISL[zoomed].r*2.72}`:'0 0 1600 1050';
+ let s=`<svg viewBox="${vb}" id="msvg" class="${zoomed?'zoom':''}"><defs><radialGradient id="sea" cx="50%" cy="40%" r="75%"><stop offset="0" stop-color="${SEA[0]}"/><stop offset=".6" stop-color="${SEA[1]}"/><stop offset="1" stop-color="${SEA[2]}"/></radialGradient>
  <pattern id="ripple" width="90" height="60" patternUnits="userSpaceOnUse"><path d="M5 20 q10 -7 20 0 M50 48 q10 -7 20 0" stroke="#ffffff" stroke-opacity=".18" stroke-width="2.5" fill="none" stroke-linecap="round"/></pattern>
- <radialGradient id="grass" cx="45%" cy="40%"><stop offset="0" stop-color="#9ccc65"/><stop offset="1" stop-color="#558b2f"/></radialGradient>
+ <radialGradient id="grass" cx="45%" cy="40%"><stop offset="0" stop-color="${GR[0]}"/><stop offset="1" stop-color="${GR[1]}"/></radialGradient>
  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
  <filter id="fogBlur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6"/></filter></defs>
  <rect x="-500" y="-500" width="2600" height="2100" fill="url(#sea)"/><rect class="ripple" x="-500" y="-500" width="2600" height="2100" fill="url(#ripple)"/>`;
@@ -159,8 +160,8 @@ function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const vb=zo
  const fogRad=zoomed?ISL[zoomed].r/58*2.6:13;let holes='';const tot={};
  TAX.topics.forEach((t,i)=>{if(zoomed&&t.subject!==zoomed)return;const b=tot[t.subject]??={n:0,lit:0};b.n++;if(lit(i)){b.lit++;const[x,y]=pos[i];holes+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${fogRad.toFixed(1)}"/>`;}});
  let fogS='';for(const [sub,I] of Object.entries(ISL)){if(zoomed&&zoomed!==sub)continue;const b=tot[sub];if(!b||!b.n||b.lit>=b.n)continue;const un=1-b.lit/b.n;
-  fogS+=`<g class="fog-layer" opacity="${(.18+.32*un).toFixed(2)}"><path class="fog-island" d="${blob(I.x,I.y,I.r*1.06,hash(sub)+.9)}" fill="#37474f"/>
-  <path class="fog-wisp" d="${blob(I.x+I.r*.12,I.y-I.r*.08,I.r*.62,hash(sub)+1.4)}" fill="#546e7a" opacity=".5"/></g>`;}
+  fogS+=`<g class="fog-layer" opacity="${(.18+.32*un).toFixed(2)}"><path class="fog-island" d="${blob(I.x,I.y,I.r*1.06,hash(sub)+.9)}" fill="${FOG||'#37474f'}"/>
+  <path class="fog-wisp" d="${blob(I.x+I.r*.12,I.y-I.r*.08,I.r*.62,hash(sub)+1.4)}" fill="${FOG||'#546e7a'}" opacity=".5"/></g>`;}
  if(fogS)s+=`<mask id="fogHoles" maskUnits="userSpaceOnUse" x="-500" y="-500" width="2600" height="2100"><rect x="-500" y="-500" width="2600" height="2100" fill="#fff"/><g fill="#000" filter="url(#fogBlur)">${holes}</g></mask>
  <g class="fog" pointer-events="none" mask="url(#fogHoles)">${fogS}</g>`;
  const rad=zoomed?ISL[zoomed].r/58:4.4;const G={m:'',v:'',r:'',l:'',x:''},fl=[];
@@ -172,7 +173,7 @@ function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const vb=zo
  <g class="g-m" fill="${COL.m}" stroke="#fff8e1" filter="url(#glow)">${G.m}</g><g class="g-v" fill="${COL.v}" stroke="#fff">${G.v}</g><g pointer-events="none">${fl.join('')}</g></g>`;
  for(const [sub,I] of Object.entries(ISL)){if(zoomed&&zoomed!==sub)continue;const b=by[sub],p=b?Math.round(100*(b.mastered+b.review)/b.total):0;const fs=zoomed?I.r/8:Math.max(20,I.r/7);s+=banner2(I,sub,p,fs);}
  if(zoomed)for(const {d,a} of doms[zoomed]){const I=ISL[zoomed];const lb=d.length>16?d.split(/ & | and /)[0]:d;s+=`<text pointer-events="none" x="${I.x+I.r*1.0*Math.cos(a)}" y="${I.y+I.r*1.0*Math.sin(a)}" font-size="${I.r/(doms[zoomed].length>10?24:17)}" text-anchor="middle" fill="#3e2723" font-weight="800" stroke="#fff8e1" stroke-width="${I.r/80}" paint-order="stroke">${esc(lb)}</text>`;}
- if(!zoomed){s+=ship(250,985,.9,'#42a5f5',22)+ship(1180,960,.9,'#ec407a',28)+ship(1500,560,.8,'#ffca28',25)+compass(1500,110,55);
+ if(!zoomed){s+=ship(250,985,.9,'#42a5f5',22,LK.ship)+ship(1180,960,.9,'#ec407a',28,LK.ship)+ship(1500,560,.8,'#ffca28',25,LK.ship)+compass(1500,110,55);
   for(const [x,y,k,d] of [[200,120,1,70],[800,90,.8,90],[1300,480,.7,80],[400,980,.9,100],[1100,140,.6,75]])s+=cloud(x,y,k,d);}
  const cur=mapData.current&&TAX.idx[mapData.current];if(cur!=null&&pos[cur]&&(!zoomed||TAX.topics[cur].subject===zoomed)){const[x,y]=pos[cur];s+=`<text pointer-events="none" class="boat" x="${x}" y="${y-rad*1.5}" font-size="${rad*6}" text-anchor="middle">⛵</text>`;}
  $('world').innerHTML=s+'</svg>';const svg=$('msvg');
@@ -188,9 +189,10 @@ function drawBars(){const pr=mapData.progress;let s=`<div class="big">🌍 ${pr.
  $('bars').innerHTML=s;requestAnimationFrame(()=>$('bars').querySelectorAll('.track i').forEach(i=>i.style.width=i.dataset.w));}
 const seg=(b,t)=>[['mastered','m'],['review','v'],['learning','l'],['ready','r']].map(([k,c])=>`<i style="width:0;background:${COL[c]};opacity:${c==='r'?.45:1}" data-w="${(100*b[k]/t).toFixed(2)}%" title="${k}: ${b[k]}"></i>`).join('');
 $('zoomout').onclick=()=>{zoomed=null;drawMap();};
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{const sw=()=>{document.querySelectorAll('.tab').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-selected',x===b);x.tabIndex=x===b?0:-1;});for(const v of['play','map','trophies','quests'])$(v).hidden=b.dataset.v!==v;};window.FX?FX.view(sw):sw();if(b.dataset.v==='map')loadMap();if(b.dataset.v==='trophies')loadTrophies();if(b.dataset.v==='quests')loadQuests();});
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{const sw=()=>{document.querySelectorAll('.tab').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-selected',x===b);x.tabIndex=x===b?0:-1;});for(const v of['play','map','trophies','quests','market'])$(v).hidden=b.dataset.v!==v;};window.FX?FX.view(sw):sw();if(b.dataset.v==='map')loadMap();if(b.dataset.v==='market')loadMarket();if(b.dataset.v==='trophies')loadTrophies();if(b.dataset.v==='quests')loadQuests();});
 loadGloss().finally(()=>api('/api/state').then(s=>{render(s);questDot(s);if(s.finaleReveal)finaleReveal(s.campaign);else if(s.newQuest&&!location.hash&&s.quest)questReveal(s.quest);}));
 if(location.hash==='#quests')document.querySelector('.tab[data-v=quests]').click();
+if(location.hash==='#market')document.querySelector('.tab[data-v=market]').click();
 if(location.hash==='#trophies')document.querySelector('.tab[data-v=trophies]').click();
 if(location.hash.startsWith('#map')){const z=decodeURIComponent(location.hash.slice(5));if(z)zoomed=z;document.querySelector('.tab[data-v=map]').click();}
 
@@ -448,3 +450,41 @@ addEventListener('scroll',()=>gclose(),{passive:true});
  // Escape closes medal / stone / quest overlays
  document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;(document.querySelector('.finale #fnok')||document.querySelector('.coverlay #cclose')||document.querySelector('.scard .x')||document.querySelector('.reveal .rbox button'))?.click();});
 })();
+
+// ---------- Points Market (plans/points-market.md, #74; idea credit: Christopher) ----------
+// Points buy fun, choice and peeks: never mastery, medals or permanent fog clear. The server keeps the wallet
+// (balance = earned − spent) and the prices; the client only sends a purchase id (pid) so a retry never charges twice.
+const MK_GROUP={ship:'⛵ Ships',avatar:'🙂 Avatars',boss:'👾 Boss skins',theme:'🎨 Map themes',sticker:'🌟 Stickers'};
+const mkPid=()=>{const r=globalThis.crypto?.randomUUID?.()||(Date.now().toString(36)+Math.random().toString(36).slice(2,12));return('p'+r).replace(/[^A-Za-z0-9_-]/g,'').slice(0,40);};
+let MK=null,_mkFocus=null;
+async function loadMarket(){let d;try{d=await api('/api/market');}catch{d=null;}if(!d||d.error){$('mlist').innerHTML='<p class="small">The Market is closed for a moment. Try again soon! 🛒</p>';return;}
+ MK=d;if(st){st.wallet=d.wallet;chips(st);}paintMarket();}
+function mkSetWallet(r){if(r.wallet&&r.items)MK={...MK,wallet:r.wallet,items:r.items};if(r.state){st=r.state;chips(st);}}
+function paintMarket(){const d=MK;if(!d)return;const W=d.wallet;
+ $('mbal').innerHTML=`<div class="mkbal">⭐ ${W.balance.toLocaleString()} <span>to spend</span></div><div class="small">earned ${W.earned.toLocaleString()} · spent ${W.spent.toLocaleString()} · your medals and skills never cost points</div>`;
+ const groups={};for(const it of d.items)(groups[it.slot||it.kind]??=[]).push(it);
+ $('mlist').innerHTML=Object.entries(groups).map(([k,items])=>`<div class="card mksec"><h3>${esc(MK_GROUP[k]||k)}</h3><div class="mkgrid">${items.map(mkCard).join('')}</div></div>`).join('');
+ $('mlist').querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>mkConfirm(d.items.find(i=>i.id===b.dataset.buy)));
+ $('mlist').querySelectorAll('[data-eq]').forEach(b=>b.onclick=()=>mkEquip(b.dataset.slot,b.dataset.eq==='off'?null:b.dataset.eq));}
+function mkCard(it){const bal=MK.wallet.balance;
+ const btn=it.owned&&it.slot?(it.equipped?`<button type="button" class="ghost" data-eq="off" data-slot="${esc(it.slot)}">✓ Wearing · take off</button>`:`<button type="button" data-eq="${esc(it.id)}" data-slot="${esc(it.slot)}">Wear it</button>`)
+  :it.owned&&it.once?'<span class="mkown">✓ Yours!</span>'
+  :`<button type="button" data-buy="${esc(it.id)}"${it.affordable?'':' disabled'}>${it.affordable?`Buy · ⭐ ${it.price}`:`Need ${it.price-bal} more ⭐`}</button>`;
+ return`<div class="mkcard${it.owned?' own':''}${it.equipped?' on':''}"><div class="mkemo" aria-hidden="true">${esc(it.emoji)}</div><b>${esc(it.title)}</b><div class="small">${esc(it.note||'')}</div><div class="mkprice">⭐ ${it.price}</div>${btn}</div>`;}
+function mkClose(){const o=document.querySelector('.mkconfirm');if(!o)return;o.remove();(_mkFocus&&document.contains(_mkFocus)?_mkFocus:$('mbal'))?.focus?.();_mkFocus=null;}
+// buy → confirm → owned. opt.meta goes to the server (e.g. a flare's region); opt.after(r) runs after a good buy.
+function mkConfirm(it,opt={}){if(!it||!MK)return;mkClose();_mkFocus=document.activeElement;const pid=mkPid(),left=MK.wallet.balance-it.price;
+ const o=document.createElement('div');o.className='mkconfirm';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label','Buy '+it.title);
+ o.innerHTML=`<div class="mkbox"><div class="mkemo" aria-hidden="true">${esc(it.emoji)}</div><h3>Buy ${esc(it.title)}?</h3>${opt.extra||''}<p id="mkmsg">It costs <b>⭐ ${it.price}</b>. You'll have <b>⭐ ${left}</b> left.</p>
+ <div class="small">Points buy fun stuff. Your medals and skills stay exactly the same.</div><div class="hb"><button type="button" id="mkyes">Yes, buy it! 🛒</button><button type="button" class="ghost" id="mkno">Not now</button></div></div>`;
+ document.body.appendChild(o);const yes=o.querySelector('#mkyes'),no=o.querySelector('#mkno');
+ no.onclick=mkClose;o.onclick=e=>{if(e.target===o)mkClose();};
+ o.onkeydown=e=>{if(e.key==='Escape'){e.preventDefault();mkClose();}if(e.key==='Tab'){const f=[...o.querySelectorAll('button:not([disabled]),select')];const i=f.indexOf(document.activeElement);e.preventDefault();f[(i+(e.shiftKey?-1:1)+f.length)%f.length]?.focus();}};
+ yes.onclick=async()=>{yes.disabled=true;let r;const meta=opt.meta?.(o);
+  try{r=await api('/api/market/buy',{pid,item:it.id,meta});}catch{yes.disabled=false;o.querySelector('#mkmsg').textContent='Oops, the internet hiccuped. Tap again: you will only pay once.';return;}
+  if(r.error){o.querySelector('#mkmsg').textContent=r.error;return;}
+  mkSetWallet(r);
+  if(it.slot&&!r.already){try{const e=await api('/api/market/equip',{slot:it.slot,item:it.id});if(!e.error)mkSetWallet(e);}catch{}}
+  mkClose();paintMarket();if(!r.already){if(!(window.FX&&FX.good?.($('mbal'),true)))confetti(30);banner(`🛒 ${esc(it.title)} is yours!`);}opt.after?.(r);};
+ setTimeout(()=>yes.focus(),50);}
+async function mkEquip(slot,item){let r;try{r=await api('/api/market/equip',{slot,item});}catch{return;}if(r.error){say(r.error);return;}mkSetWallet(r);paintMarket();}

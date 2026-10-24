@@ -16,7 +16,7 @@ export function parentData({S,g,now,today,logs,packs,tomorrowPack,boosts}){
   const recs=Object.entries(S.ts).filter(([id,r])=>r.st==='mastered'&&g.byId[id]);
   const growth=days.map(d=>({date:d,direct:recs.filter(([,r])=>r.how!=='inferred'&&r.at&&ptDate(r.at)<=d).length,all:recs.filter(([,r])=>r.at&&ptDate(r.at)<=d).length}));
   const week=perDay.slice(-7);
-  const head={pct:sm.pct,done:sm.done,total:sm.total,tot:sm.tot,direct:recs.filter(([,r])=>r.how!=='inferred').length,verified:recs.filter(([,r])=>r.verified).length,unverifiedInferred:recs.filter(([id])=>E.unverified(S,id)).length,points:S.points,stars:S.stars,streak:S.streak,bestStreak:S.bestStreak,solved:S.solved,
+  const head={pct:sm.pct,done:sm.done,total:sm.total,tot:sm.tot,direct:recs.filter(([,r])=>r.how!=='inferred').length,verified:recs.filter(([,r])=>r.verified).length,unverifiedInferred:recs.filter(([id])=>E.unverified(S,id)).length,points:S.points,wallet:{balance:E.balanceOf(S),earned:S.points||0,spent:S.wallet?.spent||0,items:(S.wallet?.ledger||[]).length},stars:S.stars,streak:S.streak,bestStreak:S.bestStreak,solved:S.solved,
     medals:E.trophies(S,g).medals.length,today:perDay.find(p=>p.date===today)||{answers:0,minutes:0,first:0,firstRight:0},
     week:{minutes:week.reduce((a,p)=>a+p.minutes,0),answers:week.reduce((a,p)=>a+p.answers,0),first:week.reduce((a,p)=>a+p.first,0),firstRight:week.reduce((a,p)=>a+p.firstRight,0),days:week.filter(p=>p.answers).length}};
   // subjects → domains → topics

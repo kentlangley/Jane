@@ -126,7 +126,22 @@ export function claimFind(S,g,id,now=Date.now()){const def=FOG_FINDS.find(d=>d.i
 // row keeps the price paid, so retuning never rewrites history. Rows with `when` (like FOG_FINDS) show only after fog clears.
 export const MARKET=[
   {id:'test-sticker',kind:'sticker',once:true,price:25,emoji:'🌟',title:'Gold star sticker',note:'A shiny sticker for your collection.'},
+  // skins (slice 2, the main sink): bought once, owned forever, equip/unequip free. Purely cosmetic looks the client draws.
+  {id:'ship-candy',kind:'skin',slot:'ship',once:true,price:300,emoji:'🍭',title:'Candy Cruiser',note:'Pink sails and a bubblegum hull for the ships on your Map.',look:{sail:'#f48fb1',hull:'#ce93d8',flag:'#ff4081'}},
+  {id:'ship-pirate',kind:'skin',slot:'ship',once:true,price:400,emoji:'🏴‍☠️',title:'Pirate Fleet',note:'Black sails and a skull flag. Arrr!',look:{sail:'#263238',hull:'#4e342e',flag:'#fafafa'}},
+  {id:'ship-gold',kind:'skin',slot:'ship',once:true,price:900,emoji:'👑',title:'Golden Galleon',note:'Shiny gold sails for a treasure hunter.',look:{sail:'#ffd54f',hull:'#ff8f00',flag:'#d50000'}},
+  {id:'avatar-fox',kind:'skin',slot:'avatar',once:true,price:300,emoji:'🦊',title:'Clever Fox',note:'Your badge at the top of the screen.',look:{face:'🦊'}},
+  {id:'avatar-ninja',kind:'skin',slot:'avatar',once:true,price:500,emoji:'🥷',title:'Math Ninja',note:'Silent, quick and very sneaky.',look:{face:'🥷'}},
+  {id:'avatar-astronaut',kind:'skin',slot:'avatar',once:true,price:500,emoji:'🧑‍🚀',title:'Space Explorer',note:'Ready for lift-off!',look:{face:'🧑‍🚀'}},
+  {id:'avatar-dragon',kind:'skin',slot:'avatar',once:true,price:800,emoji:'🐲',title:'Dragon Rider',note:'A dragon badge. Very rare.',look:{face:'🐲'}},
+  {id:'boss-robots',kind:'skin',slot:'boss',once:true,price:600,emoji:'🤖',title:'Robot Bosses',note:'Bosses turn into robots and UFOs. Same fight, same hearts.',look:{set:['🤖','👾','🛸','🦾'],frame:'robots'}},
+  {id:'boss-spooky',kind:'skin',slot:'boss',once:true,price:700,emoji:'👻',title:'Spooky Bosses',note:'Ghosts, pumpkins and bats. Same fight, same hearts.',look:{set:['👻','🎃','🦇','💀'],frame:'spooky'}},
+  {id:'boss-sea',kind:'skin',slot:'boss',once:true,price:1000,emoji:'🦈',title:'Sea Monster Bosses',note:'Sharks and krakens from the deep. Same fight, same hearts.',look:{set:['🦈','🐙','🦑','🐊'],frame:'sea'}},
+  {id:'theme-sunset',kind:'skin',slot:'theme',once:true,price:800,emoji:'🌅',title:'Sunset Sea',note:'Your whole Map glows orange and purple.',look:{sea:['#ffcc80','#ff7043','#6a1b9a'],grass:['#c5e1a5','#7cb342'],fog:'#4a148c'}},
+  {id:'theme-night',kind:'skin',slot:'theme',once:true,price:1200,emoji:'🌙',title:'Starry Night',note:'A midnight-blue Map under the stars.',look:{sea:['#7986cb','#283593','#0d1338'],grass:['#81c784','#2e7d32'],fog:'#1a1a2e'}},
+  {id:'theme-lava',kind:'skin',slot:'theme',once:true,price:1500,emoji:'🌋',title:'Lava World',note:'Hot lava seas. The fog turns to smoke!',look:{sea:['#ffcc80','#e64a19','#3e2723'],grass:['#aed581','#689f38'],fog:'#3e2723'}},
 ];
+export const SKIN_SLOTS=['ship','avatar','boss','theme'];
 export const WALLET_DAYS=60;
 const PID=/^[A-Za-z0-9_-]{6,64}$/;
 function walletOf(S){const W=S.wallet??={};W.spent??=0;W.ledger??=[];W.owned??={};W.equipped??={};W.active??={};W.choices??={};W.days??={};return W;}
@@ -135,7 +150,13 @@ export const balanceOf=S=>(S.points||0)-(S.wallet?.spent||0);
 function m0Sig(S){return JSON.stringify([S.points||0,S.medals||[],S.questMedals||[],Object.entries(S.ts||{}).map(([id,r])=>[id,r.st,r.how,r.box,r.due,r.ft]).sort(),(S.fog?.finds||[]).length]);}
 const activeOf=(W,now)=>Object.fromEntries(Object.entries(W?.active||{}).map(([k,v])=>[k,Array.isArray(v)?v.filter(x=>!(x?.until<=now)):v]));
 export function walletState(S,g,now=Date.now()){const W=S.wallet||{};
-  return{balance:balanceOf(S),earned:S.points||0,spent:W.spent||0,owned:{...(W.owned||{})},equipped:{...(W.equipped||{})},active:activeOf(W,now),choices:{...(W.choices||{})}};}
+  const looks={};for(const [slot,id] of Object.entries(W.equipped||{})){const d=MARKET.find(x=>x.id===id&&x.slot===slot);if(d)looks[slot]={id,emoji:d.emoji,...d.look};}
+  return{balance:balanceOf(S),earned:S.points||0,spent:W.spent||0,owned:{...(W.owned||{})},equipped:{...(W.equipped||{})},looks,active:activeOf(W,now),choices:{...(W.choices||{})}};}
+// equip (free): only an owned skin, only in its own slot; item null/'' takes the slot off
+export function equip(S,g,slot,item){if(!SKIN_SLOTS.includes(slot))return{error:'unknown slot'};
+  if(!item){if(S.wallet?.equipped?.[slot])delete S.wallet.equipped[slot];return{ok:true,slot,item:null};}
+  const d=MARKET.find(x=>x.id===item);if(!d||d.slot!==slot)return{error:'That does not go there!'};if(!S.wallet?.owned?.[item])return{error:'Buy it first! 🛒'};
+  const sig=m0Sig(S);walletOf(S).equipped[slot]=item;if(m0Sig(S)!==sig)throw new Error('equip must not change points, medals or mastery');return{ok:true,slot,item};}
 const visible=(def,counts)=>!def.when||findEligible(def,counts);
 export function marketItems(S,g,now=Date.now()){const counts=fogClearCounts(S,g),bal=balanceOf(S),W=S.wallet||{};
   return MARKET.filter(d=>visible(d,counts)).map(d=>({id:d.id,kind:d.kind,slot:d.slot,price:d.price,emoji:d.emoji,title:d.title,note:d.note,once:!!d.once,
