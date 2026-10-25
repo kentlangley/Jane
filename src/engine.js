@@ -212,7 +212,8 @@ const visible=(def,counts)=>!def.when||findEligible(def,counts);
 const listed=(def,counts,W)=>def.chest?!!W.owned?.[def.id]:visible(def,counts);
 export const hiddenCount=(S,g)=>{const c=fogClearCounts(S,g);return MARKET.filter(d=>d.when&&!visible(d,c)).length;};
 export function marketItems(S,g,now=Date.now()){const counts=fogClearCounts(S,g),bal=balanceOf(S),W=S.wallet||{};
-  return MARKET.filter(d=>listed(d,counts,W)).map(d=>({id:d.id,kind:d.kind,slot:d.slot,price:d.price,emoji:d.emoji,title:d.title,note:d.note,once:!!d.once,
+  // Scout flare retired from the player Market (fog removed); keep def/buy for data compat + tests.
+  return MARKET.filter(d=>d.kind!=='flare'&&listed(d,counts,W)).map(d=>({id:d.id,kind:d.kind,slot:d.slot,price:d.price,emoji:d.emoji,title:d.title,note:d.note,once:!!d.once,
     owned:!!W.owned?.[d.id],equipped:!!(d.slot&&W.equipped?.[d.slot]===d.id),affordable:d.price<=bal}));}
 // buy(S,g,{pid,item,meta},now): one ledger row per pid. The client never sends a price.
 export function buy(S,g,{pid,item,meta}={},now=Date.now()){pid=String(pid||'');if(!PID.test(pid))return{error:'bad purchase id'};

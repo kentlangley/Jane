@@ -67,12 +67,13 @@ test('campaign overlay helpers present; strip is actionable (slice 3)',()=>{
   assert.match(css,/\.coverlay|\.qomap/);
 });
 
-test('Map draws literal fog from fog mask (slice 4)',()=>{
+test('Map no longer draws player-facing fog; fogState stays on the API for data compat',()=>{
   const js=fs.readFileSync(path.join(DIR,'../public/app.js'),'utf8');
-  const css=fs.readFileSync(path.join(DIR,'../public/app.css'),'utf8');
   const w=fs.readFileSync(path.join(DIR,'../src/worker.js'),'utf8');
-  assert.match(js,/fog-island|fog-stone/);assert.match(js,/mapData\.fog/);
-  assert.match(w,/fog:E\.fogState/);assert.match(css,/fogDrift|fog-layer/);
+  assert.doesNotMatch(js,/fog-island|fog-wisp|fogHoles/);
+  assert.doesNotMatch(js,/Fog finds ready|claimFogFind|paintFogFinds|Light it up!/);
+  assert.match(js,/Fog overlay removed|Fog finds \/ scout flare UI removed/);
+  assert.match(w,/fog:E\.fogState/);
 });
 
 test('claimFind: eligible chest claims once; idempotent; never invents medals (slice 5)',()=>{
@@ -96,13 +97,13 @@ test('claimFind power-up is garnish only (hintToken buff, no mastery skip) (slic
   // still no quest medal invented
   assert.deepEqual(S.questMedals||[],[]);
 });
-test('export + UI surfaces fog finds (slice 5)',()=>{
+test('export still knows fog finds; player UI no longer surfaces them (slice 5 retired)',()=>{
   const js=fs.readFileSync(path.join(DIR,'../public/app.js'),'utf8');
   const html=fs.readFileSync(path.join(DIR,'../public/index.html'),'utf8');
   const ex=fs.readFileSync(path.join(DIR,'../export-progress.mjs'),'utf8');
-  const les=fs.readFileSync(path.join(DIR,'../LESSONS.md'),'utf8');
-  assert.ok(html.includes('id="ffinds"'));assert.match(js,/claimFogFind|fogFindReveal/);
-  assert.match(ex,/fog:E\.fogState/);assert.match(les,/Fog finds/);
+  assert.ok(!html.includes('id="ffinds"'));
+  assert.doesNotMatch(js,/claimFogFind|fogFindReveal|Fog finds ready/);
+  assert.match(ex,/fog:E\.fogState/);
 });
 
 test('syncFinale persists reveal once; no fake medals (slice 6)',()=>{
