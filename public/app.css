@@ -339,13 +339,29 @@ body.picking main,body.picking header{visibility:hidden}
 .who .whob{color:#2d2250;background:#faf8ff;box-shadow:0 5px 0 #d9cffc;font-size:1.2rem}
 .who .whob:focus-visible{outline:3px solid #7c4dff;outline-offset:3px}
 
-/* worn Map theme also paints the whole app (Points Market skins) */
-body.theme-night{background:linear-gradient(135deg,#283593,#1a237e 45%,#0d1338);color:#e8eaf6}
-body.theme-night .card{background:#e8eaf6ee}
-body.theme-night .bubble{background:#c5cae9;color:#1a237e}
-body.theme-sunset{background:linear-gradient(135deg,#ffcc80,#ff7043 40%,#6a1b9a)}
-body.theme-lava{background:linear-gradient(135deg,#ffcc80,#e64a19 40%,#3e2723);color:#fff8e1}
-body.theme-lava .card{background:#fff3e0ee;color:#3e2723}
+/* worn Map theme paints the shell; content cards stay light with dark text for readable contrast */
+:root{--ink:#2d2a4a;--ink-muted:#555;--card-bg:#fff;--bubble-bg:#e3f2fd;--bubble-ink:#1a237e}
+body.theme-night{background:linear-gradient(135deg,#283593,#1a237e 45%,#0d1338);color:#e8eaf6;--card-bg:#f5f7ff;--bubble-bg:#e8eaf6;--bubble-ink:#1a237e}
+body.theme-sunset{background:linear-gradient(135deg,#ffcc80,#ff7043 40%,#6a1b9a);--card-bg:#fffaf3}
+body.theme-lava{background:linear-gradient(135deg,#ffcc80,#e64a19 40%,#3e2723);color:#fff8e1;--card-bg:#fff8f0}
+/* Content surfaces: always dark ink on a light card — never inherit light shell text onto light panels */
+.card,.qstrip,.steps,.help,.ex,.miniend,.ord li,.scbox,.mkcard,.mkbox,.pickline,.whisper-box,.tdbox,.qcard,.intro,
+#pcard,#intro,#help,#steps,#extra,#mc,.ord .ot,.q,.topic,.evidence,.sbar .lbl,.big,.legend,.tip,.bubble,
+.tfs,.nlv,.fb+.nlv,.kcard,.klbl,.start li,.steps li,.help li,.ord li .ot{color:var(--ink)}
+.card,.qstrip,.steps,.help,.ex,.miniend,.scbox,.mkcard,.pickline,.whisper-box,.tdbox,.qcard,#pcard,#intro{background:var(--card-bg)}
+.small,.topic + .small,#mc > .small,.help .small{color:var(--ink-muted)}
+.bubble{background:var(--bubble-bg);color:var(--bubble-ink)}
+body.theme-night .card,body.theme-night #pcard,body.theme-night #intro,body.theme-night .qstrip,body.theme-night .steps,
+body.theme-night .help,body.theme-night .ex,body.theme-night .miniend,body.theme-night .ord li,body.theme-night .mkcard,
+body.theme-night .pickline,body.theme-night .whisper-box{background:#f5f7ff;color:#1a237e}
+body.theme-night .ord li{background:#e8eaf6;border-color:#9fa8da;color:#1a237e}
+body.theme-night .ord .ot,body.theme-night .q,body.theme-night .steps,body.theme-night .steps b,body.theme-night .steps li,
+body.theme-night .small,body.theme-night .topic,body.theme-night .sbar .lbl,body.theme-night .big,body.theme-night .legend{color:#1a237e}
+body.theme-night .bubble{background:#e8eaf6;color:#1a237e}
+body.theme-night .steps{background:#e8f5e9;border-color:#66bb6a}
+body.theme-lava .card,body.theme-lava #pcard,body.theme-lava .qstrip,body.theme-lava .steps,body.theme-lava .help,
+body.theme-lava .ord li,body.theme-lava .mkcard{background:#fff8f0;color:#3e2723}
+body.theme-lava .q,body.theme-lava .small,body.theme-lava .ord .ot,body.theme-lava .steps,body.theme-lava .steps li{color:#3e2723}
 .chip.sticker{background:#fff8e1;cursor:help;border:2px solid #ffc107}
 .chip.me{font-size:1.35rem;padding:2px 10px}
 .whisperb{background:#ffd54f!important;color:#3e2723!important;box-shadow:0 5px 0 #f9a825!important;font-size:1.1rem!important;margin-left:6px}

@@ -92,14 +92,19 @@ const COL={m:'#ffc400',v:'#ff6d00',r:'#00e676',l:'#2979ff',x:'#b0bec5'},SN={m:'M
 const hash=s=>{let h=2166136261;for(const c of s)h=Math.imul(h^c.charCodeAt(0),16777619);return(h>>>0)/4294967296;};
 let layout=null,mapData=null,zoomed=null;
 async function loadMap(){if(!TAX)TAX=await (await fetch('/tax.json')).json();if(!layout){ensureIslands();layout=doLayout();TAX.idx=Object.fromEntries(TAX.topics.map((t,i)=>[t.id,i]));}
- mapData=await api('/api/map');try{drawMap();}catch(e){console.error(e);$('world').innerHTML='<p class="small">Oops, the map got lost in the fog. Try again in a moment! 🧭</p>';}drawBars();}
-// Live map merge after a grind mini ends: patch codes/progress/fog and redraw without requiring a tab click.
-function applyMap(m){if(!m||(!m.codes&&!m.progress&&!m.fog))return;
+ mapData=await api('/api/map');try{drawMap();}catch(e){console.error(e);$('world').innerHTML='<p class="small">Oops, the map hiccuped. Try again in a moment! 🧭</p>';}drawBars();}
+// Live map merge after a grind mini ends: patch codes/progress and redraw without requiring a tab click.
+function applyMap(m){if(!m||(!m.codes&&!m.progress))return;
  if(!mapData)mapData={codes:m.codes||'',focus:null,current:null,progress:m.progress||{},fog:m.fog||null};
  else{if(m.codes!=null)mapData.codes=m.codes;if(m.progress)mapData.progress=m.progress;if(m.fog)mapData.fog=m.fog;if(m.current!==undefined)mapData.current=m.current;if(m.focus!==undefined)mapData.focus=m.focus;}
- if(layout&&mapData.codes){try{drawMap();drawBars();}catch(e){console.error(e);}}
- if(m.fog&&typeof paintFogFinds==='function')paintFogFinds(m.fog);}
+ // Keep header % in sync with map progress while grinding (stones + bars + chip).
+ if(m.progress){if(st)st.progress=m.progress;const el=$('pct');if(el)el.textContent=`🗺️ ${m.progress.pct}%`;}
+ if(layout&&mapData.codes){try{drawMap();drawBars();}catch(e){console.error(e);}}}
 async function refreshMap(){try{const m=await api('/api/map');applyMap(m);}catch(e){console.error(e);}}
+// Rebuild progress.by / tot from codes so a codes-only patch never leaves X/Y and bars stale.
+function progressFromCodes(codes){const by={},tot={mastered:0,review:0,ready:0,learning:0,locked:0},M={m:'mastered',v:'review',r:'ready',l:'learning',x:'locked'};
+ TAX.topics.forEach((t,i)=>{const s=M[codes[i]||'x']||'locked';tot[s]++;const b=by[t.subject]??={total:0,mastered:0,review:0,ready:0,learning:0,locked:0};b.total++;b[s]++;});
+ const done=tot.mastered+tot.review;return{total:TAX.topics.length,done,pct:Math.round(1000*done/TAX.topics.length)/10,tot,by};}
 let trailDone=new Set(); // client-side session exclude (mirrors S.grindTrail.done)
 function blob(cx,cy,r,seed,n=48,amp=1){let d='';const P=[];for(let i=0;i<n;i++){const a=i/n*2*Math.PI,k=1+amp*(.07*Math.sin(a*3+seed*9)+.05*Math.sin(a*5+seed*4)+.025*Math.sin(a*11+seed*17));P.push([cx+r*k*Math.cos(a),cy+r*k*Math.sin(a)]);}
  // smooth closed curve through points (Catmull-Rom → cubic Bézier)
@@ -157,12 +162,11 @@ function banner2(I,sub,p,fs){const w=fs*((I.s||sub).length*.56+6.5),x=I.x,y=I.y-
  <rect x="${-w/2}" y="${-fs*.85}" width="${w}" height="${fs*1.7}" rx="${fs*.3}" fill="${I.c}" stroke="#fff" stroke-width="${fs/9}"/>
  <text y="${fs*.12}" font-size="${fs}" text-anchor="middle" font-weight="800" fill="#fff" stroke="#0005" stroke-width="${fs/12}" paint-order="stroke">${I.e} ${esc(I.s||sub)} · ${p}%</text>
  <rect x="${-w/2+fs*.4}" y="${fs*.38}" width="${w-fs*.8}" height="${fs*.22}" rx="${fs*.11}" fill="#0003"/><rect x="${-w/2+fs*.4}" y="${fs*.38}" width="${((w-fs*.8)*p/100).toFixed(1)}" height="${fs*.22}" rx="${fs*.11}" fill="#ffd54f"/></g>`;}
-function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const LK=st?.wallet?.looks||{},TH=LK.theme||{},SEA=TH.sea||['#4dd0e1','#0288d1','#01579b'],GR=TH.grass||['#9ccc65','#558b2f'],FOG=TH.fog;const vb=zoomed?`${ISL[zoomed].x-ISL[zoomed].r*1.3} ${ISL[zoomed].y-ISL[zoomed].r*1.42} ${ISL[zoomed].r*2.6} ${ISL[zoomed].r*2.72}`:'0 0 1600 1050';
+function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const LK=st?.wallet?.looks||{},TH=LK.theme||{},SEA=TH.sea||['#4dd0e1','#0288d1','#01579b'],GR=TH.grass||['#9ccc65','#558b2f'];const vb=zoomed?`${ISL[zoomed].x-ISL[zoomed].r*1.3} ${ISL[zoomed].y-ISL[zoomed].r*1.42} ${ISL[zoomed].r*2.6} ${ISL[zoomed].r*2.72}`:'0 0 1600 1050';
  let s=`<svg viewBox="${vb}" id="msvg" class="${zoomed?'zoom':''}"><defs><radialGradient id="sea" cx="50%" cy="40%" r="75%"><stop offset="0" stop-color="${SEA[0]}"/><stop offset=".6" stop-color="${SEA[1]}"/><stop offset="1" stop-color="${SEA[2]}"/></radialGradient>
  <pattern id="ripple" width="90" height="60" patternUnits="userSpaceOnUse"><path d="M5 20 q10 -7 20 0 M50 48 q10 -7 20 0" stroke="#ffffff" stroke-opacity=".18" stroke-width="2.5" fill="none" stroke-linecap="round"/></pattern>
  <radialGradient id="grass" cx="45%" cy="40%"><stop offset="0" stop-color="${GR[0]}"/><stop offset="1" stop-color="${GR[1]}"/></radialGradient>
- <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
- <filter id="fogBlur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6"/></filter></defs>
+ <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
  <rect x="-500" y="-500" width="2600" height="2100" fill="url(#sea)"/><rect class="ripple" x="-500" y="-500" width="2600" height="2100" fill="url(#ripple)"/>`;
  for(let i=0;i<14;i++)s+=`<path class="wave" style="animation-delay:${-i*.7}s" d="M${(i*137)%1500} ${60+i*72} q15 -10 30 0 t30 0" stroke="#fff6" stroke-width="3" fill="none"/>`;
  const by=mapData.progress.by;
@@ -174,20 +178,7 @@ function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const LK=st
   ${trees(I,sub,Math.round(I.r/14))}${landmark(sub,I.x,I.y-I.r*.04,I.r*.55)}</g>`;}
  if(zoomed){const ids=new Set();TAX.topics.forEach((t)=>{if(t.subject===zoomed)ids.add(t.id)});let ls='';for(const [a,b,h] of TAX.deps){if(!h||!ids.has(a)||!ids.has(b))continue;const ia=TAX.idx[a],ib=TAX.idx[b];const ca=codes[ia],cb=codes[ib];if(cb==='x')continue;
    ls+=`<line x1="${pos[ib][0]}" y1="${pos[ib][1]}" x2="${pos[ia][0]}" y2="${pos[ia][1]}" stroke="${ca==='r'?'#00e676':ca==='m'||ca==='v'?'#fff8e1':'#ffffff55'}" stroke-width="${ca==='r'?1.4:.7}" opacity=".75"/>`;}s+=`<g pointer-events="none">${ls}</g>`;}
- // literal fog (slice 4): dark, see-through mist over the unexplored parts only. A stone is lit (no fog) when it is
- // directly cleared (mapData.fog mask 'C') or mastered / review due (codes m|v). Fog sits BELOW the nodes so lit and
- // learning stones always show, and a mask punches clear holes around every lit stone. The quiet % chip stays.
- const fog=mapData.fog||{bySubject:{},mask:'',pct:0},mask=fog.mask||'',lit=i=>mask[i]==='C'||codes[i]==='m'||codes[i]==='v';
- // scout flares (Points Market): a 24 h peek. The fog over a flared island is thinned, never cleared; mask and counts are untouched.
- const FL=Object.fromEntries((fog.flares||[]).map(f=>[f.region,f]));
- const fogRad=zoomed?ISL[zoomed].r/58*2.6:13;let holes='';const tot={};
- TAX.topics.forEach((t,i)=>{if(zoomed&&t.subject!==zoomed)return;const b=tot[t.subject]??={n:0,lit:0};b.n++;if(lit(i)){b.lit++;const[x,y]=pos[i];holes+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${fogRad.toFixed(1)}"/>`;}});
- let fogS='';for(const [sub,I] of Object.entries(ISL)){if(zoomed&&zoomed!==sub)continue;const b=tot[sub];if(!b||!b.n||b.lit>=b.n)continue;const un=1-b.lit/b.n;
-  // darker see-through mist (was ~0.18–0.50; kids called pale fog "trash"). Lit stones stay punched clear via fogHoles.
-  fogS+=`<g class="fog-layer${FL[sub]?' flared':''}" opacity="${((.52+.36*un)*(FL[sub]?.35:1)).toFixed(2)}"><path class="fog-island" d="${blob(I.x,I.y,I.r*1.06,hash(sub)+.9)}" fill="${FOG||'#263238'}"/>
-  <path class="fog-wisp" d="${blob(I.x+I.r*.12,I.y-I.r*.08,I.r*.62,hash(sub)+1.4)}" fill="${FOG||'#455a64'}" opacity=".65"/></g>`;}
- if(fogS)s+=`<mask id="fogHoles" maskUnits="userSpaceOnUse" x="-500" y="-500" width="2600" height="2100"><rect x="-500" y="-500" width="2600" height="2100" fill="#fff"/><g fill="#000" filter="url(#fogBlur)">${holes}</g></mask>
- <g class="fog" pointer-events="none" mask="url(#fogHoles)">${fogS}</g>`;
+ // Fog overlay removed from the player Map (stones always fully visible). Mastery/progress stones unchanged.
  const rad=zoomed?ISL[zoomed].r/58:4.4;const G={m:'',v:'',r:'',l:'',x:''},fl=[];
  TAX.topics.forEach((t,i)=>{if(zoomed&&t.subject!==zoomed)return;const c=codes[i],[x,y]=pos[i];const rr=c==='x'?rad*.8:rad;
   G[c]+=`<circle class="tp ${c}" data-i="${i}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rr.toFixed(2)}"/>`;
@@ -201,29 +192,24 @@ function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const LK=st
   // big "your ship" so a worn Golden Galleon (etc.) is obvious — decorative edge boats stay too
   if(LK.ship)s+=`<g class="ship-hero">${ship(780,980,1.55,'#ffd54f',18,LK.ship)}<text x="780" y="1018" font-size="22" font-weight="800" text-anchor="middle" fill="#5d4037">${esc(LK.ship.emoji||'⛵')} Your ship</text></g>`;
   for(const [x,y,k,d] of [[200,120,1,70],[800,90,.8,90],[1300,480,.7,80],[400,980,.9,100],[1100,140,.6,75]])s+=cloud(x,y,k,d);}
- for(const [sub,f] of Object.entries(FL)){const I=ISL[sub];if(!I||(zoomed&&zoomed!==sub))continue;
-  if(zoomed){const lb=[];TAX.topics.forEach((t,i)=>{if(t.subject!==sub||lit(i)||!'rl'.includes(codes[i]))return;const[x,y]=pos[i];if(lb.length<30)lb.push(`<text x="${x.toFixed(1)}" y="${(y-rad*1.6).toFixed(1)}" font-size="${(rad*1.5).toFixed(1)}" text-anchor="middle">${esc(t.sn||t.name)}</text>`);});
-   s+=`<g class="flare-names" pointer-events="none" fill="#fff8e1" stroke="#3e2723" stroke-width="${(rad/5).toFixed(2)}" paint-order="stroke" font-weight="800">${lb.join('')}</g>`;}
-  let mk='';for(let k=0;k<Math.min(3,f.secrets||0);k++){const a=hash(sub+'s'+k)*2*Math.PI,rr=I.r*(.35+.4*hash(sub+'sr'+k));mk+=`<text class="flare-secret" x="${(I.x+rr*Math.cos(a)).toFixed(1)}" y="${(I.y+rr*Math.sin(a)).toFixed(1)}" font-size="${(I.r/(zoomed?7:5)).toFixed(1)}" text-anchor="middle">❓<title>Something's hidden here…</title></text>`;}
-  s+=`<g pointer-events="none">${mk}<text class="flare-burst" x="${I.x+I.r*.85}" y="${I.y-I.r*.85}" font-size="${(I.r/(zoomed?5:3.2)).toFixed(1)}" text-anchor="middle">🎆</text></g>`;}
  const cur=mapData.current&&TAX.idx[mapData.current];if(cur!=null&&pos[cur]&&(!zoomed||TAX.topics[cur].subject===zoomed)){const[x,y]=pos[cur];s+=`<text pointer-events="none" class="boat" x="${x}" y="${y-rad*1.5}" font-size="${rad*6}" text-anchor="middle">⛵</text>`;}
  $('world').innerHTML=s+'</svg>';const svg=$('msvg');
  svg.querySelectorAll('.isl').forEach(g=>g.onclick=()=>{if(!zoomed){zoomed=g.dataset.s;drawMap();}});
  svg.addEventListener('pointermove',tip);svg.addEventListener('click',e=>{const isl=e.target.closest?.('.isl');if(!zoomed&&isl&&!e.target.classList.contains('tp')){zoomed=isl.dataset.s;window.FX?FX.view(drawMap):drawMap();return;}if(e.target.classList.contains('tp')){if(!zoomed){tip(e,true);zoomed=TAX.topics[e.target.dataset.i].subject;drawMap();}else{$('tip').hidden=true;stoneCard(+e.target.dataset.i);}}});
- $('zoomout').hidden=!zoomed;const pr=mapData.progress,fp=mapData.fog?.pct??0,lp=pr.total?Math.round(1000*TAX.topics.reduce((n,t,i)=>n+(mapData.fog?.mask?.[i]==='C'||'mv'.includes(mapData.codes[i]||'_')?1:0),0)/pr.total)/10:0;const flH=f=>Math.max(1,Math.ceil((f.until-Date.now())/3600e3)),flT=Object.values(FL).map(f=>`🎆 ${ISL[f.region]?.s||f.region} lit (${flH(f)} h left)`).join(' · ');
- $('msub').textContent=(zoomed?`${zoomed}: tap a stone to see the skill. Fog lifts when you master a skill for real!`:`${pr.done} of ${pr.total} skills · ${lp}% lit · fog clear ${fp}% · ${pr.tot.ready} ready · tap an island`)+(flT?' · '+flT:'');
- flareBtn(FL,fog);}
-// "Light it up": fire a scout flare at the island you are looking at (it still goes through the Market's confirm step)
-function flareBtn(FL,fog){let b=$('flarebtn');if(!b){b=document.createElement('button');b.id='flarebtn';b.type='button';b.className='ghost';$('zoomout').after(b);b.onclick=async()=>{if(!MK)await loadMarket();const it=MK?.items?.find(i=>i.kind==='flare');if(it)mkFlare(it,zoomed);};}
- const bs=fog.bySubject?.[zoomed];b.hidden=!zoomed||!bs||bs.clear>=bs.total||!!FL[zoomed];b.textContent='🎆 Light it up!';}
+ $('zoomout').hidden=!zoomed;const pr=mapData.progress;
+ $('msub').textContent=zoomed?`${zoomed}: tap a stone to see the skill.`:`${pr.done} of ${pr.total} skills · ${pr.pct}% · ${pr.tot.ready} ready · tap an island`;
+ const fb=$('flarebtn');if(fb)fb.hidden=true;const ff=$('ffinds');if(ff){ff.hidden=true;ff.innerHTML='';}}
 function tip(e,force){const t=e.target;if(!t.classList?.contains('tp')){if(!force)$('tip').hidden=true;return;}const i=+t.dataset.i,tp=TAX.topics[i],c=mapData.codes[i];
- const box=$('world').getBoundingClientRect(),card=$('world').parentElement.getBoundingClientRect();const el=$('tip');el.hidden=false;
- const cl=mapData.fog?.mask?.[i]==='C',fogged=!!mapData.fog&&!cl&&!'mv'.includes(c||'_'),flared=fogged&&(mapData.fog.flares||[]).some(f=>f.region===tp.subject);el.innerHTML=`<b>${esc(tp.name)}</b><br><span class="small">${esc(tp.subject)} › ${esc(tp.domain)} · ages ${tp.ageRangeStart}+</span><br>${SN[c]}${flared?' · 🎆 lit by your flare (fog comes back)':fogged?' · 🌫️ under fog':(cl?' · ✨ fog cleared':'')}<br><span class="small">${esc(tp.description).slice(0,140)}…</span>`;
+ const card=$('world').parentElement.getBoundingClientRect();const el=$('tip');el.hidden=false;
+ el.innerHTML=`<b>${esc(tp.name)}</b><br><span class="small">${esc(tp.subject)} › ${esc(tp.domain)} · ages ${tp.ageRangeStart}+</span><br>${SN[c]}<br><span class="small">${esc(tp.description).slice(0,140)}…</span>`;
  el.style.left=Math.min(e.clientX-card.left+12,card.width-290)+'px';el.style.top=(e.clientY-card.top+12)+'px';}
-function drawBars(){const pr=mapData.progress;let s=`<div class="big">🌍 ${pr.pct}% of ${pr.total} skills</div><div class="sbar"><div class="track">${seg(pr.tot,pr.total)}</div></div>`;
- for(const [sub,I] of Object.entries(ISL)){const b=pr.by[sub];if(!b)continue;s+=`<div class="sbar"><div class="lbl"><span>${I.e} ${esc(sub)}</span><span>${b.mastered+b.review} / ${b.total}</span></div><div class="track">${seg(b,b.total)}</div></div>`;}
+// Subject X/Y = mastered+review (done). Bar fill matches that same done count; learning is a muted add-on.
+function drawBars(){const pr=mapData.progress;let s=`<div class="big">🌍 ${pr.pct}% of ${pr.total} skills</div><div class="sbar"><div class="track">${segDone(pr.tot,pr.total)}</div></div>`;
+ for(const [sub,I] of Object.entries(ISL)){const b=pr.by[sub];if(!b)continue;const done=b.mastered+b.review;s+=`<div class="sbar"><div class="lbl"><span>${I.e} ${esc(sub)}</span><span>${done} / ${b.total}</span></div><div class="track">${segDone(b,b.total)}</div></div>`;}
  $('bars').innerHTML=s;requestAnimationFrame(()=>$('bars').querySelectorAll('.track i').forEach(i=>i.style.width=i.dataset.w));}
-const seg=(b,t)=>[['mastered','m'],['review','v'],['learning','l'],['ready','r']].map(([k,c])=>`<i style="width:0;background:${COL[c]};opacity:${c==='r'?.45:1}" data-w="${(100*b[k]/t).toFixed(2)}%" title="${k}: ${b[k]}"></i>`).join('');
+const segDone=(b,t)=>{const done=(b.mastered||0)+(b.review||0),learn=b.learning||0;
+ return`<i style="width:0;background:${COL.m}" data-w="${(100*done/t).toFixed(2)}%" title="done: ${done}"></i>`
+  +(learn?`<i style="width:0;background:${COL.l};opacity:.55" data-w="${(100*learn/t).toFixed(2)}%" title="learning: ${learn}"></i>`:'');};
 $('zoomout').onclick=()=>{zoomed=null;drawMap();};
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{const sw=()=>{document.querySelectorAll('.tab').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-selected',x===b);x.tabIndex=x===b?0:-1;});for(const v of['play','map','trophies','quests','market'])$(v).hidden=b.dataset.v!==v;};window.FX?FX.view(sw):sw();if(b.dataset.v==='map')loadMap();if(b.dataset.v==='market')loadMarket();if(b.dataset.v==='trophies')loadTrophies();if(b.dataset.v==='quests')loadQuests();});
 // learner profiles: wait for picker.js; while "Who's playing?" shows, nothing loads (the pick reloads the page)
@@ -241,23 +227,8 @@ function finaleReveal(C){if(document.querySelector('.finale'))return;const o=doc
  <p class="small">No free medals — when Jane finishes forging, a one-shot Finale quest may appear.</p>
  <button type="button" id="fnok">Awesome! 🗡️</button></div>`;
  document.body.appendChild(o);confetti(90);const close=()=>{o.classList.add('out');setTimeout(()=>o.remove(),320);};$('fnok').onclick=close;o.onclick=e=>{if(e.target===o)close();};setTimeout(()=>$('fnok')?.focus(),60);}
-// ---------- fog finds (slice 5 / #59): claim once; garnish only — never invent medals ----------
-function fogFindReveal(f,reward){const o=document.createElement('div');o.className='freveal';
- o.innerHTML=`<div class="frbox"><div class="fremo">${esc(f.emoji||'📦')}</div><div class="frnew">✨ Fog find! ✨</div><h3>${esc(f.title||'Treasure')}</h3>
- <p class="small">${esc(reward?.note||'You uncovered something under the fog!')}</p>
- <div class="small">Garnish only — no free medals, no skipping mastery.</div>
- <button type="button" id="frok">Collect it!</button></div>`;
- document.body.appendChild(o);confetti(40);const close=()=>{o.classList.add('out');setTimeout(()=>o.remove(),300);};o.querySelector('#frok').onclick=close;o.onclick=e=>{if(e.target===o)close();};setTimeout(()=>$('frok')?.focus(),50);}
-async function claimFogFind(id){const r=await api('/api/fog/claim',{id});if(r.error){say(r.error);return null;}
- if(r.state){st=r.state;if(st.fog){if(mapData)mapData.fog=st.fog;campaignHUD(st);}chips(st);}
- if(!r.already)fogFindReveal(r.find,r.reward);return r;}
-function paintFogFinds(fog){const host=$('ffinds');if(!host)return;const avail=fog?.available||[];
- if(!avail.length){host.hidden=true;host.innerHTML='';return;}
- host.hidden=false;host.innerHTML=`<div class="ffh">🌫️ Fog finds ready!</div>${avail.map(f=>`<button type="button" class="ffbtn" data-id="${esc(f.id)}">${esc(f.emoji||'📦')} ${esc(f.title)}</button>`).join('')}`;
- host.querySelectorAll('.ffbtn').forEach(b=>b.onclick=()=>claimFogFind(b.dataset.id));}
-// refresh find strip whenever map fog or state fog updates
-const _loadMap=loadMap;loadMap=async function(){await _loadMap();paintFogFinds(mapData?.fog||st?.fog);}
-const _chipsFog=chips;chips=function(s){_chipsFog(s);if(s?.fog)paintFogFinds(s.fog);pickLine(s);}
+// Fog finds / scout flare UI removed from the player experience (data may still exist server-side for compat).
+const _chipsPick=chips;chips=function(s){_chipsPick(s);pickLine(s);}
 
 // ---------- campaign trail HUD + Quest of Quests overlay (slices 2–3 / #56 #57) ----------
 function cTrailHTML(C,{big=false}={}){const nodes=C.nodes.map((n,i)=>{const done=!!n,cur=!done&&i===C.filled;
@@ -416,11 +387,13 @@ function questStrip(s,p){const el=$('qstrip');if(!el)return;const Q=s.quest;
 async function miniQuit(){const s=await api('/api/mini/quit',{});trailDone=new Set();render(s);goMap(s.mini?.subject);}
 function goMap(sub){trailDone=new Set();if(window._afterMini){render(window._afterMini);window._afterMini=null;}if(sub)zoomed=sub;document.querySelector('.tab[data-v=map]').click();}
 async function miniEnd(r){const m=r.miniDone;$('f').style.display='none';$('mc').innerHTML='';
- // Update map stone colors + fog immediately from the answer payload, then confirm with /api/map.
+ // Update map stone colors + subject progress immediately from the answer payload, then confirm with /api/map.
  if(m.topicId)trailDone.add(m.topicId);
  if(r.map)applyMap(r.map);
  else if(m.topicId&&mapData?.codes&&TAX?.idx){const i=TAX.idx[m.topicId];if(i!=null){const code={mastered:'m',review:'v',ready:'r',learning:'l',locked:'x'}[m.state]||mapData.codes[i];
-  mapData.codes=mapData.codes.slice(0,i)+code+mapData.codes.slice(i+1);if(layout){try{drawMap();drawBars();}catch(e){}}}}
+  mapData.codes=mapData.codes.slice(0,i)+code+mapData.codes.slice(i+1);mapData.progress=progressFromCodes(mapData.codes);
+  if(st)st.progress=mapData.progress;const el=$('pct');if(el)el.textContent=`🗺️ ${mapData.progress.pct}%`;
+  if(layout){try{drawMap();drawBars();}catch(e){console.error(e);}}}}
  await refreshMap();
  // Never re-offer a stone just finished this session (server grindTrail + client belt-and-suspenders).
  let n=m.next;if(n&&trailDone.has(n.topicId))n=null;
@@ -535,9 +508,9 @@ addEventListener('scroll',()=>gclose(),{passive:true});
 })();
 
 // ---------- Points Market (plans/archive/points-market.md, #74; idea credit: Christopher) ----------
-// Points buy fun, choice and peeks: never mastery, medals or permanent fog clear. The server keeps the wallet
+// Points buy fun and choice: never mastery or medals. The server keeps the wallet
 // (balance = earned − spent) and the prices; the client only sends a purchase id (pid) so a retry never charges twice.
-const MK_GROUP={'skin-ship':'⛵ Ships','skin-avatar':'🙂 Avatars','skin-boss':'👾 Boss skins','skin-theme':'🎨 Map themes',sticker:'🌟 Stickers',flare:'🎆 Peek into the fog',prove:'🎟️ Prove it',path:'🧭 Choose your next quest',theme:'🧭 Choose your next quest',extra:'🎒 Handy extras',chest:'🧰 Mystery chests (found under the fog!)'};
+const MK_GROUP={'skin-ship':'⛵ Ships','skin-avatar':'🙂 Avatars','skin-boss':'👾 Boss skins','skin-theme':'🎨 Map themes',sticker:'🌟 Stickers',prove:'🎟️ Prove it',path:'🧭 Choose your next quest',theme:'🧭 Choose your next quest',extra:'🎒 Handy extras',chest:'🧰 Mystery chests'};
 const mkPid=()=>{const r=globalThis.crypto?.randomUUID?.()||(Date.now().toString(36)+Math.random().toString(36).slice(2,12));return('p'+r).replace(/[^A-Za-z0-9_-]/g,'').slice(0,40);};
 let MK=null,_mkFocus=null;
 async function loadMarket(){let d;try{d=await api('/api/market');}catch{d=null;}if(!d||d.error){$('mlist').innerHTML='<p class="small">The Market is closed for a moment. Try again soon! 🛒</p>';return;}
@@ -545,9 +518,10 @@ async function loadMarket(){let d;try{d=await api('/api/market');}catch{d=null;}
 function mkSetWallet(r){if(r.wallet&&r.items)MK={...MK,wallet:r.wallet,items:r.items,prove:r.prove?.due?r.prove:MK?.prove,path:r.path?.offers?r.path:MK?.path};if(r.state){st=r.state;chips(st);}}
 function paintMarket(){const d=MK;if(!d)return;const W=d.wallet;
  $('mbal').innerHTML=`<div class="mkbal">⭐ ${W.balance.toLocaleString()} <span>to spend</span></div><div class="small">earned ${W.earned.toLocaleString()} · spent ${W.spent.toLocaleString()} · your medals and skills never cost points</div>${mkShelf(W,d)}`;
- const groups={};for(const it of d.items)(groups[it.slot?'skin-'+it.slot:it.kind==='theme'?'path':it.kind]??=[]).push(it);
+ // Scout flare / fog peeks are retired from the Market UI (server may still know them for old wallets).
+ const groups={};for(const it of d.items){if(it.kind==='flare')continue;(groups[it.slot?'skin-'+it.slot:it.kind==='theme'?'path':it.kind]??=[]).push(it);}
  $('mlist').innerHTML=Object.entries(groups).map(([k,items])=>`<div class="card mksec"><h3>${esc(MK_GROUP[k]||k)}</h3><div class="mkgrid">${items.map(mkCard).join('')}</div></div>`).join('');
- $('mlist').querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const it=d.items.find(i=>i.id===b.dataset.buy);if(it?.kind==='flare')return mkFlare(it);if(it?.kind==='prove')return mkProve(it);if(it?.kind==='path'||it?.kind==='theme')return mkPick(it);mkConfirm(it,it.kind==='chest'?{after:r=>r.prize&&chestReveal(r.prize)}:{});});
+ $('mlist').querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const it=d.items.find(i=>i.id===b.dataset.buy);if(!it||it.kind==='flare')return;if(it.kind==='prove')return mkProve(it);if(it.kind==='path'||it.kind==='theme')return mkPick(it);mkConfirm(it,it.kind==='chest'?{after:r=>r.prize&&chestReveal(r.prize)}:{});});
  $('mlist').querySelectorAll('[data-eq]').forEach(b=>b.onclick=()=>mkEquip(b.dataset.slot,b.dataset.eq==='off'?null:b.dataset.eq));}
 function mkCard(it){const bal=MK.wallet.balance,PV=MK.prove;
  if(it.kind==='prove'&&PV&&(!PV.due.length||!PV.left))return`<div class="mkcard" id="mkprove"><div class="mkemo" aria-hidden="true">${esc(it.emoji)}</div><b>${esc(it.title)}</b><div class="small">${esc(it.note||'')}</div><div class="mkprice">⭐ ${it.price}</div><button type="button" disabled>${PV.left?'No reviews due right now 🌱':'Come back tomorrow 🌙'}</button></div>`;
@@ -574,13 +548,8 @@ function mkConfirm(it,opt={}){if(!it||!MK)return;mkClose();_mkFocus=document.act
   mkClose();paintMarket();if(!r.already){if(!(window.FX&&FX.good?.($('mbal'),true)))confetti(30);banner(`🛒 ${esc(it.title)} is yours!`);}opt.after?.(r);};
  setTimeout(()=>yes.focus(),50);}
 async function mkEquip(slot,item){let r;try{r=await api('/api/market/equip',{slot,item});}catch{return;}if(r.error){say(r.error);return;}mkSetWallet(r);paintMarket();}
-// scout flare: pick a fogged island (least clear first), buy, then fly to it on the Map
-function mkFlare(it,pre){const F=st?.fog||mapData?.fog||{},by=F.bySubject||{},on=new Set((F.flares||[]).map(f=>f.region));
- const opts=Object.entries(by).filter(([k,b])=>b.total&&b.clear<b.total&&!on.has(k)).sort((a,b)=>a[1].clear/a[1].total-b[1].clear/b[1].total);
- if(!opts.length){say('No foggy islands left to light up right now! ✨');return;}
- mkConfirm(it,{extra:`<label for="mkreg"><b>Which island?</b></label><br><select id="mkreg">${opts.map(([k,b])=>`<option value="${esc(k)}"${k===pre?' selected':''}>${esc((ISL[k]?.e||'🏝️')+' '+(ISL[k]?.s||k))} · ${Math.round(100*b.clear/b.total)}% clear</option>`).join('')}</select>
-  <div class="small">For 24 hours you'll see skill names and where secrets hide. Then the fog rolls back. Only mastering skills clears it for good!</div>`,
-  meta:o=>({region:o.querySelector('#mkreg').value}),after:r=>{if(r.flare)goMap(r.flare.region);}});}
+// Scout flare retired from the player Market (no-op stub kept so old callers do nothing harmful).
+function mkFlare(){say('Scout flares are gone — the whole map is clear now! ✨');}
 // prove-it: pick a due review (most overdue first); a gate's own topic is not offered while its gate item is on screen
 function openProve(){document.querySelector('.tab[data-v=market]').click();setTimeout(()=>$('mkprove')?.scrollIntoView({behavior:'smooth',block:'center'}),600);}
 function mkProve(it){const gt=st?.item?.gate?st.item.topicId:null,due=(MK?.prove?.due||[]).filter(d=>d.topicId!==gt);
@@ -598,13 +567,12 @@ function pickLine(s){const C=s?.wallet?.choices||{},p=C.path&&!C.path.used?C.pat
  if(!p&&!t){if(el)el.hidden=true;return;}
  if(!el){el=document.createElement('div');el.id='pickline';el.className='card pickline';el.setAttribute('role','status');$('campaign').after(el);}
  el.hidden=false;el.innerHTML=`🧭 <b>Next quest: your pick!</b> ${p?esc(p.name):''}${p&&t?' · ':''}${t?esc((t.emoji||'')+' '+t.title):''}<span class="small"> Jane is building it.</span>`;}
-// stickers, titles, extras in your pocket, and a teaser for rows still hidden in the fog
+// stickers, titles, extras in your pocket
 function mkShelf(W,d){const st0=(d.items||[]).filter(i=>i.kind==='sticker'&&i.owned).map(i=>({emoji:i.emoji,title:i.title})),sts=[...st0,...(W.stickers||[])];
  const pk=[W.hintTokens&&`🤫 ×${W.hintTokens}`,W.shield&&`🛡️ ×${W.shield}`,W.freeze&&`🧊 ×${W.freeze}`].filter(Boolean);
  return(sts.length?`<div class="mkshelf" aria-label="Your stickers">${sts.map(x=>`<span title="${esc(x.title)}">${esc(x.emoji)}</span>`).join('')}</div>`:'')
   +((W.titles||[]).length?`<div class="small">🏷️ Titles: ${W.titles.map(t=>`<b>${esc(t.title)}</b>`).join(' · ')}</div>`:'')
-  +(pk.length?`<div class="small">🎒 In your pocket: ${pk.join(' · ')}</div>`:'')
-  +(d.hidden?`<div class="small mkfog">🌫️ ${d.hidden} more thing${d.hidden>1?'s are':' is'} hidden in the fog… master skills to find ${d.hidden>1?'them':'it'}!</div>`:'');}
+  +(pk.length?`<div class="small">🎒 In your pocket: ${pk.join(' · ')}</div>`:'');}
 function chestReveal(p){const o=document.createElement('div');o.className='freveal';
  o.innerHTML=`<div class="frbox"><div class="fremo">${esc(p.emoji||'🎁')}</div><div class="frnew">🧰 The chest pops open!</div><h3>${esc(p.title||'A prize')}</h3>
  <p class="small">${p.type==='skin'?'A RARE skin! Wear it from the Market.':p.type==='title'?'A new title for your collection!':'A new sticker for your shelf!'}</p><button type="button" id="frok">Awesome!</button></div>`;

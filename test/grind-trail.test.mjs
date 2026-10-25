@@ -107,3 +107,10 @@ test('client refreshes map after mini and filters trailDone next',()=>{
   assert.match(js,/continue:true/);
   assert.match(js,/r\.map\)applyMap/);
 });
+test('grind live progress keeps X/Y, bar fill and header % in sync',()=>{
+  assert.match(js,/function progressFromCodes\(/);
+  assert.match(js,/segDone/);
+  assert.match(js,/st\.progress=m\.progress/);
+  assert.match(js,/🗺️ \$\{m\.progress\.pct\}%/);
+  assert.match(js,/mapData\.progress=progressFromCodes/);
+});

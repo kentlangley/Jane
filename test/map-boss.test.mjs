@@ -1,5 +1,5 @@
-// Map must render for every taxonomy subject (a missing island blanked the whole map), fog only veils unexplored stones,
-// and boss hearts count THIS fight (today's first-try boss hits on the topic), not the topic's lifetime streak.
+// Map must render for every taxonomy subject (a missing island blanked the whole map); fog overlay is retired from the player Map;
+// boss hearts count THIS fight (today's first-try boss hits on the topic), not the topic's lifetime streak.
 import {test} from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';
 import {loadEngine,ROOT} from './helpers.mjs';
 const {E,g}=await loadEngine();const js=fs.readFileSync(path.join(ROOT,'public/app.js'),'utf8');
@@ -10,14 +10,20 @@ test('every subject in the taxonomy has a Map island (Geography blanked the map)
   for(const s of new Set(g.topics.map(t=>t.subject)))assert.ok(ISL[s],`no island for subject "${s}"`);
   assert.match(js,/if\(!layout\)\{ensureIslands\(\);layout=doLayout\(\)/);assert.match(js,/function ensureIslands\(\)/);
   assert.match(js,/try\{drawMap\(\);\}catch/,'a draw error must not leave the skeleton forever');});
-test('fog is dark and see-through, sits under the nodes, and has clear holes at lit (cleared / mastered) stones',()=>{
+test('Map draws no fog overlay; stones and ship hero still render',()=>{
   const d=js.slice(js.indexOf('function drawMap'),js.indexOf('function tip('));
-  assert.ok(d.indexOf('class="fog"')>0&&d.indexOf('class="fog"')<d.indexOf('class="nodes"'),'fog must be drawn before (under) the nodes');
-  assert.match(d,/mask="url\(#fogHoles\)"/);assert.match(d,/lit=i=>mask\[i\]==='C'\|\|codes\[i\]==='m'\|\|codes\[i\]==='v'/);
-  assert.match(d,/\.52\+\.36\*un/,'mist must be dark enough to read as fog, not a pale wash');
+  assert.doesNotMatch(d,/class="fog"/,'fog overlay must be gone from the player Map');
+  assert.doesNotMatch(d,/fogHoles|fog-island|fog-wisp/);
+  assert.doesNotMatch(d,/Light it up|flareBtn|flare-burst/);
   assert.match(d,/trails\[sub\]\|\|\[\]/,'missing island trails must not crash drawMap');
   assert.match(d,/ship-hero/,'worn ship skin needs a big Your ship marker');
-  assert.doesNotMatch(d,/fill="#cfd8dc" filter="url\(#fogBlur\)"/,'no pale opaque fog blanket');});
+  assert.match(d,/class="nodes"/);});
+test('night theme keeps dark text on light content cards',()=>{
+  const css=fs.readFileSync(path.join(ROOT,'public/app.css'),'utf8');
+  assert.match(css,/body\.theme-night/);
+  assert.match(css,/body\.theme-night .ord li\{[^}]*color:#1a237e/);
+  assert.match(css,/--ink/);
+  assert.match(js,/document\.body\.classList\.add\(tid\)/);});
 test('worn theme paints the app shell and sticker/whisper UI are wired',()=>{
   assert.match(js,/document\.body\.classList\.add\(tid\)/);
   assert.match(js,/function showWhisper/);

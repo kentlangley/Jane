@@ -49,7 +49,10 @@ test('skins: 4 slots priced 300–1,500, bought once, equip owned-only and free,
   assert.ok(E.equip(S,g,'ship',null).ok);w=E.walletState(S,g,NOW);assert.equal(w.equipped.ship,undefined);assert.ok(w.owned['ship-pirate'],'still owned after taking it off');
   assert.ok(E.buy(S,g,{pid:pid(21),item:'ship-pirate'},NOW).already,'owned skins are not sold twice');});
 
-// ---------- slice 3: scout flare ----------
+// ---------- slice 3: scout flare (engine still supports buy for compat; Market listing hides it) ----------
+test('marketItems omits scout flare from the player catalog',()=>{
+  const S=rich(2000);assert.ok(!E.marketItems(S,g,NOW).some(i=>i.kind==='flare'||i.id==='scout-flare'));
+});
 test('scout flare: active < 24 h, gone after; mask, clear and available identical; claimFind still refuses uncleared finds',()=>{
   const S=rich(1000);const before=E.fogState(S,g,NOW);
   assert.match(E.buy(S,g,{pid:pid(30),item:'scout-flare',meta:{region:'Atlantis'}},NOW).error,/Pick an island/);
