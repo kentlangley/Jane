@@ -207,9 +207,9 @@ function tip(e,force){const t=e.target;if(!t.classList?.contains('tp')){if(!forc
 function drawBars(){const pr=mapData.progress;let s=`<div class="big">🌍 ${pr.pct}% of ${pr.total} skills</div><div class="sbar"><div class="track">${segDone(pr.tot,pr.total)}</div></div>`;
  for(const [sub,I] of Object.entries(ISL)){const b=pr.by[sub];if(!b)continue;const done=b.mastered+b.review;s+=`<div class="sbar"><div class="lbl"><span>${I.e} ${esc(sub)}</span><span>${done} / ${b.total}</span></div><div class="track">${segDone(b,b.total)}</div></div>`;}
  $('bars').innerHTML=s;requestAnimationFrame(()=>$('bars').querySelectorAll('.track i').forEach(i=>i.style.width=i.dataset.w));}
-const segDone=(b,t)=>{const done=(b.mastered||0)+(b.review||0),learn=b.learning||0;
- return`<i style="width:0;background:${COL.m}" data-w="${(100*done/t).toFixed(2)}%" title="done: ${done}"></i>`
-  +(learn?`<i style="width:0;background:${COL.l};opacity:.55" data-w="${(100*learn/t).toFixed(2)}%" title="learning: ${learn}"></i>`:'');};
+const segDone=(b,t)=>{const done=(b.mastered||0)+(b.review||0);
+ // Fill matches the X/Y done count exactly (mastered+review). Learning is not drawn here so 0/19 never looks "partly done".
+ return`<i style="width:0;background:${COL.m}" data-w="${(100*done/t).toFixed(2)}%" title="done: ${done}"></i>`;};
 $('zoomout').onclick=()=>{zoomed=null;drawMap();};
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{const sw=()=>{document.querySelectorAll('.tab').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-selected',x===b);x.tabIndex=x===b?0:-1;});for(const v of['play','map','trophies','quests','market'])$(v).hidden=b.dataset.v!==v;};window.FX?FX.view(sw):sw();if(b.dataset.v==='map')loadMap();if(b.dataset.v==='market')loadMarket();if(b.dataset.v==='trophies')loadTrophies();if(b.dataset.v==='quests')loadQuests();});
 // learner profiles: wait for picker.js; while "Who's playing?" shows, nothing loads (the pick reloads the page)

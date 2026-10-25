@@ -10,7 +10,7 @@ Dates are Pacific Time.
 
 ### Fixed
 - **Night / Starry Night (and other map themes) contrast**: content cards, coach "Start like this" steps, Explorer Check drag cards, prompts and body text keep dark ink on light surfaces under every worn theme — no more white-on-near-white or same-hue-on-same-hue from shell text color leaking into panels.
-- **Grind-path live progress**: after each trail stone, subject **X / Y** counts, bar fill, island %, and the header 🗺️ chip all refresh from the answer `map` payload (and a codes→progress rebuild on fallback) so numbers and bars stay in sync without leaving the grind. Subject bars now fill to the same done count shown in X / Y (learning is a muted add-on).
+- **Grind-path live progress**: after each trail stone, subject **X / Y** counts, bar fill, island %, and the header 🗺️ chip all refresh from the answer `map` payload (and a codes→progress rebuild on fallback) so numbers and bars stay in sync without leaving the grind. Subject bars now fill to the same done count shown in X / Y (learning is not drawn in the bar, so 0 / N never looks partly filled).
 
 ## [0.7.0] - 2026-10-24
 

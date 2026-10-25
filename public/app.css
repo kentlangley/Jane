@@ -357,7 +357,7 @@ body.theme-night .pickline,body.theme-night .whisper-box{background:#f5f7ff;colo
 body.theme-night .ord li{background:#e8eaf6;border-color:#9fa8da;color:#1a237e}
 body.theme-night .ord .ot,body.theme-night .q,body.theme-night .steps,body.theme-night .steps b,body.theme-night .steps li,
 body.theme-night .small,body.theme-night .topic,body.theme-night .sbar .lbl,body.theme-night .big,body.theme-night .legend{color:#1a237e}
-body.theme-night .bubble{background:#e8eaf6;color:#1a237e}
+body.theme-night .bubble{background:#e8eaf6;color:#0d1338;font-weight:700}
 body.theme-night .steps{background:#e8f5e9;border-color:#66bb6a}
 body.theme-lava .card,body.theme-lava #pcard,body.theme-lava .qstrip,body.theme-lava .steps,body.theme-lava .help,
 body.theme-lava .ord li,body.theme-lava .mkcard{background:#fff8f0;color:#3e2723}
