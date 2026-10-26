@@ -95,8 +95,8 @@ async function loadMap(){if(!TAX)TAX=await (await fetch('/tax.json')).json();if(
  mapData=await api('/api/map');try{drawMap();}catch(e){console.error(e);$('world').innerHTML='<p class="small">Oops, the map hiccuped. Try again in a moment! 🧭</p>';}drawBars();}
 // Live map merge after a grind mini ends: patch codes/progress and redraw without requiring a tab click.
 function applyMap(m){if(!m||(!m.codes&&!m.progress))return;
- if(!mapData)mapData={codes:m.codes||'',focus:null,current:null,progress:m.progress||{},fog:m.fog||null};
- else{if(m.codes!=null)mapData.codes=m.codes;if(m.progress)mapData.progress=m.progress;if(m.fog)mapData.fog=m.fog;if(m.current!==undefined)mapData.current=m.current;if(m.focus!==undefined)mapData.focus=m.focus;}
+ if(!mapData)mapData={codes:m.codes||'',focus:null,current:null,progress:m.progress||{}};
+ else{if(m.codes!=null)mapData.codes=m.codes;if(m.progress)mapData.progress=m.progress;if(m.current!==undefined)mapData.current=m.current;if(m.focus!==undefined)mapData.focus=m.focus;}
  // Keep header % in sync with map progress while grinding (stones + bars + chip).
  if(m.progress){if(st)st.progress=m.progress;const el=$('pct');if(el)el.textContent=`🗺️ ${m.progress.pct}%`;}
  if(layout&&mapData.codes){try{drawMap();drawBars();}catch(e){console.error(e);}}}
@@ -178,7 +178,6 @@ function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const LK=st
   ${trees(I,sub,Math.round(I.r/14))}${landmark(sub,I.x,I.y-I.r*.04,I.r*.55)}</g>`;}
  if(zoomed){const ids=new Set();TAX.topics.forEach((t)=>{if(t.subject===zoomed)ids.add(t.id)});let ls='';for(const [a,b,h] of TAX.deps){if(!h||!ids.has(a)||!ids.has(b))continue;const ia=TAX.idx[a],ib=TAX.idx[b];const ca=codes[ia],cb=codes[ib];if(cb==='x')continue;
    ls+=`<line x1="${pos[ib][0]}" y1="${pos[ib][1]}" x2="${pos[ia][0]}" y2="${pos[ia][1]}" stroke="${ca==='r'?'#00e676':ca==='m'||ca==='v'?'#fff8e1':'#ffffff55'}" stroke-width="${ca==='r'?1.4:.7}" opacity=".75"/>`;}s+=`<g pointer-events="none">${ls}</g>`;}
- // Fog overlay removed from the player Map (stones always fully visible). Mastery/progress stones unchanged.
  const rad=zoomed?ISL[zoomed].r/58:4.4;const G={m:'',v:'',r:'',l:'',x:''},fl=[];
  TAX.topics.forEach((t,i)=>{if(zoomed&&t.subject!==zoomed)return;const c=codes[i],[x,y]=pos[i];const rr=c==='x'?rad*.8:rad;
   G[c]+=`<circle class="tp ${c}" data-i="${i}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rr.toFixed(2)}"/>`;
@@ -198,7 +197,7 @@ function drawMap(){const{pos,doms,trails}=layout,codes=mapData.codes;const LK=st
  svg.addEventListener('pointermove',tip);svg.addEventListener('click',e=>{const isl=e.target.closest?.('.isl');if(!zoomed&&isl&&!e.target.classList.contains('tp')){zoomed=isl.dataset.s;window.FX?FX.view(drawMap):drawMap();return;}if(e.target.classList.contains('tp')){if(!zoomed){tip(e,true);zoomed=TAX.topics[e.target.dataset.i].subject;drawMap();}else{$('tip').hidden=true;stoneCard(+e.target.dataset.i);}}});
  $('zoomout').hidden=!zoomed;const pr=mapData.progress;
  $('msub').textContent=zoomed?`${zoomed}: tap a stone to see the skill.`:`${pr.done} of ${pr.total} skills · ${pr.pct}% · ${pr.tot.ready} ready · tap an island`;
- const fb=$('flarebtn');if(fb)fb.hidden=true;const ff=$('ffinds');if(ff){ff.hidden=true;ff.innerHTML='';}}
+}
 function tip(e,force){const t=e.target;if(!t.classList?.contains('tp')){if(!force)$('tip').hidden=true;return;}const i=+t.dataset.i,tp=TAX.topics[i],c=mapData.codes[i];
  const card=$('world').parentElement.getBoundingClientRect();const el=$('tip');el.hidden=false;
  el.innerHTML=`<b>${esc(tp.name)}</b><br><span class="small">${esc(tp.subject)} › ${esc(tp.domain)} · ages ${tp.ageRangeStart}+</span><br>${SN[c]}<br><span class="small">${esc(tp.description).slice(0,140)}…</span>`;
@@ -227,16 +226,15 @@ function finaleReveal(C){if(document.querySelector('.finale'))return;const o=doc
  <p class="small">No free medals — when Jane finishes forging, a one-shot Finale quest may appear.</p>
  <button type="button" id="fnok">Awesome! 🗡️</button></div>`;
  document.body.appendChild(o);confetti(90);const close=()=>{o.classList.add('out');setTimeout(()=>o.remove(),320);};$('fnok').onclick=close;o.onclick=e=>{if(e.target===o)close();};setTimeout(()=>$('fnok')?.focus(),60);}
-// Fog finds / scout flare UI removed from the player experience (data may still exist server-side for compat).
 const _chipsPick=chips;chips=function(s){_chipsPick(s);pickLine(s);}
 
 // ---------- campaign trail HUD + Quest of Quests overlay (slices 2–3 / #56 #57) ----------
 function cTrailHTML(C,{big=false}={}){const nodes=C.nodes.map((n,i)=>{const done=!!n,cur=!done&&i===C.filled;
   const label=done?`${n.emoji||'🏅'} ${n.name}`:cur?'Next boss':'Boss ahead';
   const face=done?esc(n.emoji||'🏅'):cur?'⚔️':'🌫️';
-  return`<span class="cn ${done?'done':cur?'cur':'fog'}" title="${esc(label)}" aria-label="${esc(label)}">${face}</span>`;}).join('<i></i>');
+  return`<span class="cn ${done?'done':cur?'cur':'locked'}" title="${esc(label)}" aria-label="${esc(label)}">${face}</span>`;}).join('<i></i>');
  const lit=C.finalBoss.lit||0,unlocked=!!C.finalBoss.unlocked;
- const fbCls=unlocked?'unlocked':lit>=1?'lit':lit>0?'partial':'fog';
+ const fbCls=unlocked?'unlocked':lit>=1?'lit':lit>0?'partial':'locked';
  const fb=unlocked?'👑':lit>=1?'🐲':lit>0?'🐉':'🌫️';
  return`<div class="ctrail${big?' big':''}" role="list" aria-label="Trail ${C.filled} of ${C.trailLen}">${nodes}<i class="cend"></i><span class="cn boss ${fbCls}" role="listitem" title="Final Boss" aria-label="Final Boss ${Math.round(lit*100)} percent lit">${fb}</span></div>`;}
 function campaignHUD(s){if(s?.finaleReveal)finaleReveal(s.campaign);const el=$('campaign');if(!el)return;const C=s?.campaign;if(!C){el.hidden=true;return;}
@@ -518,10 +516,9 @@ async function loadMarket(){let d;try{d=await api('/api/market');}catch{d=null;}
 function mkSetWallet(r){if(r.wallet&&r.items)MK={...MK,wallet:r.wallet,items:r.items,prove:r.prove?.due?r.prove:MK?.prove,path:r.path?.offers?r.path:MK?.path};if(r.state){st=r.state;chips(st);}}
 function paintMarket(){const d=MK;if(!d)return;const W=d.wallet;
  $('mbal').innerHTML=`<div class="mkbal">⭐ ${W.balance.toLocaleString()} <span>to spend</span></div><div class="small">earned ${W.earned.toLocaleString()} · spent ${W.spent.toLocaleString()} · your medals and skills never cost points</div>${mkShelf(W,d)}`;
- // Scout flare / fog peeks are retired from the Market UI (server may still know them for old wallets).
- const groups={};for(const it of d.items){if(it.kind==='flare')continue;(groups[it.slot?'skin-'+it.slot:it.kind==='theme'?'path':it.kind]??=[]).push(it);}
+ const groups={};for(const it of d.items){(groups[it.slot?'skin-'+it.slot:it.kind==='theme'?'path':it.kind]??=[]).push(it);}
  $('mlist').innerHTML=Object.entries(groups).map(([k,items])=>`<div class="card mksec"><h3>${esc(MK_GROUP[k]||k)}</h3><div class="mkgrid">${items.map(mkCard).join('')}</div></div>`).join('');
- $('mlist').querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const it=d.items.find(i=>i.id===b.dataset.buy);if(!it||it.kind==='flare')return;if(it.kind==='prove')return mkProve(it);if(it.kind==='path'||it.kind==='theme')return mkPick(it);mkConfirm(it,it.kind==='chest'?{after:r=>r.prize&&chestReveal(r.prize)}:{});});
+ $('mlist').querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const it=d.items.find(i=>i.id===b.dataset.buy);if(!it)return;if(it.kind==='prove')return mkProve(it);if(it.kind==='path'||it.kind==='theme')return mkPick(it);mkConfirm(it,it.kind==='chest'?{after:r=>r.prize&&chestReveal(r.prize)}:{});});
  $('mlist').querySelectorAll('[data-eq]').forEach(b=>b.onclick=()=>mkEquip(b.dataset.slot,b.dataset.eq==='off'?null:b.dataset.eq));}
 function mkCard(it){const bal=MK.wallet.balance,PV=MK.prove;
  if(it.kind==='prove'&&PV&&(!PV.due.length||!PV.left))return`<div class="mkcard" id="mkprove"><div class="mkemo" aria-hidden="true">${esc(it.emoji)}</div><b>${esc(it.title)}</b><div class="small">${esc(it.note||'')}</div><div class="mkprice">⭐ ${it.price}</div><button type="button" disabled>${PV.left?'No reviews due right now 🌱':'Come back tomorrow 🌙'}</button></div>`;
@@ -532,7 +529,7 @@ function mkCard(it){const bal=MK.wallet.balance,PV=MK.prove;
   :`<button type="button" data-buy="${esc(it.id)}"${it.affordable?'':' disabled'}>${it.affordable?`Buy · ⭐ ${it.price}`:`Need ${it.price-bal} more ⭐`}</button>`;
  return`<div class="mkcard${it.owned?' own':''}${it.equipped?' on':''}"><div class="mkemo" aria-hidden="true">${esc(it.emoji)}</div><b>${esc(it.title)}</b><div class="small">${esc(it.note||'')}</div><div class="mkprice">⭐ ${it.price}</div>${btn}</div>`;}
 function mkClose(){const o=document.querySelector('.mkconfirm');if(!o)return;o.remove();(_mkFocus&&document.contains(_mkFocus)?_mkFocus:$('mbal'))?.focus?.();_mkFocus=null;}
-// buy → confirm → owned. opt.meta goes to the server (e.g. a flare's region); opt.after(r) runs after a good buy.
+// buy → confirm → owned. opt.meta goes to the server; opt.after(r) runs after a good buy.
 function mkConfirm(it,opt={}){if(!it||!MK)return;mkClose();_mkFocus=document.activeElement;const pid=mkPid(),left=MK.wallet.balance-it.price;
  const o=document.createElement('div');o.className='mkconfirm';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label','Buy '+it.title);
  o.innerHTML=`<div class="mkbox"><div class="mkemo" aria-hidden="true">${esc(it.emoji)}</div><h3>Buy ${esc(it.title)}?</h3>${opt.extra||''}<p id="mkmsg">It costs <b>⭐ ${it.price}</b>. You'll have <b>⭐ ${left}</b> left.</p>
@@ -548,8 +545,6 @@ function mkConfirm(it,opt={}){if(!it||!MK)return;mkClose();_mkFocus=document.act
   mkClose();paintMarket();if(!r.already){if(!(window.FX&&FX.good?.($('mbal'),true)))confetti(30);banner(`🛒 ${esc(it.title)} is yours!`);}opt.after?.(r);};
  setTimeout(()=>yes.focus(),50);}
 async function mkEquip(slot,item){let r;try{r=await api('/api/market/equip',{slot,item});}catch{return;}if(r.error){say(r.error);return;}mkSetWallet(r);paintMarket();}
-// Scout flare retired from the player Market (no-op stub kept so old callers do nothing harmful).
-function mkFlare(){say('Scout flares are gone — the whole map is clear now! ✨');}
 // prove-it: pick a due review (most overdue first); a gate's own topic is not offered while its gate item is on screen
 function openProve(){document.querySelector('.tab[data-v=market]').click();setTimeout(()=>$('mkprove')?.scrollIntoView({behavior:'smooth',block:'center'}),600);}
 function mkProve(it){const gt=st?.item?.gate?st.item.topicId:null,due=(MK?.prove?.due||[]).filter(d=>d.topicId!==gt);

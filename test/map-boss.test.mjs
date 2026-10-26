@@ -1,4 +1,4 @@
-// Map must render for every taxonomy subject (a missing island blanked the whole map); fog overlay is retired from the player Map;
+// Map must render for every taxonomy subject (a missing island blanked the whole map); fog is fully purged;
 // boss hearts count THIS fight (today's first-try boss hits on the topic), not the topic's lifetime streak.
 import {test} from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';
 import {loadEngine,ROOT} from './helpers.mjs';
@@ -10,11 +10,9 @@ test('every subject in the taxonomy has a Map island (Geography blanked the map)
   for(const s of new Set(g.topics.map(t=>t.subject)))assert.ok(ISL[s],`no island for subject "${s}"`);
   assert.match(js,/if\(!layout\)\{ensureIslands\(\);layout=doLayout\(\)/);assert.match(js,/function ensureIslands\(\)/);
   assert.match(js,/try\{drawMap\(\);\}catch/,'a draw error must not leave the skeleton forever');});
-test('Map draws no fog overlay; stones and ship hero still render',()=>{
+test('Map draws stones and ship hero with no fog leftovers',()=>{
   const d=js.slice(js.indexOf('function drawMap'),js.indexOf('function tip('));
-  assert.doesNotMatch(d,/class="fog"/,'fog overlay must be gone from the player Map');
-  assert.doesNotMatch(d,/fogHoles|fog-island|fog-wisp/);
-  assert.doesNotMatch(d,/Light it up|flareBtn|flare-burst/);
+  assert.doesNotMatch(d,/class="fog"|fogHoles|fog-island|fog-wisp|fog-layer|Light it up|flareBtn|flare-burst|scout-flare/);
   assert.match(d,/trails\[sub\]\|\|\[\]/,'missing island trails must not crash drawMap');
   assert.match(d,/ship-hero/,'worn ship skin needs a big Your ship marker');
   assert.match(d,/class="nodes"/);});

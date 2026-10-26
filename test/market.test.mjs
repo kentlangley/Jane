@@ -1,11 +1,11 @@
 // Points Market (plans/archive/points-market.md, #74; idea credit: Christopher). Points buy fun, choice and peeks:
-// never mastery, medals or permanent fog clear. balance = earned − spent; purchases are server-side and idempotent.
+// never mastery or medals. balance = earned − spent; purchases are server-side and idempotent.
 import {test,before,after} from 'node:test';import assert from 'node:assert/strict';import {spawn,execFileSync} from 'node:child_process';
 import fs from 'node:fs';import path from 'node:path';import net from 'node:net';import {ROOT,tmpDir,loadEngine,validate,example} from './helpers.mjs';
 const {E,g}=await loadEngine();const DAY=864e5,NOW=Date.parse('2026-10-23T19:00:00Z');
 const rich=(pts=1000)=>{const S=E.blank();S.points=pts;S.firstDone=true;return S;};
 const pid=(n=0)=>'test-pid-'+n;
-const m0=S=>JSON.stringify([S.medals,S.questMedals||[],S.ts,S.fog?.finds||[]]);
+const m0=S=>JSON.stringify([S.medals,S.questMedals||[],S.ts]);
 
 // ---------- slice 1: wallet + ledger ----------
 test('balance = earned − spent; S.points (earned) never decreases',()=>{
@@ -24,9 +24,9 @@ test('bad pid, unknown item and client-sent prices are ignored or refused',()=>{
   const S=rich(100);assert.match(E.buy(S,g,{pid:'x',item:'test-sticker'},NOW).error,/purchase id/);
   assert.match(E.buy(S,g,{pid:pid(5),item:'medal-gold'},NOW).error,/unknown/);
   const x=E.buy(S,g,{pid:pid(6),item:'test-sticker',price:0},NOW);assert.equal(x.row.price,25);});
-test('medals, mastery and fog finds are unchanged after any buy',()=>{
+test('medals and mastery are unchanged after any buy',()=>{
   const S=rich(5000);const t=g.topics[0];S.ts[t.id]={st:'mastered',how:'direct',conf:.9,box:1,due:NOW+DAY,c:3,ft:3};S.medals=[{id:t.id,tier:'bronze',at:1}];
-  const before=m0(S);for(const [i,d] of E.MARKET.entries()){const meta=d.kind==='flare'?{region:'Mathematics'}:{};try{E.buy(S,g,{pid:pid(100+i),item:d.id,meta},NOW);}catch(e){assert.fail(e.message);}}
+  const before=m0(S);for(const [i,d] of E.MARKET.entries()){if(d.chest)continue;const meta={};try{E.buy(S,g,{pid:pid(100+i),item:d.id,meta},NOW);}catch(e){assert.fail(e.message);}}
   assert.equal(m0(S),before);assert.equal(S.points,5000);});
 test('day snapshots: one per PT day, capped; export has a market block with earned7d/spent7d',()=>{
   const S=rich(0);for(let i=0;i<70;i++){S.points=i*10;E.snapDay(S,new Date(Date.UTC(2026,0,1)+i*DAY).toISOString().slice(0,10));}
@@ -49,24 +49,12 @@ test('skins: 4 slots priced 300–1,500, bought once, equip owned-only and free,
   assert.ok(E.equip(S,g,'ship',null).ok);w=E.walletState(S,g,NOW);assert.equal(w.equipped.ship,undefined);assert.ok(w.owned['ship-pirate'],'still owned after taking it off');
   assert.ok(E.buy(S,g,{pid:pid(21),item:'ship-pirate'},NOW).already,'owned skins are not sold twice');});
 
-// ---------- slice 3: scout flare (engine still supports buy for compat; Market listing hides it) ----------
-test('marketItems omits scout flare from the player catalog',()=>{
-  const S=rich(2000);assert.ok(!E.marketItems(S,g,NOW).some(i=>i.kind==='flare'||i.id==='scout-flare'));
+// ---------- scout flare / fog finds: fully deleted ----------
+test('scout flare and fog finds are gone from MARKET and engine exports',()=>{
+  assert.ok(!E.MARKET.some(i=>i.kind==='flare'||i.id==='scout-flare'||i.when));
+  assert.equal(typeof E.fogState,'undefined');assert.equal(typeof E.claimFind,'undefined');
+  assert.match(E.buy(rich(1000),g,{pid:pid(30),item:'scout-flare',meta:{region:'Science'}},NOW).error,/unknown/);
 });
-test('scout flare: active < 24 h, gone after; mask, clear and available identical; claimFind still refuses uncleared finds',()=>{
-  const S=rich(1000);const before=E.fogState(S,g,NOW);
-  assert.match(E.buy(S,g,{pid:pid(30),item:'scout-flare',meta:{region:'Atlantis'}},NOW).error,/Pick an island/);
-  const x=E.buy(S,g,{pid:pid(31),item:'scout-flare',meta:{region:'Science'}},NOW);assert.ok(x.ok,x.error);assert.equal(x.row.price,200);assert.equal(x.flare.region,'Science');
-  assert.match(E.buy(S,g,{pid:pid(32),item:'scout-flare',meta:{region:'Science'}},NOW+1).error,/still burning/);
-  const lit=E.fogState(S,g,NOW+23*3600e3);assert.equal(lit.flares.length,1);assert.equal(lit.flares[0].region,'Science');assert.equal(lit.flares[0].secrets,1,'one Science find still hidden');
-  for(const k of ['mask','clear','total','pct','bySubject','available','finds'])assert.deepEqual(lit[k],before[k],k);
-  assert.match(E.claimFind(S,g,'secret-sci-30',NOW).error,/not yet uncovered/);
-  const after=E.fogState(S,g,NOW+24*3600e3+1);assert.deepEqual(after.flares,[],'fog returns after 24 h');assert.equal(after.mask,before.mask);
-  assert.ok(E.buy(S,g,{pid:pid(33),item:'scout-flare',meta:{region:'Science'}},NOW+25*3600e3).ok,'a new flare after the old one burns out');
-  assert.equal(S.wallet.active.flares.length,1,'expired flares are dropped');});
-test('scout flare: a fully cleared island cannot be flared',()=>{
-  const S=rich(1000);for(const t of g.topics.filter(t=>t.subject==='Geography'))S.ts[t.id]={st:'mastered',how:'direct',conf:.9,box:1,due:NOW+DAY};
-  assert.match(E.buy(S,g,{pid:pid(34),item:'scout-flare',meta:{region:'Geography'}},NOW).error,/no fog left/);});
 
 // ---------- slice 4: prove-it ticket ----------
 const whyT=g.topics.find(t=>t.ck?.y),genT=g.topics.find(t=>t.subject==='Mathematics'&&t.domain==='Multiplication & Division'&&!t.ck);
@@ -122,37 +110,31 @@ test('publish: "honors" is validated (topic must be a stage, theme from the tabl
   const bad=example();bad.honors={path:'mt_nope',theme:'unicorns',x:1};const r=validate(bad);assert.notEqual(r.status,0);assert.match(r.stdout+r.stderr,/honors\.path/);assert.match(r.stdout+r.stderr,/honors\.theme/);
   assert.equal(execFileSync(process.execPath,['publish-lessons.mjs','packs/examples/example-quest.json','--dry-run','--offline'],{cwd:ROOT,encoding:'utf8'}).length>0,true);});
 
-// ---------- slice 6: hidden chests + cheap extras ----------
-const clearN=(S,n,sub)=>{for(const t of g.topics.filter(t=>!sub||t.subject===sub).slice(0,n))S.ts[t.id]={st:'mastered',how:'direct',conf:.9,box:1,due:NOW+9*DAY,c:3,ft:3};};
-test('hidden chest rows: absent until the fog threshold, present after; same pid → same prize; chest-only skins are never sold',()=>{
-  const S=rich(2000);assert.ok(!E.marketItems(S,g,NOW).some(i=>i.id==='chest-world-20'));assert.match(E.buy(S,g,{pid:pid(70),item:'chest-world-20'},NOW).error,/hidden in the fog/);
-  assert.ok(E.hiddenCount(S,g)>=4);clearN(S,20);assert.ok(E.marketItems(S,g,NOW).some(i=>i.id==='chest-world-20'),'appears after 20 clear');
-  const A=JSON.parse(JSON.stringify(S)),B=JSON.parse(JSON.stringify(S));
-  const a=E.buy(A,g,{pid:'same-pid-123',item:'chest-world-20'},NOW),b=E.buy(B,g,{pid:'same-pid-123',item:'chest-world-20'},NOW+999);assert.deepEqual(a.prize,b.prize,'deterministic by pid');
-  const again=E.buy(A,g,{pid:'same-pid-123',item:'chest-world-20'},NOW+1);assert.ok(again.already);assert.deepEqual(again.row.meta.prize,{type:a.prize.type,id:a.prize.id});assert.equal(A.wallet.spent,300);
+// ---------- cheap extras (fog finds / fog-gated chests deleted) ----------
+test('fog-gated mystery chests are gone; chest-only skins stay unlisted until owned',()=>{
+  const S=rich(2000);assert.ok(!E.MARKET.some(i=>i.id==='chest-world-20'||i.when));
+  assert.match(E.buy(S,g,{pid:pid(70),item:'chest-world-20'},NOW).error,/unknown/);
+  assert.equal(E.hiddenCount(S,g),0);
   assert.match(E.buy(S,g,{pid:pid(71),item:'ship-ghost'},NOW).error,/mystery chest/);assert.ok(!E.marketItems(S,g,NOW).some(i=>i.id==='ship-ghost'));
-  const C=rich(2000);C.wallet={spent:0,ledger:[],owned:{},equipped:{},active:{},choices:{},days:{}};clearN(C,20);
-  let skinPid;for(let i=0;i<200&&!skinPid;i++){const T=JSON.parse(JSON.stringify(C));if(E.buy(T,g,{pid:'roll-'+i+'-xx',item:'chest-world-20'},NOW).prize.type==='skin')skinPid='roll-'+i+'-xx';}
-  const x=E.buy(C,g,{pid:skinPid,item:'chest-world-20'},NOW);assert.ok(C.wallet.owned[x.prize.id]);assert.ok(E.equip(C,g,x.prize.slot,x.prize.id).ok,'a chest skin equips like any skin');
-  assert.ok(E.marketItems(C,g,NOW).some(i=>i.id===x.prize.id&&i.equipped));});
-test('hint token: the Hint Token find and Market tokens share one counter; a whisper uses one per question and never changes grading',()=>{
-  const S=rich(1000);clearN(S,10);assert.ok(E.claimFind(S,g,'power-hint-10',NOW).ok);assert.equal(E.walletState(S,g,NOW).hintTokens,1);
-  assert.ok(E.buy(S,g,{pid:pid(72),item:'hint-token'},NOW).ok);assert.equal(S.fog.buffs.hintToken,2);
+  S.wallet={spent:0,ledger:[],owned:{'ship-ghost':NOW},equipped:{},active:{},choices:{},days:{}};
+  assert.ok(E.marketItems(S,g,NOW).some(i=>i.id==='ship-ghost'&&i.owned));
+  assert.ok(E.equip(S,g,'ship','ship-ghost').ok);});
+test('hint token: Market tokens live on wallet.active; a whisper uses one per question and never changes grading',()=>{
+  const S=rich(1000);assert.ok(E.buy(S,g,{pid:pid(72),item:'hint-token'},NOW).ok);assert.equal(S.wallet.active.hintToken,1);
+  assert.ok(E.buy(S,g,{pid:pid('72b'),item:'hint-token'},NOW).ok);assert.equal(S.wallet.active.hintToken,2);
   const t=g.topics.find(t=>t.ck?.w);S.current={id:'q1',topicId:t.id,type:'mc',kind:'quiz',q:t.ck.q,choices:[t.ck.a,...t.ck.w],answer:t.ck.a,misconception:t.ck.w[0],mode:'review',tries:0,stage:'main',issued:NOW};
   const before=JSON.stringify(S.current),pts=S.points,streak=S.streak;const w=E.whisper(S,g,NOW);assert.ok(w.ok);assert.match(w.whisper,new RegExp(t.ck.w[0].replace(/[.*+?^${}()|[\]\\]/g,'\\$&')));
-  assert.equal(S.fog.buffs.hintToken,1);const w2=E.whisper(S,g,NOW);assert.ok(w2.already);assert.equal(S.fog.buffs.hintToken,1,'once per question');
+  assert.equal(S.wallet.active.hintToken,1);const w2=E.whisper(S,g,NOW);assert.ok(w2.already);assert.equal(S.wallet.active.hintToken,1,'once per question');
   assert.equal(S.current.tries,0);assert.equal(S.points,pts);assert.equal(S.streak,streak);assert.deepEqual({...S.current,whisper:undefined},{...JSON.parse(before),whisper:undefined});
   assert.equal(E.submit(S,g,t.ck.a,NOW+1).r.correct,true,'graded exactly as without the whisper');
-  S.fog.buffs.hintToken=0;S.current={...S.current,id:'q2',whisper:undefined,tries:0};assert.match(E.whisper(S,g,NOW).error,/No whispers/);});
+  S.wallet.active.hintToken=0;S.current={...S.current,id:'q2',whisper:undefined,tries:0};assert.match(E.whisper(S,g,NOW).error,/No whispers/);});
 test('whisper without trap data does not charge a token',()=>{
-  const S=rich(1000);S.fog={finds:[],buffs:{hintToken:2}};
-  S.current={id:'q3',topicId:g.topics.find(t=>!t.ck&&!E.kindFor?.(t)).id||g.topics[0].id,type:'mc',kind:'quiz',q:'Which is a noun?',choices:['run','cat','quickly'],answer:'cat',mode:'learn',tries:0,stage:'main',issued:NOW};
-  // strip any misconception / use a topic with no generator kind
+  const S=rich(1000);S.wallet={spent:0,ledger:[],owned:{},equipped:{},active:{hintToken:2},choices:{},days:{}};
+  S.current={id:'q3',topicId:g.topics[0].id,type:'mc',kind:'quiz',q:'Which is a noun?',choices:['run','cat','quickly'],answer:'cat',mode:'learn',tries:0,stage:'main',issued:NOW};
   const none=g.topics.find(t=>!t.ck);S.current.topicId=none.id;delete S.current.misconception;
-  // monkey: if kindFor returns a TRAP key this still charges — pick English non-math
   const eng=g.topics.find(t=>t.subject==='English'&&!t.ck);if(eng)S.current.topicId=eng.id;
-  const n0=S.fog.buffs.hintToken;const w=E.whisper(S,g,NOW);
-  if(w.error&&/trap on file|keep your whisper/i.test(w.error)){assert.equal(S.fog.buffs.hintToken,n0);assert.ok(!S.current.whisper);}
+  const n0=S.wallet.active.hintToken;const w=E.whisper(S,g,NOW);
+  if(w.error&&/trap on file|keep your whisper/i.test(w.error)){assert.equal(S.wallet.active.hintToken,n0);assert.ok(!S.current.whisper);}
   else{assert.ok(w.ok);assert.ok(S.current.whisper);}});
 test('theme looks include app bg colors; sticker buy lands on the shelf list',()=>{
   const night=E.MARKET.find(d=>d.id==='theme-night');assert.ok(night.look.bg?.length>=2);
@@ -207,15 +189,13 @@ test('server: buy a ship skin, equip it, /api/state carries the look; equip with
   const a=await call('/api/market/buy',{pid:'srv-pid-3',item:'ship-candy'});assert.equal(a.status,200);
   const e=await call('/api/market/equip',{slot:'ship',item:'ship-candy'});assert.equal(e.status,200);assert.equal(e.j.state.wallet.looks.ship.id,'ship-candy');
   const s=(await call('/api/state')).j;assert.equal(s.wallet.equipped.ship,'ship-candy');assert.equal(s.wallet.balance,s.wallet.earned-s.wallet.spent);assert.equal(s.points,1000);
-  const f=await call('/api/market/buy',{pid:'srv-pid-4',item:'scout-flare',meta:{region:'Mathematics'}});assert.equal(f.status,200);assert.equal(f.j.state.fog.flares[0].region,'Mathematics');
-  const m1=(await call('/api/map')).j;assert.equal(m1.fog.flares.length,1);
-  fs.writeFileSync(path.join(DATA,'debug%3AclockOffsetDays.json'),'2');const m2=(await call('/api/map')).j;fs.rmSync(path.join(DATA,'debug%3AclockOffsetDays.json'));
-  assert.deepEqual(m2.fog.flares,[],'two days later the fog is back');assert.equal(m2.fog.mask,m1.fog.mask);
-  const h=await (await fetch(B+'/parent')).text();assert.match(h,/"wallet":\{"balance":475,"earned":1000,"spent":525/,"parent data carries both earned and spendable");});
+  assert.equal((await call('/api/market/buy',{pid:'srv-pid-4',item:'scout-flare',meta:{region:'Mathematics'}})).status,400);
+  const m1=(await call('/api/map')).j;assert.equal(m1.fog,undefined);assert.ok(m1.codes);assert.ok(m1.progress);
+  const h=await (await fetch(B+'/parent')).text();assert.match(h,/"wallet":\{"balance":675,"earned":1000,"spent":325/,"parent data carries both earned and spendable");});
 test('server: POST /api/market/prove serves the harder question; answering it right clears the review',async()=>{
   const m=(await call('/api/market')).j;assert.ok(m.prove.due.some(d=>d.topicId===whyT.id));
   const a=await call('/api/market/prove',{pid:'srv-pid-5',topicId:whyT.id});assert.equal(a.status,200,JSON.stringify(a.j));assert.equal(a.j.state.item.format,'prove');
-  const r=(await call('/api/answer',{answer:whyT.ck.y.a})).j;assert.equal(r.proveIt.passed,true);assert.equal(r.state.wallet.spent,675);
+  const r=(await call('/api/answer',{answer:whyT.ck.y.a})).j;assert.equal(r.proveIt.passed,true);assert.equal(r.state.wallet.spent,475);
   assert.ok(r.state.points>=1000+20);assert.equal(r.state.wallet.balance,r.state.wallet.earned-r.state.wallet.spent);
   assert.equal((await call('/api/market/prove',{pid:'srv-pid-6',topicId:whyT.id})).status,400,'no longer due');});
 test('server: buy a pick; /api/state shows it; export carries market.choices and the MARKET CHOICE step',async()=>{

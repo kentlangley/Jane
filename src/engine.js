@@ -29,7 +29,10 @@ export function migrate(old,g){if(old&&old.v===2){if(!old.medals)backfillMedals(
   for(const [id0,t] of Object.entries(old.topics||{})){const id=g.aliases?.[id0]||id0;if(g.byId[id]&&!S.ts[id])S.ts[id]=t.mastered?{st:'mastered',how:'direct',conf:.9,box:0,due:Date.now()+DAY,c:t.correct,w:t.incorrect}:{st:'learning',how:'direct',c:t.correct,w:t.incorrect,lvl:old.level||3};}
   backfillMedals(S,g);return S;}
 // additive schema upgrades for v2 records (idempotent): finished quests from before completion snapshots are marked legacy
-function upgrade(S,g){for(const q of Object.values(S.quests||{}))if(q?.done&&!q.snap&&!q.legacy)q.legacy=true;if(g)foldAliases(S,g.aliases);dedupeMedals(S);return S;}
+function upgrade(S,g){for(const q of Object.values(S.quests||{}))if(q?.done&&!q.snap&&!q.legacy)q.legacy=true;if(g)foldAliases(S,g.aliases);dedupeMedals(S);
+  // Fog purge: move Jane-whisper tokens off S.fog, then drop fog + scout-flare blobs so old KV progress never keeps them.
+  const ht=S.fog?.buffs?.hintToken|0;if(ht>0){S.wallet??={};S.wallet.active??={};S.wallet.active.hintToken=(S.wallet.active.hintToken||0)+ht;}
+  if(S.fog)delete S.fog;if(S.wallet?.active?.flares)delete S.wallet.active.flares;return S;}
 // Topic ids removed upstream (data/topic-aliases.json, bundled as tax.aliases) are folded into their replacement
 // (idempotent). Topic state: the stronger record wins (mastered > learning; direct > inferred; then more correct
 // answers, then the newer one). Medals move to the new id (one per topic: dedupeMedals keeps the higher tier, earliest
@@ -56,7 +59,7 @@ function dedupeMedals(S){if(S.medals){const d=dedupeBy(S.medals,m=>m.id);if(d.le
 export function trophies(S,g){const M=[...dedupeBy(S.medals,m=>m.id).map(m=>medalInfo(m,g)).filter(Boolean),
   ...dedupeBy(S.questMedals,q=>q.date).map(q=>({id:'quest:'+q.date,tier:'quest',at:q.at,name:q.name,ic:q.emoji,subject:'Quest',domain:q.title,why:`finishing the quest "${q.title}"`}))].sort((a,b)=>b.at-a.at);
   const counts={};M.forEach(m=>counts[m.tier]=(counts[m.tier]||0)+1);return{medals:M,counts};}
-// ---------- campaign trail + fog map (slice 1) ----------
+// ---------- campaign trail (slice 1) ----------
 // Quest medals fill a fixed-length trail; legendary topic medals light the Final Boss. Pure: no unlock persistence here.
 export const TRAIL_LEN=12, LEGENDARY_NEED=4;
 export function campaignState(S,g){const trailLen=TRAIL_LEN,need=LEGENDARY_NEED;
@@ -85,50 +88,12 @@ export function syncFinale(S,g,now=Date.now()){const C=campaignState(S,g);
   S.campaign??={};S.campaign.finalBossRevealedAt=now;
   if((S.medals||[]).length!==medalsBefore||(S.questMedals||[]).length!==qmBefore)throw new Error('syncFinale must not invent medals');
   return{justUnlocked:true,revealedAt:now};}
-// Fog clear = direct mastery (map "lights on"); inferred mastery does not clear fog.
-// Finds (slice 5): table-driven chests/secrets/power-ups revealed when clear thresholds hit; claim once; never invent medals or skip mastery (D11).
-export const FOG_FINDS=[
-  {id:'chest-world-5',kind:'chest',emoji:'📦',title:'Explorer\'s Chest',when:{clear:5},reward:{type:'fun',note:'A brass compass sticker for your map!'}},
-  {id:'chest-math-25',kind:'chest',emoji:'💎',title:'Math Island Treasure',when:{subject:'Mathematics',pct:25},reward:{type:'fun',note:'Sparkly fraction gems (cosmetic).'}},
-  {id:'secret-sci-30',kind:'secret',emoji:'🔮',title:'Hidden Lab Path',when:{subject:'Science',pct:30},reward:{type:'path',note:'A ready Science stretch is glowing — explore it on the Map.'}},
-  {id:'power-hint-10',kind:'power',emoji:'💡',title:'Hint Token',when:{clear:10},reward:{type:'hintToken',note:'Adds one 💡 Jane whisper (trap tip on a question). Never skips teach→practice→graded→boss.'}},
-  {id:'chest-eng-20',kind:'chest',emoji:'📜',title:'Story Scroll',when:{subject:'English',pct:20},reward:{type:'skin',note:'A parchment story skin Jane can weave into tomorrow\'s hook.'}},
-  {id:'power-fact-15',kind:'power',emoji:'🃏',title:'Fun-Fact Card',when:{clear:15},reward:{type:'funFact',note:'A cool fact card for the next quest intro — garnish only.'}},
-];
-function fogClearCounts(S,g){const bySubject={};let clear=0,total=0,mask='';
-  for(const t of g.topics){total++;const ok=S.ts[t.id]?.st==='mastered'&&S.ts[t.id]?.how==='direct';if(ok)clear++;mask+=ok?'C':'F';
-    const b=bySubject[t.subject]??={clear:0,total:0};b.total++;if(ok)b.clear++;}
-  return{clear,total,pct:total?Math.round(1000*clear/total)/10:0,bySubject,mask};}
-function findEligible(def,counts){const w=def.when||{};
-  if(w.clear!=null&&counts.clear<w.clear)return false;
-  if(w.subject){const b=counts.bySubject[w.subject];if(!b||!b.total)return false;const pct=Math.round(1000*b.clear/b.total)/10;if(w.pct!=null&&pct<w.pct)return false;if(w.clear!=null&&b.clear<w.clear)return false;}
-  return true;}
-export function fogState(S,g,now=Date.now()){const counts=fogClearCounts(S,g);const claimed=S.fog?.finds||[];
-  const have=new Set(claimed.map(f=>f.id));
-  const available=FOG_FINDS.filter(d=>!have.has(d.id)&&findEligible(d,counts)).map(d=>({id:d.id,kind:d.kind,emoji:d.emoji,title:d.title,reward:d.reward}));
-  const finds=claimed.map(f=>{const d=FOG_FINDS.find(x=>x.id===f.id);return{id:f.id,kind:f.kind||d?.kind,emoji:f.emoji||d?.emoji,title:f.title||d?.title,claimedAt:f.claimedAt,reward:d?.reward};});
-  return{...counts,finds,available,flares:flaresOf(S,counts,have,now)};}
-// Scout flares (Points Market slice 3): a 24 h peek at one fogged island. Read-only here: mask, clear counts, finds and
-// claim eligibility never change; the Map only thins the fog over the flared island and shows names + "hidden here" markers.
-export const FLARE_HOURS=24;
-function flaresOf(S,counts,have,now){return(S.wallet?.active?.flares||[]).filter(f=>f.until>now&&counts.bySubject[f.region]).map(f=>({region:f.region,at:f.at,until:f.until,
-  secrets:FOG_FINDS.filter(d=>d.when?.subject===f.region&&!have.has(d.id)).length}));}
-// Idempotent claim. Never awards medals, mastery, quest medals, or bypasses teach→practice→graded→boss.
-export function claimFind(S,g,id,now=Date.now()){const def=FOG_FINDS.find(d=>d.id===id);if(!def)return{error:'unknown find'};
-  S.fog??={finds:[]};S.fog.finds??=[];
-  if(S.fog.finds.some(f=>f.id===id))return{ok:true,already:true,find:S.fog.finds.find(f=>f.id===id)};
-  const counts=fogClearCounts(S,g);if(!findEligible(def,counts))return{error:'not yet uncovered'};
-  const medalsBefore=(S.medals||[]).length,qmBefore=(S.questMedals||[]).length;
-  const find={id:def.id,kind:def.kind,emoji:def.emoji,title:def.title,claimedAt:now};
-  S.fog.finds.push(find);
-  if(def.reward?.type==='hintToken'){S.fog.buffs??={};S.fog.buffs.hintToken=(S.fog.buffs.hintToken||0)+1;}
-  if((S.medals||[]).length!==medalsBefore||(S.questMedals||[]).length!==qmBefore)throw new Error('claimFind must not invent medals');
-  return{ok:true,find,reward:def.reward};}
+// Fog Map / fog finds / scout flares: fully removed. Whisper tokens live on S.wallet.active.hintToken (migrated from S.fog.buffs in upgrade).
 // ---------- Points Market (plans/archive/points-market.md, #74; idea credit: Christopher) ----------
-// M0 points buy fun, choice and peeks: never mastery, medals, boss hearts, gate opening, quest-stage skips or permanent fog clear.
+// M0 points buy fun, choice and peeks: never mastery, medals, boss hearts, gate opening, or quest-stage skips.
 // M1 S.points is the lifetime EARNED total and is never decremented. M2 balance = S.points − S.wallet.spent, server-side only.
 // M3 purchases are idempotent by purchase id (pid), one-time items also by item id. M4 prices are knobs in MARKET; a ledger
-// row keeps the price paid, so retuning never rewrites history. Rows with `when` (like FOG_FINDS) show only after fog clears.
+// row keeps the price paid, so retuning never rewrites history.
 export const MARKET=[
   {id:'test-sticker',kind:'sticker',once:true,price:25,emoji:'🌟',title:'Gold star sticker',note:'Shows as a 🌟 sticker chip next to your stars at the top (not a new score).',
     apply:(S,g,row,now)=>{(S.wallet.stickers??=[]).push({id:row.item,emoji:'🌟',title:'Gold star sticker',at:now});}},
@@ -143,15 +108,9 @@ export const MARKET=[
   {id:'boss-robots',kind:'skin',slot:'boss',once:true,price:600,emoji:'🤖',title:'Robot Bosses',note:'Bosses turn into robots and UFOs. Same fight, same hearts.',look:{set:['🤖','👾','🛸','🦾'],frame:'robots'}},
   {id:'boss-spooky',kind:'skin',slot:'boss',once:true,price:700,emoji:'👻',title:'Spooky Bosses',note:'Ghosts, pumpkins and bats. Same fight, same hearts.',look:{set:['👻','🎃','🦇','💀'],frame:'spooky'}},
   {id:'boss-sea',kind:'skin',slot:'boss',once:true,price:1000,emoji:'🦈',title:'Sea Monster Bosses',note:'Sharks and krakens from the deep. Same fight, same hearts.',look:{set:['🦈','🐙','🦑','🐊'],frame:'sea'}},
-  {id:'theme-sunset',kind:'skin',slot:'theme',once:true,price:800,emoji:'🌅',title:'Sunset Sea',note:'Paints the whole app AND your My World map in sunset colors.',look:{sea:['#ffcc80','#ff7043','#6a1b9a'],grass:['#c5e1a5','#7cb342'],fog:'#4a148c',bg:['#ffcc80','#ff7043','#6a1b9a']}},
-  {id:'theme-night',kind:'skin',slot:'theme',once:true,price:1200,emoji:'🌙',title:'Starry Night',note:'Paints the whole app AND your My World map midnight blue under the stars.',look:{sea:['#5c6bc0','#1a237e','#0a0e27'],grass:['#81c784','#2e7d32'],fog:'#0d1117',bg:['#283593','#1a237e','#0d1338']}},
-  {id:'theme-lava',kind:'skin',slot:'theme',once:true,price:1500,emoji:'🌋',title:'Lava World',note:'Paints the whole app AND your My World map with lava seas and smoky fog.',look:{sea:['#ffcc80','#e64a19','#3e2723'],grass:['#aed581','#689f38'],fog:'#3e2723',bg:['#ff8a65','#e64a19','#3e2723']}},
-  // scout flare (slice 3): consumable, meta.region = a fogged subject island
-  {id:'scout-flare',kind:'flare',price:200,emoji:'🎆',title:'Scout Flare',note:'Light up one foggy island for 24 hours: see skill names and where secrets hide. Then the fog rolls back in.',
-    check:(S,g,meta,now)=>{const r=String(meta.region||''),b=fogClearCounts(S,g).bySubject[r];if(!b)return{error:'Pick an island to light up! 🏝️'};
-      if(b.clear>=b.total)return{error:'That island has no fog left: you cleared it! ✨'};
-      if((S.wallet?.active?.flares||[]).some(f=>f.region===r&&f.until>now))return{error:'Your flare is still burning over that island! 🎆'};return{meta:{region:r}};},
-    apply:(S,g,row,now)=>{const A=S.wallet.active;A.flares=[...(A.flares||[]).filter(f=>f.until>now),{region:row.meta.region,at:now,until:now+FLARE_HOURS*3600e3,pid:row.id}];return{flare:{region:row.meta.region,until:now+FLARE_HOURS*3600e3}};}},
+  {id:'theme-sunset',kind:'skin',slot:'theme',once:true,price:800,emoji:'🌅',title:'Sunset Sea',note:'Paints the whole app AND your My World map in sunset colors.',look:{sea:['#ffcc80','#ff7043','#6a1b9a'],grass:['#c5e1a5','#7cb342'],bg:['#ffcc80','#ff7043','#6a1b9a']}},
+  {id:'theme-night',kind:'skin',slot:'theme',once:true,price:1200,emoji:'🌙',title:'Starry Night',note:'Paints the whole app AND your My World map midnight blue under the stars.',look:{sea:['#5c6bc0','#1a237e','#0a0e27'],grass:['#81c784','#2e7d32'],bg:['#283593','#1a237e','#0d1338']}},
+  {id:'theme-lava',kind:'skin',slot:'theme',once:true,price:1500,emoji:'🌋',title:'Lava World',note:'Paints the whole app AND your My World map with lava seas and smoky shores.',look:{sea:['#ffcc80','#e64a19','#3e2723'],grass:['#aed581','#689f38'],bg:['#ff8a65','#e64a19','#3e2723']}},
   // prove-it ticket (slice 4): one harder question on a DUE review now. Right first try = review passed + PROVE_BONUS; a miss
   // = review stays due (≤ 1 day), no refund. Max PROVE_DAY_MAX per Pacific day so it never replaces the review gates.
   {id:'prove-it',kind:'prove',price:150,emoji:'🎟️',title:'Prove-It Ticket',note:'Answer one HARDER question on a review that is due. Right first try: review cleared + 20 bonus points!',
@@ -169,26 +128,20 @@ export const MARKET=[
     apply:(S,g,row,now)=>{const th=QUEST_THEMES.find(x=>x.id===row.meta.theme);S.wallet.choices.theme={id:th.id,title:th.title,emoji:th.emoji,at:now,pid:row.id};return{choice:S.wallet.choices.theme};}},
   // cheap extras (slice 6, 25–100). Stock caps keep them from piling up.
   {id:'hint-token',kind:'extra',price:40,emoji:'💡',title:'Jane Whisper',note:'Tap the 💡 Jane whisper button on a question: she names the sneaky trap (uses 1 token). Never answers for you.',
-    check:S=>(S.fog?.buffs?.hintToken||0)>=HINT_MAX?{error:`You already have ${HINT_MAX} whispers saved up! 🤫`}:{},apply:S=>{S.fog??={finds:[]};S.fog.buffs??={};S.fog.buffs.hintToken=(S.fog.buffs.hintToken||0)+1;}},
+    check:S=>(S.wallet?.active?.hintToken||0)>=HINT_MAX?{error:`You already have ${HINT_MAX} whispers saved up! 🤫`}:{},apply:S=>{walletOf(S);S.wallet.active.hintToken=(S.wallet.active.hintToken||0)+1;}},
   {id:'streak-shield',kind:'extra',price:60,emoji:'🛡️',title:'Streak Shield',note:'Your next miss keeps your 🔥 streak alive. (Stars still need 3 right in a row.)',
     check:S=>(S.wallet?.active?.shield||0)>=SHIELD_MAX?{error:`You already have ${SHIELD_MAX} shields! 🛡️`}:{},apply:S=>{S.wallet.active.shield=(S.wallet.active.shield||0)+1;}},
   {id:'streak-freeze',kind:'extra',price:80,emoji:'🧊',title:'Streak Freeze',note:'Going on a trip? A freeze saves your 📅 days-played streak for one missed day.',
     check:S=>(S.wallet?.active?.freeze||0)>=FREEZE_MAX?{error:`You already have ${FREEZE_MAX} freezes! 🧊`}:{},apply:S=>{S.wallet.active.freeze=(S.wallet.active.freeze||0)+1;}},
-  // hidden mystery chests (slice 6): appear only after nearby fog clears (`when`, like FOG_FINDS). One each; the prize
-  // is rolled from a fixed cosmetic table, seeded by the purchase id, so a retry gives the same prize.
-  {id:'chest-world-20',kind:'chest',once:true,price:300,emoji:'🧰',title:'Explorer\'s Mystery Chest',note:'Found under the fog! What\'s inside?',when:{clear:20}},
-  {id:'chest-math-15',kind:'chest',once:true,price:350,emoji:'💠',title:'Math Island Mystery Chest',note:'Washed up on Math Island when the fog lifted.',when:{subject:'Mathematics',pct:15}},
-  {id:'chest-sci-15',kind:'chest',once:true,price:350,emoji:'🧪',title:'Science Lab Mystery Chest',note:'Hidden in the Science fog. It\'s bubbling…',when:{subject:'Science',pct:15}},
-  {id:'chest-eng-15',kind:'chest',once:true,price:350,emoji:'📕',title:'Story Vault Mystery Chest',note:'Locked in the English fog. It\'s humming a tune…',when:{subject:'English',pct:15}},
-  // chest-only rare skins: never sold, only won from a chest; once owned they equip like any skin
+  // chest-only rare skins (mystery-chest prizes kept for kids who already own them; never sold):
   {id:'ship-ghost',kind:'skin',slot:'ship',once:true,chest:true,price:0,emoji:'👻',title:'Ghost Ship',note:'A rare see-through ship from a mystery chest.',look:{sail:'#e0f7fa',hull:'#90a4ae',flag:'#80deea'}},
   {id:'avatar-unicorn',kind:'skin',slot:'avatar',once:true,chest:true,price:0,emoji:'🦄',title:'Rainbow Unicorn',note:'A rare badge from a mystery chest.',look:{face:'🦄'}},
-  {id:'theme-candy',kind:'skin',slot:'theme',once:true,chest:true,price:0,emoji:'🍬',title:'Candy Sea',note:'A rare strawberry-milk Map from a mystery chest.',look:{sea:['#f8bbd0','#f06292','#880e4f'],grass:['#e6ee9c','#9ccc65'],fog:'#6a1b4d'}},
+  {id:'theme-candy',kind:'skin',slot:'theme',once:true,chest:true,price:0,emoji:'🍬',title:'Candy Sea',note:'A rare strawberry-milk Map from a mystery chest.',look:{sea:['#f8bbd0','#f06292','#880e4f'],grass:['#e6ee9c','#9ccc65']}},
 ];
 export const HINT_MAX=5,SHIELD_MAX=3,FREEZE_MAX=2;
 export const CHEST_PRIZES=[{type:'skin',id:'ship-ghost'},{type:'skin',id:'avatar-unicorn'},{type:'skin',id:'theme-candy'},
   {type:'sticker',id:'st-comet',emoji:'☄️',title:'Comet sticker'},{type:'sticker',id:'st-crown',emoji:'👑',title:'Tiny crown sticker'},{type:'sticker',id:'st-octo',emoji:'🐙',title:'Octopus sticker'},
-  {type:'title',id:'t-fogbuster',title:'Fog Buster'},{type:'title',id:'t-captain',title:'Captain of the Map'},{type:'title',id:'t-wizard',title:'Number Wizard'}];
+  {type:'title',id:'t-pathfinder',title:'Path Finder'},{type:'title',id:'t-captain',title:'Captain of the Map'},{type:'title',id:'t-wizard',title:'Number Wizard'}];
 export const QUEST_THEMES=[{id:'pirates',emoji:'🏴‍☠️',title:'Pirates'},{id:'space',emoji:'🚀',title:'Outer space'},{id:'dungeon',emoji:'🐉',title:'Dragon dungeon'},
   {id:'jungle',emoji:'🌴',title:'Jungle expedition'},{id:'ocean',emoji:'🌊',title:'Deep ocean'},{id:'dinosaurs',emoji:'🦕',title:'Dinosaur valley'},{id:'detective',emoji:'🕵️',title:'Detective mystery'},{id:'sports',emoji:'⚽',title:'Sports championship'}];
 export const SKIN_SLOTS=['ship','avatar','boss','theme'];
@@ -196,31 +149,28 @@ export const WALLET_DAYS=60;
 const PID=/^[A-Za-z0-9_-]{6,64}$/;
 function walletOf(S){const W=S.wallet??={};W.spent??=0;W.ledger??=[];W.owned??={};W.equipped??={};W.active??={};W.choices??={};W.days??={};return W;}
 export const balanceOf=S=>(S.points||0)-(S.wallet?.spent||0);
-// what a purchase may never touch (M0): points earned, medals, quest medals, mastery records, fog finds
-function m0Sig(S){return JSON.stringify([S.points||0,S.medals||[],S.questMedals||[],Object.entries(S.ts||{}).map(([id,r])=>[id,r.st,r.how,r.box,r.due,r.ft]).sort(),(S.fog?.finds||[]).length]);}
+// what a purchase may never touch (M0): points earned, medals, quest medals, mastery records
+function m0Sig(S){return JSON.stringify([S.points||0,S.medals||[],S.questMedals||[],Object.entries(S.ts||{}).map(([id,r])=>[id,r.st,r.how,r.box,r.due,r.ft]).sort()]);}
 const activeOf=(W,now)=>Object.fromEntries(Object.entries(W?.active||{}).map(([k,v])=>[k,Array.isArray(v)?v.filter(x=>!(x?.until<=now)):v]));
 export function walletState(S,g,now=Date.now()){const W=S.wallet||{};
   const looks={};for(const [slot,id] of Object.entries(W.equipped||{})){const d=MARKET.find(x=>x.id===id&&x.slot===slot);if(d)looks[slot]={id,emoji:d.emoji,...d.look};}
   return{balance:balanceOf(S),earned:S.points||0,spent:W.spent||0,owned:{...(W.owned||{})},equipped:{...(W.equipped||{})},looks,active:activeOf(W,now),choices:{...(W.choices||{})},
-    hintTokens:S.fog?.buffs?.hintToken||0,shield:W.active?.shield||0,freeze:W.active?.freeze||0,stickers:W.stickers||[],titles:W.titles||[]};}
+    hintTokens:W.active?.hintToken||0,shield:W.active?.shield||0,freeze:W.active?.freeze||0,stickers:W.stickers||[],titles:W.titles||[]};}
 // equip (free): only an owned skin, only in its own slot; item null/'' takes the slot off
 export function equip(S,g,slot,item){if(!SKIN_SLOTS.includes(slot))return{error:'unknown slot'};
   if(!item){if(S.wallet?.equipped?.[slot])delete S.wallet.equipped[slot];return{ok:true,slot,item:null};}
   const d=MARKET.find(x=>x.id===item);if(!d||d.slot!==slot)return{error:'That does not go there!'};if(!S.wallet?.owned?.[item])return{error:'Buy it first! 🛒'};
   const sig=m0Sig(S);walletOf(S).equipped[slot]=item;if(m0Sig(S)!==sig)throw new Error('equip must not change points, medals or mastery');return{ok:true,slot,item};}
-const visible=(def,counts)=>!def.when||findEligible(def,counts);
-const listed=(def,counts,W)=>def.chest?!!W.owned?.[def.id]:visible(def,counts);
-export const hiddenCount=(S,g)=>{const c=fogClearCounts(S,g);return MARKET.filter(d=>d.when&&!visible(d,c)).length;};
-export function marketItems(S,g,now=Date.now()){const counts=fogClearCounts(S,g),bal=balanceOf(S),W=S.wallet||{};
-  // Scout flare retired from the player Market (fog removed); keep def/buy for data compat + tests.
-  return MARKET.filter(d=>d.kind!=='flare'&&listed(d,counts,W)).map(d=>({id:d.id,kind:d.kind,slot:d.slot,price:d.price,emoji:d.emoji,title:d.title,note:d.note,once:!!d.once,
+const listed=(def,W)=>def.chest?!!W.owned?.[def.id]:!def.chest;
+export const hiddenCount=()=>0;
+export function marketItems(S,g,now=Date.now()){const bal=balanceOf(S),W=S.wallet||{};
+  return MARKET.filter(d=>listed(d,W)).map(d=>({id:d.id,kind:d.kind,slot:d.slot,price:d.price,emoji:d.emoji,title:d.title,note:d.note,once:!!d.once,
     owned:!!W.owned?.[d.id],equipped:!!(d.slot&&W.equipped?.[d.slot]===d.id),affordable:d.price<=bal}));}
 // buy(S,g,{pid,item,meta},now): one ledger row per pid. The client never sends a price.
 export function buy(S,g,{pid,item,meta}={},now=Date.now()){pid=String(pid||'');if(!PID.test(pid))return{error:'bad purchase id'};
   const prev=(S.wallet?.ledger||[]).find(r=>r.id===pid);if(prev)return{ok:true,already:true,row:prev};
   const def=MARKET.find(d=>d.id===item);if(!def)return{error:'unknown item'};
   if(def.chest)return{error:'That one only comes out of a mystery chest! 🧰'};
-  if(!visible(def,fogClearCounts(S,g)))return{error:'That one is still hidden in the fog! 🌫️'};
   if(def.once&&S.wallet?.owned?.[def.id])return{ok:true,already:true,owned:true};
   const m=def.check?def.check(S,g,meta&&typeof meta==='object'?meta:{},now):{};if(m.error)return{error:m.error};
   const price=def.price,bal=balanceOf(S);if(price>bal)return{error:`Not enough points yet: you need ${price-bal} more ⭐`,need:price-bal};
@@ -289,15 +239,16 @@ const TRAP={fracadd:'Careful: never add the bottom numbers! Make the bottoms the
   pizza:'The trap: count ALL the equal slices for the bottom number, not just the leftovers.',fracdec:'The trap: tenths, hundredths and thousandths look alike. Line up the places!',
   muldiv:'The trap: line up the places and remember what you carried.',addsub:'The trap: line up ones under ones, and borrow carefully.',place:'The trap: the same digit is worth more in a bigger place. Check each place value!'};
 export function whisper(S,g,now=Date.now()){const it=S.current;if(!it||it.type==='card'||it.type==='self'||it.stage==='bonus')return{error:'Jane whispers on questions only! 💡'};
-  if(it.whisper)return{ok:true,already:true,whisper:it.whisper,tokens:S.fog?.buffs?.hintToken||0};
-  if(!((S.fog?.buffs?.hintToken||0)>0))return{error:'No whispers left. Get one in the Market! 🛒'};
+  const toks=()=>S.wallet?.active?.hintToken||0;
+  if(it.whisper)return{ok:true,already:true,whisper:it.whisper,tokens:toks()};
+  if(!(toks()>0))return{error:'No whispers left. Get one in the Market! 🛒'};
   // Only charge when we have a real trap (tagged misconception or a known generator trap). A vague tip is free / refused.
   const t=g.byId[it.topicId],k=kindFor(t),mc=it.misconception&&String(it.misconception),trap=TRAP[k];
-  if(!mc&&!trap)return{error:'No sneaky trap on file for this one — keep your whisper! Try the hint instead. 💡',tokens:S.fog.buffs.hintToken};
+  if(!mc&&!trap)return{error:'No sneaky trap on file for this one — keep your whisper! Try the hint instead. 💡',tokens:toks()};
   const w=mc?`💡 Jane whisper: lots of explorers pick "${mc}" here. Ask yourself why that might be a trap!${it.feedback?.[mc]?' '+it.feedback[mc]:''}`:
     `💡 Jane whisper: ${trap}`;
-  const sig=m0Sig(S),tries=it.tries;S.fog.buffs.hintToken--;it.whisper=w;if(m0Sig(S)!==sig||it.tries!==tries)throw new Error('a whisper must not change grading');
-  return{ok:true,whisper:w,tokens:S.fog.buffs.hintToken,ev:[{event:'whisper',topicId:it.topicId,topic:t?.name,question:it.q}]};}
+  const sig=m0Sig(S),tries=it.tries;walletOf(S);S.wallet.active.hintToken--;it.whisper=w;if(m0Sig(S)!==sig||it.tries!==tries)throw new Error('a whisper must not change grading');
+  return{ok:true,whisper:w,tokens:toks(),ev:[{event:'whisper',topicId:it.topicId,topic:t?.name,question:it.q}]};}
 // ---------- days-played streak + travel freeze (slice 6) ----------
 // A Pacific day counts as played when the learner answers a question. A freeze (bought ahead) covers exactly one missed day.
 const dayN=d=>Math.round(Date.parse(d+'T12:00:00Z')/DAY);
@@ -315,7 +266,7 @@ export function marketExport(S,g,now=Date.now()){const W=S.wallet||{},ws=walletS
   const base=[...ds].reverse().find(d=>d<=cut)??ds[0];const ledger=W.ledger||[];
   return{balance:ws.balance,earned:ws.earned,spent:ws.spent,spent7d:ledger.filter(r=>r.at>=now-7*DAY).reduce((a,r)=>a+r.price,0),
     earned7d:base!=null?Math.max(0,ws.earned-W.days[base]):null,earnedSince:base??null,ledger:ledger.slice(-30),owned:ws.owned,equipped:ws.equipped,active:ws.active,choices:ws.choices,
-    openChoices:Object.fromEntries(Object.entries(ws.choices).filter(([,c])=>c&&!c.used)),hintTokens:ws.hintTokens,shield:ws.shield,freeze:ws.freeze,stickers:ws.stickers,titles:ws.titles,days:dayStreak(S,now),hiddenRows:hiddenCount(S,g),
+    openChoices:Object.fromEntries(Object.entries(ws.choices).filter(([,c])=>c&&!c.used)),hintTokens:ws.hintTokens,shield:ws.shield,freeze:ws.freeze,stickers:ws.stickers,titles:ws.titles,days:dayStreak(S,now),hiddenRows:0,
     prices:Object.fromEntries(MARKET.map(d=>[d.id,d.price]))};}
 // medals: one per directly-mastered topic (not inferred, not self-rated); boss wins are legendary
 export function tierOf(g,id,boss){return boss?'legendary':(g.byId[id]||g.hidden?.[id])?.tier||'bronze';}
@@ -844,8 +795,8 @@ export function nextTrailTopic(S,g,subject,afterId,now,exclude){const skip=new S
   const start=i>=0?i+1:0;for(let k=start;k<all.length;k++){if(open(all[k].id))return pack(all[k]);}
   for(let k=0;k<(i>=0?i:0);k++){if(open(all[k].id))return pack(all[k]);}
   return null;}
-// Live map payload for the client after a mini ends (codes + fog) so stones recolor without a tab switch.
-export function mapPayload(S,g,now){const sm=summary(S,g,now);return{codes:sm.codes,progress:{...sm,codes:undefined},fog:fogState(S,g,now)};}
+// Live map payload for the client after a mini ends so stones recolor without a tab switch.
+export function mapPayload(S,g,now){const sm=summary(S,g,now);return{codes:sm.codes,progress:{...sm,codes:undefined}};}
 export function miniAfter(S,g,pack,now,r){const M=S.mini;if(!M)return null;
   const st=stateOf(S,g,M.topicId,now),mastered=M.mode==='learn'&&S.ts[M.topicId]?.st==='mastered';
   if(M.left>0&&!mastered&&!(M.mode==='review'&&st==='mastered'&&M.n>=1&&!kindFor(g.byId[M.topicId]))){miniItem(S,g,pack,now);return null;}

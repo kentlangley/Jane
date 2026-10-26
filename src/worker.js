@@ -72,7 +72,7 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
    quest:pack?.quest?E.questInfo(S,g,pack):null,newQuest:(()=>{const L=LU();return L.newQuest&&pack?.date===L.current;})(),
    quests:(()=>{const L=LU();return{current:L.current,nextUp:L.queued.length>0,boost:pack?.boost||null};})(),
    terms:pack?.terms||null,mini:S.mini?{topicId:S.mini.topicId,subject:S.mini.ret}:null,
-   campaign:E.campaignState(S,g),fog:E.fogState(S,g,now),wallet:E.walletState(S,g,now),days:E.dayStreak(S,now),finaleReveal:finaleJust||undefined,profile:{id:LR.id,avatar:LR.avatar||PF.DEFAULT_AVATAR,count:REG.learners.length}};};
+   campaign:E.campaignState(S,g),wallet:E.walletState(S,g,now),days:E.dayStreak(S,now),finaleReveal:finaleJust||undefined,profile:{id:LR.id,avatar:LR.avatar||PF.DEFAULT_AVATAR,count:REG.learners.length}};};
  const questCheck=r=>{const m=E.completeQuest(S,g,pack,now);if(m){r.questDone=m;ev.push({event:'questDone',date:pack.date,quest:m.title});}};
  if(P==='/parent'){ // read-only: returns before any KV write
    const ds=[...Array(14)].map((_,i)=>ptDate(now-(13-i)*864e5));const logs={};await Promise.all(ds.map(async d=>logs[d]=(await KV.get(K('log:'+d),'json'))||[]));
@@ -84,7 +84,7 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
    return new Response(PR.parentShell(data),{headers:{'content-type':'text/html; charset=utf-8','cache-control':'no-store'}});}
  if(P==='/api/state'){if(!S.current)E.next(S,g,pack,now);out=pub();}
  else if(P==='/api/trophies'){out=E.trophies(S,g);}
- else if(P==='/api/map'){const sm=E.summary(S,g,now);out={codes:sm.codes,focus:S.focus,current:S.current?.topicId,progress:{...sm,codes:undefined},fog:E.fogState(S,g,now)};}
+ else if(P==='/api/map'){const sm=E.summary(S,g,now);out={codes:sm.codes,focus:S.focus,current:S.current?.topicId,progress:{...sm,codes:undefined}};}
  else if(P==='/api/answer'&&req.method==='POST'){if(!S.current)E.next(S,g,pack,now);const x=E.submit(S,g,body.answer??'',now);ev=x.ev;if(x.r.medal)x.r.medal=E.medalInfo(x.r.medal,g);
    if(x.r.done){const md=E.miniAfter(S,g,pack,now,x.r);if(md){x.r.miniDone=md;x.r.map=E.mapPayload(S,g,now);x.r.askChoice=false;}questCheck(x.r);if(!S.current&&!x.r.askChoice)E.next(S,g,pack,now);}out={...x.r,state:pub()};}
  else if(P==='/api/stuck'&&req.method==='POST'){if(!S.current)E.next(S,g,pack,now);const x=E.stuck(S,g,now);if(x.error)return J(x,400);ev=x.ev;out={...x.r,state:pub()};}
@@ -105,7 +105,6 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
  else if(P==='/api/next'&&req.method==='POST'){if(!S.current)E.next(S,g,pack,now);out=pub();}
  else if(P==='/api/skipbonus'&&req.method==='POST'){S.current=null;E.next(S,g,pack,now);out=pub();}
  else if(P==='/api/choice'&&req.method==='POST'){const r=E.choose(S,g,body.choice,pack,now);E.next(S,g,pack,now);out={...r,state:pub()};}
- else if(P==='/api/fog/claim'&&req.method==='POST'){const x=E.claimFind(S,g,String(body.id||''),now);if(x.error)return J(x,400);ev.push({event:'fogFind',id:x.find?.id,kind:x.find?.kind,already:!!x.already});out={...x,state:pub(),fog:E.fogState(S,g,now)};}
  // Points Market (plans/archive/points-market.md): balance = earned − spent, server-side; idempotent by purchase id
  else if(P==='/api/market'){out={wallet:E.walletState(S,g,now),items:E.marketItems(S,g,now),prove:E.proveOffers(S,g,now),path:{offers:E.pathOffers(S,g,now),themes:E.QUEST_THEMES},hidden:E.hiddenCount(S,g)};}
  else if((P==='/api/market/buy'||P==='/api/market/prove')&&req.method==='POST'){const x=P==='/api/market/prove'?E.buy(S,g,{pid:body.pid,item:'prove-it',meta:{topicId:body.topicId}},now):E.buy(S,g,{pid:body.pid,item:String(body.item||''),meta:body.meta},now);if(x.error)return J(x,400);

@@ -373,12 +373,6 @@ spells out what to do.
   rewritten). Say why in the quest's hook too.
 - Points never buy medals, mastery, skipped stages or open gates; nothing in the pack should hint otherwise.
 
-## Fog finds (secrets under the Map)
-
-Clearing fog (direct mastery only) can uncover a **chest**, **secret path**, or **power-up** from a fixed table — never live AI. Finds are claimed once (`/api/fog/claim`); `export-progress.mjs` lists them under `fog.finds` / `fog.available` so the nightly author can weave a hook if they want.
-
-**Honesty (D11):** power-ups are garnish only (hint token, fun-fact card, story skin). They must not invent medals, skip teach → guided practice → graded → boss, or bypass hearts/mastery rules.
-
 
 ## Example deep dive (Similes & Metaphors, for a topic that showed up in `weakSpots.goDeeper`)
 ```json
@@ -466,7 +460,7 @@ node publish-lessons.mjs packs/<id>/placement.json --learner <id> --date <today 
 
 ## Several learners (profiles)
 One household app can serve several kids (plans/archive/learner-profiles.md). Each learner has their own progress,
-quests, wallet, trail, fog, medals and logs. The **primary** learner keeps the original keys, so every command above
+quests, wallet, trail, medals and logs. The **primary** learner keeps the original keys, so every command above
 without `--learner` works on the primary learner exactly as before. For every other learner pass `--learner <id>`:
 ```bash
 node export-progress.mjs --learner <id>                     # → exports/<id>/progress-<today PT>.json

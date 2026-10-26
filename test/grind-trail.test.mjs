@@ -96,7 +96,7 @@ test('mapPayload exposes codes so the client can recolor stones live',()=>{
   const m=E.mapPayload(S,g,now);
   assert.ok(typeof m.codes==='string'&&m.codes.length===g.topics.length);
   assert.equal(m.codes[g.topics.findIndex(t=>t.id===ids[0])],'m');
-  assert.ok(m.progress&&m.fog);
+  assert.ok(m.progress);assert.equal(m.fog,undefined);
 });
 
 test('client refreshes map after mini and filters trailDone next',()=>{
