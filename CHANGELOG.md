@@ -6,7 +6,7 @@ Dates are Pacific Time.
 ## [Unreleased]
 
 ### Removed
-- **Map fog (player-facing)**: literal fog overlay, "Fog finds ready!", scout flare / "Light it up!", and fog-clear % copy are gone from My World / Map and the Market. Stones stay fully visible; mastery/progress stones unchanged. `fogState` may still ride on `/api/state` and `/api/map` for data compat; claimed fog finds stay inert. Scout flare is no longer listed in the Market.
+- **Fog completely purged**: Map fog overlay, fog finds, scout flare, fog-gated mystery chests, `/api/fog/claim`, and every `fog` field on `/api/state` / `/api/map` / export are gone for good. Progress migration moves Jane-whisper tokens from `S.fog.buffs.hintToken` onto `S.wallet.active.hintToken` and deletes `S.fog` plus any `wallet.active.flares` so old Landon/Christopher KV records stay valid without keeping fog blobs. Market catalog no longer sells scout flare or fog-threshold chests (chest-only skins remain for kids who already own them).
 
 ### Fixed
 - **Night / Starry Night (and other map themes) contrast**: content cards, coach "Start like this" steps, Explorer Check drag cards, prompts and body text keep dark ink on light surfaces under every worn theme — no more white-on-near-white or same-hue-on-same-hue from shell text color leaking into panels.

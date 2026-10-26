@@ -34,11 +34,6 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #009624}
 .g-r{animation:pulse 1.6s ease-in-out infinite}.g-v{animation:pulse 1s ease-in-out infinite}.g-x{opacity:.55}
 @keyframes pulse{50%{opacity:.45}}.tw{animation:tw 2.5s ease-in-out infinite}@keyframes tw{50%{opacity:.6}}
 .boat{animation:boat 3s ease-in-out infinite}@keyframes boat{50%{transform:translateY(-6px) rotate(3deg)}}
-.fog-layer .fog-wisp{animation:fogDrift 9s ease-in-out infinite alternate}
-.fog-stones .fog-stone{animation:fogPulse 4.5s ease-in-out infinite alternate}
-@keyframes fogDrift{from{transform:translate(-4px,2px)}to{transform:translate(6px,-3px)}}
-@keyframes fogPulse{from{opacity:.55}to{opacity:.85}}
-@media (prefers-reduced-motion:reduce){.fog-layer .fog-wisp,.fog-stones .fog-stone{animation:none}}
 
 .legend{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;font-size:.95rem;padding:6px}.d{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:4px;vertical-align:middle}
 .d.m,.c-m{background:#ffc400}.d.v{background:#ff6d00}.d.r{background:#00e676}.d.l{background:#2979ff}.d.x{background:#b0bec5}
@@ -185,7 +180,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #009624}
 .campaign .cn{flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;font-size:.95rem;background:#311b9277;border:2px solid #7e57c2;opacity:.55}
 .campaign .cn.done{background:#69f0ae;border-color:#00c853;opacity:1;color:#1b5e20}
 .campaign .cn.cur{background:#fff3e0;border-color:#ff6d00;opacity:1;box-shadow:0 0 0 3px #ff6d0088;animation:cnPulse 1.4s ease-in-out infinite}
-.campaign .cn.fog{filter:saturate(.4)}
+.campaign .cn.locked{filter:saturate(.4)}
 .campaign .cn.boss{width:34px;height:34px;font-size:1.15rem;border-width:3px;border-color:#ffd54f;background:#3e2723}
 .campaign .cn.boss.partial{opacity:.85;box-shadow:0 0 10px #ff80ab88}
 .campaign .cn.boss.lit,.campaign .cn.boss.unlocked{opacity:1;background:linear-gradient(135deg,#ff8bd8,#8a5cff);box-shadow:0 0 14px #ffd54fcc;animation:cnPulse 1.6s ease-in-out infinite}
@@ -282,16 +277,6 @@ main[hidden]{display:none!important}
 .card.gate{border-color:#ffb300;box-shadow:0 0 0 3px #ffe08255}
 
 
-/* fog finds (slice 5) */
-#ffinds{background:linear-gradient(135deg,#eceff1,#cfd8dc);border:3px dashed #78909c}
-#ffinds .ffh{font-weight:800;margin-bottom:6px}
-#ffinds .ffbtn{display:block;width:100%;margin:6px 0;background:#546e7a;box-shadow:0 4px 0 #37474f;font-size:1.1rem;text-align:left}
-.freveal{position:fixed;inset:0;z-index:56;background:#000a;display:flex;align-items:center;justify-content:center;padding:16px;animation:fadein .25s}
-.freveal.out{animation:fadeout .3s forwards}
-.freveal .frbox{background:linear-gradient(160deg,#fff8e1,#ffe0b2);border-radius:24px;padding:18px;max-width:360px;text-align:center;border:4px solid #ffca28;animation:pop .35s}
-.freveal .fremo{font-size:3rem}.freveal .frnew{font-weight:800;color:#e65100;font-size:1.3rem}
-.freveal h3{margin:.2em 0}.freveal button{margin-top:10px}
-@media (prefers-reduced-motion:reduce){.freveal,.freveal .frbox{animation:none}}
 
 /* Final Boss unlock (slice 6) */
 .finale{position:fixed;inset:0;z-index:58;background:radial-gradient(circle,#4a148cee,#000d);display:flex;align-items:center;justify-content:center;padding:16px;animation:fadein .3s}
@@ -317,11 +302,9 @@ main[hidden]{display:none!important}
 .mkconfirm select{font:inherit;font-size:1.05rem;padding:6px 10px;border-radius:12px;margin:6px 0;max-width:100%}
 .hp.bskin-robots .boss,.hp.bskin-sea .boss{filter:drop-shadow(0 0 6px #00e5ff)}.hp.bskin-spooky .boss{filter:drop-shadow(0 0 6px #ff9100)}
 @media (prefers-reduced-motion:reduce){.mkconfirm,.mkconfirm .mkbox{animation:none}}
-.flare-burst{animation:pulse 1.6s infinite}.flare-secret{filter:drop-shadow(0 0 4px #ffd54f)}#flarebtn{margin-left:6px}
-@media (prefers-reduced-motion:reduce){.flare-burst{animation:none}}
 .framebar.f-prove{background:linear-gradient(90deg,#ffd54f,#ff8f00);color:#3e2723}.provelink{font-size:.95rem;margin-left:6px}
 .pickline{background:linear-gradient(90deg,#e8f5e9,#fffde7);border:3px solid #66bb6a;padding:10px 14px;font-size:1.05rem}
-.chip.days{background:#43a047;color:#fff}.mkshelf{font-size:1.6rem;letter-spacing:4px;margin:4px 0}.mkfog{color:#546e7a;font-style:italic}
+.chip.days{background:#43a047;color:#fff}.mkshelf{font-size:1.6rem;letter-spacing:4px;margin:4px 0}
 /* "Who's playing?" picker (picker.js) */
 body.picking main,body.picking header{visibility:hidden}
 .who{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#7c4dff,#3b82f6);padding:16px}

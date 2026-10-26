@@ -1,20 +1,16 @@
-// Slice 1 (#55): campaign trail + fog state API (quest medals fill trail; legendaries light Final Boss; fog clear counts).
+// Slice 1 (#55): campaign trail API (quest medals fill trail; legendaries light Final Boss). Fog fully removed.
 import {test} from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import {fileURLToPath} from 'node:url';import {loadEngine} from './helpers.mjs';
 const DIR=path.dirname(fileURLToPath(import.meta.url));
 const {E,g}=await loadEngine();
 const qm=(date,at,name='Medal',emoji='🏅')=>({date,title:'Q '+date,name,emoji,at});
 const blank=()=>E.blank();
 
-test('empty progress: empty trail, no legendaries, fog clear 0',()=>{
-  const S=blank(),C=E.campaignState(S,g),F=E.fogState(S,g);
+test('empty progress: empty trail, no legendaries',()=>{
+  const S=blank(),C=E.campaignState(S,g);
   assert.equal(C.trailLen,12);assert.equal(C.filled,0);assert.equal(C.nodes.length,12);
   assert.ok(C.nodes.every(n=>n===null));assert.equal(C.legendaries.have,0);assert.equal(C.legendaries.need,4);
   assert.equal(C.legendaries.slots.length,4);assert.ok(C.legendaries.slots.every(s=>s===null));assert.deepEqual(C.history,[]);
-  assert.equal(C.finalBoss.lit,0);assert.equal(C.finalBoss.unlocked,false);assert.equal(typeof C.taunt,'string');
-  assert.equal(F.clear,0);assert.equal(F.total,g.topics.length);assert.equal(F.pct,0);
-  assert.deepEqual(F.finds,[]);assert.deepEqual(F.available,[]);assert.equal(F.mask.length,g.topics.length);assert.ok(F.mask.split('').every(c=>c==='F'));
-  assert.ok(Object.keys(F.bySubject).length>0);
-  for(const b of Object.values(F.bySubject)){assert.equal(b.clear,0);assert.ok(b.total>0);}});
+  assert.equal(C.finalBoss.lit,0);assert.equal(C.finalBoss.unlocked,false);assert.equal(typeof C.taunt,'string');});
 
 test('N quest medals fill N trail nodes in at-order',()=>{
   const S=blank();S.questMedals=[qm('2026-01-03',30,'C','💎'),qm('2026-01-01',10,'A','⭐'),qm('2026-01-02',20,'B','🔥')];
@@ -39,16 +35,6 @@ test('legendary medals light the Final Boss; unlocked only when trail full AND n
   C=E.campaignState(S,g);assert.equal(C.filled,12);assert.equal(C.finalBoss.unlocked,true);assert.match(C.taunt,/Final Boss|finale/i);
   S.medals.push({id:'f',tier:'legendary',at:6});C=E.campaignState(S,g);assert.equal(C.finalBoss.lit,1,'lit caps at 1');});
 
-test('fog counts direct mastery only; inferred does not clear',()=>{
-  const S=blank(),ids=g.topics.slice(0,5).map(t=>t.id);
-  S.ts[ids[0]]={st:'mastered',how:'direct',c:3,w:0};S.ts[ids[1]]={st:'mastered',how:'direct',c:2,w:0};
-  S.ts[ids[2]]={st:'mastered',how:'inferred',conf:.9};S.ts[ids[3]]={st:'learning',how:'direct',c:1,w:0};
-  const F=E.fogState(S,g);assert.equal(F.clear,2);assert.equal(F.total,g.topics.length);
-  assert.equal(F.pct,Math.round(1000*2/g.topics.length)/10);assert.deepEqual(F.finds,[]);
-  assert.equal(F.mask[0],'C');assert.equal(F.mask[1],'C');assert.equal(F.mask[2],'F');assert.equal(F.mask[3],'F');
-  for(const [sub,b] of Object.entries(F.bySubject)){
-    const want=g.topics.filter(t=>t.subject===sub&&S.ts[t.id]?.st==='mastered'&&S.ts[t.id]?.how==='direct').length;
-    assert.equal(b.clear,want);assert.equal(b.total,g.topics.filter(t=>t.subject===sub).length);}});
 
 test('Play mounts Campaign Trail HUD + preview hash (slice 2)',()=>{
   const html=fs.readFileSync(path.join(DIR,'../public/index.html'),'utf8');
@@ -67,43 +53,28 @@ test('campaign overlay helpers present; strip is actionable (slice 3)',()=>{
   assert.match(css,/\.coverlay|\.qomap/);
 });
 
-test('Map no longer draws player-facing fog; fogState stays on the API for data compat',()=>{
+test('fog purged: no fog API helpers, no fog fields on worker pub/map, no fog finds UI',()=>{
   const js=fs.readFileSync(path.join(DIR,'../public/app.js'),'utf8');
   const w=fs.readFileSync(path.join(DIR,'../src/worker.js'),'utf8');
-  assert.doesNotMatch(js,/fog-island|fog-wisp|fogHoles/);
-  assert.doesNotMatch(js,/Fog finds ready|claimFogFind|paintFogFinds|Light it up!/);
-  assert.match(js,/Fog overlay removed|Fog finds \/ scout flare UI removed/);
-  assert.match(w,/fog:E\.fogState/);
+  const eng=fs.readFileSync(path.join(DIR,'../src/engine.js'),'utf8');
+  assert.equal(typeof E.fogState,'undefined');assert.equal(typeof E.claimFind,'undefined');assert.equal(E.FOG_FINDS,undefined);
+  assert.doesNotMatch(js,/fog-island|fog-wisp|fogHoles|claimFogFind|paintFogFinds|Light it up!|mkFlare|scout-flare/);
+  assert.doesNotMatch(w,/fog:E\.fogState|\/api\/fog\/claim|fogState/);
+  assert.doesNotMatch(eng,/export function fogState|export const FOG_FINDS|export function claimFind|id:'scout-flare'/);
 });
 
-test('claimFind: eligible chest claims once; idempotent; never invents medals (slice 5)',()=>{
-  const S=blank(),ids=g.topics.slice(0,12).map(t=>t.id);
-  for(const id of ids)S.ts[id]={st:'mastered',how:'direct',c:3,w:0,ft:3};
-  const F0=E.fogState(S,g);assert.ok(F0.clear>=5);assert.ok(F0.available.some(a=>a.id==='chest-world-5'));
-  const medals0=(S.medals||[]).length,qm0=(S.questMedals||[]).length;
-  const r1=E.claimFind(S,g,'chest-world-5',1000);assert.equal(r1.ok,true);assert.equal(r1.already,undefined);
-  assert.equal(r1.find.id,'chest-world-5');assert.equal((S.medals||[]).length,medals0);assert.equal((S.questMedals||[]).length,qm0);
-  const r2=E.claimFind(S,g,'chest-world-5',2000);assert.equal(r2.ok,true);assert.equal(r2.already,true);
-  assert.equal(S.fog.finds.filter(f=>f.id==='chest-world-5').length,1);
-  const F1=E.fogState(S,g);assert.ok(F1.finds.some(f=>f.id==='chest-world-5'));
-  assert.ok(!F1.available.some(a=>a.id==='chest-world-5'));
-  assert.equal(E.claimFind(S,g,'nope',3).error,'unknown find');
-  assert.equal(E.claimFind(blank(),g,'chest-world-5',4).error,'not yet uncovered');
+test('upgrade migrates hint tokens off S.fog and strips fog + flares',()=>{
+  const S=blank();S.fog={finds:[{id:'chest-world-5',claimedAt:1}],buffs:{hintToken:2}};S.wallet={spent:0,ledger:[],owned:{},equipped:{},active:{flares:[{region:'Science',until:9e15}]},choices:{},days:{}};
+  E.migrate(S,g);assert.equal(S.fog,undefined);assert.equal(S.wallet.active.flares,undefined);
+  assert.equal(S.wallet.active.hintToken,2);assert.equal(E.walletState(S,g).hintTokens,2);
 });
-test('claimFind power-up is garnish only (hintToken buff, no mastery skip) (slice 5)',()=>{
-  const S=blank();for(const t of g.topics.slice(0,12))S.ts[t.id]={st:'mastered',how:'direct',c:3,w:0,ft:3};
-  const r=E.claimFind(S,g,'power-hint-10',50);assert.equal(r.ok,true);assert.equal(r.reward.type,'hintToken');
-  assert.equal(S.fog.buffs.hintToken,1);assert.ok(!(S.medals||[]).length||true);
-  // still no quest medal invented
-  assert.deepEqual(S.questMedals||[],[]);
-});
-test('export still knows fog finds; player UI no longer surfaces them (slice 5 retired)',()=>{
+test('export and UI have no fog finds surface',()=>{
   const js=fs.readFileSync(path.join(DIR,'../public/app.js'),'utf8');
   const html=fs.readFileSync(path.join(DIR,'../public/index.html'),'utf8');
   const ex=fs.readFileSync(path.join(DIR,'../export-progress.mjs'),'utf8');
   assert.ok(!html.includes('id="ffinds"'));
   assert.doesNotMatch(js,/claimFogFind|fogFindReveal|Fog finds ready/);
-  assert.match(ex,/fog:E\.fogState/);
+  assert.doesNotMatch(ex,/fog:E\.fogState|fogState/);
 });
 
 test('syncFinale persists reveal once; no fake medals (slice 6)',()=>{

@@ -1,6 +1,6 @@
 # Nightly authoring notes
 
-See **LESSONS.md** for the full pack rules, nightly loop, and Fog finds honesty.
+See **LESSONS.md** for the full pack rules and nightly loop.
 
 ## Every learner, every night (profiles)
 

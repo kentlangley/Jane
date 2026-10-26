@@ -103,12 +103,11 @@ const res={exportedAt:new Date(now).toISOString(),date,timezone:'America/Los_Ang
   quests,termsLookedUp,weakSpots,todayLog:log,learnedToday:log.filter(l=>l.event==='mastered'),
   // household region filter (HIDE_REGIONS): these topics are not in the app, the frontier or the totals; progress on them is kept
   hiddenRegions:{regions:hiddenRegions,topics:Object.keys(g.hidden).length,mastered:Object.keys(g.hidden).filter(id=>S.ts[id]?.st==='mastered').length,medals:(S.medals||[]).filter(m=>g.hidden[m.id]).length},
-  research,frontier,reviewDue,fog:E.fogState(S,g,now),campaign:E.campaignState(S,g),
+  research,frontier,reviewDue,campaign:E.campaignState(S,g),
   market:E.marketExport(S,g,now), // Points Market: spend vs earn for price tuning (target 50–70% of earned points spent), choices to honor
   progress:S};
 fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,E.withName(JSON.stringify({learner:L,profile:(F=>({id:F.id,primary:F.primary,...L,interests:F.interests||[]}))(learnerFull()),learners:profiles().learners.map(l=>({id:l.id,name:l.name,grade:l.grade})),...res},null,1),JSON.stringify(L.name).slice(1,-1)));
 console.log(`  📚 research briefs: ${research.available?`${Object.keys(research.briefs).length} attached, ${research.pointers.length} more as pointers (npm run research -- <topicId>)`:research.note}`);
-const fog=res.fog;if(fog)console.log(`  🌫️ fog: ${fog.clear}/${fog.total} clear (${fog.pct}%), ${fog.finds.length} finds claimed, ${(fog.available||[]).length} waiting`);
 if(hiddenRegions.length)console.log(`  🌏 hidden regions: ${hiddenRegions.join(',')} (${res.hiddenRegions.topics} topics left out of the app and this export; never put them in a pack)`);
 {const m=res.market;console.log(`  🛒 market: balance ${m.balance}, spent ${m.spent} (7d: spent ${m.spent7d} / earned ${m.earned7d??'?'})`);}
 console.log(`  🗺️ quests: ${quests.nextStep}`);if(quests.marketChoice&&cur)console.log(`  🧭 ${quests.marketChoice}`);if(termsLookedUp.length)console.log(`  📘 looked up: ${termsLookedUp.slice(0,10).map(t=>t.term+'×'+t.count).join(', ')}`);
