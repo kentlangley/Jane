@@ -494,7 +494,7 @@ addEventListener('scroll',()=>gclose(),{passive:true});
  const _draw=drawMap;drawMap=function(){_draw();FX.kbd($('world'),'.isl',el=>`${el.dataset.s} island: open it`);};
  const _troph=loadTrophies;loadTrophies=async function(){if(!$('tgrid').children.length)$('tgrid').innerHTML='<div class="sk sk-cell"></div>'.repeat(8);await _troph();FX.stagger($('tgrid').querySelectorAll('.tcell'),{step:.03});};
  const _quests=loadQuests;loadQuests=async function(){if(!$('qlist').children.length)$('qlist').innerHTML='<div class="card sk sk-quest"></div>'.repeat(2);await _quests();FX.stagger($('qlist').children,{step:.06});};
- const _reveal=reveal;reveal=function(m,inf){_reveal(m,inf);FX.sound('win');FX.haptic('win');const b=document.querySelector('.reveal .rbox');FX.anim(b,{transform:['scale(.6) rotate(-6deg)','scale(1) rotate(0)'],opacity:[0,1]},{stiffness:260,damping:14});const btn=document.querySelector('.reveal button');btn?.focus();};
+ const _reveal=reveal;reveal=function(m,inf,onClose){_reveal(m,inf,onClose);FX.sound('win');FX.haptic('win');const b=document.querySelector('.reveal .rbox');FX.anim(b,{transform:['scale(.6) rotate(-6deg)','scale(1) rotate(0)'],opacity:[0,1]},{stiffness:260,damping:14});const btn=document.querySelector('.reveal button');btn?.focus();};
  const _qr=questReveal;questReveal=function(Q){_qr(Q);FX.sound('open');const b=document.querySelector('.qreveal .qrbox');FX.anim(b,{transform:['translateY(40px) scale(.9)','none'],opacity:[0,1]},{stiffness:220,damping:16});setTimeout(()=>$('qstart')?.focus(),300);};
  const _conf=confetti;confetti=function(n=40){if(!FX.burst(null,n>=60))_conf(n);};
  addEventListener('scroll',()=>gclose(),{passive:true});

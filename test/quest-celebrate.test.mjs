@@ -46,3 +46,11 @@ test('client shows high-five celebration with three post-quest options',()=>{
   assert.match(css,/\.qcelebrate\{/);
   assert.match(js,/#quest-celebrate-preview/);
 });
+
+test('FX reveal wrap forwards onClose so questDone+medal still celebrates',()=>{
+  // questDone path passes go (questCelebrate) as reveal's third arg when a skill medal also fires
+  assert.match(js,/if\(r\.medal\)\{reveal\(r\.medal,r\.inferred,go\);return;\}/);
+  // FX polish must forward onClose — dropping it was #104 (high-five never after Collect)
+  assert.match(js,/reveal=function\(m,inf,onClose\)\{_reveal\(m,inf,onClose\);/);
+  assert.doesNotMatch(js,/reveal=function\(m,inf\)\{_reveal\(m,inf\);/);
+});
