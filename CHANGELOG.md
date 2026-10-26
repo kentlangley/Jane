@@ -5,6 +5,9 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+### Fixed
+- **Quest high-five after skill medal** ([#104](https://github.com/kentlangley/Jane/issues/104)): FX polish wrap around `reveal` now forwards `onClose`, so finishing a quest on the same answer that awards a skill/legendary medal still opens the high-five chooser after Collect.
+
 ## [0.7.1] - 2026-10-26
 
 ### Removed
