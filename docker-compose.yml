@@ -6,7 +6,7 @@ services:
       context: .
       args:
         HIDE_REGIONS: ""                 # e.g. "AU" leaves Australia-specific topics out (BOT-SETUP.md); rebuild after changing
-    image: jane:0.7.1
+    image: jane:0.7.2
     restart: unless-stopped
     environment:
       LEARNER_NAME: "Explorer"           # first name or nickname
