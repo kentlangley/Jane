@@ -26,7 +26,7 @@ function bossHTML(b,topicId){if(!b)return'';const BL=st?.wallet?.looks?.boss,BS=
  const msg=hp?`Hit it ${hp} more time${hp>1?'s':''} in a row!`:'Boss defeated! 💥';
  return`<div class="hp${BL?.frame?' bskin-'+esc(BL.frame):''}" aria-label="Boss: ${hp} of ${max} hearts left"><span class="boss">${BS[String(topicId||'').charCodeAt(4)%BS.length||0]}</span>${'❤️'.repeat(hp)}${'🖤'.repeat(max-hp)}<span class="small">${msg}</span></div>`;}
 function bossBar(p){$('bossbar').innerHTML=p?.boss?bossHTML(p.boss,p.topicId):'';}
-function render(s){st=s;if(s?.learner)setLearner(s.learner);chips(s);const p=s.item;clearInterval(timerInt);$('timer').innerHTML='';if(!p)return;
+function render(s){answerLock=false;st=s;if(s?.learner)setLearner(s.learner);chips(s);const p=s.item;clearInterval(timerInt);$('timer').innerHTML='';if(!p)return;
  const f=p.format||'quest';$('frame').className='framebar f-'+f;$('frame').textContent=p.gate?(p.gate.warm?`🔥 Warm-up! A quick one you learned before (${p.gate.n}/${p.gate.of})`:p.gate.spot?`🗝️ Gate! Quick check: show me you know this one (${p.gate.n}/${p.gate.of})`:`🗝️ Gate! Unlock it with something you learned before (${p.gate.n}/${p.gate.of})`):FRAMES[f]||'🗡️ Quest';$('pcard').className='card '+f;
  $('topic').textContent=`${ISL[p.topic.subject]?.e||'📚'} ${p.topic.name}${p.level?` · Lv ${p.level}`:''}`;
  PACKT=s.terms||{};glReset();if(p.blank)$('q').innerHTML=gl(p.q).replace(/_{2,}/,'<span class="blank" id="blankslot">❓</span>');else $('q').innerHTML=p.type==='card'?'':gl(p.q);$('ev').innerHTML='';
@@ -46,7 +46,12 @@ function render(s){st=s;if(s?.learner)setLearner(s.learner);chips(s);const p=s.i
  else{$('f').style.display='flex';$('a').value='';$('a').placeholder=p.creative?(p.placeholder||'Your idea!'):p.vis?.type==='pizza'||/fraction/i.test(p.topic.domain)?'Your answer (like 3/8)':'Your answer';setTimeout(()=>$('a').focus(),50);}
  if(p.timed){const end=Date.now()+p.timed*1000;$('timer').innerHTML='<div class="tbar"><i id="tb"></i></div><div class="small" id="tl"></div>';
   timerInt=setInterval(()=>{const left=Math.max(0,end-Date.now());$('tb').style.transform=`scaleX(${left/(p.timed*1000)})`;$('tl').textContent=left?`⚡ ${Math.ceil(left/1000)}s for a speed bonus!`:'Time\'s up for the bonus — but keep going, you can still get it!';if(!left)clearInterval(timerInt);},200);}}
-async function send(v){if(!v||$('pcard').classList.contains('busy'))return;$('pcard').classList.add('busy');let r;try{r=await api('/api/answer',{answer:v});}catch(e){$('pcard').classList.remove('busy');say('Oops, the internet hiccuped. Try again! 🔌');return;}$('pcard').classList.remove('busy');say(r.jane);
+// After questDone the server holds the next item until celebrate (#106). Clear choice UI and
+// refuse further /api/answer calls so a late boss tap cannot land on free-play/review.
+let answerLock=false;
+function lockAnswers(){answerLock=true;$('f').style.display='none';$('mc').innerHTML='';$('extra').innerHTML='';$('a').value='';$('pcard').classList.remove('busy');}
+async function send(v){if(answerLock||!v||$('pcard').classList.contains('busy'))return;$('pcard').classList.add('busy');let r;try{r=await api('/api/answer',{answer:v});}catch(e){$('pcard').classList.remove('busy');say('Oops, the internet hiccuped. Try again! 🔌');return;}$('pcard').classList.remove('busy');
+ if(r.error){say(r.jane||'Oops — try the next question! 🙌');return;}say(r.jane);
  if(r.stuck){if(r.state)st=r.state;showHelp(r.stuck);return;}
  if(r.shielded)setTimeout(()=>banner(`🛡️ Shield up!<br><small>Your 🔥 ${r.shielded} streak is safe</small>`),300);
  if(r.proveIt?.passed)setTimeout(()=>banner(`🎟️ Proved it!<br><small>${esc(r.proveIt.topic||'')} +${r.proveIt.bonus} bonus</small>`),r.medal?2600:500);
@@ -56,8 +61,8 @@ async function send(v){if(!v||$('pcard').classList.contains('busy'))return;$('pc
  else if(window.FX&&!FX.reduced()){FX.bad($('pcard'));}else{$('pcard').classList.remove('shake');void $('pcard').offsetWidth;$('pcard').classList.add('shake');}
  if(r.boss){if(st?.item)st.item.boss=r.boss;$('bossbar').innerHTML=bossHTML(r.boss,st?.item?.topicId);$('bossbar').querySelector('.boss')?.classList.add('shake');}
  // Quest complete: celebratory high-five BEFORE free play — hold state until they pick an option.
- if(r.questDone){chips(r.state);window._afterQuest=r.state;const go=()=>questCelebrate(r.questDone,r.state);
-  if(r.reveal){$('f').style.display='none';$('mc').innerHTML='';$('extra').innerHTML=`<p style="font-size:1.3rem">✅ Answer: <b>${esc(String(r.reveal).replace(/\|/g,' → '))}</b></p><button onclick="next()">Next ➡</button>`;window._next=r.state;window._questDone=r.questDone;window._mini=null;return;}
+ if(r.questDone){lockAnswers();chips(r.state);window._afterQuest=r.state;const go=()=>questCelebrate(r.questDone,r.state);
+  if(r.reveal){$('extra').innerHTML=`<p style="font-size:1.3rem">✅ Answer: <b>${esc(String(r.reveal).replace(/\|/g,' → '))}</b></p><button onclick="next()">Next ➡</button>`;window._next=r.state;window._questDone=r.questDone;window._mini=null;return;}
   if(r.medal){reveal(r.medal,r.inferred,go);return;}setTimeout(go,400);return;}
  if(r.askChoice){chips(r.state);return ask(r.jane);}
  if(r.reveal){$('f').style.display='none';$('mc').innerHTML='';$('extra').innerHTML=`<p style="font-size:1.3rem">✅ Answer: <b>${esc(String(r.reveal).replace(/\|/g,' → '))}</b></p><button onclick="next()">Next ➡</button>`;window._next=r.state;window._mini=r.miniDone?r:null;chips(r.state);return;}
@@ -71,7 +76,7 @@ async function skip(){render(await api('/api/skipbonus',{}));say('No problem! He
 async function stuckTap(){if($('pcard').classList.contains('busy'))return;$('pcard').classList.add('busy');let r;try{r=await api('/api/stuck',{});}finally{$('pcard').classList.remove('busy');}
  if(!r||r.error)return;say(r.jane);if(r.state)st=r.state;showHelp(r.stuck);}
 async function skipNow(){if($('pcard').classList.contains('busy'))return;$('pcard').classList.add('busy');let r;try{r=await api('/api/skip',{});}finally{$('pcard').classList.remove('busy');}
- if(!r||r.error)return;say(r.jane);if(r.questDone){chips(r.state);window._afterQuest=r.state;setTimeout(()=>questCelebrate(r.questDone,r.state),300);return;}if(r.miniDone){chips(r.state);return miniEnd(r);}render(r.state);}
+ if(!r||r.error)return;say(r.jane);if(r.questDone){lockAnswers();chips(r.state);window._afterQuest=r.state;setTimeout(()=>questCelebrate(r.questDone,r.state),300);return;}if(r.miniDone){chips(r.state);return miniEnd(r);}render(r.state);}
 function tryAgain(){if(st?.item?.type==='input'){$('a').focus();$('a').select();}else $('mc').scrollIntoView({behavior:'smooth',block:'center'});}
 function showHelp(h){const el=$('help');if(!h){el.hidden=true;el.innerHTML='';return;}el.hidden=false;const li=a=>(a||[]).map(x=>`<li>${esc(x)}</li>`).join('');
  el.innerHTML=h.step<2?`<div class="help"><div class="hl">💡 Hint</div><p>${gl(h.hint,new Set())}</p><div class="hb"><button type="button" class="ghost" onclick="tryAgain()">✏️ I'll try</button><button type="button" class="stuckb" onclick="stuckTap()">Still stuck 🤔</button></div></div>`
@@ -455,7 +460,7 @@ function questCelebrate(m,state){document.querySelectorAll('.qcelebrate').forEac
  $('qc-reinforce').onclick=async()=>{const s=await api('/api/reinforce',{topicIds:m.topicIds||[]});close();
   if(s.error){say(s.error);render(state||window._afterQuest||s);return;}document.querySelector('.tab[data-v=play]').click();render(s);say('🧠 Reinforcement time — quick practice on what you covered!');window._afterQuest=null;};
  $('qc-grind').onclick=()=>{close();window._afterQuest=null;trailDone=new Set();goMap(sub||undefined);say(`🛤️ Grind time — pick a stone on ${subLbl}!`);};
- $('qc-play').onclick=()=>{close();const s=state||window._afterQuest;window._afterQuest=null;document.querySelector('.tab[data-v=play]').click();if(s)render(s);else api('/api/next',{}).then(render);say('🎲 Mini-games! Have fun!');};
+ $('qc-play').onclick=async()=>{close();window._afterQuest=null;document.querySelector('.tab[data-v=play]').click();const s=await api('/api/next',{});render(s);say('🎲 Mini-games! Have fun!');};
 }
 if(location.hash==='#quest-preview')api('/api/state').then(s=>s.quest&&questReveal(s.quest));
 if(location.hash==='#quest-celebrate-preview'){document.querySelector('.tab[data-v=play]')?.click();
