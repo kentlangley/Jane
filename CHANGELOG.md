@@ -5,6 +5,8 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+## [0.7.2] - 2026-10-28
+
 ### Fixed
 - **Post-quest answer carry-over** ([#106](https://github.com/kentlangley/Jane/issues/106)): after `questDone`, the server holds the next free-play/review item until the high-five choice, and the client clears/locks the answer UI so a late or double boss tap cannot submit the previous answer on the next item.
 - **Quest high-five after skill medal** ([#104](https://github.com/kentlangley/Jane/issues/104)): FX polish wrap around `reveal` now forwards `onClose`, so finishing a quest on the same answer that awards a skill/legendary medal still opens the high-five chooser after Collect.
