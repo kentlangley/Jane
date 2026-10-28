@@ -41,7 +41,7 @@ test('client shows high-five celebration with three post-quest options',()=>{
   assert.match(js,/Mini-games/);
   assert.match(js,/Reinforcement/);
   // Must not silently dismiss into free play on questDone
-  assert.match(js,/if\(r\.questDone\)\{chips\(r\.state\);window\._afterQuest=r\.state/);
+  assert.match(js,/if\(r\.questDone\)\{lockAnswers\(\);chips\(r\.state\);window\._afterQuest=r\.state/);
   assert.doesNotMatch(js,/if\(r\.questDone\)setTimeout\(\(\)=>questMedal/);
   assert.match(css,/\.qcelebrate\{/);
   assert.match(js,/#quest-celebrate-preview/);
@@ -53,4 +53,24 @@ test('FX reveal wrap forwards onClose so questDone+medal still celebrates',()=>{
   // FX polish must forward onClose — dropping it was #104 (high-five never after Collect)
   assert.match(js,/reveal=function\(m,inf,onClose\)\{_reveal\(m,inf,onClose\);/);
   assert.doesNotMatch(js,/reveal=function\(m,inf\)\{_reveal\(m,inf\);/);
+});
+
+test('post-quest: client locks answers and Mini-games always fetches /api/next (#106)',()=>{
+  assert.match(js,/function lockAnswers\(/);
+  assert.match(js,/if\(answerLock\|\|!v\|\|\$\('pcard'\)\.classList\.contains\('busy'\)\)return/);
+  assert.match(js,/function render\(s\)\{answerLock=false;/);
+  assert.match(js,/if\(r\.questDone\)\{lockAnswers\(\);chips\(r\.state\);window\._afterQuest=r\.state;setTimeout/);
+  assert.doesNotMatch(js,/\$\('qc-play'\)\.onclick=\(\)=>\{close\(\);const s=state\|\|window\._afterQuest/);
+  assert.match(js,/\$\('qc-play'\)\.onclick=async\(\)=>\{close\(\);window\._afterQuest=null/);
+  assert.match(js,/await api\('\/api\/next',\{\}\)/);
+});
+
+test('worker holds next item while questDone celebrates (#106)',()=>{
+  const w=fs.readFileSync(path.join(ROOT,'src/worker.js'),'utf8');
+  assert.match(w,/if\(!S\.current&&!x\.r\.askChoice&&!x\.r\.questDone\)E\.next/);
+  assert.match(w,/if\(!S\.current&&!x\.r\.questDone\)E\.next/);
+  // Stray /api/answer with no current must not invent+grade the next item (#106)
+  assert.match(w,/\/api\/answer[\s\S]*?if\(!S\.current\)return J\(\{error:'no item'/);
+  assert.doesNotMatch(w,/\/api\/answer'&&req\.method==='POST'\)\{if\(!S\.current\)E\.next/);
+  assert.doesNotMatch(w,/questHold/);
 });
