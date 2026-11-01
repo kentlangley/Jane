@@ -329,7 +329,7 @@ solved problem for the stuck help), `skill` (the topic a boss question tests).
   "honors": { "path": "mt_hJW7hVflm3", "theme": "pirates" }, // optional: the learner's Market picks this quest honors ("Market choices")
   "topics": [                                // the quest path, in order; topicIds unique
     {
-      "topicId": "mt_hJW7hVflm3",            // a Marble topic id (public/tax.json or the export's frontier)
+      "topicId": "mt_hJW7hVflm3",            // a topic id: Marble mt_… or Jane's own jane_… (public/tax.json or the export's frontier)
       "stage": { "name": "Simile Swamp", "emoji": "🐊" },   // required in quests: the stop on the path
       "format": "story",                     // quest | story | mystery | minigame | timed | boss | explore | guided
       "deepDive": true,                      // weak area: learn/why card + guided + 3-4 graded steps, mastery needs 3 in a row

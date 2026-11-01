@@ -1,0 +1,5 @@
+jane_mm_compound_growth|$100 grows 10% a year. How much after 2 years?|$121|$120|$110
+jane_mm_rule_of_72|Money grows 6% a year. About how long until it doubles?|About 12 years|About 6 years|About 72 years
+jane_mm_real_return|Savings earn 5%, prices rise 3%. About how much richer are you?|About 2% richer|About 8% richer|About 5% richer
+jane_mm_present_value|Savings can earn interest. Which is worth more?|$100 today|$100 in five years|They are worth the same
+jane_mm_true_average_return|$100 goes up 50%, then down 50%. What is it now?|$75|$100|$125

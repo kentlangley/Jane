@@ -9,7 +9,7 @@
 // The research file is offline authoring input only: it is never copied into public/, the Worker bundle or the Docker
 // image (test/research.test.mjs guards this). Topics that are pending or hidden in this household (PENDING.txt; HIDE_REGIONS via public/tax.json or the setting)
 // get a one-line notice instead of a brief, unless --all is given.
-import fs from 'fs';import path from 'path';import {fileURLToPath} from 'url';import {regionTags,hideRegionsSetting} from './lib-regions.mjs';
+import fs from 'fs';import path from 'path';import {fileURLToPath} from 'url';import {regionTags,hideRegionsSetting} from './lib-regions.mjs';import {loadJaneTopics} from './lib-jane-topics.mjs';
 const DIR=path.dirname(fileURLToPath(import.meta.url));
 export const BRIEF_MAX=6000;   // characters, text brief
 export const COMPACT_MAX=3000; // characters, JSON brief attached to the nightly export
@@ -23,7 +23,8 @@ export function researchAvailable(){return fs.existsSync(resFile());}
 export function reset(){RES=TOPICS=TAX=PENDING=REGIONS=null;}
 function load(){
   if(!RES){RES=new Map();if(researchAvailable())for(const r of JSON.parse(fs.readFileSync(resFile(),'utf8')).records)RES.set(r.topicId,r);}
-  if(!TOPICS)TOPICS=new Map(J('data/marble/topics.json').topics.map(t=>[t.id,t]));
+  // Marble topics plus Jane's own (data/jane/, never researched by Marble: they get "no research" with the reason)
+  if(!TOPICS){const m=J('data/marble/topics.json').topics;TOPICS=new Map([...m,...loadJaneTopics(DIR,m).janeTopics].map(t=>[t.id,t]));}
   if(!TAX)TAX=fs.existsSync(path.join(DIR,'public/tax.json'))?J('public/tax.json'):{topics:[],hidden:{regions:[],topics:[]},aliases:{}};
   if(!REGIONS)REGIONS=regionTags(DIR);
   if(!PENDING){PENDING=new Map();for(const l of fs.readFileSync(path.join(DIR,'data/kid-prompts/PENDING.txt'),'utf8').split('\n')){const id=l.replace(/#.*/,'').trim();if(id)PENDING.set(id,(l.match(/held:\s*(.*)$/)||[])[1]||'not playable yet');}}

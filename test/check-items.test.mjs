@@ -30,7 +30,7 @@ test('build attaches them to playable topics only; pending and hidden-region top
   assert.equal(withCk.length,[...ids].filter(id=>g.byId[id]).length);assert.ok(!(TAX.hidden?.topics||[]).some(t=>t.ck));
   for(const t of TAX.topics)assert.ok(!pending.has(t.id));
   // scratch build: a line for a pending topic and one for an AU topic are skipped (not errors) under HIDE_REGIONS=AU
-  const d=tmpDir('jane-ck-');try{for(const p of['build.mjs','lib-regions.mjs','prototype/server.js','vendor/entry.mjs','data','src'])fs.cpSync(path.join(ROOT,p),path.join(d,p),{recursive:true});
+  const d=tmpDir('jane-ck-');try{for(const p of['build.mjs','lib-regions.mjs','lib-jane-topics.mjs','prototype/server.js','vendor/entry.mjs','data','src'])fs.cpSync(path.join(ROOT,p),path.join(d,p),{recursive:true});
     fs.mkdirSync(path.join(d,'public'),{recursive:true});fs.symlinkSync(path.join(ROOT,'node_modules'),path.join(d,'node_modules'));
     const au=fs.readFileSync(path.join(ROOT,'data/regions/AU.txt'),'utf8').split('\n').map(l=>l.replace(/#.*/,'').trim()).filter(id=>id&&!pending.has(id))[0],pd=[...pending][0];
     fs.writeFileSync(path.join(d,'data/checks/zz-test.txt'),`${pd}|Question one here?|Right|Wrong one|Wrong two\n${au}|Question two here?|Right|Wrong one|Wrong two\n`);

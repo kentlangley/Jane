@@ -7,7 +7,7 @@ const J=f=>JSON.parse(fs.readFileSync(f,'utf8'));
 const upstream=J(path.join(ROOT,'data/marble/topics.json')).topics,byUp=Object.fromEntries(upstream.map(t=>[t.id,t]));
 const AU=regionTags(ROOT).AU,auIds=[...AU.keys()];
 const pending=new Set(fs.readFileSync(path.join(ROOT,'data/kid-prompts/PENDING.txt'),'utf8').split('\n').map(l=>l.replace(/#.*/,'').trim()).filter(Boolean));
-function scratch(){const d=tmpDir('jane-reg-');for(const p of['build.mjs','lib-regions.mjs','lib-cli.mjs','export-progress.mjs','publish-lessons.mjs','prototype/server.js','vendor/entry.mjs','data','src','server','packs/examples'])fs.cpSync(path.join(ROOT,p),path.join(d,p),{recursive:true});
+function scratch(){const d=tmpDir('jane-reg-');for(const p of['build.mjs','lib-regions.mjs','lib-jane-topics.mjs','lib-cli.mjs','export-progress.mjs','publish-lessons.mjs','prototype/server.js','vendor/entry.mjs','data','src','server','packs/examples'])fs.cpSync(path.join(ROOT,p),path.join(d,p),{recursive:true});
   fs.mkdirSync(path.join(d,'public'),{recursive:true});fs.symlinkSync(path.join(ROOT,'node_modules'),path.join(d,'node_modules'));return d;}
 const clean=env=>{const e={...process.env,...env};for(const k of Object.keys(e))if(e[k]===undefined)delete e[k];return e;};
 const run=(d,args,env={})=>spawnSync(process.execPath,args,{cwd:d,encoding:'utf8',env:clean({HIDE_REGIONS:undefined,...env})});
