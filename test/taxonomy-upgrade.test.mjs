@@ -35,7 +35,8 @@ test('teaching research stays offline: nothing of it under public/ or in tax.jso
 
 test('every upstream topic is either playable, explicitly pending or hidden by the household; neither is in the app',()=>{
   const ids=new Set(upstream.map(t=>t.id));for(const id of pending)assert.ok(ids.has(id),'pending id exists upstream: '+id);
-  assert.equal(g.topics.length+pending.size+hidden.size,upstream.length);for(const id of hidden)assert.ok(!pending.has(id));for(const t of g.topics){assert.ok(!away(t.id));assert.ok(t.kq||t.self,t.id);}
+  const jane=g.topics.filter(t=>t.id.startsWith('jane_')).length; // Jane's own topics (data/jane/) are not upstream
+  assert.equal(g.topics.length-jane+pending.size+hidden.size,upstream.length);for(const id of hidden)assert.ok(!pending.has(id));for(const t of g.topics){assert.ok(!away(t.id));assert.ok(t.kq||t.self,t.id);}
   for(const id of [...pending,...hidden])assert.equal(g.byId[id],undefined);});
 
 test('the app graph only names playable topics, stays acyclic, and keeps every upstream prerequisite path',()=>{

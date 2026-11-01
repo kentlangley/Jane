@@ -437,3 +437,5 @@ pH|🧪|A 0-14 scale showing how acidic or alkaline something is.
 polymer|🧵|A material made of long chains of molecules, like plastic.
 recycling/recycle|♻️|Turning old things into new things instead of trash.
 finite|⏳|Will run out someday, like oil.
+inflation|🎈|When prices slowly go up, so the same money buys less.
+compound interest|❄️|Interest earned on your interest too, so savings snowball over time.

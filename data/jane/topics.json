@@ -1,0 +1,97 @@
+{
+  "about": "Jane's own topics: added by this project, not part of the Marble Skill Taxonomy. Same schema as data/marble/topics.json. Ids start with jane_ (never mt_) so they can never collide with Marble ids, and they live outside data/marble/ so a Marble data refresh never touches them. build.mjs appends them after the Marble topics in public/tax.json. centrality is hand-set (Marble computes its own; the app does not use it). See data/jane/README.md.",
+  "version": 1,
+  "topicCount": 5,
+  "topics": [
+    {
+      "id": "jane_mm_compound_growth",
+      "type": "CONCEPTUAL",
+      "subject": "Life Skills",
+      "domain": "Money Math",
+      "name": "Compound growth",
+      "description": "Money that earns interest on its interest grows by the same percentage each period: future value = present value × (1 + rate)^years (FV = PV × (1+r)^n); why savings and investments grow along a curve that gets steeper over time, unlike simple interest, which adds the same amount each year",
+      "ageRangeStart": 11,
+      "ageRangeEnd": 14,
+      "centrality": 0.01,
+      "evidence": [
+        "Work out year by year how $100 grows at 10% a year for 3 years, and explain why each year adds more than the last",
+        "Use FV = PV × (1 + r)^n to find the value of a saving after a given number of years",
+        "Compare simple and compound interest on the same amount and explain why the compound total pulls ahead"
+      ],
+      "assessmentPrompt": "If {{name}} saved $200 at 5% interest a year, could they work out how much it would be worth after 3 years, and explain why it grows faster each year?",
+      "standards": []
+    },
+    {
+      "id": "jane_mm_rule_of_72",
+      "type": "PROCEDURAL",
+      "subject": "Life Skills",
+      "domain": "Money Math",
+      "name": "The Rule of 72",
+      "description": "A mental-math shortcut for compound growth: the years needed to double money are about 72 ÷ the yearly growth rate in percent; the same rule estimates how fast inflation halves what money can buy",
+      "ageRangeStart": 11,
+      "ageRangeEnd": 14,
+      "centrality": 0.01,
+      "evidence": [
+        "Estimate how many years it takes money to double at 6%, 8% and 12% a year using 72 ÷ rate",
+        "Work backwards to find the growth rate needed to double money in a given number of years",
+        "Use the rule to estimate how long it takes 4% inflation to halve what a dollar buys"
+      ],
+      "assessmentPrompt": "If {{name}} heard that a savings account pays 9% a year, could they estimate in their head how many years it would take the money to double?",
+      "standards": []
+    },
+    {
+      "id": "jane_mm_real_return",
+      "type": "CONCEPTUAL",
+      "subject": "Life Skills",
+      "domain": "Money Math",
+      "name": "Real return and inflation",
+      "description": "Inflation means prices rise over time, so the same money buys less; the real return is what savings grow by after inflation: (1 + rate) ÷ (1 + inflation) − 1, roughly the rate minus the inflation rate",
+      "ageRangeStart": 12,
+      "ageRangeEnd": 14,
+      "centrality": 0.01,
+      "evidence": [
+        "Explain what inflation is, using a price that has gone up over time",
+        "Estimate the real return when savings earn 5% and prices rise 3% (about 2%)",
+        "Use (1 + r) ÷ (1 + i) − 1 to find the exact real return and compare it with the r − i estimate"
+      ],
+      "assessmentPrompt": "If {{name}}'s savings earned 4% in a year when prices rose 6%, could they explain whether they can buy more or less than before, and by roughly how much?",
+      "standards": []
+    },
+    {
+      "id": "jane_mm_present_value",
+      "type": "CONCEPTUAL",
+      "subject": "Life Skills",
+      "domain": "Money Math",
+      "name": "Present value",
+      "description": "Money today is worth more than the same amount later, because today's money can grow; present value runs compound growth backwards: PV = FV ÷ (1 + rate)^years, to compare money at different times",
+      "ageRangeStart": 13,
+      "ageRangeEnd": 15,
+      "centrality": 0.01,
+      "evidence": [
+        "Explain why $100 today is worth more than $100 in five years",
+        "Use PV = FV ÷ (1 + r)^n to find how much to save now to have a target amount later",
+        "Compare two offers paid at different times (for example $100 now or $110 next year) at a given interest rate"
+      ],
+      "assessmentPrompt": "If {{name}} were offered $100 now or $120 in three years, could they use present value to decide which is the better deal when savings earn 8% a year?",
+      "standards": []
+    },
+    {
+      "id": "jane_mm_true_average_return",
+      "type": "PROCEDURAL",
+      "subject": "Life Skills",
+      "domain": "Money Math",
+      "name": "True average return (geometric mean)",
+      "description": "The fair average of yearly growth rates is the geometric mean: multiply the growth factors, take the nth root, then subtract 1; why +50% followed by −50% loses money even though the simple average of the rates is 0%",
+      "ageRangeStart": 13,
+      "ageRangeEnd": 15,
+      "centrality": 0.01,
+      "evidence": [
+        "Show that $100 up 50% then down 50% ends at $75, and explain why the simple average of 0% is misleading",
+        "Turn yearly percentage changes into growth factors (like 1.2 and 0.9) and multiply them",
+        "Find the true average yearly return by taking the nth root of the product of the growth factors and subtracting 1"
+      ],
+      "assessmentPrompt": "If {{name}} saw an investment go up 20% one year and down 20% the next, could they explain why it did not break even and work out its true average yearly return?",
+      "standards": []
+    }
+  ]
+}

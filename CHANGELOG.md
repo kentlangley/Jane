@@ -5,6 +5,9 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+### Added
+- **Money Math path on the Life Skills island**: five new topics (compound growth, the Rule of 72, real return and inflation, present value, true average return / geometric mean), ages 11–15, for every learner. They are Jane's own topics, not Marble's: they live in `data/jane/` (same schema as `data/marble/`, ids `jane_…`), are validated by `lib-jane-topics.mjs` and appended after the Marble topics in `public/tax.json`, so a Marble refresh never touches them and existing map positions, medal tiers, bosses and campaign state do not change. Prerequisites link to Marble's Percentages (age 12+), Square and cube numbers (powers and roots), Banks & Saving, Financial Planning, How the Economy Works and Calculating the Mean. Kid prompts in `data/kid-prompts/b12.txt`; glossary adds *inflation* and *compound interest*. Topic ideas from Kent, after "The Five Equations That Quietly Run Your Entire Financial Life" (@lumenxbt on X).
+
 ## [0.7.2] - 2026-10-28
 
 ### Fixed

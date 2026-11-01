@@ -15,6 +15,10 @@ const {kindFor}=await import('./src/gen.js?'+Date.now());
 const {regionTags,hideRegionsSetting}=await import('./lib-regions.mjs');
 const T='data/marble/';
 const all=JSON.parse(fs.readFileSync(T+'topics.json')).topics,allIds=new Set(all.map(t=>t.id));
+// Jane's own topics (data/jane/, see its README): not Marble's, so they live outside data/marble/ and survive a Marble
+// refresh. Same schema, ids start with jane_, appended after the Marble topics (existing tax.json positions never move).
+const {janeTopics,janeDeps}=await import('./lib-jane-topics.mjs').then(m=>m.loadJaneTopics('.',all));
+const janeIds=new Set(janeTopics.map(t=>t.id)),knownIds=new Set([...allIds,...janeIds]);
 // Topics not playable yet (data/kid-prompts/PENDING.txt, slice 3 #39) are left out of the app; the prerequisite graph is
 // bridged across them (dependent → each of the pending topic's prerequisites, hard only if both edges are hard).
 const pending=new Set(fs.readFileSync('data/kid-prompts/PENDING.txt','utf8').split('\n').map(l=>l.replace(/#.*/,'').trim()).filter(Boolean));
@@ -27,13 +31,13 @@ for(const [c,m] of Object.entries(tags))for(const id of m.keys())if(!allIds.has(
 for(const c of hideCodes)if(!tags[c])throw Error(`HIDE_REGIONS: no data/regions/${c}.txt (known: ${Object.keys(tags).join(', ')||'none'})`);
 const hidden=new Set(hideCodes.flatMap(c=>[...tags[c].keys()]).filter(id=>!pending.has(id)));
 const regionOf=id=>Object.keys(tags).filter(c=>tags[c].has(id));
-const rawAll=all.filter(t=>!pending.has(t.id)),raw=rawAll.filter(t=>!hidden.has(t.id));
+const rawAll=[...all.filter(t=>!pending.has(t.id)),...janeTopics],raw=rawAll.filter(t=>!hidden.has(t.id));
 const bridge=(E,drop)=>{const key=(a,b)=>a+'|'+b;const add=(a,b,h)=>{if(a===b)return;const k=key(a,b);E.set(k,Math.max(E.get(k)??0,h));};
   for(const x of drop){const ins=[],outs=[];for(const [k,h] of E){const [a,b]=k.split('|');if(b===x)ins.push([a,h]);else if(a===x)outs.push([b,h]);}
     for(const [a] of ins)E.delete(key(a,x));for(const [b] of outs)E.delete(key(x,b));
     for(const [a,h1] of ins)for(const [b,h2] of outs)add(a,b,h1&&h2?1:0);}
   return E;};
-const upstream=new Map();for(const d of JSON.parse(fs.readFileSync(T+'dependencies.json')).dependencies){if(d.topicId===d.prerequisiteId)continue;const k=d.topicId+'|'+d.prerequisiteId;upstream.set(k,Math.max(upstream.get(k)??0,d.strength==='hard'?1:0));}
+const upstream=new Map();for(const d of [...JSON.parse(fs.readFileSync(T+'dependencies.json')).dependencies,...janeDeps]){if(d.topicId===d.prerequisiteId)continue;const k=d.topicId+'|'+d.prerequisiteId;upstream.set(k,Math.max(upstream.get(k)??0,d.strength==='hard'?1:0));}
 const toList=E=>[...E].map(([k,h])=>[...k.split('|'),h]);
 const depsAll=toList(bridge(new Map(upstream),pending)),deps=toList(bridge(bridge(new Map(upstream),pending),hidden));
 // removed upstream ids → their replacement; progress on an old id is folded forward by the engine (src/engine.js foldAliases)
@@ -41,7 +45,7 @@ const aliases=JSON.parse(fs.readFileSync('data/topic-aliases.json','utf8')).alia
 for(const [a,b] of Object.entries(aliases)){if(allIds.has(a))throw Error(`data/topic-aliases.json: ${a} still exists upstream`);if(!rawAll.some(t=>t.id===b))throw Error(`data/topic-aliases.json: ${a} → ${b}, which is not a playable topic`);}
 // kid prompts: data/kid-prompts/b*.txt, one line per topic `mt_id|question|right|wrong1|wrong2`, joined by topic id (never by position)
 const ids=new Set(rawAll.map(t=>t.id)),kid={};for(const f of fs.readdirSync('data/kid-prompts').filter(f=>/^b\d+\.txt$/.test(f)).sort())for(const l of fs.readFileSync('data/kid-prompts/'+f,'utf8').split('\n')){if(!l.trim())continue;const p=l.split('|');if(p.length!==5)throw Error('bad line '+l);
-  const id=p[0].trim();if(!/^mt_[\w-]+$/.test(id))throw Error(`${f}: kid prompt must start with a topic id (mt_…), got "${id}" (run node migrate-kid-prompts.mjs)`);
+  const id=p[0].trim();if(!/^(mt|jane)_[\w-]+$/.test(id))throw Error(`${f}: kid prompt must start with a topic id (mt_… or jane_…), got "${id}" (run node migrate-kid-prompts.mjs)`);
   if(!ids.has(id))throw Error(`${f}: kid prompt for ${pending.has(id)?'pending topic '+id+' (remove it from PENDING.txt)':'unknown topic '+id}`);if(kid[id])throw Error(`${f}: duplicate kid prompt for ${id}`);kid[id]=p.slice(1).map(x=>x.trim());}
 // check-understanding items: data/checks/*.txt, `mt_id|question|right|wrong1|wrong2[|why right|why wrong1|why wrong2]`,
 // kid-voice items written offline from the research's two-tier assessments (slice 6). Pending / hidden topics are skipped.
@@ -49,20 +53,21 @@ const CK={};let ckSkipped=0;const wcB=s=>s.trim().split(/\s+/).length;
 if(fs.existsSync('data/checks'))for(const f of fs.readdirSync('data/checks').filter(f=>f.endsWith('.txt')).sort())for(const l of fs.readFileSync('data/checks/'+f,'utf8').split('\n')){if(!l.trim()||l.startsWith('#'))continue;
   const p=l.split('|').map(x=>x.trim()),id=p[0],bad=m=>{throw Error(`data/checks/${f}: ${id}: ${m}`);};
   if(p.length!==5&&p.length!==8)bad('needs 5 or 8 fields (id|question|right|wrong1|wrong2[|why right|why wrong1|why wrong2])');
-  if(!allIds.has(id))bad('unknown topic id');if(CK[id])bad('duplicate');if(p.some(x=>!x))bad('empty field');
+  if(!knownIds.has(id))bad('unknown topic id');if(CK[id])bad('duplicate');if(p.some(x=>!x))bad('empty field');
   if(new Set(p.slice(2,5)).size<3||(p.length===8&&new Set(p.slice(5)).size<3))bad('choices must be different');
   if(wcB(p[1])>15)bad(`question is ${wcB(p[1])} words (max 15)`);for(const c of p.slice(2))if(wcB(c)>12)bad(`choice "${c}" is over 12 words`);
   if(/\b(the child|the learner|pupils?|students? should|say:|ask:|watch (?:what|which|whether))/i.test(p.join(' ')))bad('adult/teacher wording: write it for the kid');
   if(!ids.has(id)||hidden.has(id)){ckSkipped++;continue;}
   CK[id]={q:p[1],a:p[2],w:[p[3],p[4]],...(p.length===8?{y:{a:p[5],w:[p[6],p[7]]}}:{})};}
-const ICON={'Artificial Intelligence':'🤖','Algorithms & Programming':'🧩','Data Representation':'🗂️','Digital Systems':'💻','Designing Digital Solutions':'💡','Digital Tools & Collaboration':'📲','Privacy & Security':'🔒','Maps & Spatial Skills':'🗺️','Places & Environments':'🌏','Family & Community History':'👪','Modern History':'📜','Food & Cooking':'🍳','Design & Technology':'🛠️','English Thinking':'💭','Grammar & Punctuation':'❗','Handwriting & Transcription':'✍️','Phonics & Word Reading':'🔤','Reading Comprehension':'📖','Speaking & Listening':'🎤','Spelling & Word Study':'🐝','Vocabulary':'💬','Writing Composition':'📝','Ancient Egypt':'🏺','Ancient Greece & Rome':'🏛️','Historical Thinking':'🕰️','Medieval Times':'🏰','Learning to Learn':'🧠','Entrepreneurship':'🚀','Money & Finance':'💰','Addition & Subtraction':'➕','Algebra':'🔣','Counting & Cardinality':'🔢','Data & Statistics':'📊','Fractions':'🍕','Geometry':'📐','Mathematical Thinking':'🧩','Measurement':'📏','Multiplication & Division':'✖️','Number Representation & Place Value':'💯','Probability':'🎲','Ratio & Proportion':'⚖️','Emotional Literacy':'😊','Empathy & Social Awareness':'🤝','Friendship & Cooperation':'👫','Responsible Decision-Making':'🧭','Self-Awareness':'🪞','Self-Regulation & Resilience':'💪','Animals of the World':'🦁','Dinosaurs & Paleontology':'🦖',"Earth's Systems":'🌍','Ecosystems & Habitats':'🌳','Energy':'⚡','Forces & Motion':'🧲','Insects & Minibeasts':'🐞','Matter & Materials':'🧪','Ocean Life':'🐙','Organisms & Life Processes':'🧬','Polar Regions':'🐧','Rainforests':'🦜','Scientific Inquiry':'🔬','Space Exploration':'🛰️',"Space Systems & Earth's History":'🪐','The Human Body':'🫀','Volcanoes & Earthquakes':'🌋','Waves, Light & Sound':'🔊','Weather & Climate':'⛈️'};
+const ICON={'Artificial Intelligence':'🤖','Algorithms & Programming':'🧩','Data Representation':'🗂️','Digital Systems':'💻','Designing Digital Solutions':'💡','Digital Tools & Collaboration':'📲','Privacy & Security':'🔒','Maps & Spatial Skills':'🗺️','Places & Environments':'🌏','Family & Community History':'👪','Modern History':'📜','Food & Cooking':'🍳','Design & Technology':'🛠️','English Thinking':'💭','Grammar & Punctuation':'❗','Handwriting & Transcription':'✍️','Phonics & Word Reading':'🔤','Reading Comprehension':'📖','Speaking & Listening':'🎤','Spelling & Word Study':'🐝','Vocabulary':'💬','Writing Composition':'📝','Ancient Egypt':'🏺','Ancient Greece & Rome':'🏛️','Historical Thinking':'🕰️','Medieval Times':'🏰','Learning to Learn':'🧠','Entrepreneurship':'🚀','Money & Finance':'💰','Money Math':'📈','Addition & Subtraction':'➕','Algebra':'🔣','Counting & Cardinality':'🔢','Data & Statistics':'📊','Fractions':'🍕','Geometry':'📐','Mathematical Thinking':'🧩','Measurement':'📏','Multiplication & Division':'✖️','Number Representation & Place Value':'💯','Probability':'🎲','Ratio & Proportion':'⚖️','Emotional Literacy':'😊','Empathy & Social Awareness':'🤝','Friendship & Cooperation':'👫','Responsible Decision-Making':'🧭','Self-Awareness':'🪞','Self-Regulation & Resilience':'💪','Animals of the World':'🦁','Dinosaurs & Paleontology':'🦖',"Earth's Systems":'🌍','Ecosystems & Habitats':'🌳','Energy':'⚡','Forces & Motion':'🧲','Insects & Minibeasts':'🐞','Matter & Materials':'🧪','Ocean Life':'🐙','Organisms & Life Processes':'🧬','Polar Regions':'🐧','Rainforests':'🦜','Scientific Inquiry':'🔬','Space Exploration':'🛰️',"Space Systems & Earth's History":'🪐','The Human Body':'🫀','Volcanoes & Earthquakes':'🌋','Waves, Light & Sound':'🔊','Weather & Climate':'⛈️'};
 const SELF={pizza:'Can you solve fraction stories, like sharing a pizza?',fracadd:'Can you add and take away fractions?',equiv:'Can you find fractions that are equal?',compare:'Can you tell which fraction is bigger?',fracdec:'Can you switch fractions into decimals?',fracof:'Can you find a fraction of a number?',fracmul:'Can you multiply with fractions?',fracdiv:'Can you divide with fractions?',muldiv:'Can you multiply and divide quickly?',addsub:'Can you add and subtract quickly?',place:'Can you tell what each digit is worth?'};
 const OV={"Conjunctions, Prepositions": "Joining & Linking Words", "Narrative Perspective & Unreliable": "Tricky Narrators", "Preparing for & Explaining": "Preparing a Talk", "Identifying Reasons Behind a Speaker's": "Why Speakers Say Things", "Layout & Formatting in Informational": "Page Layout", "Developed Informational & Explanatory": "Explaining in Writing", "Addition as combining or putting": "Adding = Putting Together", "Mentally adding hundreds to 3-digit": "Adding Hundreds in Your Head", "Decomposing a shape into more equal": "Splitting Shapes Equally", "Decimal equivalents of tenths": "Tenths as Decimals", "Adding fractions (different": "Adding Unlike Fractions", "Modelling with multiplication": "Multiplying in Real Life", "Estimation to check answers": "Estimate to Check", "The world contains many cultures": "Many Cultures", "Vocabulary: making decisions & keeping": "Safe Choices Words", "Why circuit components behave": "How Circuits Work", "Insect life cycles: complete": "Insect Metamorphosis"};
 function short(n){n=n.replace(/\s*\((age|ages)[^)]*\)/i,'').replace(/\band\b/g,'&').trim();if(n.length>40){const w=n.split(' ');let o='';for(const x of w){if((o+' '+x).trim().length>38)break;o=(o+' '+x).trim();}n=o;let w2=n.split(' ');while(w2.length>1&&/^(or|and|&|into|as|the|of|a|an|to|with|in|on|for|by|from|using|that|is|–|-|,)$/i.test(w2[w2.length-1].replace(/[,:]$/,'')))w2.pop();n=w2.join(' ').replace(/[,&:–-]+$/,'').trim();}return OV[n]||n;}
 // depth = number of ancestors (prereq closure) → medal tier
 const pre={};for(const [a,b] of depsAll)(pre[a]=pre[a]||[]).push(b);
 const anc=id=>{const s=new Set(),q=[id];while(q.length)for(const p of pre[q.pop()]||[])if(!s.has(p)){s.add(p);q.push(p);}return s.size;};
-const D=rawAll.map(t=>anc(t.id)),sorted=[...D].sort((a,b)=>a-b),pc=p=>sorted[Math.floor(p*(sorted.length-1))];
+// tier cut-offs come from the Marble topics only, so adding Jane topics never moves an existing topic's tier
+const D=rawAll.map(t=>anc(t.id)),sorted=D.filter((_,i)=>!janeIds.has(rawAll[i].id)).sort((a,b)=>a-b),pc=p=>sorted[Math.floor(p*(sorted.length-1))];
 const g70=pc(.72),s40=pc(.4);
 let miss=0;const topicsAll=rawAll.map((t,i)=>{const k=kid[t.id],kf=kindFor(t);if(!k&&!kf)miss++;
   const sn=short(t.name);
@@ -77,7 +82,7 @@ const hiddenOut={regions:hideCodes,topics:topicsAll.filter(t=>hidden.has(t.id)).
 fs.writeFileSync('public/tax.json',JSON.stringify({topics,deps,aliases,hidden:hiddenOut}));
 if(hideCodes.length)console.log(`regions: hiding ${hideCodes.join(',')} (${setting.source}): ${hidden.size} topics left out`);
 console.log(`checks: ${topics.filter(t=>t.ck).length} check-understanding items${ckSkipped?` (${ckSkipped} skipped: pending or hidden here)`:''}`);
-console.log('topics',topics.length,'pending',pending.size,'hidden',hidden.size,'deps',deps.length,'mcq',Object.keys(kid).length,'tiers g/s',g70,s40);
+console.log('topics',topics.length,'jane',janeTopics.length,'pending',pending.size,'hidden',hidden.size,'deps',deps.length,'mcq',Object.keys(kid).length,'tiers g/s',g70,s40);
 // glossary.txt → public/glossary.json (kid definitions for key terms; the app underlines them in questions)
 {const G=[];const seen=new Set();let long=0;
  for(const l of fs.readFileSync('data/glossary.txt','utf8').split('\n')){if(!l.trim()||l.startsWith('#'))continue;const [t,e,d]=l.split('|');const forms=t.split('/').map(x=>x.trim()).filter(Boolean);

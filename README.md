@@ -179,6 +179,7 @@ and Docker, set them as environment variables:
 | `test/` | End-to-end smoke test for the Node server (`npm test`) |
 | `data/marble/` | Marble Skill Taxonomy v1 at a pinned upstream commit (`UPSTREAM`), unchanged, with its LICENSE, LICENSE-CONTENT, PROVENANCE.md, CITATION.cff and the offline teaching research |
 | `data/kid-prompts/`, `data/glossary.txt` | Kid-friendly layer derived from the taxonomy |
+| `data/jane/` | Jane's own topics on top of Marble (same schema, `jane_` ids, appended by `build.mjs`; see [its README](data/jane/README.md)), e.g. Life Skills › Money Math |
 | `packs/examples/` | A generic example quest. Real nightly packs (`packs/*.json`) are gitignored |
 | `LESSONS.md`, `docs/` | Lesson-pack rules and the nightly workflow |
 | `prototype/` | Early math-only Node prototype (source of the math generators); not the full app |
