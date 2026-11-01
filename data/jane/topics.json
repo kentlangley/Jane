@@ -1,7 +1,7 @@
 {
   "about": "Jane's own topics: added by this project, not part of the Marble Skill Taxonomy. Same schema as data/marble/topics.json. Ids start with jane_ (never mt_) so they can never collide with Marble ids, and they live outside data/marble/ so a Marble data refresh never touches them. build.mjs appends them after the Marble topics in public/tax.json. centrality is hand-set (Marble computes its own; the app does not use it). See data/jane/README.md.",
   "version": 1,
-  "topicCount": 5,
+  "topicCount": 10,
   "topics": [
     {
       "id": "jane_mm_compound_growth",
@@ -91,6 +91,96 @@
         "Find the true average yearly return by taking the nth root of the product of the growth factors and subtracting 1"
       ],
       "assessmentPrompt": "If {{name}} saw an investment go up 20% one year and down 20% the next, could they explain why it did not break even and work out its true average yearly return?",
+      "standards": []
+    },
+    {
+      "id": "jane_mmod_profit_per_customer",
+      "type": "CONCEPTUAL",
+      "subject": "Life Skills",
+      "domain": "Money Models",
+      "name": "Profit per customer",
+      "description": "What one customer is really worth to a business: the money they pay (revenue) minus what it cost to get them (acquisition cost, like flyers or free samples) and to serve them (delivery cost, like cups, lemons or snacks); a business can only grow when each new customer brings in more than they cost (source: FounderOS — designing-money-models)",
+      "ageRangeStart": 9,
+      "ageRangeEnd": 12,
+      "centrality": 0.01,
+      "evidence": [
+        "Work out the profit from one lemonade customer who pays $3 when the cup and lemons cost $1 and the flyer that brought them cost $1",
+        "Name the cost to get a customer and the cost to serve a customer for a snack stand",
+        "Explain why selling to more customers loses money if each customer costs more than they pay"
+      ],
+      "assessmentPrompt": "If {{name}} ran a snack stand, could they work out how much profit one customer brings after the cost of getting and serving them?",
+      "standards": []
+    },
+    {
+      "id": "jane_mmod_payback_period",
+      "type": "PROCEDURAL",
+      "subject": "Life Skills",
+      "domain": "Money Models",
+      "name": "Payback period",
+      "description": "How many sales (or days) it takes for a customer to pay back what it cost to win them: payback = acquisition cost ÷ profit per sale; the 30-day payback rule: a healthy money model earns back the cost of getting and serving a new customer, plus some profit, within 30 days (source: FounderOS — designing-money-models)",
+      "ageRangeStart": 9,
+      "ageRangeEnd": 12,
+      "centrality": 0.01,
+      "evidence": [
+        "Work out how many $2-profit sales pay back a $6 cost to win a customer",
+        "Turn sales into days: if a customer buys once a day, how many days until they pay back",
+        "Check whether a plan passes the 30-day payback rule and suggest a change if it does not"
+      ],
+      "assessmentPrompt": "If it cost {{name}} $10 in free samples to win a new snack customer who brings $2 profit a week, could they work out the payback period and say whether it passes the 30-day rule?",
+      "standards": []
+    },
+    {
+      "id": "jane_mmod_offer_ladder",
+      "type": "CONCEPTUAL",
+      "subject": "Life Skills",
+      "domain": "Money Models",
+      "name": "The offer ladder",
+      "description": "A money model is a planned sequence of offers, not a random pile of products: attract (a first offer that wins new customers), upsell (a bigger or better offer for those who said yes), downsell (a smaller or cheaper option for those who said no) and continuity (something that repeats, like a weekly snack box); the take rate is the percent of customers who say yes, and extra cash per customer = take rate × the offer's profit (source: FounderOS — designing-money-models)",
+      "ageRangeStart": 10,
+      "ageRangeEnd": 13,
+      "centrality": 0.01,
+      "evidence": [
+        "Design a four-step offer ladder (attract, upsell, downsell, continuity) for a lemonade stand",
+        "Work out the extra cash from 20 customers when 25% of them take a $2 upsell",
+        "Explain why a downsell means a customer's 'no' is not the end of the sale"
+      ],
+      "assessmentPrompt": "If {{name}} offered a cookie with every lemonade and 40% of 30 customers said yes, could they work out how much extra cash the upsell brought in?",
+      "standards": []
+    },
+    {
+      "id": "jane_mmod_price_testing",
+      "type": "PROCEDURAL",
+      "subject": "Life Skills",
+      "domain": "Money Models",
+      "name": "Price testing",
+      "description": "Finding a good price by testing: start lower, raise the price in steps, and use a price × number sold table (minus costs) to find the total profit at each step; keep raising while total profit goes up, and when total profit drops, step back one price (source: FounderOS — designing-money-models)",
+      "ageRangeStart": 11,
+      "ageRangeEnd": 14,
+      "centrality": 0.01,
+      "evidence": [
+        "Fill in a price × number sold table and find the total profit at each price",
+        "Pick the best price from a table where profit rises and then falls, and explain why the highest price is not always best",
+        "Explain the rule: keep raising the price until total profit goes down, then step back one"
+      ],
+      "assessmentPrompt": "If {{name}} sold 40 drinks at $1, 30 at $2 and 15 at $3, with each drink costing 50¢ to make, could they find which price earns the most profit?",
+      "standards": []
+    },
+    {
+      "id": "jane_mmod_billing_math",
+      "type": "PROCEDURAL",
+      "subject": "Life Skills",
+      "domain": "Money Models",
+      "name": "Billing math",
+      "description": "The maths of repeat payments: prices are often shown in the smallest unit ('$5 a day') and billed over a longer cycle (a month, a term, a year), so check the total; billing every 28 days instead of once a month makes 13 payments a year instead of 12, about 8.3% more (1 ÷ 12); an honest seller makes the yearly total clear (source: FounderOS — designing-money-models)",
+      "ageRangeStart": 11,
+      "ageRangeEnd": 14,
+      "centrality": 0.01,
+      "evidence": [
+        "Turn a price per day into a price per week, month and year",
+        "Show that billing every 28 days gives 13 payments a year and work out how much more that is than 12 monthly payments",
+        "Compare paying monthly with paying for a whole year up front, and explain why a fair seller shows the yearly total"
+      ],
+      "assessmentPrompt": "If a snack club cost $5 every 28 days, could {{name}} work out the total for a year and explain why it is more than $5 a month for 12 months?",
       "standards": []
     }
   ]

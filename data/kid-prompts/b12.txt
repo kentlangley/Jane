@@ -3,3 +3,8 @@ jane_mm_rule_of_72|Money grows 6% a year. About how long until it doubles?|About
 jane_mm_real_return|Savings earn 5%, prices rise 3%. About how much richer are you?|About 2% richer|About 8% richer|About 5% richer
 jane_mm_present_value|Savings can earn interest. Which is worth more?|$100 today|$100 in five years|They are worth the same
 jane_mm_true_average_return|$100 goes up 50%, then down 50%. What is it now?|$75|$100|$125
+jane_mmod_profit_per_customer|A cup sells for $3. Lemons cost $1, the flyer $1. Profit?|$1|$3|$5
+jane_mmod_payback_period|Winning a customer costs $6. You make $2 a sale. Sales to pay back?|3 sales|6 sales|12 sales
+jane_mmod_offer_ladder|Half of 10 customers add a $2 cookie. How much extra cash?|$10|$20|$2
+jane_mmod_price_testing|Profit: $40 at $2, $45 at $3, $35 at $4. Best price?|$3|$4|$2
+jane_mmod_billing_math|You pay every 28 days, not monthly. How many payments a year?|13|12|14

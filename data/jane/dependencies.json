@@ -1,7 +1,7 @@
 {
   "about": "Prerequisite edges for Jane's own topics (data/jane/topics.json), same shape as data/marble/dependencies.json: topicId needs prerequisiteId. topicId is always a jane_ topic; prerequisiteId is a jane_ or Marble mt_ topic. Marble topics never depend on jane_ topics here, so adding Jane topics never locks or re-scores a Marble topic. The app builds both directions (prerequisites and unlocks) from these edges.",
   "version": 1,
-  "edgeCount": 11,
+  "edgeCount": 24,
   "dependencies": [
     {"topicId": "jane_mm_compound_growth", "prerequisiteId": "mt_iEXqN48w3x", "strength": "hard", "reason": "Cross-domain: percentage increase and simple interest (Percentages, age 12+) come before interest on interest"},
     {"topicId": "jane_mm_compound_growth", "prerequisiteId": "mt_hCVPYlF-7Y", "strength": "hard", "reason": "Cross-domain: (1 + r)^n needs integer powers (Square and cube numbers, powers and roots)"},
@@ -13,6 +13,19 @@
     {"topicId": "jane_mm_present_value", "prerequisiteId": "jane_mm_compound_growth", "strength": "hard", "reason": "Present value runs the compound growth formula backwards"},
     {"topicId": "jane_mm_true_average_return", "prerequisiteId": "jane_mm_compound_growth", "strength": "hard", "reason": "The true average return treats each year as a compound growth factor"},
     {"topicId": "jane_mm_true_average_return", "prerequisiteId": "mt_Cg8VPguS_V", "strength": "hard", "reason": "Cross-domain: the ordinary (arithmetic) mean comes first, to see why it misleads for growth rates"},
-    {"topicId": "jane_mm_true_average_return", "prerequisiteId": "mt_hCVPYlF-7Y", "strength": "hard", "reason": "Cross-domain: the nth root of the product of growth factors needs roots (Square and cube numbers, powers and roots)"}
+    {"topicId": "jane_mm_true_average_return", "prerequisiteId": "mt_hCVPYlF-7Y", "strength": "hard", "reason": "Cross-domain: the nth root of the product of growth factors needs roots (Square and cube numbers, powers and roots)"},
+    {"topicId": "jane_mmod_profit_per_customer", "prerequisiteId": "mt_9gpUHWVKMR", "strength": "hard", "reason": "Cross-domain: revenue, costs and profit (Costs & Revenue) come before profit per customer"},
+    {"topicId": "jane_mmod_profit_per_customer", "prerequisiteId": "mt_3tz3Otap5j", "strength": "hard", "reason": "Cross-domain: adding and subtracting dollars and cents (Money word problems) is the arithmetic of profit per customer"},
+    {"topicId": "jane_mmod_profit_per_customer", "prerequisiteId": "mt_M2Gou3O6qT", "strength": "soft", "reason": "Cross-domain: how customers find out about you (Marketing Basics) is where acquisition cost comes from"},
+    {"topicId": "jane_mmod_payback_period", "prerequisiteId": "jane_mmod_profit_per_customer", "strength": "hard", "reason": "Payback divides the cost to win a customer by the profit each sale brings"},
+    {"topicId": "jane_mmod_payback_period", "prerequisiteId": "mt_Zdv-b-iW5K", "strength": "hard", "reason": "Cross-domain: payback is a division word problem (how many equal profits make the cost)"},
+    {"topicId": "jane_mmod_offer_ladder", "prerequisiteId": "jane_mmod_profit_per_customer", "strength": "hard", "reason": "Each step of the ladder is judged by the profit per customer it adds"},
+    {"topicId": "jane_mmod_offer_ladder", "prerequisiteId": "mt_PNSyfH56eQ", "strength": "hard", "reason": "Cross-domain: take rates are percentages of customers (Calculating Percentages)"},
+    {"topicId": "jane_mmod_price_testing", "prerequisiteId": "jane_mmod_profit_per_customer", "strength": "hard", "reason": "Price testing compares total profit, built from profit per customer, at each price"},
+    {"topicId": "jane_mmod_price_testing", "prerequisiteId": "jane_mmod_offer_ladder", "strength": "hard", "reason": "Price testing comes after the offer ladder is in place (raise prices once the offers work)"},
+    {"topicId": "jane_mmod_billing_math", "prerequisiteId": "jane_mmod_profit_per_customer", "strength": "hard", "reason": "Billing math checks what repeat payments add to profit per customer"},
+    {"topicId": "jane_mmod_billing_math", "prerequisiteId": "mt_Zdv-b-iW5K", "strength": "hard", "reason": "Cross-domain: price per day to per year, and 364 ÷ 28 = 13, are multiplication and division problems"},
+    {"topicId": "jane_mmod_billing_math", "prerequisiteId": "mt_PNSyfH56eQ", "strength": "hard", "reason": "Cross-domain: 13 payments instead of 12 is about 8.3% more (Calculating Percentages)"},
+    {"topicId": "jane_mmod_billing_math", "prerequisiteId": "mt_EXlmTURK_o", "strength": "soft", "reason": "Cross-domain: days in a month and a year (Time Units and Calendar Facts) underlie billing cycles"}
   ]
 }

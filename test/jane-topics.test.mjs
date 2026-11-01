@@ -1,4 +1,4 @@
-// Jane's own topics (data/jane/, lib-jane-topics.mjs): the Money Math path on the Life Skills island (2026-11-01).
+// Jane's own topics (data/jane/, lib-jane-topics.mjs): the Money Math and Money Models paths on the Life Skills island (2026-11-01).
 // They load into tax.json after every Marble topic, sit on the Life Skills island as their own path (domain), have
 // valid prerequisites, start unmastered, unlock through the normal ready/locked rules, can be quest stages, and never
 // change a Marble topic (position, tier, prerequisites) or campaign state.
@@ -8,12 +8,14 @@ const {E,g}=await loadEngine();const J=f=>JSON.parse(fs.readFileSync(path.join(R
 const tax=J('public/tax.json'),marble=J('data/marble/topics.json').topics,src=J('data/jane/topics.json').topics,srcDeps=J('data/jane/dependencies.json').dependencies;
 const now=Date.parse('2026-11-01T16:00:00Z'),DAY=864e5;
 const MM={compound:'jane_mm_compound_growth',r72:'jane_mm_rule_of_72',real:'jane_mm_real_return',pv:'jane_mm_present_value',geo:'jane_mm_true_average_return'};
+const MOD={profit:'jane_mmod_profit_per_customer',payback:'jane_mmod_payback_period',ladder:'jane_mmod_offer_ladder',price:'jane_mmod_price_testing',billing:'jane_mmod_billing_math'};
+const COSTREV='mt_9gpUHWVKMR',MONEYWP='mt_3tz3Otap5j',MKT='mt_M2Gou3O6qT',MDWP='mt_Zdv-b-iW5K',CALCPCT='mt_PNSyfH56eQ',CAL='mt_EXlmTURK_o';
 const PCT12='mt_iEXqN48w3x',POW='mt_hCVPYlF-7Y',BANK='mt_uSUqTjOl8m',PLAN='mt_r1hw-KenpK',ECON='mt_udgPy5oAvR',MEAN='mt_Cg8VPguS_V';
 const master=(S,id)=>{S.ts[id]={st:'mastered',how:'direct',c:3,w:0,ft:3,lvl:3,box:0,due:now+7*DAY,at:now};};
 const pre=id=>Object.fromEntries(g.pre[id].map(e=>[e.id,e.h?'hard':'soft']));
 
 test('the five Money Math topics load into tax.json on the Life Skills island, after every Marble topic',()=>{
-  const ids=Object.values(MM);assert.deepEqual(src.map(t=>t.id),ids,'source order');
+  const ids=Object.values(MM);assert.deepEqual(src.map(t=>t.id).slice(0,5),ids,'source order');
   const at=ids.map(id=>tax.topics.findIndex(t=>t.id===id));assert.ok(at.every(i=>i>=0),'all in tax.json');
   const firstJane=tax.topics.findIndex(t=>t.id.startsWith('jane_'));assert.ok(tax.topics.slice(0,firstJane).every(t=>t.id.startsWith('mt_')),'Marble topics keep their positions');
   assert.ok(tax.topics.slice(firstJane).every(t=>t.id.startsWith('jane_')),'Jane topics are appended');
@@ -21,7 +23,7 @@ test('the five Money Math topics load into tax.json on the Life Skills island, a
     assert.ok(t.kq&&t.ka&&t.kw?.length===2,id+' has a kid prompt');assert.ok(['bronze','silver','gold'].includes(t.tier));}
   for(const t of src){for(const k of['type','subject','domain','name','description','ageRangeStart','ageRangeEnd','centrality','evidence','assessmentPrompt','standards'])assert.ok(k in t,`${t.id}.${k}`);
     assert.ok(!marble.some(m=>m.id===t.id),'distinct from Marble ids');}
-  assert.deepEqual(src.map(t=>[t.ageRangeStart,t.ageRangeEnd]),[[11,14],[11,14],[12,14],[13,15],[13,15]]);
+  assert.deepEqual(src.slice(0,5).map(t=>[t.ageRangeStart,t.ageRangeEnd]),[[11,14],[11,14],[12,14],[13,15],[13,15]]);
   const lsDomains=new Set(g.topics.filter(t=>t.subject==='Life Skills').map(t=>t.domain));
   for(const d of['Entrepreneurship','Food & Cooking','Money & Finance','Money Math'])assert.ok(lsDomains.has(d),d);});
 
@@ -55,7 +57,7 @@ test('adding Jane topics leaves Marble tiers, bosses and campaign state as they 
     fs.rmSync(path.join(d,'data/jane'),{recursive:true});fs.rmSync(path.join(d,'data/kid-prompts/b12.txt'));
     const r=spawnSync(process.execPath,['build.mjs'],{cwd:d,encoding:'utf8',env:{...process.env,HIDE_REGIONS:(tax.hidden?.regions||[]).join(',')}});assert.equal(r.status,0,r.stderr);
     const base=JSON.parse(fs.readFileSync(path.join(d,'public/tax.json'),'utf8'));
-    assert.equal(base.topics.length,tax.topics.length-5);base.topics.forEach((t,i)=>assert.deepEqual(tax.topics[i],t,t.id));
+    assert.equal(base.topics.length,tax.topics.length-src.length);base.topics.forEach((t,i)=>assert.deepEqual(tax.topics[i],t,t.id));
     const g0=E.graph(base);assert.deepEqual([...g.boss].filter(id=>!id.startsWith('jane_')).sort(),[...g0.boss].sort(),'same boss topics');
     const S=E.blank();S.questMedals=Array.from({length:11},(_,i)=>({date:`2026-10-${String(i+10)}`,name:'Q'+i,emoji:'🏅',title:'Q'+i,at:now-(20-i)*DAY}));
     S.medals=[{id:[...g0.boss][0],tier:'legendary',at:now-DAY}];assert.deepEqual(E.campaignState(S,g),E.campaignState(S,g0));}
@@ -80,3 +82,22 @@ test('the loader rejects mt_ ids, Marble collisions, unknown subjects, Marble→
 
 test('research.mjs knows Jane topics (no Marble research for them)',async()=>{const R=await import('../research.mjs');R.reset();
   const d=R.briefData(MM.compound);assert.equal(d.known,true);assert.equal(d.status,'playable');assert.equal(d.research,false);assert.equal(d.subject,'Life Skills');});
+
+test('the Money Models path (business math, after FounderOS designing-money-models) sits on Life Skills with valid prerequisites',()=>{
+  const ids=Object.values(MOD);assert.deepEqual(src.slice(5).map(t=>t.id),ids,'source order');
+  assert.deepEqual(src.slice(5).map(t=>[t.ageRangeStart,t.ageRangeEnd]),[[9,12],[9,12],[10,13],[11,14],[11,14]]);
+  for(const t of src.slice(5)){assert.match(t.description,/FounderOS — designing-money-models/,t.id+' credits its source');assert.equal(t.domain,'Money Models');}
+  for(const id of ids){const t=g.byId[id];assert.equal(t.subject,'Life Skills');assert.equal(t.ic,'🍋');assert.ok(t.kq&&t.ka&&t.kw?.length===2,id);}
+  assert.deepEqual(pre(MOD.profit),{[COSTREV]:'hard',[MONEYWP]:'hard',[MKT]:'soft'});
+  assert.deepEqual(pre(MOD.payback),{[MOD.profit]:'hard',[MDWP]:'hard'});
+  assert.deepEqual(pre(MOD.ladder),{[MOD.profit]:'hard',[CALCPCT]:'hard'});
+  assert.deepEqual(pre(MOD.price),{[MOD.profit]:'hard',[MOD.ladder]:'hard'});
+  assert.deepEqual(pre(MOD.billing),{[MOD.profit]:'hard',[MDWP]:'hard',[CALCPCT]:'hard',[CAL]:'soft'});
+  assert.ok(g.byId[CALCPCT].ageRangeStart<12,'the percent prerequisite is a ~10-11 topic, not Percentages (age 12+)');
+  // unlocks: a fresh learner has every stone locked; Costs & Revenue + Money word problems open the first one
+  const S=E.blank();for(const id of ids)assert.equal(E.stateOf(S,g,id,now),'locked',id);
+  master(S,COSTREV);master(S,MONEYWP);assert.equal(E.stateOf(S,g,MOD.profit,now),'ready');
+  master(S,MOD.profit);assert.equal(E.stateOf(S,g,MOD.payback,now),'locked');master(S,MDWP);assert.equal(E.stateOf(S,g,MOD.payback,now),'ready');
+  master(S,CALCPCT);assert.equal(E.stateOf(S,g,MOD.ladder,now),'ready');assert.equal(E.stateOf(S,g,MOD.price,now),'locked');assert.equal(E.stateOf(S,g,MOD.billing,now),'ready');
+  master(S,MOD.ladder);assert.equal(E.stateOf(S,g,MOD.price,now),'ready');
+  assert.equal(E.nextTrailTopic(S,g,'Life Skills',MOD.profit,now).domain,'Money Models');});

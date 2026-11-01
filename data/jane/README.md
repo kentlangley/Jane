@@ -37,3 +37,20 @@ From Kent, after the X article "The Five Equations That Quietly Run Your Entire 
 | `jane_mm_real_return` | Real return and inflation: (1+r)/(1+i) − 1 ≈ r − i | 12–14 | hard: Compound growth; soft: How the Economy Works |
 | `jane_mm_present_value` | Present value: PV = FV ÷ (1+r)^n | 13–15 | hard: Compound growth |
 | `jane_mm_true_average_return` | True average return (geometric mean) | 13–15 | hard: Compound growth, Calculating the Mean, Square and cube numbers (roots) |
+
+## Life Skills › Money Models (2026-11-01)
+
+Business math for a kid-sized business (a lemonade stand, a snack cart). Source: **FounderOS — designing-money-models**
+(the FounderOS skill's SKILL.md, references/money-model-builder.md and templates/money-model-worksheet.md, which
+themselves cite Alex Hormozi's *$100M Money Models* and *$100M Playbook: Pricing*). Ideas only, reworded for kids;
+no text is copied. Topic ideas approved by Kent.
+
+| Id | Topic | Ages | Prerequisites (hard / soft) |
+|---|---|---|---|
+| `jane_mmod_profit_per_customer` | Profit per customer: revenue − cost to get − cost to serve | 9–12 | hard: Costs & Revenue, Money word problems; soft: Marketing Basics |
+| `jane_mmod_payback_period` | Payback period and the 30-day payback rule | 9–12 | hard: Profit per customer, Multiplication and Division Word Problems |
+| `jane_mmod_offer_ladder` | The offer ladder: attract, upsell, downsell, continuity; take rates | 10–13 | hard: Profit per customer, Calculating Percentages |
+| `jane_mmod_price_testing` | Price testing: raise in steps until total profit drops, step back one | 11–14 | hard: Profit per customer, The offer ladder |
+| `jane_mmod_billing_math` | Billing math: smallest-unit price, longer cycles, 28-day billing = 13 payments | 11–14 | hard: Profit per customer, Multiplication and Division Word Problems, Calculating Percentages; soft: Time Units and Calendar Facts |
+
+Price testing is the path's boss topic (the deepest end of the path), like boss topics on Marble paths.

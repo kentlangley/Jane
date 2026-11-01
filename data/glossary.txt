@@ -439,3 +439,10 @@ recycling/recycle|♻️|Turning old things into new things instead of trash.
 finite|⏳|Will run out someday, like oil.
 inflation|🎈|When prices slowly go up, so the same money buys less.
 compound interest|❄️|Interest earned on your interest too, so savings snowball over time.
+revenue|💵|All the money that comes in from sales, before paying costs.
+acquisition cost/customer acquisition cost|🧲|What it costs to win one new customer, like flyers or free samples.
+upsell|⬆️|Offering a bigger or better version to someone who already said yes.
+downsell|⬇️|Offering a smaller or cheaper option to someone who said no.
+payback/payback period|⏱️|How long until a customer earns back what it cost to win them.
+continuity|🔁|An offer that repeats, like a weekly snack box paid each week.
+take rate|✅|The percent of customers who say yes to an offer.
