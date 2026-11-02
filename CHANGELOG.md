@@ -5,6 +5,8 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-11-01
+
 ### Added
 - **Money Math path on the Life Skills island**: five new topics (compound growth, the Rule of 72, real return and inflation, present value, true average return / geometric mean), ages 11–15, for every learner. They are Jane's own topics, not Marble's: they live in `data/jane/` (same schema as `data/marble/`, ids `jane_…`), are validated by `lib-jane-topics.mjs` and appended after the Marble topics in `public/tax.json`, so a Marble refresh never touches them and existing map positions, medal tiers, bosses and campaign state do not change. Prerequisites link to Marble's Percentages (age 12+), Square and cube numbers (powers and roots), Banks & Saving, Financial Planning, How the Economy Works and Calculating the Mean. Kid prompts in `data/kid-prompts/b12.txt`; glossary adds *inflation* and *compound interest*. Topic ideas from Kent, after "The Five Equations That Quietly Run Your Entire Financial Life" (@lumenxbt on X).
 - **Money Models path on the Life Skills island** (business math for a lemonade stand or snack business): profit per customer, payback period (the 30-day payback rule), the offer ladder (attract, upsell, downsell, continuity; take rates), price testing and billing math (28-day billing = 13 payments a year), ages 9–14, for every learner. Same `data/jane/` mechanism (ids `jane_mmod_…`). Prerequisites link to Marble's Costs & Revenue, Money word problems, Marketing Basics, Multiplication and Division Word Problems, Calculating Percentages and Time Units and Calendar Facts. Price testing is the path's boss topic. Glossary adds *revenue*, *acquisition cost*, *upsell*, *downsell*, *payback*, *continuity* and *take rate*. Source: FounderOS — designing-money-models.
@@ -361,7 +363,8 @@ First public release.
 - Runs on Cloudflare Workers (or `npm run dev` locally) only; the standalone Node server is planned for v0.2.
   `prototype/` is the early math-only version, not the full app.
 
-[Unreleased]: https://github.com/kentlangley/Jane/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/kentlangley/Jane/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/kentlangley/Jane/releases/tag/v0.8.0
 [0.6.0]: https://github.com/kentlangley/Jane/releases/tag/v0.6.0
 [0.5.0]: https://github.com/kentlangley/Jane/releases/tag/v0.5.0
 [0.4.2]: https://github.com/kentlangley/Jane/releases/tag/v0.4.2
