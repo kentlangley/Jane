@@ -23,28 +23,28 @@ test('the five Money Math topics load into tax.json on the Life Skills island, a
     assert.ok(t.kq&&t.ka&&t.kw?.length===2,id+' has a kid prompt');assert.ok(['bronze','silver','gold'].includes(t.tier));}
   for(const t of src){for(const k of['type','subject','domain','name','description','ageRangeStart','ageRangeEnd','centrality','evidence','assessmentPrompt','standards'])assert.ok(k in t,`${t.id}.${k}`);
     assert.ok(!marble.some(m=>m.id===t.id),'distinct from Marble ids');}
-  assert.deepEqual(src.slice(0,5).map(t=>[t.ageRangeStart,t.ageRangeEnd]),[[11,14],[11,14],[12,14],[13,15],[13,15]]);
+  assert.deepEqual(src.slice(0,5).map(t=>[t.ageRangeStart,t.ageRangeEnd]),[[11,14],[10,14],[12,14],[13,15],[13,15]]);
   const lsDomains=new Set(g.topics.filter(t=>t.subject==='Life Skills').map(t=>t.domain));
   for(const d of['Entrepreneurship','Food & Cooking','Money & Finance','Money Math'])assert.ok(lsDomains.has(d),d);});
 
 test('prerequisites are valid, playable and as planned; no Marble topic depends on a Jane topic',()=>{
   assert.deepEqual(pre(MM.compound),{[PCT12]:'hard',[POW]:'hard',[BANK]:'soft',[PLAN]:'soft'});
-  assert.deepEqual(pre(MM.r72),{[MM.compound]:'hard'});
+  assert.deepEqual(pre(MM.r72),{[CALCPCT]:'hard'},'early unlock: basic percentages only');
   assert.deepEqual(pre(MM.real),{[MM.compound]:'hard',[ECON]:'soft'});
   assert.deepEqual(pre(MM.pv),{[MM.compound]:'hard'});
   assert.deepEqual(pre(MM.geo),{[MM.compound]:'hard',[MEAN]:'hard',[POW]:'hard'});
   for(const d of srcDeps){assert.ok(g.byId[d.prerequisiteId],'playable prerequisite '+d.prerequisiteId);assert.ok(d.topicId.startsWith('jane_'));}
   for(const t of g.topics)if(t.id.startsWith('mt_'))assert.ok(!g.pre[t.id].some(e=>e.id.startsWith('jane_')),t.id);
   // unlocks are the other direction of the same edges
-  assert.deepEqual(g.post[MM.compound].map(e=>e.id).sort(),[MM.r72,MM.real,MM.pv,MM.geo].sort());
+  assert.deepEqual(g.post[MM.compound].map(e=>e.id).sort(),[MM.real,MM.pv,MM.geo].sort());
   assert.ok(g.post[PCT12].some(e=>e.id===MM.compound)&&g.post[MEAN].some(e=>e.id===MM.geo));});
 
 test('new topics start unmastered and unlock through the normal ready/locked rules',()=>{
   const S=E.blank();for(const id of Object.values(MM)){assert.equal(S.ts[id],undefined);assert.equal(E.stateOf(S,g,id,now),'locked');}
   master(S,PCT12);assert.equal(E.stateOf(S,g,MM.compound,now),'locked','powers still needed');
   master(S,POW);assert.equal(E.stateOf(S,g,MM.compound,now),'ready','soft prerequisites do not block');
-  assert.equal(E.stateOf(S,g,MM.r72,now),'locked');master(S,MM.compound);
-  for(const id of[MM.r72,MM.real,MM.pv])assert.equal(E.stateOf(S,g,id,now),'ready',id);
+  assert.equal(E.stateOf(S,g,MM.r72,now),'locked','needs Calculating Percentages');master(S,MM.compound);
+  for(const id of[MM.real,MM.pv])assert.equal(E.stateOf(S,g,id,now),'ready',id);
   assert.equal(E.stateOf(S,g,MM.geo,now),'locked','needs the mean');master(S,MEAN);assert.equal(E.stateOf(S,g,MM.geo,now),'ready');
   // the trail and the map payload reach them
   const n=E.nextTrailTopic(S,g,'Life Skills',MM.compound,now);assert.equal(n.domain,'Money Math');
@@ -101,3 +101,40 @@ test('the Money Models path (business math, after FounderOS designing-money-mode
   master(S,CALCPCT);assert.equal(E.stateOf(S,g,MOD.ladder,now),'ready');assert.equal(E.stateOf(S,g,MOD.price,now),'locked');assert.equal(E.stateOf(S,g,MOD.billing,now),'ready');
   master(S,MOD.ladder);assert.equal(E.stateOf(S,g,MOD.price,now),'ready');
   assert.equal(E.nextTrailTopic(S,g,'Life Skills',MOD.profit,now).domain,'Money Models');});
+
+test('the Rule of 72 unlocks early: Calculating Percentages alone opens it, before Compound growth (approved 2026-11-01)',()=>{
+  assert.ok(g.post[CALCPCT].some(e=>e.id===MM.r72&&e.h),'Calculating Percentages unlocks it');
+  assert.ok(!g.pre[MM.r72].some(e=>e.id===MM.compound)&&!g.pre[MM.compound].some(e=>e.id===MM.r72),'no edge either way, so mastering one never credits the other');
+  const r72=src.find(t=>t.id===MM.r72);assert.equal(r72.ageRangeStart,10,'a 5th-grade (age 10) topic');assert.match(r72.description,/double/);
+  // a learner who has only basic percentages: the Rule of 72 is ready, the rest of Money Math stays locked
+  const S=E.blank();master(S,CALCPCT);assert.equal(E.stateOf(S,g,MM.r72,now),'ready');
+  for(const id of[MM.compound,MM.real,MM.pv,MM.geo])assert.equal(E.stateOf(S,g,id,now),'locked',id);
+  // a mastered prerequisite that is due for review still counts
+  S.ts[CALCPCT].due=now-DAY;assert.equal(E.stateOf(S,g,CALCPCT,now),'review');assert.equal(E.stateOf(S,g,MM.r72,now),'ready');
+  // an inferred (not direct) percentages mastery counts too, like every other hard prerequisite
+  const S2=E.blank();S2.ts[CALCPCT]={st:'mastered',how:'inferred',conf:.8,box:2,due:now+9*DAY,at:now};assert.equal(E.stateOf(S2,g,MM.r72,now),'ready');
+  // mastering the Rule of 72 leaves Compound growth unmastered and locked
+  master(S,MM.r72);assert.equal(S.ts[MM.compound],undefined);assert.equal(E.stateOf(S,g,MM.compound,now),'locked');
+  // a quest or the map can reach it once ready
+  assert.equal(E.mapPayload(S,g,now).codes[g.topics.findIndex(t=>t.id===MM.compound)],'x');});
+
+test('money topics carry verified curriculum standards (Common Core math, Jump$tart 2021); none invented',()=>{
+  const want={
+    [MM.compound]:['ccss-math:7.RP.3','ccss-math:7.EE.2','ccss-math:HSA-SSE.A.1b','ccss-math:HSF-LE.A.1c','ccss-math:HSF-LE.A.2','jumpstart-2021:Saving-8-5a','jumpstart-2021:Saving-8-5b','jumpstart-2021:Investing-8-7a','jumpstart-2021:Investing-8-7b'],
+    [MM.r72]:['jumpstart-2021:Saving-8-4c'],
+    [MM.real]:['ccss-math:7.RP.3','ccss-math:7.EE.2','jumpstart-2021:Saving-12-4b','jumpstart-2021:Investing-12-4a','jumpstart-2021:Investing-12-4b'],
+    [MM.pv]:['ccss-math:HSA-SSE.A.1b'],
+    [MM.geo]:['ccss-math:7.EE.2','ccss-math:HSF-LE.A.1a'],
+    [MOD.profit]:['ccss-math:4.OA.3','jumpstart-2021:EarningIncome-4-4c'],
+    [MOD.payback]:['ccss-math:4.OA.3','ccss-math:6.RP.3b'],
+    [MOD.ladder]:['ccss-math:6.RP.3c'],
+    [MOD.price]:['ccss-math:7.EE.3','jumpstart-2021:EarningIncome-4-4c'],
+    [MOD.billing]:['ccss-math:6.RP.3b','ccss-math:6.RP.3d','ccss-math:7.RP.3']};
+  for(const t of src)assert.deepEqual(t.standards,want[t.id]||[],t.id);
+  // code shapes: CCSS K-8 in Marble's short form (no cluster letter), high school with its cluster; Jump$tart area-grade-standard+outcome
+  const CCSS=/^ccss-math:(?:[3-8]\.(?:OA|RP|EE)\.\d+[a-e]?|HS[AF]-(?:SSE|LE)\.[A-B]\.\d+[a-e]?)$/,JS=/^jumpstart-2021:(?:Saving|Investing|EarningIncome|Spending|ManagingCredit|ManagingRisk)-(?:4|8|12)-\d+[a-z]$/;
+  for(const t of src)for(const c of t.standards)assert.ok(CCSS.test(c)||JS.test(c),`${t.id}: ${c}`);
+  // the Jump$tart outcome's grade matches its standard number (8-4c is a grade 8 outcome)
+  for(const t of src)for(const c of t.standards.filter(c=>c.startsWith('jumpstart-2021:'))){const [,gr,std]=c.match(/-(\d+)-(\d+)[a-z]$/);assert.ok(Number(gr)>=4&&Number(std)>=1,c);}
+  // the build still accepts them (Marble's source:code rule)
+  assert.equal(loadJaneTopics(ROOT).janeTopics.length,src.length);});

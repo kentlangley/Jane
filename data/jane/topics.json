@@ -19,7 +19,7 @@
         "Compare simple and compound interest on the same amount and explain why the compound total pulls ahead"
       ],
       "assessmentPrompt": "If {{name}} saved $200 at 5% interest a year, could they work out how much it would be worth after 3 years, and explain why it grows faster each year?",
-      "standards": []
+      "standards": ["ccss-math:7.RP.3", "ccss-math:7.EE.2", "ccss-math:HSA-SSE.A.1b", "ccss-math:HSF-LE.A.1c", "ccss-math:HSF-LE.A.2", "jumpstart-2021:Saving-8-5a", "jumpstart-2021:Saving-8-5b", "jumpstart-2021:Investing-8-7a", "jumpstart-2021:Investing-8-7b"]
     },
     {
       "id": "jane_mm_rule_of_72",
@@ -27,17 +27,18 @@
       "subject": "Life Skills",
       "domain": "Money Math",
       "name": "The Rule of 72",
-      "description": "A mental-math shortcut for compound growth: the years needed to double money are about 72 ÷ the yearly growth rate in percent; the same rule estimates how fast inflation halves what money can buy",
-      "ageRangeStart": 11,
+      "description": "Doubling money with a mental-math shortcut: when money grows by the same percent every year, it takes about 72 ÷ the yearly rate in percent years to double (at 6% a year, about 12 years); a first taste of how savings grow that needs only percentages, before the full compound growth formula; the same rule estimates how fast inflation halves what money can buy",
+      "ageRangeStart": 10,
       "ageRangeEnd": 14,
       "centrality": 0.01,
       "evidence": [
+        "Explain what it means for money to double (for example $50 growing to $100) and why a higher yearly rate doubles it sooner",
         "Estimate how many years it takes money to double at 6%, 8% and 12% a year using 72 ÷ rate",
         "Work backwards to find the growth rate needed to double money in a given number of years",
         "Use the rule to estimate how long it takes 4% inflation to halve what a dollar buys"
       ],
       "assessmentPrompt": "If {{name}} heard that a savings account pays 9% a year, could they estimate in their head how many years it would take the money to double?",
-      "standards": []
+      "standards": ["jumpstart-2021:Saving-8-4c"]
     },
     {
       "id": "jane_mm_real_return",
@@ -55,7 +56,7 @@
         "Use (1 + r) ÷ (1 + i) − 1 to find the exact real return and compare it with the r − i estimate"
       ],
       "assessmentPrompt": "If {{name}}'s savings earned 4% in a year when prices rose 6%, could they explain whether they can buy more or less than before, and by roughly how much?",
-      "standards": []
+      "standards": ["ccss-math:7.RP.3", "ccss-math:7.EE.2", "jumpstart-2021:Saving-12-4b", "jumpstart-2021:Investing-12-4a", "jumpstart-2021:Investing-12-4b"]
     },
     {
       "id": "jane_mm_present_value",
@@ -73,7 +74,7 @@
         "Compare two offers paid at different times (for example $100 now or $110 next year) at a given interest rate"
       ],
       "assessmentPrompt": "If {{name}} were offered $100 now or $120 in three years, could they use present value to decide which is the better deal when savings earn 8% a year?",
-      "standards": []
+      "standards": ["ccss-math:HSA-SSE.A.1b"]
     },
     {
       "id": "jane_mm_true_average_return",
@@ -91,7 +92,7 @@
         "Find the true average yearly return by taking the nth root of the product of the growth factors and subtracting 1"
       ],
       "assessmentPrompt": "If {{name}} saw an investment go up 20% one year and down 20% the next, could they explain why it did not break even and work out its true average yearly return?",
-      "standards": []
+      "standards": ["ccss-math:7.EE.2", "ccss-math:HSF-LE.A.1a"]
     },
     {
       "id": "jane_mmod_profit_per_customer",
@@ -109,7 +110,7 @@
         "Explain why selling to more customers loses money if each customer costs more than they pay"
       ],
       "assessmentPrompt": "If {{name}} ran a snack stand, could they work out how much profit one customer brings after the cost of getting and serving them?",
-      "standards": []
+      "standards": ["ccss-math:4.OA.3", "jumpstart-2021:EarningIncome-4-4c"]
     },
     {
       "id": "jane_mmod_payback_period",
@@ -127,7 +128,7 @@
         "Check whether a plan passes the 30-day payback rule and suggest a change if it does not"
       ],
       "assessmentPrompt": "If it cost {{name}} $10 in free samples to win a new snack customer who brings $2 profit a week, could they work out the payback period and say whether it passes the 30-day rule?",
-      "standards": []
+      "standards": ["ccss-math:4.OA.3", "ccss-math:6.RP.3b"]
     },
     {
       "id": "jane_mmod_offer_ladder",
@@ -145,7 +146,7 @@
         "Explain why a downsell means a customer's 'no' is not the end of the sale"
       ],
       "assessmentPrompt": "If {{name}} offered a cookie with every lemonade and 40% of 30 customers said yes, could they work out how much extra cash the upsell brought in?",
-      "standards": []
+      "standards": ["ccss-math:6.RP.3c"]
     },
     {
       "id": "jane_mmod_price_testing",
@@ -163,7 +164,7 @@
         "Explain the rule: keep raising the price until total profit goes down, then step back one"
       ],
       "assessmentPrompt": "If {{name}} sold 40 drinks at $1, 30 at $2 and 15 at $3, with each drink costing 50¢ to make, could they find which price earns the most profit?",
-      "standards": []
+      "standards": ["ccss-math:7.EE.3", "jumpstart-2021:EarningIncome-4-4c"]
     },
     {
       "id": "jane_mmod_billing_math",
@@ -181,7 +182,7 @@
         "Compare paying monthly with paying for a whole year up front, and explain why a fair seller shows the yearly total"
       ],
       "assessmentPrompt": "If a snack club cost $5 every 28 days, could {{name}} work out the total for a year and explain why it is more than $5 a month for 12 months?",
-      "standards": []
+      "standards": ["ccss-math:6.RP.3b", "ccss-math:6.RP.3d", "ccss-math:7.RP.3"]
     }
   ]
 }
