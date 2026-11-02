@@ -57,12 +57,16 @@ function dedupeBy(a,key){const m=new Map();for(const x of a||[]){const k=key(x),
 function dedupeMedals(S){if(S.medals){const d=dedupeBy(S.medals,m=>m.id);if(d.length!==S.medals.length)S.medals=d;}if(S.questMedals){const d=dedupeBy(S.questMedals,m=>m.date);if(d.length!==S.questMedals.length)S.questMedals=d;}}
 // the trophy list (kid Trophies tab and parent report): deduped, newest first, with counts per tier
 export function trophies(S,g){const M=[...dedupeBy(S.medals,m=>m.id).map(m=>medalInfo(m,g)).filter(Boolean),
-  ...dedupeBy(S.questMedals,q=>q.date).map(q=>({id:'quest:'+q.date,tier:'quest',at:q.at,name:q.name,ic:q.emoji,subject:'Quest',domain:q.title,why:`finishing the quest "${q.title}"`}))].sort((a,b)=>b.at-a.at);
+  ...dedupeBy(S.questMedals,q=>q.date).map(q=>({id:'quest:'+q.date,tier:'quest',at:q.at,name:q.name,ic:q.emoji,subject:'Quest',domain:q.title,why:q.finale?`beating the Final Boss in "${q.title}" and graduating to the Big Leagues`:`finishing the quest "${q.title}"`,grad:q.finale?true:undefined}))].sort((a,b)=>b.at-a.at);
   const counts={};M.forEach(m=>counts[m.tier]=(counts[m.tier]||0)+1);return{medals:M,counts};}
 // ---------- campaign trail (slice 1) ----------
 // Quest medals fill a fixed-length trail; legendary topic medals light the Final Boss. Pure: no unlock persistence here.
 export const TRAIL_LEN=12, LEGENDARY_NEED=4;
-export function campaignState(S,g){const trailLen=TRAIL_LEN,need=LEGENDARY_NEED;
+// The Finale quest (LESSONS.md "Finale quest"): the newest published pack whose quest block says "finale": true.
+// packs = {date: pack}. Returns null or {date, title, status: 'ready'|'started'|'done'}. Pure, read-only.
+export function finaleState(S,packs){const ds=Object.keys(packs||{}).filter(d=>packs[d]?.quest?.finale===true).sort();if(!ds.length)return null;
+  const d=ds[ds.length-1],r=S?.quests?.[d]||{};return{date:d,title:packs[d].quest.title||packs[d].title||'Finale',status:r.done?'done':r.started?'started':'ready'};}
+export function campaignState(S,g,fin=null){const trailLen=TRAIL_LEN,need=LEGENDARY_NEED;
   const qs=[...dedupeBy(S.questMedals,q=>q.date)].sort((a,b)=>(a.at||0)-(b.at||0));
   const filled=Math.min(trailLen,qs.length);
   const nodes=Array.from({length:trailLen},(_,i)=>i<qs.length?{date:qs[i].date,name:qs[i].name,emoji:qs[i].emoji||'🏅'}:null);
@@ -73,13 +77,19 @@ export function campaignState(S,g){const trailLen=TRAIL_LEN,need=LEGENDARY_NEED;
   const lit=Math.min(1,have/need),unlocked=filled>=trailLen&&have>=need;
   const leftBoss=trailLen-filled,leftLeg=Math.max(0,need-have);
   let taunt;
-  if(unlocked)taunt='The Final Boss is unlocked — Jane is forging the finale…';
+  // graduated: the Finale quest medal is won (kept on the quest medal row, so it survives the 30-day pack window)
+  const graduated=(S.questMedals||[]).some(q=>q.finale)||fin?.status==='done';
+  let note=unlocked?'👑 Unlocked — Jane is forging the finale…':null;
+  if(graduated){taunt='🎓 Graduated to the Big Leagues! Final Boss beaten.';note='🎓 Graduate — you beat the Final Boss!';}
+  else if(unlocked&&fin){taunt=fin.status==='started'?'The Final Boss awaits! 👑 Finish the Finale quest to graduate.':'The Final Boss awaits! 👑 Your Finale quest is ready.';
+    note=`👑 Unlocked — the Final Boss awaits in "${fin.title}"!`;}
+  else if(unlocked)taunt='The Final Boss is unlocked — Jane is forging the finale…';
   else if(!filled&&!have)taunt='Beat quests to light the Campaign Trail. Legendaries wake the Final Boss!';
   else if(leftBoss>0&&leftLeg>0)taunt=leftBoss===1?`1 boss till the Final Boss — and ${leftLeg} legendary${leftLeg===1?'':'s'} to light it!`:`${leftBoss} bosses till the Final Boss…`;
   else if(leftBoss>0)taunt=leftBoss===1?'1 boss left — then the Final Boss!':`${leftBoss} bosses till the Final Boss…`;
   else taunt=leftLeg===1?'Trail full! 1 legendary win lights the Final Boss!':`Trail full! ${leftLeg} legendary wins to fully light the Final Boss!`;
   const revealedAt=S.campaign?.finalBossRevealedAt||null;
-  return{trailLen,filled,nodes,history,legendaries:{have,need,slots},finalBoss:{lit,unlocked,revealedAt},taunt};}
+  return{trailLen,filled,nodes,history,legendaries:{have,need,slots},finalBoss:{lit,unlocked,revealedAt,finale:unlocked&&fin?fin:null,graduated,note},taunt};}
 // Persist Final Boss unlock once (slice 6). Never invents medals. Returns {justUnlocked, revealedAt}.
 export function syncFinale(S,g,now=Date.now()){const C=campaignState(S,g);
   if(!C.finalBoss.unlocked)return{justUnlocked:false,revealedAt:S.campaign?.finalBossRevealedAt||null};
@@ -746,7 +756,10 @@ export function questInfo(S,g,pack){if(!pack)return null;const Q=pack.quest||{},
     // a stage the learner already started without meeting this gate (e.g. a quest begun before gates existed) shows it as passed
     return{before:k,state:r?.open||passed?'open':'locked',passed:passed||undefined,items:r?.n||0,of:r?.of??null,right:r?.right||0};}):[];
   return{date:pack.date,isQuest:!!pack.quest,title:Q.title||pack.title||('Adventure '+pack.date),hook:Q.hook||'',emoji:Q.emoji||'🗺️',medal:Q.medal||{name:(pack.title||'Adventure')+' medal',emoji:'🏅'},
-    stages,gates,current:stages.findIndex(s=>!s.complete),total,done,pct:total?Math.round(100*done/total):0,started:rec.started||null,completed:rec.done||null};}
+    stages,gates,current:stages.findIndex(s=>!s.complete),total,done,pct:total?Math.round(100*done/total):0,started:rec.started||null,completed:rec.done||null,
+    finale:Q.finale===true||undefined,graduation:Q.finale===true&&rec.done?graduationOf(Q):undefined};}
+// The Finale's send-off (quest.graduation: Jane's title + message, and the grown-up's parentMessage). Only sent once the medal is won.
+function graduationOf(Q){const G=Q.graduation||{};return{title:G.title||'You graduated!',message:G.message||'',parentMessage:G.parentMessage||''};}
 // called after an answer: when every stage is done, the quest is finished once and for all (snapshot + quest medal)
 export function completeQuest(S,g,pack,now){if(!pack?.quest)return null;S.quests??={};const q=S.quests[pack.date]??={};if(q.done)return null;
   const qi=questInfo(S,g,pack);if(!qi.total||qi.done<qi.total)return null;
@@ -754,10 +767,13 @@ export function completeQuest(S,g,pack,now){if(!pack?.quest)return null;S.quests
   if(pack.placement)S.placementQuest=placementSummary(S,g,pack,now);
   const topicIds=pack.topics.map(t=>t.topicId).filter(id=>g.byId[id]);
   const subjects=[...new Set(topicIds.map(id=>g.byId[id].subject))];
-  S.questMedals??=[];const row={date:pack.date,title:qi.title,name:qi.medal.name,emoji:qi.medal.emoji,at:now};
+  S.questMedals??=[];const row={date:pack.date,title:qi.title,name:qi.medal.name,emoji:qi.medal.emoji,at:now};if(pack.quest.finale===true)row.finale=true;
   if(!S.questMedals.some(x=>x.date===pack.date))S.questMedals.push(row);
   const C=campaignState(S,g); // after the medal so trail N/12 includes this win
-  return{...row,questEmoji:qi.emoji,subjects,preferSubject:subjects[0]||null,topicIds,trail:{filled:C.filled,trailLen:C.trailLen},stages:qi.stages.length};}
+  const out={...row,questEmoji:qi.emoji,subjects,preferSubject:subjects[0]||null,topicIds,trail:{filled:C.filled,trailLen:C.trailLen},stages:qi.stages.length};
+  // Finale: the graduation screen gets every quest medal the learner really has (oldest first, this one last) and the send-off
+  if(row.finale){out.graduation=graduationOf(pack.quest);out.recap=dedupeBy(S.questMedals,q=>q.date).sort((a,b)=>(a.at||0)-(b.at||0)).map(q=>({date:q.date,name:q.name,emoji:q.emoji||'🏅',title:q.title||'',finale:q.finale||undefined}));}
+  return out;}
 // After a quest win: short light practice (quest topics + due reviews), not a new quest.
 export function startReinforce(S,g,topicIds,now){const ids=(topicIds||[]).filter(id=>g.byId[id]);
   const due=g.topics.filter(t=>stateOf(S,g,t.id,now)==='review').sort((a,b)=>S.ts[a.id].due-S.ts[b.id].due).map(t=>t.id);

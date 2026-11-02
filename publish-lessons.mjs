@@ -48,7 +48,9 @@ if(refreshArg&&(!PROG||!pack.quest)){console.error(`❌ --refresh needs ${!pack.
 if(refreshArg&&!startedHere){console.error(`❌ quest ${pack.date} isn't in progress, so there is nothing to refresh. Publish it normally${PROG?.quests?.[pack.date]?'':' (or check the date)'}.`);process.exit(1);}
 if(REFRESH){try{PREV=kvGet(lk('lessons:')+pack.date);}catch{}if(!PREV?.quest){console.error(`❌ no quest published at lessons:${pack.date} to refresh`);process.exit(1);}
   RR=questReached(PROG,PREV);const bad=[];
-  if(JSON.stringify(pack.quest)!==JSON.stringify(PREV.quest))bad.push('the quest block (title, hook, medal) changed');
+  // the Finale's display-only fields ("finale", "graduation") may be added or edited on a started quest: they change no stage
+  const qcore=q=>{const{finale,graduation,...rest}=q||{};return JSON.stringify(rest);};
+  if(qcore(pack.quest)!==qcore(PREV.quest))bad.push('the quest block (title, hook, medal) changed');
   for(let i=0;i<RR;i++){const a=PREV.topics[i],b=(pack.topics||[])[i];if(JSON.stringify(a)!==JSON.stringify(b))bad.push(`stage ${i+1} "${a.stage?.name||a.topicId}" ${b?'changed':'is missing'}`);}
   if(bad.length){console.error(`⛔ refresh of ${pack.date} touches what the learner already reached (stages 1-${RR} and the quest block are locked). Nothing was written:\n  `+bad.join('\n  ')+`\n   Copy stages 1-${RR} unchanged from the stored pack and change only stages ${RR+1}+.`);process.exit(SIX);}
   if(!refreshArg)console.warn(`ℹ️  ${pack.date} is the quest in progress: treating this as --refresh (stages 1-${RR} locked).`);}
@@ -83,7 +85,20 @@ if(Q){str(Q.title,'quest.title');str(Q.hook,'quest.hook');str(Q.emoji,'quest.emo
   if(wc(Q.hook)>30)W('quest.hook',`${wc(Q.hook)} words (aim ≤ 30)`);if(third(Q.hook))W('quest.hook',YOU);
   const last=pack.topics?.[pack.topics.length-1];if(last&&last.format!=='boss'&&!pack.placement)E('topics[last]','a quest ends with a boss finale: set "format":"boss" on the last stage');
   if((pack.topics||[]).filter(t=>t.format==='boss').length>1)W('topics','more than one boss stage; only the last is the finale');
-  (pack.topics||[]).forEach((t,i)=>{if(!t.stage?.name)E(`topics[${i}].stage.name`,'every quest stage needs a name');if(!t.stage?.emoji)W(`topics[${i}].stage.emoji`,'add an emoji for the quest path');});}
+  (pack.topics||[]).forEach((t,i)=>{if(!t.stage?.name)E(`topics[${i}].stage.name`,'every quest stage needs a name');if(!t.stage?.emoji)W(`topics[${i}].stage.emoji`,'add an emoji for the quest path');});
+  // Finale quest (LESSONS.md "Finale quest"): "finale": true gives the crown reveal and the graduation screen;
+  // "graduation": {title, message, parentMessage} is the send-off shown when its medal is won (never a fun-fact card).
+  if(Q.finale!=null){if(Q.finale!==true)E('quest.finale','true (or leave it out)');if(pack.placement)E('quest.finale','a placement quest cannot be the Finale');
+    if(Q.finale===true&&PROG){const CG=EN.graph(tax),SP=EN.migrate(JSON.parse(JSON.stringify(PROG)),CG);if(!EN.campaignState(SP,CG).finalBoss.unlocked)W('quest.finale',"the learner hasn't unlocked the Final Boss yet (full trail + legendaries): the Finale is the climax, publish it after the unlock");}
+    const B=(pack.topics||[])[(pack.topics||[]).length-1],lc=B?.questions?.[B.questions.length-1];
+    if(Q.finale===true&&B?.format==='boss'&&['fact','why'].includes(lc?.type))W(`topics[${pack.topics.length-1}].questions[${B.questions.length-1}]`,`the Finale's last boss card is a "${lc.type}" card: put the send-off in "quest.graduation" (title, message, parentMessage) instead, so it shows on the graduation screen`);}
+  if(Q.graduation!=null){const G=Q.graduation;if(Q.finale!==true)E('quest.graduation','only the Finale quest ("finale": true) has a graduation send-off');
+    if(typeof G!=='object'||Array.isArray(G))E('quest.graduation','an object {"title", "message", "parentMessage"}');
+    else{for(const k of Object.keys(G))if(!['title','message','parentMessage'].includes(k))E('quest.graduation.'+k,'only "title", "message" and "parentMessage"');
+      if(G.title!=null&&str(G.title,'quest.graduation.title')&&G.title.length>60)E('quest.graduation.title','≤ 60 characters');
+      if(G.message!=null&&str(G.message,'quest.graduation.message')){if(wc(G.message)>40)W('quest.graduation.message',`${wc(G.message)} words (aim ≤ 40)`);if(third(G.message))W('quest.graduation.message',YOU);}
+      if(G.parentMessage!=null&&str(G.parentMessage,'quest.graduation.parentMessage')){if(G.parentMessage.length>1000)E('quest.graduation.parentMessage','≤ 1000 characters');if(/<[a-z!/]/i.test(G.parentMessage))E('quest.graduation.parentMessage','plain text only (line breaks are kept)');}
+      if(G.message==null&&G.parentMessage==null)W('quest.graduation','add a "message" (Jane\'s send-off) and/or a "parentMessage" (from the grown-up)');}}}
 else W('quest','no "quest" block: this pack will show as a plain adventure (see LESSONS.md "Quests")');
 checkTerms(pack.terms,'terms',E,W);
 // fill-ins: acceptedAnswers (fuzzy: plural/singular, a/an/the, small typos) and open-ended warnings

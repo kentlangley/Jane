@@ -412,6 +412,19 @@ When the learner's Campaign Trail is full (**12** quest medals) **and** the Fina
 
 The nightly author **may** write a one-shot **Finale** quest (still one-quest-at-a-time; no free medals). Until that pack exists, the app taunts: "Jane is forging the finale…". Do not invent medals or skip mastery to rush the unlock.
 
+**Mark the Finale** with `"finale": true` in the `quest` block, and put the send-off in `quest.graduation` (never in a fun-fact card: those render under "🤩 Fun fact!"):
+```json
+"quest": {"title": "...", "emoji": "🎓", "hook": "...", "medal": {"name": "...", "emoji": "🎓"},
+  "finale": true,
+  "graduation": {"title": "You graduated!", "message": "Jane's send-off, ≤ 40 words, talks to the learner as you.",
+                 "parentMessage": "A note from the grown-up.\n\nLine breaks are kept."}}
+```
+- **Campaign Trail text.** Once a Finale pack is published the trail says **"The Final Boss awaits! 👑"** (and "Finish the Finale quest to graduate" once started); after the medal is won it says "🎓 Graduated to the Big Leagues!" and the trail's boss node becomes 🎓.
+- **Reveal.** The Finale gets a crown **"👑 FINAL BOSS 👑"** reveal instead of the treasure chest (preview: `/#quest-preview`), and a "👑 FINAL BOSS" tag on the Quests tab.
+- **Graduation screen.** Winning the Finale medal opens the graduation screen instead of the plain high-five: cap toss and confetti (none with reduced motion), a "Graduated to the Big Leagues!" banner, Jane's `message`, a recap of every quest medal the learner really has, and the `parentMessage`, then the usual Reinforcement / Grind a Trail / Mini-games choices. The medal shows a 🎓 Graduate ribbon in Trophies. Preview: `/#graduation-preview` (placeholder text until the medal is won; the send-off is only sent after the win).
+- **Validator.** `finale` must be `true`; `graduation` only on a Finale and only `title` (≤ 60 chars), `message` and `parentMessage` (plain text, ≤ 1,000 chars). It warns when the learner hasn't unlocked the Final Boss yet, and when the boss stage ends with a fact/why card (move that send-off into `graduation`). `finale` and `graduation` are display-only, so a refresh of a started Finale may add or edit them; the rest of the quest block stays locked.
+- **Privacy.** `parentMessage` is personal: it lives only in the gitignored pack (`packs/*.json`) and KV, never in the repo, issues or PRs.
+
 ## Nightly loop
 ```bash
 node export-progress.mjs                    # → exports/progress-<today PT>.json
