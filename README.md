@@ -78,7 +78,9 @@ friendly tutor. The name is just a nod to the books: this project has no affilia
   animated "New quest!" reveal and a Quests tab. **One quest at a time**: a newer pack waits hidden ("Next up: ???")
   until the current quest is finished, and meanwhile the nightly job *refreshes* the current quest's unreached
   stages instead of starting another one. Quests are short (about 8 minutes, at most
-  16 graded questions) and **a finished quest is locked**: its medal and progress never change.
+  16 graded questions) and **a finished quest is locked**: its medal and progress never change. Twelve quest medals
+  and four legendaries unlock the **Final Boss**: a one-shot Finale quest (`"finale": true`) with a crown reveal and a
+  graduation screen when its medal is won.
 - **Nightly lesson packs.** `export-progress.mjs` exports weak spots, strengths, frontier topics and due reviews.
   You (or an AI assistant) write tomorrow's pack following [LESSONS.md](LESSONS.md), then
   `publish-lessons.mjs` validates and publishes it.

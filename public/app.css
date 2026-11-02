@@ -352,3 +352,31 @@ body.theme-lava .q,body.theme-lava .small,body.theme-lava .ord .ot,body.theme-la
 .whisper-box .wlbl{display:block;font-size:.85rem;color:#f57f17;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
 .ship-hero text{paint-order:stroke fill;stroke:#fff8e1;stroke-width:3px}
 .qstrip.empty{background:#f3e5f5;border:2px dashed #ce93d8}
+/* ---------- Finale quest: crown "FINAL BOSS" reveal + graduation screen (v0.8) ---------- */
+.qreveal.qfinale{background:radial-gradient(circle,#b71c1ccc,#1a0033f2)}.qreveal.qfinale .rays{background:repeating-conic-gradient(#ffd54f55 0 8deg,transparent 8deg 16deg)}
+.qreveal .fbnew{font-size:2.3rem;letter-spacing:.04em;color:#ffe082;text-shadow:0 3px 0 #b71c1c,0 0 24px #ffab00}
+.crownrev{position:relative;height:120px;margin:4px auto 0;animation:chestIn .8s cubic-bezier(.2,1.6,.4,1)}.crownrev .crown{position:relative;z-index:2;display:inline-block;font-size:6rem;line-height:1;filter:drop-shadow(0 6px 0 #6a1b9a) drop-shadow(0 0 18px #ffd54f);animation:crownDrop 1s cubic-bezier(.2,1.5,.4,1)}
+.crownrev .glow{position:absolute;left:25%;right:25%;top:50px;height:30px;border-radius:50%;background:#fff59d;box-shadow:0 0 50px 30px #ffd54f;opacity:0;animation:fadein2 .6s .6s forwards}
+.fbsub{color:#fff;font-weight:800;margin:0 0 6px;text-shadow:0 2px 4px #000}
+@keyframes crownDrop{from{transform:translateY(-120px) rotate(-25deg) scale(.4);opacity:0}}
+.newtag.fbtag{background:linear-gradient(90deg,#ffd54f,#ff8f00);color:#4a148c}
+.qcelebrate.grad{background:radial-gradient(circle,#311b92ee,#000e)}.qcelebrate.grad .rays{background:repeating-conic-gradient(#ffd54f40 0 10deg,transparent 10deg 20deg)}
+.qcelebrate.grad .qcbox{background:linear-gradient(165deg,#fffde7,#ede7f6);border-color:#ffc400;max-width:440px}
+.qcelebrate .gcap{font-size:3.6rem}.gbanner{display:inline-block;margin:.25em auto .35em;padding:8px 18px;font-weight:900;font-size:1.35rem;color:#fff;background:linear-gradient(90deg,#6a1b9a,#c2185b);border-radius:10px;box-shadow:0 4px 0 #4a148c;clip-path:polygon(0 0,100% 0,96% 50%,100% 100%,0 100%,4% 50%)}
+.gjane{background:#fff;border:2px solid #d1c4e9;border-radius:14px;padding:8px 12px;margin:6px 0}.gjane p{margin:.3em 0 0}
+.grecap h3{font-size:1rem;margin:10px 0 6px}.grecap ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:6px}
+.grecap li{background:#fff;border:2px solid #ffe082;border-radius:12px;padding:4px 2px;display:flex;flex-direction:column;align-items:center;font-size:.72rem;font-weight:700;line-height:1.15}.grecap .ge{font-size:1.6rem}.grecap li.gfin{border-color:#7c4dff;background:#ede7f6}
+.gparent{margin:10px 0 4px;background:#fff8e1;border:3px dashed #ffb300;border-radius:16px;padding:10px 14px;text-align:left}.gph{font-weight:900;color:#6a1b9a;margin-bottom:4px}
+.gpm{white-space:pre-line;margin:0;font-size:1.05rem;line-height:1.4;color:#3e2723}
+.capfly{position:fixed;inset:0;pointer-events:none;z-index:71;overflow:hidden}.capfly span{position:absolute;bottom:-60px;font-size:2.6rem;animation:capToss 2.4s cubic-bezier(.2,.8,.4,1) forwards}
+@keyframes capToss{0%{transform:translateY(0) rotate(0);opacity:1}55%{transform:translateY(-78vh) rotate(var(--r,240deg));opacity:1}100%{transform:translateY(-30vh) rotate(calc(var(--r,240deg)*2));opacity:0}}
+.gradbadge{display:inline-block;margin-left:6px;padding:0 8px;border-radius:999px;background:linear-gradient(90deg,#ffd54f,#ffab00);color:#4a148c;font-size:.8rem;font-weight:900}
+.campaign .cn.boss.grad{background:linear-gradient(#ede7f6,#ffd54f)}
+.tcell.grad{position:relative;border-color:#7c4dff}.tcell .gradrib{position:absolute;top:2px;left:50%;transform:translateX(-50%);background:#6a1b9a;color:#fff;font-size:.62rem;padding:1px 6px;border-radius:999px;white-space:nowrap;z-index:1}
+@media (prefers-reduced-motion:reduce){.capfly{display:none}.crownrev,.crownrev .crown,.crownrev .glow,.qreveal .fbnew{animation:none}.crownrev .glow{opacity:.9}}
+/* graduation screen: dark ink on the light card under every theme; tall content scrolls from the top (no clipped banner) */
+.qcelebrate.grad{align-items:flex-start;overflow-x:hidden}.qcelebrate.grad .rays{position:fixed;left:50%;top:50%;margin:-80vmax 0 0 -80vmax}
+.qcelebrate.grad .qcbox{margin:auto;color:#311b92}.qcelebrate.grad .qcname,.qcelebrate.grad .qcask{color:#4a148c}.gjane,.gjane b,.gjane p{color:#311b92}.grecap h3{color:#4a148c}.grecap li,.grecap .gn{color:#3e2723}
+/* the Campaign Trail card stays dark (its gold taunt text needs it) under the light content-card rule and every worn theme */
+.card.campaign,body[class*=theme-] .card.campaign{background:linear-gradient(135deg,#1a237e,#4a148c 55%,#880e4f);color:#fff}
+.card.campaign .chint{color:#e1bee7}

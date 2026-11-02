@@ -11,7 +11,7 @@ original commands). A learner without `placementQuest` in the export gets the pl
 
 ## Finale (Campaign Trail)
 
-If export shows `campaign.finalBoss.unlocked: true` (trail full + legendaries lit) and there is no Finale pack yet, you **may** author a one-shot **Finale** quest for the climax. Until then, leave the learner on the normal one-quest-at-a-time lineup — the app already says Jane is forging the finale. Never award free medals or skip teach → practice → graded → boss to force the unlock.
+If export shows `campaign.finalBoss.unlocked: true` (trail full + legendaries lit) and there is no Finale pack yet, you **may** author a one-shot **Finale** quest for the climax. Until then, leave the learner on the normal one-quest-at-a-time lineup — the app already says Jane is forging the finale. Mark the Finale with `"finale": true` in its `quest` block and put the send-off (Jane's `message`, the grown-up's `parentMessage`) in `quest.graduation`, not in a fun-fact card; the trail then says "The Final Boss awaits!" and winning shows the graduation screen. The parent message stays in the gitignored pack only. Details: LESSONS.md "Finale quest". Never award free medals or skip teach → practice → graded → boss to force the unlock.
 
 ## Market choices (Points Market)
 

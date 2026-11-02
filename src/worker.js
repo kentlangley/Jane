@@ -72,7 +72,7 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
    quest:pack?.quest?E.questInfo(S,g,pack):null,newQuest:(()=>{const L=LU();return L.newQuest&&pack?.date===L.current;})(),
    quests:(()=>{const L=LU();return{current:L.current,nextUp:L.queued.length>0,boost:pack?.boost||null};})(),
    terms:pack?.terms||null,mini:S.mini?{topicId:S.mini.topicId,subject:S.mini.ret}:null,
-   campaign:E.campaignState(S,g),wallet:E.walletState(S,g,now),days:E.dayStreak(S,now),finaleReveal:finaleJust||undefined,profile:{id:LR.id,avatar:LR.avatar||PF.DEFAULT_AVATAR,count:REG.learners.length}};};
+   campaign:E.campaignState(S,g,E.finaleState(S,Object.fromEntries(recent.map(d=>[d,PC[d]])))),wallet:E.walletState(S,g,now),days:E.dayStreak(S,now),finaleReveal:finaleJust||undefined,profile:{id:LR.id,avatar:LR.avatar||PF.DEFAULT_AVATAR,count:REG.learners.length}};};
  const questCheck=r=>{const m=E.completeQuest(S,g,pack,now);if(m){r.questDone=m;ev.push({event:'questDone',date:pack.date,quest:m.title});}};
  if(P==='/parent'){ // read-only: returns before any KV write
    const ds=[...Array(14)].map((_,i)=>ptDate(now-(13-i)*864e5));const logs={};await Promise.all(ds.map(async d=>logs[d]=(await KV.get(K('log:'+d),'json'))||[]));

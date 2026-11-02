@@ -228,7 +228,7 @@ function finaleReveal(C){if(document.querySelector('.finale'))return;const o=doc
  o.innerHTML=`<div class="fnbox"><div class="fnemo">👑</div><div class="fnnew">FINAL BOSS UNLOCKED!</div>
  <p>The Campaign Trail is complete and the Final Boss is fully lit.</p>
  <p class="ctaunt">${esc(C?.taunt||'Jane is forging the finale…')}</p>
- <p class="small">No free medals — when Jane finishes forging, a one-shot Finale quest may appear.</p>
+ <p class="small">${C?.finalBoss?.finale?'Your Finale quest is ready. Beat the Final Boss to graduate!':'No free medals — when Jane finishes forging, a one-shot Finale quest may appear.'}</p>
  <button type="button" id="fnok">Awesome! 🗡️</button></div>`;
  document.body.appendChild(o);confetti(90);const close=()=>{o.classList.add('out');setTimeout(()=>o.remove(),320);};$('fnok').onclick=close;o.onclick=e=>{if(e.target===o)close();};setTimeout(()=>$('fnok')?.focus(),60);}
 const _chipsPick=chips;chips=function(s){_chipsPick(s);pickLine(s);}
@@ -239,17 +239,18 @@ function cTrailHTML(C,{big=false}={}){const nodes=C.nodes.map((n,i)=>{const done
   const face=done?esc(n.emoji||'🏅'):cur?'⚔️':'🌫️';
   return`<span class="cn ${done?'done':cur?'cur':'locked'}" title="${esc(label)}" aria-label="${esc(label)}">${face}</span>`;}).join('<i></i>');
  const lit=C.finalBoss.lit||0,unlocked=!!C.finalBoss.unlocked;
- const fbCls=unlocked?'unlocked':lit>=1?'lit':lit>0?'partial':'locked';
- const fb=unlocked?'👑':lit>=1?'🐲':lit>0?'🐉':'🌫️';
- return`<div class="ctrail${big?' big':''}" role="list" aria-label="Trail ${C.filled} of ${C.trailLen}">${nodes}<i class="cend"></i><span class="cn boss ${fbCls}" role="listitem" title="Final Boss" aria-label="Final Boss ${Math.round(lit*100)} percent lit">${fb}</span></div>`;}
+ const grad=!!C.finalBoss.graduated,fbCls=grad?'unlocked grad':unlocked?'unlocked':lit>=1?'lit':lit>0?'partial':'locked';
+ const fb=grad?'🎓':unlocked?'👑':lit>=1?'🐲':lit>0?'🐉':'🌫️';
+ return`<div class="ctrail${big?' big':''}" role="list" aria-label="Trail ${C.filled} of ${C.trailLen}">${nodes}<i class="cend"></i><span class="cn boss ${fbCls}" role="listitem" title="${grad?'Graduate! Final Boss beaten':'Final Boss'}" aria-label="${grad?'Graduate: Final Boss beaten':`Final Boss ${Math.round(lit*100)} percent lit`}">${fb}</span></div>`;}
 function campaignHUD(s){if(s?.finaleReveal)finaleReveal(s.campaign);const el=$('campaign');if(!el)return;const C=s?.campaign;if(!C){el.hidden=true;return;}
  const legs='★'.repeat(C.legendaries.have)+'☆'.repeat(Math.max(0,C.legendaries.need-C.legendaries.have));
  el.hidden=false;
  el.innerHTML=`<button type="button" class="copen" id="copen" aria-haspopup="dialog" aria-controls="coverlay" aria-label="Open Quest of Quests campaign map">
-<div class="chd"><span class="ctitle">🗡️ Campaign Trail</span><span class="cleg" title="Legendary wins light the Final Boss" aria-label="${C.legendaries.have} of ${C.legendaries.need} legendaries">${esc(legs)}</span></div>
+<div class="chd"><span class="ctitle">🗡️ Campaign Trail${C.finalBoss?.graduated?' <span class="gradbadge">🎓 Graduate</span>':''}</span><span class="cleg" title="Legendary wins light the Final Boss" aria-label="${C.legendaries.have} of ${C.legendaries.need} legendaries">${esc(legs)}</span></div>
 ${cTrailHTML(C)}
 <p class="ctaunt">${esc(C.taunt)}</p>
 <span class="chint">Tap for Quest of Quests ›</span></button>`;
+ if(C.finalBoss?.unlocked){const tr=el.querySelector('.ctrail');if(tr)tr.scrollLeft=tr.scrollWidth;} // show the 👑/🎓 boss node at the trail's end
  $('copen').onclick=()=>openCampaign();}
 let _cFocus=null;
 function openCampaign(){const C=st?.campaign;if(!C)return;closeCampaign();_cFocus=document.activeElement;
@@ -264,7 +265,7 @@ function openCampaign(){const C=st?.campaign;if(!C)return;closeCampaign();_cFocu
  <p class="ctaunt">${esc(C.taunt)}</p>
  ${cTrailHTML(C,{big:true})}
  <div class="csec"><h3>🌈 Legendary slots · Final Boss ${lit}%</h3><div class="cslots">${slots}</div>
- <div class="small">${C.finalBoss.unlocked?'👑 Unlocked — Jane is forging the finale…':`Need ${C.legendaries.need} legendaries + a full trail of ${C.trailLen}.`}</div></div>
+ <div class="small">${C.finalBoss.note||(C.finalBoss.unlocked?'👑 Unlocked — Jane is forging the finale…':`Need ${C.legendaries.need} legendaries + a full trail of ${C.trailLen}.`)}</div></div>
  <div class="csec"><h3>🏅 Quest history</h3>${hist}</div>
  <button type="button" class="bigbtn" id="cback">⬅ Back to Play</button></div>`;
  document.body.appendChild(o);
@@ -300,7 +301,7 @@ function reveal(m,inf,onClose){const o=document.createElement('div');o.className
 let tFilter='all',tAnim=false;
 async function loadTrophies(){const d=await api('/api/trophies');const TF=window.TrophyFilter,M=d.medals||[];if(!TF.chips(M,tFilter).some(c=>c.tier===tFilter))tFilter='all';
  const grid=$('tgrid');if(!tAnim&&window.UIK?.autoAnimate&&!matchMedia('(prefers-reduced-motion: reduce)').matches){UIK.autoAnimate(grid,{duration:260,easing:'ease-out'});tAnim=true;}
- const cells=M.map((m,i)=>{const b=document.createElement('button');b.className='tcell t-'+m.tier;b.dataset.i=i;b.innerHTML=`${medalSVG(m,72)}<span>${esc(m.name)}</span>`;b.onclick=()=>detail(m);return b;});
+ const cells=M.map((m,i)=>{const b=document.createElement('button');b.className='tcell t-'+m.tier;b.dataset.i=i;if(m.grad)b.classList.add('grad');b.innerHTML=`${m.grad?'<b class="gradrib">🎓 Graduate</b>':''}${medalSVG(m,72)}<span>${esc(m.name)}</span>`;b.onclick=()=>detail(m);return b;});
  const draw=()=>{$('tcount').innerHTML=TF.chipsHTML(M,tFilter);$('tcount').querySelectorAll('.tc').forEach(c=>c.onclick=()=>{const t=c.dataset.tier,kb=document.activeElement===c;tFilter=TF.next(tFilter,t);draw();if(kb)$('tcount').querySelector(`.tc[data-tier="${t}"]`)?.focus();});
   const show=TF.filter(M,tFilter).map(m=>cells[M.indexOf(m)]);
   grid.replaceChildren(...(show.length?show:[Object.assign(document.createElement('p'),{className:'tempty',textContent:TF.empty(tFilter,M.length)})]));
@@ -417,15 +418,18 @@ function stoneCard(i){const t=TAX.topics[i],c=mapData.codes[i];const o=document.
 
 // ---------- quests: reveal, tab, medal ----------
 function questDot(s){const d=document.querySelector('.tab[data-v=quests] .dot');if(d)d.hidden=!s.newQuest;}
-function questReveal(Q){const o=document.createElement('div');o.className='qreveal';
- o.innerHTML=`<div class="rays"></div><div class="qrbox"><div class="qrnew">✨ NEW QUEST! ✨</div><div class="chest"><div class="lid"></div><div class="base"><span class="lock">🔒</span></div><div class="glow"></div></div>
+function questReveal(Q){const o=document.createElement('div');o.className='qreveal'+(Q.finale?' qfinale':'');
+ // the Finale quest (quest.finale) gets a crown + "FINAL BOSS" reveal instead of the treasure chest
+ const top=Q.finale?`<div class="qrnew fbnew">👑 FINAL BOSS 👑</div><div class="crownrev" aria-hidden="true"><span class="crown">👑</span><div class="glow"></div></div><div class="fbsub">The Finale quest · beat it to graduate!</div>`
+  :`<div class="qrnew">✨ NEW QUEST! ✨</div><div class="chest"><div class="lid"></div><div class="base"><span class="lock">🔒</span></div><div class="glow"></div></div>`;
+ o.innerHTML=`<div class="rays"></div><div class="qrbox">${top}
  <div class="scroll"><div class="rod"></div><div class="paper"><div class="qemo">${esc(Q.emoji)}</div><h2>${esc(Q.title)}</h2><p>${esc(Q.hook)}</p>
  ${qpath(Q,{big:true})}
- <div class="small">${Q.stages.length} stages · boss finale · win the <b>${esc(Q.medal.emoji)} ${esc(Q.medal.name)}</b></div><button class="bigbtn" id="qstart">⚔️ Start the quest!</button></div><div class="rod"></div></div></div>`;
- document.body.appendChild(o);confetti(50);
+ <div class="small">${Q.stages.length} stages · ${Q.finale?'the FINAL BOSS':'boss finale'} · win the <b>${esc(Q.medal.emoji)} ${esc(Q.medal.name)}</b></div><button class="bigbtn" id="qstart">${Q.finale?'👑 Face the Final Boss!':'⚔️ Start the quest!'}</button></div><div class="rod"></div></div></div>`;
+ document.body.appendChild(o);confetti(Q.finale?90:50);
  $('qstart').onclick=async()=>{const s=await api('/api/quest/start',{date:Q.date});if(s.error){o.remove();say(s.error);return;}o.classList.add('out');setTimeout(()=>o.remove(),400);document.querySelector('.tab[data-v=play]').click();render(s);questDot(s);say(`Let's go! Stage 1: ${Q.stages[0].name}! ${Q.stages[0].emoji}`);};}
 // v0.5: one quest at a time: the current quest big, a secret "Next up: ???" teaser, then the finished ones
-function qcardHTML(q,big){return`<div class="qcard ${big?'cur':''} ${q.today&&big?'now':''} ${q.completed?'won':''}"><div class="qch"><span class="qemo">${esc(q.emoji)}</span><div><b>${esc(q.title)}</b>${big&&!q.started&&q.isQuest?'<span class="newtag">NEW!</span>':''}<div class="small">${q.today?'Today’s quest':new Date(q.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})} · ${q.completed?'🏅 Won!':q.started?'In progress':q.isQuest?'Not started':'Adventure'}</div></div></div>
+function qcardHTML(q,big){return`<div class="qcard ${big?'cur':''} ${q.today&&big?'now':''} ${q.completed?'won':''}"><div class="qch"><span class="qemo">${esc(q.emoji)}</span><div><b>${esc(q.title)}</b>${q.finale?'<span class="newtag fbtag">👑 FINAL BOSS</span>':''}${big&&!q.started&&q.isQuest?'<span class="newtag">NEW!</span>':''}<div class="small">${q.today?'Today’s quest':new Date(q.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})} · ${q.completed?'🏅 Won!':q.started?'In progress':q.isQuest?'Not started':'Adventure'}</div></div></div>
   ${big&&q.hook?`<p>${esc(q.hook)}</p>`:''}${qpath(q)}
   <div class="track"><i style="width:${q.pct}%;background:linear-gradient(90deg,#00e676,#ffd54f)"></i></div><div class="small">${q.done} / ${q.total} steps · ${q.pct}% ${q.completed?`· ${esc(q.medal.emoji)} ${esc(q.medal.name)}`:''}</div>
   ${big&&q.boost?`<div class="boost">${esc(q.boost.emoji)} ${esc(q.boost.message||'')}</div>`:''}${big&&q.isQuest&&!q.completed?`<button class="qgo">${q.started?'▶ Keep going':'⚔️ Start'}</button>`:''}</div>`;}
@@ -438,23 +442,24 @@ async function loadQuests(){const d=await api('/api/quests');const el=$('qlist')
 function questMedal(m){questCelebrate(m,st);} // back-compat
 // High-five when a quest finishes: medal + trail progress, then Reinforcing / Grind a Trail / Mini-games.
 function questCelebrate(m,state){document.querySelectorAll('.qcelebrate').forEach(x=>x.remove());
- const o=document.createElement('div');o.className='qcelebrate';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-labelledby','qctitle');
+ const o=document.createElement('div');o.className='qcelebrate'+(m.finale?' grad':'');o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-labelledby','qctitle');
  const trail=m.trail?`🗡️ Campaign Trail ${m.trail.filled} / ${m.trail.trailLen}`:'';
  const sub=m.preferSubject||(m.subjects&&m.subjects[0])||'';
  const subLbl=sub?(ISL[sub]?.e||'🗺️')+' '+sub:'🗺️ My World';
- o.innerHTML=`<div class="rays"></div><div class="qcbox">
-  <div class="qchi">🙌</div><div class="qcnew" id="qctitle">High five — quest complete!</div>
+ o.innerHTML=`<div class="rays"></div>${m.finale?gradCaps():''}<div class="qcbox">
+  ${m.finale?gradHTML(m):`<div class="qchi">🙌</div><div class="qcnew" id="qctitle">High five — quest complete!</div>
   <div class="qcmedal">${medalSVG({tier:'quest',name:m.name,ic:m.emoji||'🏅',subject:m.title},120)}</div>
   <div class="qcname">${esc(m.emoji||m.questEmoji||'🏅')} ${esc(m.name)}</div>
   <p class="small">You finished <b>${esc(m.title)}</b>${m.stages?` · ${m.stages} stages`:''}</p>
-  ${trail?`<div class="qctrail">${esc(trail)}</div>`:''}
-  <p class="qcask">What do you want to do next?</p>
+  ${trail?`<div class="qctrail">${esc(trail)}</div>`:''}`}
+  <p class="qcask">${m.finale?'Graduates keep exploring! What next?':'What do you want to do next?'}</p>
   <div class="qcacts">
    <button type="button" class="bigbtn" id="qc-reinforce">🧠 Reinforcement<span class="small">Light practice on what you just learned</span></button>
    <button type="button" class="bigbtn trailgo" id="qc-grind">🛤️ Grind a Trail<span class="small">Explore ${esc(subLbl)} on the Map</span></button>
    <button type="button" class="ghost" id="qc-play">🎲 Mini-games<span class="small">Free play — random practice</span></button>
   </div></div>`;
- document.body.appendChild(o);confetti(120);say(`🙌 High five! You finished "${m.title}"!`);
+ document.body.appendChild(o);confetti(m.finale?160:120);if(m.finale&&!matchMedia('(prefers-reduced-motion: reduce)').matches)setTimeout(()=>confetti(120),900);
+ say(m.finale?`🎓 You graduated to the Big Leagues! "${m.title}" is won!`:`🙌 High five! You finished "${m.title}"!`);
  const close=()=>{o.classList.add('out');setTimeout(()=>o.remove(),400);};
  // Must pick an option — no silent dismiss by clicking the backdrop.
  $('qc-reinforce').onclick=async()=>{const s=await api('/api/reinforce',{topicIds:m.topicIds||[]});close();
@@ -462,6 +467,23 @@ function questCelebrate(m,state){document.querySelectorAll('.qcelebrate').forEac
  $('qc-grind').onclick=()=>{close();window._afterQuest=null;trailDone=new Set();goMap(sub||undefined);say(`🛤️ Grind time — pick a stone on ${subLbl}!`);};
  $('qc-play').onclick=async()=>{close();window._afterQuest=null;document.querySelector('.tab[data-v=play]').click();const s=await api('/api/next',{});render(s);say('🎲 Mini-games! Have fun!');};
 }
+// Finale graduation screen: cap toss + confetti, banner, Jane's send-off, a recap of every quest medal, the grown-up's message.
+// Reduced motion: no cap toss (the caps are not drawn) and the CSS turns the animations off.
+function gradCaps(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return'';
+ return`<div class="capfly" aria-hidden="true">${Array.from({length:9},(_,i)=>`<span style="left:${6+i*11}%;animation-delay:${(i%3)*.18+Math.floor(i/3)*.09}s;--r:${(i%2?1:-1)*(200+i*40)}deg">🎓</span>`).join('')}</div>`;}
+function gradHTML(m){const G=m.graduation||{},R=m.recap||[];
+ const cells=R.map(q=>`<li class="${q.finale?'gfin':''}" title="${esc(q.title||q.name)}"><span class="ge">${esc(q.emoji||'🏅')}</span><span class="gn">${esc(q.name)}</span></li>`).join('');
+ const n=R.filter(q=>!q.finale).length;
+ return`<div class="qchi gcap">🎓</div><div class="gbanner" id="qctitle">Graduated to the Big Leagues!</div>
+  <div class="qcname">${esc(m.emoji||'🎓')} ${esc(m.name)}</div>
+  <div class="gjane"><b>${esc(G.title||'You graduated!')}</b>${G.message?`<p>${esc(G.message)}</p>`:''}</div>
+  ${R.length?`<div class="grecap"><h3>🏅 Your ${n} quest medal${n===1?'':'s'}${R.some(q=>q.finale)?' + the Final Boss':''}</h3><ul>${cells}</ul></div>`:''}
+  ${G.parentMessage?`<div class="gparent"><div class="gph">💌 A message for you</div><p class="gpm">${esc(G.parentMessage)}</p></div>`:''}`;}
+if(location.hash==='#graduation-preview'){document.querySelector('.tab[data-v=play]')?.click();
+ api('/api/state').then(s=>{campaignHUD(s);const h=s.campaign?.history||[],q=s.quest;
+  questCelebrate({date:'preview',finale:true,title:q?.title||'The Finale',name:q?.medal?.name||'Graduate Medal',emoji:q?.medal?.emoji||'🎓',subjects:['Mathematics'],preferSubject:'Mathematics',topicIds:[],trail:{filled:s.campaign?.filled||0,trailLen:s.campaign?.trailLen||12},stages:q?.stages?.length||5,
+   recap:[...h,{name:q?.medal?.name||'Graduate Medal',emoji:q?.medal?.emoji||'🎓',title:q?.title||'',finale:true}],
+   graduation:q?.graduation||{title:'You graduated!',message:'(Preview) Jane\'s send-off shows here.',parentMessage:'(Preview) The message from your grown-up shows here once the Finale medal is won.'}},s);});}
 if(location.hash==='#quest-preview')api('/api/state').then(s=>s.quest&&questReveal(s.quest));
 if(location.hash==='#quest-celebrate-preview'){document.querySelector('.tab[data-v=play]')?.click();
  api('/api/state').then(s=>{campaignHUD(s);questCelebrate({date:'preview',title:(s.quest?.title)||'Captain Comet\'s Lost Treasure',name:(s.quest?.medal?.name)||'Comet Treasure Medal',emoji:(s.quest?.medal?.emoji)||'💎',questEmoji:s.quest?.emoji||'🏴‍☠️',subjects:['Mathematics','Science'],preferSubject:'Mathematics',topicIds:[],trail:{filled:s.campaign?.filled||3,trailLen:s.campaign?.trailLen||12},stages:s.quest?.stages?.length||5},s);});}
