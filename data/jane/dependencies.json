@@ -7,7 +7,7 @@
     {"topicId": "jane_mm_compound_growth", "prerequisiteId": "mt_hCVPYlF-7Y", "strength": "hard", "reason": "Cross-domain: (1 + r)^n needs integer powers (Square and cube numbers, powers and roots)"},
     {"topicId": "jane_mm_compound_growth", "prerequisiteId": "mt_uSUqTjOl8m", "strength": "soft", "reason": "Cross-domain: knowing that bank savings earn interest gives compound growth its everyday meaning"},
     {"topicId": "jane_mm_compound_growth", "prerequisiteId": "mt_r1hw-KenpK", "strength": "soft", "reason": "Cross-domain: how regular saving adds up over time (Financial Planning) motivates the growth formula"},
-    {"topicId": "jane_mm_rule_of_72", "prerequisiteId": "jane_mm_compound_growth", "strength": "hard", "reason": "The Rule of 72 is a shortcut for compound growth doubling time"},
+    {"topicId": "jane_mm_rule_of_72", "prerequisiteId": "mt_PNSyfH56eQ", "strength": "hard", "reason": "Cross-domain: early unlock (approved by Kent, 2026-11-01). The doubling shortcut needs only a percent of an amount (Calculating Percentages), so it opens before Compound growth as a first taste of Money Math; no edge to Compound growth, so mastering it never credits Compound growth"},
     {"topicId": "jane_mm_real_return", "prerequisiteId": "jane_mm_compound_growth", "strength": "hard", "reason": "Real return compares two compound growth rates: savings and prices"},
     {"topicId": "jane_mm_real_return", "prerequisiteId": "mt_udgPy5oAvR", "strength": "soft", "reason": "Cross-domain: why prices change (How the Economy Works) grounds what inflation is"},
     {"topicId": "jane_mm_present_value", "prerequisiteId": "jane_mm_compound_growth", "strength": "hard", "reason": "Present value runs the compound growth formula backwards"},
