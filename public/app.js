@@ -425,9 +425,17 @@ function questReveal(Q){const o=document.createElement('div');o.className='qreve
  o.innerHTML=`<div class="rays"></div><div class="qrbox">${top}
  <div class="scroll"><div class="rod"></div><div class="paper"><div class="qemo">${esc(Q.emoji)}</div><h2>${esc(Q.title)}</h2><p>${esc(Q.hook)}</p>
  ${qpath(Q,{big:true})}
- <div class="small">${Q.stages.length} stages · ${Q.finale?'the FINAL BOSS':'boss finale'} · win the <b>${esc(Q.medal.emoji)} ${esc(Q.medal.name)}</b></div><button class="bigbtn" id="qstart">${Q.finale?'👑 Face the Final Boss!':'⚔️ Start the quest!'}</button></div><div class="rod"></div></div></div>`;
+ <div class="small">${Q.stages.length} stages · ${Q.finale?'the FINAL BOSS':'boss finale'} · win the <b>${esc(Q.medal.emoji)} ${esc(Q.medal.name)}</b></div><button class="bigbtn" id="qstart">${Q.finale?'👑 Face the Final Boss!':'⚔️ Start the quest!'}</button><p class="qrerr" id="qrerr" role="alert" hidden></p></div><div class="rod"></div></div></div><button type="button" class="qrclose" id="qrlater" aria-label="Not now" title="Not now">✕</button>`;
  document.body.appendChild(o);confetti(Q.finale?90:50);
- $('qstart').onclick=async()=>{const s=await api('/api/quest/start',{date:Q.date});if(s.error){o.remove();say(s.error);return;}o.classList.add('out');setTimeout(()=>o.remove(),400);document.querySelector('.tab[data-v=play]').click();render(s);questDot(s);say(`Let's go! Stage 1: ${Q.stages[0].name}! ${Q.stages[0].emoji}`);};}
+ // v0.8.1: the reveal must never trap the learner. It scrolls on short screens (app.css), a failed start says so and
+ // can be tapped again, and "Not now" / Escape closes it so the tabs (My World island, Quests, ...) still work.
+ let busy=false;const onKey=e=>{if(e.key==='Escape')later();};
+ const close=()=>{document.removeEventListener('keydown',onKey);o.classList.add('out');setTimeout(()=>o.remove(),400);};
+ const later=()=>{close();say(`${Q.finale?'The Final Boss':'Your quest'} will wait for you in 🗺️ Quests. Tap ⚔️ Start there when you're ready!`);};
+ document.addEventListener('keydown',onKey);$('qrlater').onclick=later;
+ $('qstart').onclick=async()=>{if(busy)return;busy=true;const b=$('qstart'),er=$('qrerr');b.disabled=true;er.hidden=true;let s;
+  try{s=await api('/api/quest/start',{date:Q.date});}catch(e){busy=false;b.disabled=false;er.textContent='Oops, the internet hiccuped. Tap the button again! 🔌';er.hidden=false;return;}
+  if(s.error){close();say(s.error);return;}close();document.querySelector('.tab[data-v=play]').click();render(s);questDot(s);say(`Let's go! Stage 1: ${Q.stages[0].name}! ${Q.stages[0].emoji}`);};}
 // v0.5: one quest at a time: the current quest big, a secret "Next up: ???" teaser, then the finished ones
 function qcardHTML(q,big){return`<div class="qcard ${big?'cur':''} ${q.today&&big?'now':''} ${q.completed?'won':''}"><div class="qch"><span class="qemo">${esc(q.emoji)}</span><div><b>${esc(q.title)}</b>${q.finale?'<span class="newtag fbtag">👑 FINAL BOSS</span>':''}${big&&!q.started&&q.isQuest?'<span class="newtag">NEW!</span>':''}<div class="small">${q.today?'Today’s quest':new Date(q.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})} · ${q.completed?'🏅 Won!':q.started?'In progress':q.isQuest?'Not started':'Adventure'}</div></div></div>
   ${big&&q.hook?`<p>${esc(q.hook)}</p>`:''}${qpath(q)}

@@ -5,6 +5,9 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+### Fixed
+- **The quest reveal can no longer trap a learner.** The v0.8.0 Finale reveal (crown + scroll, about 730px tall) sat in a fixed, `overflow:hidden`, vertically centred overlay with no way to close it. On short screens (a phone in landscape, small phones, split-screen tablets, a zoomed or short browser window) the "👑 Face the Final Boss!" button was cut off below the screen, and the overlay also blocked every tab behind it (🏝️ My World, Quests, Trophies, Market), again on every reload, until the quest was started. Now the reveal scrolls from the top when it is taller than the screen (like the graduation screen already did). Shorter screens get a compact card (smaller crown or chest, then no crown, then no stage path) so the button fits without scrolling. A ✕ "Not now" button (or Escape) closes it and points to 🗺️ Quests. A failed start shows "tap again" and can be retried instead of leaving a dead button, and a double tap can't start the quest twice. The same fix applies to the treasure-chest reveal of normal quests. Display only: no learner data changes.
+
 ## [0.8.0] - 2026-11-01
 
 ### Added

@@ -380,3 +380,14 @@ body.theme-lava .q,body.theme-lava .small,body.theme-lava .ord .ot,body.theme-la
 /* the Campaign Trail card stays dark (its gold taunt text needs it) under the light content-card rule and every worn theme */
 .card.campaign,body[class*=theme-] .card.campaign{background:linear-gradient(135deg,#1a237e,#4a148c 55%,#880e4f);color:#fff}
 .card.campaign .chint{color:#e1bee7}
+/* v0.8.1: the quest reveal (treasure chest or Finale crown) never traps the learner: tall content scrolls from the top like the
+   graduation screen, shorter screens get a more compact card so the Start button fits, and a ✕ ("Not now") always shows */
+.qreveal{overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;align-items:flex-start}
+.qreveal .rays{position:fixed;left:50%;top:50%;margin:-80vmax 0 0 -80vmax;pointer-events:none}
+.qreveal .qrbox{margin:auto}
+.qreveal .qrclose{position:fixed;top:10px;right:10px;z-index:2;width:44px;height:44px;padding:0;border-radius:50%;border:2px solid #fff9;background:#0006;color:#fff;font-size:1.3rem;font-weight:900;line-height:1;box-shadow:none;cursor:pointer}
+.qreveal .qrerr{margin:8px 0 0;color:#b71c1c;font-weight:800}
+@media (max-height:760px){.crownrev{height:72px}.crownrev .crown{font-size:3.6rem}.crownrev .glow{top:30px}.qreveal .fbnew,.qreveal .qrnew{font-size:1.6rem}.chest{transform:scale(.7);margin:-14px auto -18px}
+  .qreveal .paper .qemo{font-size:2rem;margin:0}.qreveal .paper h2{margin:.15em 0}.qreveal .paper p{font-size:.95rem;line-height:1.35;margin:.3em 0}}
+@media (max-height:620px){.qreveal .crownrev,.qreveal .chest,.qreveal .paper .qemo{display:none}.qreveal .fbnew,.qreveal .qrnew{font-size:1.4rem}}
+@media (max-height:450px){.qreveal .qpath,.qreveal .paper .small,.qreveal .fbsub{display:none}}
