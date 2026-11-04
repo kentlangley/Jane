@@ -5,6 +5,8 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+## [0.8.1] - 2026-11-04
+
 ### Fixed
 - **The quest reveal can no longer trap a learner.** The v0.8.0 Finale reveal (crown + scroll, about 730px tall) sat in a fixed, `overflow:hidden`, vertically centred overlay with no way to close it. On short screens (a phone in landscape, small phones, split-screen tablets, a zoomed or short browser window) the "👑 Face the Final Boss!" button was cut off below the screen, and the overlay also blocked every tab behind it (🏝️ My World, Quests, Trophies, Market), again on every reload, until the quest was started. Now the reveal scrolls from the top when it is taller than the screen (like the graduation screen already did). Shorter screens get a compact card (smaller crown or chest, then no crown, then no stage path) so the button fits without scrolling. A ✕ "Not now" button (or Escape) closes it and points to 🗺️ Quests. A failed start shows "tap again" and can be retried instead of leaving a dead button, and a double tap can't start the quest twice. The same fix applies to the treasure-chest reveal of normal quests. Display only: no learner data changes.
 
@@ -366,7 +368,8 @@ First public release.
 - Runs on Cloudflare Workers (or `npm run dev` locally) only; the standalone Node server is planned for v0.2.
   `prototype/` is the early math-only version, not the full app.
 
-[Unreleased]: https://github.com/kentlangley/Jane/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/kentlangley/Jane/compare/v0.8.1...HEAD
+[0.8.1]: https://github.com/kentlangley/Jane/releases/tag/v0.8.1
 [0.8.0]: https://github.com/kentlangley/Jane/releases/tag/v0.8.0
 [0.6.0]: https://github.com/kentlangley/Jane/releases/tag/v0.6.0
 [0.5.0]: https://github.com/kentlangley/Jane/releases/tag/v0.5.0
