@@ -5,6 +5,11 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+## [0.8.2] - 2026-11-10
+
+### Added
+- **Working level on the parent report.** A new "Working level" section (after Overview) estimates, per subject, the level a learner is working at: an age and US grade range such as "about age 10-11, roughly 5th-6th grade" (grade is age minus 5). The top of the range is the highest Marble target age (`ageRangeStart`) among topics mastered directly; inferred mastery never sets it. The bottom is the next highest, pulled down a year when a topic at or just below the top is slipping in the 14-day logs (under 70% right first try over 3+ tries, 2+ learning moments, or a failed review). Each subject shows a confidence note (few data points, no ceiling yet, or at the top of what Jane's topics cover), slipping spots, and topics shown well above the learner's age. When the learner has a stored grade or age (`[vars]` for the primary learner, the profile for the others) it says on level, ahead or behind; with neither it shows the level alone. Read-only: it never writes progress or changes medals, mastery or points (`src/level.js`, `test/working-level.test.mjs`).
+
 ## [0.8.1] - 2026-11-04
 
 ### Fixed
@@ -368,7 +373,8 @@ First public release.
 - Runs on Cloudflare Workers (or `npm run dev` locally) only; the standalone Node server is planned for v0.2.
   `prototype/` is the early math-only version, not the full app.
 
-[Unreleased]: https://github.com/kentlangley/Jane/compare/v0.8.1...HEAD
+[Unreleased]: https://github.com/kentlangley/Jane/compare/v0.8.2...HEAD
+[0.8.2]: https://github.com/kentlangley/Jane/releases/tag/v0.8.2
 [0.8.1]: https://github.com/kentlangley/Jane/releases/tag/v0.8.1
 [0.8.0]: https://github.com/kentlangley/Jane/releases/tag/v0.8.0
 [0.6.0]: https://github.com/kentlangley/Jane/releases/tag/v0.6.0
