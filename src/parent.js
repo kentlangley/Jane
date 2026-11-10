@@ -1,9 +1,9 @@
 // Parent report data (read-only). Rendered client-side by public/parent.js.
-import * as E from './engine.js';import {coverage as areaCoverage} from './coverage.js';
+import * as E from './engine.js';import {coverage as areaCoverage} from './coverage.js';import {workingLevel} from './level.js';
 const DAY=864e5;
 export const ptDate=(ms)=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(ms));
 const CAP=120; // seconds counted per answer (longer = idle)
-export function parentData({S,g,now,today,logs,packs,tomorrowPack,boosts}){
+export function parentData({S,g,now,today,logs,packs,tomorrowPack,boosts,actual}){
   const sm=E.summary(S,g,now);const st=id=>E.stateOf(S,g,id,now);
   const days=Object.keys(logs).sort();const all=days.flatMap(d=>(logs[d]||[]).map(l=>({...l,day:d})));
   const answers=all.filter(l=>!l.event&&l.regraded!=='neutral');
@@ -50,7 +50,9 @@ export function parentData({S,g,now,today,logs,packs,tomorrowPack,boosts}){
   // coverage by area (Marble domains) from records + the 14-day logs (LESSONS.md "Coverage")
   const cv=areaCoverage(S,g,all,{age:E.learner().age,now});
   const coverage={seen:cv.seen,total:cv.total,subjects:cv.subjects.map(s=>({name:s.name,total:s.total,seen:s.seen,domains:s.domains.map(d=>({name:d.name,seen:d.seen,answered:d.answered,mastered:d.mastered,topics:d.topics}))}))};
-  return{coverage,name:E.learner().name,grade:E.learner().grade,today,generated:now,head,perDay,growth,subjects:Object.values(subjects),struggles,wins,terms:Object.values(terms).sort((a,b)=>b.count-a.count),quests,tonight,reviews,inferredDue,log,medals,placement:S.placement};}
+  // working level per subject (src/level.js): read-only, from direct mastery + the 14-day logs vs the stored grade/age
+  const level=workingLevel(S,g,all,{actual:actual||{grade:E.learner().grade},now});
+  return{coverage,level,name:E.learner().name,grade:E.learner().grade,today,generated:now,head,perDay,growth,subjects:Object.values(subjects),struggles,wins,terms:Object.values(terms).sort((a,b)=>b.count-a.count),quests,tonight,reviews,inferredDue,log,medals,placement:S.placement};}
 // one line of stats per kid for the parent switcher (learner profiles, Slice 3). S may be null (never played).
 export function kidStats(S,g,now){if(!S)return{points:0,medals:0,mastered:0,days:0,lastPlayed:null};const sm=E.summary(S,g,now);
   return{points:S.points||0,medals:E.trophies(S,g).medals.filter(m=>m.tier!=='quest').length,mastered:sm.done,days:E.dayStreak(S,now).n,lastPlayed:S.days?.last||null,placementDone:!!S.placementQuest};}

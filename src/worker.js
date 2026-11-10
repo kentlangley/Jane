@@ -79,7 +79,8 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
    const qp={};for(const d of recent)if(PC[d]?.quest)qp[d]=PC[d];const boosts={};await Promise.all(Object.keys(qp).map(async d=>boosts[d]=await KV.get(LK('boost:')+d,'json')));
    const tomorrowPack=await KV.get(LK('lessons:')+ptDate(now+864e5),'json');cfg();
    const kids=await Promise.all(REG.learners.map(async l=>[l,l.id===LR.id?S:await KV.get(l.prefix+'progress','json')]));cfg();
-   const data=PR.parentData({S,g,now,today,logs,packs:qp,tomorrowPack,boosts});data.sandbox=sbx||undefined;
+   const prim=LR.id===REG.primary,actual=prim?{grade:env.LEARNER_GRADE||LR.grade||'',age:env.LEARNER_AGE??LR.age}:{grade:LR.grade||'',age:LR.age};
+   const data=PR.parentData({S,g,now,today,logs,packs:qp,tomorrowPack,boosts,actual});data.sandbox=sbx||undefined;
    data.profiles={current:LR.id,primary:REG.primary,avatars:PF.AVATARS,parentPin:!!env.PARENT_PIN,learners:kids.map(([l,x])=>({...PF.publicProfile(l),grade:l.id===REG.primary?(env.LEARNER_GRADE||l.grade||''):l.grade,interests:l.interests||[],primary:l.id===REG.primary,...PR.kidStats(x&&E.migrate(JSON.parse(JSON.stringify(x)),g),g,now)}))};
    return new Response(PR.parentShell(data),{headers:{'content-type':'text/html; charset=utf-8','cache-control':'no-store'}});}
  if(P==='/api/state'){if(!S.current)E.next(S,g,pack,now);out=pub();}
