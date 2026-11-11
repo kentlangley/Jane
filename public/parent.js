@@ -78,7 +78,7 @@ function medals(){const M=D.medals;const TC={legendary:'🌈',gold:'🥇',silver
 // ---------- page ----------
 // "Help shape Jane" check-in answers (src/feedback.js), newest first, plus when the next check-in shows
 function feedbackSec(){const F=D.feedback||{},E=F.entries||[];
- const next=F.pending?'⏳ A check-in is waiting: it shows the next time the app opens (or right after the next quest high-five).':F.snoozed?'💤 "Not now" was tapped today, so Jane asks again on the next day of play.':`Next check-in after ${Math.max(0,(F.nextAt||0)-(F.questsDone||0))} more finished quest${(F.nextAt||0)-(F.questsDone||0)===1?'':'s'} (every ${F.every||3}).`;
+ const next=F.pending?'⏳ A check-in is waiting: it shows the next time the app opens (or right after the next quest high-five).':F.snoozed?'💤 "Not now" was tapped today, so Jane asks again on the next day of play.':`Next check-in after ${Math.max(0,(F.nextAt||0)-(F.questsDone||0))} more finished quest${(F.nextAt||0)-(F.questsDone||0)===1?'':'s'} (Jane asks every ${F.every||8} quests).`;
  return`<p class="muted small">${next}</p>`+(E.length?E.map(e=>`<div class="fbentry"><div class="muted small">${fmtDT(e.at)} PT${e.quest?.title?` · after “${esc(e.quest.title)}”`:''} · ${e.quests||0} quest${e.quests===1?'':'s'} done</div>
   ${e.questions.map((q,i)=>`<p><b>${esc(q)}</b><br>${e.answers[i]?esc(e.answers[i]).replace(/\n/g,'<br>'):'<span class="muted">(skipped)</span>'}</p>`).join('')}</div>`).join(''):`<p>No answers yet.</p>`);}
 const NAV=[['overview','Overview'],['level','Working level'],['feedback','Feedback'],['highlights','How it\'s going'],['charts','Trends'],['subjects','Subjects'],['coverage','Coverage'],['quests','Quests'],['reviews','Reviews'],['log','Answer log'],['medals','Medals']];

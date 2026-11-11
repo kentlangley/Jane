@@ -5,6 +5,14 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+## [0.8.4] - 2026-11-11
+
+### Changed
+- **The "Help shape Jane" check-in comes back every 8 finished quests instead of every 3** (Kent: every 3 was too often). The first check-in still shows on the next app open, "Not now" still snoozes for the rest of the Pacific day, and two "Not now"s in a row now wait for the next 8 quests. The parent report's next check-in line says "Next check-in after N more finished quests (Jane asks every 8 quests)." Saved answers and feedback records are unchanged (`src/feedback.js` `EVERY`).
+
+### Fixed
+- **A first "Not now" no longer pushes the first check-in back by a whole cycle.** In v0.8.3 a learner with fewer finished quests than the cycle who tapped "Not now" on their first check-in would not be asked again the next day. The first check-in now stays due until it is answered (or "Not now" is tapped twice in a row).
+
 ## [0.8.3] - 2026-11-11
 
 ### Added
@@ -383,7 +391,8 @@ First public release.
 - Runs on Cloudflare Workers (or `npm run dev` locally) only; the standalone Node server is planned for v0.2.
   `prototype/` is the early math-only version, not the full app.
 
-[Unreleased]: https://github.com/kentlangley/Jane/compare/v0.8.3...HEAD
+[Unreleased]: https://github.com/kentlangley/Jane/compare/v0.8.4...HEAD
+[0.8.4]: https://github.com/kentlangley/Jane/releases/tag/v0.8.4
 [0.8.3]: https://github.com/kentlangley/Jane/releases/tag/v0.8.3
 [0.8.2]: https://github.com/kentlangley/Jane/releases/tag/v0.8.2
 [0.8.1]: https://github.com/kentlangley/Jane/releases/tag/v0.8.1
