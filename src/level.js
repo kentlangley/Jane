@@ -7,7 +7,9 @@ const SLIP_ACC=0.7,SLIP_MIN=3; // a topic is "slipping" at < 70% right first try
 const SLIP_LM=2;               // ...or >= 2 learning moments (missed twice), or a failed review / demotion
 export const gradeOf=a=>{const n=Math.round(a)-5;if(n<=0)return'K';const s=n%100>=11&&n%100<=13?'th':({1:'st',2:'nd',3:'rd'}[n%10]||'th');return n+s;};
 const range=(lo,hi,f)=>lo===hi?f(lo):`${f(lo)}-${f(hi)}`;
-export const ageLabel=(lo,hi)=>`about age ${range(lo,hi,String)}, roughly ${lo===hi?gradeOf(lo)+' grade':`${gradeOf(lo)}-${gradeOf(hi)} grade`}`;
+// grade words: "kindergarten" (not "K grade"), "5th grade", "kindergarten-1st grade", "5th-6th grade"
+const KG='kindergarten',gw=(lo,hi)=>{const a=gradeOf(lo),b=gradeOf(hi);if(a===b)return a==='K'?KG:a+' grade';return `${a==='K'?KG:a}-${b==='K'?KG:b}${b==='K'?'':' grade'}`;};
+export const ageLabel=(lo,hi)=>`about age ${range(lo,hi,String)}, roughly ${gw(lo,hi)}`;
 // per-topic slip signals from log entries (each {topicId, try, correct, event, expected, regraded})
 export function slipSignals(logs=[]){const W={};
   for(const l of logs){if(!l?.topicId||l.regraded==='neutral')continue;const w=W[l.topicId]??={first:0,firstRight:0,lm:0,failed:0};

@@ -3,12 +3,12 @@
 // Usage: node export-progress.mjs [--out file.json] [--date YYYY-MM-DD] [--days 7] [--local]   (default out: exports/progress-<date>.json;
 //        with --local or STORAGE=file it reads the standalone server's DATA_DIR and writes DATA_DIR/exports/)
 // Adds weakSpots (per topic + per domain: misses, hints, slow answers, failed reviews, unsure self-checks), strengths and goDeeper suggestions.
-import fs from 'fs';import path from 'path';import {kvGet,loadTax,ptDate,DIR,activeQuests,questReached,learnerConfig,learnerDir,lk,learnerFull,profiles} from './lib-cli.mjs';import * as E from './src/engine.js';import {coverage as areaCoverage} from './src/coverage.js';import {checkRegionFilter} from './lib-regions.mjs';
+import fs from 'fs';import path from 'path';import {kvGet,loadTax,ptDate,DIR,activeQuests,questReached,learnerConfig,learnerDir,lk,learnerFull,profiles} from './lib-cli.mjs';import * as E from './src/engine.js';import {coverage as areaCoverage} from './src/coverage.js';import {checkRegionFilter} from './lib-regions.mjs';import * as FBK from './src/feedback.js';
 E.configure(learnerConfig());const L=E.learner();
 const args=process.argv.slice(2),opt=k=>args.includes(k)?args[args.indexOf(k)+1]:null;
 const date=opt('--date')||ptDate(),out=opt('--out')||path.join(learnerDir('exports'),`progress-${date}.json`);
 const TAX=loadTax(),hiddenRegions=checkRegionFilter(TAX,DIR),g=E.graph(TAX),now=Date.now();
-const S=E.migrate(kvGet(lk('progress')),g),log=kvGet(lk('log:')+date)||[],pack=kvGet(lk('lessons:')+date);
+const S=E.migrate(kvGet(lk('progress')),g),FBR=kvGet(lk('feedback')),log=kvGet(lk('log:')+date)||[],pack=kvGet(lk('lessons:')+date);
 const days=+(opt('--days')||7),dayList=[...Array(days)].map((_,i)=>ptDate(Date.parse(date+'T12:00:00Z')-i*864e5));
 const logs=[log,...dayList.slice(1).map(d=>kvGet(lk('log:')+d)||[])].flat();
 const full=(t,extra={})=>({...t,state:E.stateOf(S,g,t.id,now),record:S.ts[t.id]||null,
@@ -105,11 +105,16 @@ const res={exportedAt:new Date(now).toISOString(),date,timezone:'America/Los_Ang
   hiddenRegions:{regions:hiddenRegions,topics:Object.keys(g.hidden).length,mastered:Object.keys(g.hidden).filter(id=>S.ts[id]?.st==='mastered').length,medals:(S.medals||[]).filter(m=>g.hidden[m.id]).length},
   research,frontier,reviewDue,campaign:E.campaignState(S,g,E.finaleState(S,QP)),
   market:E.marketExport(S,g,now), // Points Market: spend vs earn for price tuning (target 50–70% of earned points spent), choices to honor
+  // "Help shape Jane" check-ins (src/feedback.js): answers from the last --days days are "new"; the nightly reads these
+  feedback:(()=>{const f=FBK.feedbackState(FBR,S,date),all=FBK.feedbackList(FBR),since=dayList[dayList.length-1];
+    return{pending:f.pending,snoozed:f.snoozed,questsDone:f.questsDone,nextAt:f.nextAt,every:FBK.EVERY,nextQuestions:f.questions,new:all.filter(e=>e.day>=since&&e.day<=date),all};})(),
   progress:S};
 fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,E.withName(JSON.stringify({learner:L,profile:(F=>({id:F.id,primary:F.primary,...L,interests:F.interests||[]}))(learnerFull()),learners:profiles().learners.map(l=>({id:l.id,name:l.name,grade:l.grade})),...res},null,1),JSON.stringify(L.name).slice(1,-1)));
 console.log(`  📚 research briefs: ${research.available?`${Object.keys(research.briefs).length} attached, ${research.pointers.length} more as pointers (npm run research -- <topicId>)`:research.note}`);
 if(hiddenRegions.length)console.log(`  🌏 hidden regions: ${hiddenRegions.join(',')} (${res.hiddenRegions.topics} topics left out of the app and this export; never put them in a pack)`);
 {const m=res.market;console.log(`  🛒 market: balance ${m.balance}, spent ${m.spent} (7d: spent ${m.spent7d} / earned ${m.earned7d??'?'})`);}
+{const f=res.feedback;console.log(`  💬 feedback: ${f.new.length} new check-in${f.new.length===1?'':'s'} (last ${days} days), ${f.all.length} total; ${f.pending?'a check-in shows on the next open':f.snoozed?'"not now" today, asks again next day':`next after ${f.nextAt-f.questsDone} more quest(s)`}`);
+  for(const e of f.new){console.log(`    ${e.day}${e.quest?.title?` after "${e.quest.title}"`:''}:`);e.questions.forEach((q,i)=>console.log(`      Q: ${q}\n      A: ${e.answers[i]||'(skipped)'}`));}}
 console.log(`  🗺️ quests: ${quests.nextStep}`);if(quests.marketChoice&&cur)console.log(`  🧭 ${quests.marketChoice}`);if(termsLookedUp.length)console.log(`  📘 looked up: ${termsLookedUp.slice(0,10).map(t=>t.term+'×'+t.count).join(', ')}`);
 for(const x of goDeeper)console.log(`  🔎 go deeper${x.needsSupport?' (GENTLE, the kid got stuck)':''}: ${x.name} (${x.domain}): ${x.why}`);for(const x of strengths)console.log(`  💪 strength: ${x.domain} → stretch to ${x.stretchTo.map(t=>t.name).join(', ')||'(nothing ready)'}`);
 console.log(`✅ wrote ${out}: ${sm.done}/${sm.total} mastered (${sm.pct}%), ${frontier.length} frontier, ${reviewDue.length} review due, ${log.filter(l=>!l.event).length} answers today`);

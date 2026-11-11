@@ -16,3 +16,13 @@ If export shows `campaign.finalBoss.unlocked: true` (trail full + legendaries li
 ## Market choices (Points Market)
 
 If the export has `market.openChoices` (the learner spent points on **Pick Your Path** or **Pick a Story Theme**), build the next **NEW QUEST** around the pick and add `"honors": {"path": "<topicId>", "theme": "<themeId>"}` to the pack. `quests.nextStep` says exactly what was picked. If no valid quest fits, use `"declined"` (refunds the pick) with a `"note"` and say why in the hook. Never on a refresh of locked stages. Full rules: LESSONS.md "Market choices".
+
+## Feedback check-ins ("Help shape Jane")
+
+The export's `feedback.new` holds the learner's check-in answers from the last `--days` days (all of them are in
+`feedback.all`, newest first), and the console prints them under 💬. Read them before authoring: they say what was
+fun, what felt too easy or too hard, and what the learner wants to learn next. Use them as direction for themes and
+topics, never quote them back word for word in a pack, and pass anything notable to the grown-up in the nightly note.
+`feedback.pending` only says whether the app will ask on the next open; the app handles the timing (first open, then
+every 3 finished quests, "Not now" snoozes for the day). Answers live in the learner's `feedback` KV key, not in
+progress, and never change medals, mastery or points.

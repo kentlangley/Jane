@@ -391,3 +391,19 @@ body.theme-lava .q,body.theme-lava .small,body.theme-lava .ord .ot,body.theme-la
   .qreveal .paper .qemo{font-size:2rem;margin:0}.qreveal .paper h2{margin:.15em 0}.qreveal .paper p{font-size:.95rem;line-height:1.35;margin:.3em 0}}
 @media (max-height:620px){.qreveal .crownrev,.qreveal .chest,.qreveal .paper .qemo{display:none}.qreveal .fbnew,.qreveal .qrnew{font-size:1.4rem}}
 @media (max-height:450px){.qreveal .qpath,.qreveal .paper .small,.qreveal .fbsub{display:none}}
+/* v0.8.3 "Help shape Jane" check-in: scrolls on short screens like the quest reveal (v0.8.1), never traps the learner */
+.fbcheck{position:fixed;inset:0;z-index:62;display:flex;align-items:flex-start;justify-content:center;padding:16px;background:radial-gradient(circle,#1a237ecc,#000d);overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;animation:fadein .25s}
+.fbcheck.out{animation:fadeout .3s forwards}
+.fbcheck .fbbox{margin:auto;width:100%;max-width:520px;background:#fffdf5;color:#263238;border-radius:22px;padding:20px 22px;box-shadow:0 10px 40px #0008;border:4px solid #ffd54f;text-align:left}
+.fbcheck .fbhi{font-size:2.6rem;text-align:center;line-height:1}
+.fbcheck h2{margin:.2em 0 .1em;text-align:center;color:#4a148c}
+.fbcheck .fbintro{margin:.2em 0 .8em;text-align:center;font-size:.98rem}
+.fbcheck .fbq{display:block;font-weight:800;margin:.7em 0 .3em;font-size:1.02rem}
+.fbcheck textarea{width:100%;box-sizing:border-box;font:inherit;font-size:1rem;padding:10px 12px;border-radius:12px;border:2px solid #b39ddb;resize:vertical;min-height:64px;background:#fff;color:#263238}
+.fbcheck textarea:focus{outline:3px solid #ffd54f;border-color:#7e57c2}
+.fbcheck .fberr{margin:.5em 0 0;color:#b71c1c;font-weight:800}
+.fbcheck .fbacts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:14px}
+.fbcheck .fbacts .bigbtn{margin:0;width:auto;flex:1 1 220px;font-size:1.3rem;padding:12px;animation:none}.fbcheck .fbacts .ghost{flex:0 1 auto}
+.fbcheck .qrclose{position:fixed;top:10px;right:10px;z-index:2;width:44px;height:44px;padding:0;border-radius:50%;border:2px solid #fff9;background:#0006;color:#fff;font-size:1.3rem;font-weight:900;line-height:1;box-shadow:none;cursor:pointer}
+@media (max-height:620px){.fbcheck .fbhi{display:none}.fbcheck .fbbox{padding:14px 16px}.fbcheck .fbintro{font-size:.9rem;margin-bottom:.4em}.fbcheck textarea{min-height:0;height:62px}.fbcheck .fbq{margin-top:.5em}}
+@media (prefers-reduced-motion:reduce){.fbcheck,.fbcheck.out{animation:none}}
