@@ -1,4 +1,4 @@
-// "Help shape Jane" check-in (v0.8.3, src/feedback.js): 1-2 open questions on the next app open, then every 3 finished
+// "Help shape Jane" check-in (v0.8.3, src/feedback.js): 1-2 open questions on the next app open, then every 8 finished
 // quests; "Not now" snoozes for the day. Answers live in their own per-learner "feedback" key, never in progress,
 // so medals, mastery and points can't change. /parent lists them newest first; the export prints the new ones.
 import {test} from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';
@@ -12,23 +12,24 @@ test('first open: a learner with no check-in yet gets one, with the default ques
   assert.deepEqual(f.questions,['What was the most fun part of Jane lately, and why?','If you could add or change one thing in Jane, what would it be?']);
   assert.equal(FB.feedbackState(null,{},D1).pending,true,'even before any quest');});
 
-test('after answering it waits for 3 more finished quests, and the questions rotate',()=>{
+test('after answering it waits for 8 more finished quests, and the questions rotate',()=>{
   const a=FB.feedbackApply(null,done(7),{answers:['the dragon boss','more maps']},{now:1,today:D1,questTitle:d=>'Quest '+d});
   assert.ok(a.entry);assert.equal(a.entry.quests,7);assert.deepEqual(a.entry.quest,{date:'2026-10-07',title:'Quest 2026-10-07'});
-  assert.equal(FB.feedbackState(a.F,done(7),D1).pending,false);assert.equal(FB.feedbackState(a.F,done(9),D2).pending,false,'2 more: not yet');
-  const f=FB.feedbackState(a.F,done(10),D2);assert.equal(f.pending,true,'3 more: ask again');assert.deepEqual(f.questions,FB.POOL[1]);
+  assert.equal(FB.feedbackState(a.F,done(7),D1).pending,false);assert.equal(FB.EVERY,8);assert.equal(FB.feedbackState(a.F,done(10),D2).pending,false,'3 more: not yet');assert.equal(FB.feedbackState(a.F,done(14),D2).pending,false,'7 more: not yet');
+  const f=FB.feedbackState(a.F,done(15),D2);assert.equal(f.pending,true,'8 more: ask again');assert.equal(f.nextAt,15);assert.deepEqual(f.questions,FB.POOL[1]);
   assert.notDeepEqual(f.questions,a.entry.questions);
-  let F=a.F;for(let i=0;i<FB.POOL.length;i++){F=FB.feedbackApply(F,done(10+3*i),{answers:['x']},{now:2+i,today:D2}).F;}
+  let F=a.F;for(let i=0;i<FB.POOL.length;i++){F=FB.feedbackApply(F,done(15+8*i),{answers:['x']},{now:2+i,today:D2}).F;}
   assert.deepEqual(FB.questionsFor(F),FB.POOL[1],'the pool wraps around');});
 
-test('"Not now" snoozes for the rest of the day, re-asks next day, and two in a row wait for the next 3 quests',()=>{
+test('"Not now" snoozes for the rest of the day, re-asks next day, and two in a row wait for the next 8 quests',()=>{
   const s1=FB.feedbackApply(null,done(4),{skip:true},{now:1,today:D1});assert.ok(s1.skipped);assert.equal(s1.F.entries.length,0);
   assert.equal(FB.feedbackState(s1.F,done(4),D1).pending,false,'no nagging on every load');
   assert.equal(FB.feedbackState(s1.F,done(4),D1).snoozed,true);
   assert.equal(FB.feedbackState(s1.F,done(4),D2).pending,true,'asks again the next day');
+  const k=FB.feedbackApply(null,done(2),{skip:true},{now:1,today:D1});assert.equal(FB.feedbackState(k.F,done(2),D2).pending,true,'a first "not now" re-asks next day even with few quests');
   const s2=FB.feedbackApply(s1.F,done(4),{skip:true},{now:2,today:D2});
   assert.equal(FB.feedbackState(s2.F,done(4),'2026-11-13').pending,false,'2 skips: treated as asked');
-  assert.equal(FB.feedbackState(s2.F,done(7),'2026-11-13').pending,true,'back after 3 more quests');
+  assert.equal(FB.feedbackState(s2.F,done(11),'2026-11-13').pending,false,'7 more: still waiting');assert.equal(FB.feedbackState(s2.F,done(12),'2026-11-13').pending,true,'back after 8 more quests');
   const a=FB.feedbackApply(s1.F,done(4),{answers:['ok']},{now:3,today:D2});assert.equal(a.F.skips,0);assert.equal(a.F.skipDay,null);});
 
 test('answers are cleaned, capped and never empty',()=>{
@@ -49,7 +50,7 @@ const seed=async env=>{const R=PF.synth(env);R.learners.push({id:'kid',name:'Rob
 
 test('pending on the next open for every learner; /parent says so and writes nothing',async()=>{const {dir,env}=mk();await seed(env);
   const before=fs.readdirSync(dir).sort().map(f=>[f,hash(dir,decodeURIComponent(f.slice(0,-5)))]);
-  for(const q of ['','?learner=kid']){const D=await page(env,q);assert.equal(D.feedback.pending,true);assert.deepEqual(D.feedback.entries,[]);assert.equal(D.feedback.every,3);}
+  for(const q of ['','?learner=kid']){const D=await page(env,q);assert.equal(D.feedback.pending,true);assert.deepEqual(D.feedback.entries,[]);assert.equal(D.feedback.every,8);}
   assert.deepEqual(fs.readdirSync(dir).sort().map(f=>[f,hash(dir,decodeURIComponent(f.slice(0,-5)))]),before,'no KV writes');
   const s=await call(env,'/api/state');assert.equal(s.j.feedback.pending,true);assert.deepEqual(s.j.feedback.questions,FB.POOL[0]);});
 
@@ -70,9 +71,9 @@ test('"Not now" from the app stores a snooze, not an answer; sandbox writes go t
   await call(e2,'/api/feedback?sandbox=1',{answers:['sandbox test']});assert.equal(e2.JANE_KV.getSync('feedback','json'),null,'real key untouched');
   assert.equal(e2.JANE_KV.getSync('sandbox:feedback','json').entries.length,1);assert.equal(e2.JANE_KV.getSync('progress','utf8'),p0);});
 
-test('/parent lists answers newest first; every 3 quests it comes back',async()=>{const {env}=mk();await seed(env);
-  await call(env,'/api/feedback',{answers:['first']});const P=env.JANE_KV.getSync('progress','json');Object.assign(P.quests,done(8).quests);env.JANE_KV.putSync('progress',JSON.stringify(P));
-  const s=await call(env,'/api/state');assert.equal(s.j.feedback.pending,true,'3 more quests finished');assert.deepEqual(s.j.feedback.questions,FB.POOL[1]);
+test('/parent lists answers newest first; every 8 quests it comes back',async()=>{const {env}=mk();await seed(env);
+  await call(env,'/api/feedback',{answers:['first']});const P=env.JANE_KV.getSync('progress','json');Object.assign(P.quests,done(12).quests);const s0=await call(env,'/api/state');assert.equal(s0.j.feedback.pending,false,'7 more: not yet');Object.assign(P.quests,done(13).quests);env.JANE_KV.putSync('progress',JSON.stringify(P));
+  const s=await call(env,'/api/state');assert.equal(s.j.feedback.pending,true,'8 more quests finished');assert.deepEqual(s.j.feedback.questions,FB.POOL[1]);
   await call(env,'/api/feedback',{answers:['second','']});const D=await page(env);assert.deepEqual(D.feedback.entries.map(e=>e.answers[0]),['second','first']);});
 
 test('the app shows the check-in at a break (app open, after the high-five) and it fits short screens',()=>{

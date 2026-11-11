@@ -1,4 +1,5 @@
 // "Help shape Jane" check-in (v0.8.3): every few quests Jane asks the learner 1-2 open questions and saves the answers.
+// v0.8.4: every 8 finished quests (was 3 in v0.8.3).
 // Storage: its own per-learner KV key "feedback" (sandbox + learner prefix like progress), never the progress record,
 // so a check-in can never touch medals, mastery or points. Pure functions here; the Worker/Node server do the KV I/O.
 //
@@ -7,7 +8,7 @@
 // A learner with no record yet gets the check-in on the next app open. After answering it comes back once
 // EVERY quests more are finished. "Not now" hides it for the rest of that Pacific day; after SNOOZES "not now"s
 // in a row it counts as asked, so it waits for the next EVERY quests instead of nagging.
-export const EVERY=3,SNOOZES=2,MAX_ANSWER=500,MAX_ENTRIES=200;
+export const EVERY=8,SNOOZES=2,MAX_ANSWER=500,MAX_ENTRIES=200;
 // question pairs, asked in turn (the first pair is the default first check-in)
 export const POOL=[
   ['What was the most fun part of Jane lately, and why?','If you could add or change one thing in Jane, what would it be?'],
@@ -20,7 +21,8 @@ const lastQuest=S=>{const e=Object.entries(S?.quests||{}).filter(([,q])=>q&&q.do
 export function questionsFor(F){return POOL[((F?.asks)|0)%POOL.length];}
 // is a check-in due right now? (pure; F = stored record or null)
 export function feedbackState(F,S,today){const done=questsDone(S);
-  const due=!F||done-((F.baseline)|0)>=EVERY;const snoozed=!!F&&F.skipDay===today;
+  // the first check-in stays due until it is answered (or "not now" twice), whatever the quest count (a single "not now" must not push it back)
+  const due=!F||!((F.asks)|0)||done-((F.baseline)|0)>=EVERY;const snoozed=!!F&&F.skipDay===today;
   return{pending:due&&!snoozed,due,snoozed,questsDone:done,nextAt:F?((F.baseline)|0)+EVERY:done,questions:questionsFor(F),count:F?.entries?.length||0};}
 const clean=s=>String(s??'').replace(/[<>]/g,'').replace(/\s+\n/g,'\n').trim().slice(0,MAX_ANSWER);
 // apply a POST {answers:[...]} or {skip:true}; returns {F (new record), entry?, error?}. Never reads or writes progress.

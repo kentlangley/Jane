@@ -24,5 +24,5 @@ The export's `feedback.new` holds the learner's check-in answers from the last `
 fun, what felt too easy or too hard, and what the learner wants to learn next. Use them as direction for themes and
 topics, never quote them back word for word in a pack, and pass anything notable to the grown-up in the nightly note.
 `feedback.pending` only says whether the app will ask on the next open; the app handles the timing (first open, then
-every 3 finished quests, "Not now" snoozes for the day). Answers live in the learner's `feedback` KV key, not in
+every 8 finished quests, "Not now" snoozes for the day). Answers live in the learner's `feedback` KV key, not in
 progress, and never change medals, mastery or points.
