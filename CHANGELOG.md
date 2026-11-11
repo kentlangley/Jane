@@ -5,6 +5,16 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+## [0.8.3] - 2026-11-11
+
+### Added
+- **"Help shape Jane" check-in.** Jane now asks the learner one or two open questions, with a free-text box for each, so their ideas can steer what Jane builds and teaches next. It shows on the next app open for every learner (before any quest reveal), then again after every 3 finished quests, right after the quest's high-five choice (never mid-question). Questions rotate through a small pool of pairs: what was most fun and what they'd add or change; what felt too easy or too hard and what to learn next; what their own quest would be about and what's confusing; the coolest thing learned and what would make Jane more fun. "Not now" (or ✕ / Escape) never blocks play: Jane asks again the next day, and after two "not now"s in a row it waits for the next 3 quests instead of nagging. The card scrolls and goes compact on short screens, like the v0.8.1 quest reveal. Answers (date, questions, answers, quests finished and the last quest) are saved per learner in their own `feedback` KV key, sandbox-aware, never in the progress record, so a check-in can't change medals, mastery or points, and it awards nothing. `POST /api/feedback` (`src/feedback.js`, `test/feedback-checkin.test.mjs`). Preview: `/#feedback-preview` (saves nothing).
+- **Feedback on the parent report.** A "Feedback from <learner>" section on `/parent` lists every check-in newest first and says when the next one will show. Read-only.
+- **Feedback in the export.** `export-progress.mjs` adds `feedback` (`pending`, `new` for the last `--days` days, `all`) and prints new answers under 💬 so the nightly routine can read them (NIGHTLY.md "Feedback check-ins").
+
+### Fixed
+- **Working level wording at age 5**: the parent report says "roughly kindergarten" (and "kindergarten-1st grade") instead of "roughly K grade".
+
 ## [0.8.2] - 2026-11-10
 
 ### Added
@@ -373,7 +383,8 @@ First public release.
 - Runs on Cloudflare Workers (or `npm run dev` locally) only; the standalone Node server is planned for v0.2.
   `prototype/` is the early math-only version, not the full app.
 
-[Unreleased]: https://github.com/kentlangley/Jane/compare/v0.8.2...HEAD
+[Unreleased]: https://github.com/kentlangley/Jane/compare/v0.8.3...HEAD
+[0.8.3]: https://github.com/kentlangley/Jane/releases/tag/v0.8.3
 [0.8.2]: https://github.com/kentlangley/Jane/releases/tag/v0.8.2
 [0.8.1]: https://github.com/kentlangley/Jane/releases/tag/v0.8.1
 [0.8.0]: https://github.com/kentlangley/Jane/releases/tag/v0.8.0

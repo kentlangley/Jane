@@ -217,7 +217,9 @@ const segDone=(b,t)=>{const done=(b.mastered||0)+(b.review||0);
 $('zoomout').onclick=()=>{zoomed=null;drawMap();};
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{const sw=()=>{document.querySelectorAll('.tab').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-selected',x===b);x.tabIndex=x===b?0:-1;});for(const v of['play','map','trophies','quests','market'])$(v).hidden=b.dataset.v!==v;};window.FX?FX.view(sw):sw();if(b.dataset.v==='map')loadMap();if(b.dataset.v==='market')loadMarket();if(b.dataset.v==='trophies')loadTrophies();if(b.dataset.v==='quests')loadQuests();});
 // learner profiles: wait for picker.js; while "Who's playing?" shows, nothing loads (the pick reloads the page)
-loadGloss().finally(()=>Promise.resolve(window.janeWho).then(w=>{if(w?.picker)return;return api('/api/state').then(s=>{render(s);questDot(s);if(s.finaleReveal)finaleReveal(s.campaign);else if(s.newQuest&&!location.hash&&s.quest)questReveal(s.quest);});}));
+loadGloss().finally(()=>Promise.resolve(window.janeWho).then(w=>{if(w?.picker)return;return api('/api/state').then(s=>{render(s);questDot(s);const after=()=>{if(s.finaleReveal)finaleReveal(s.campaign);else if(s.newQuest&&!location.hash&&s.quest)questReveal(s.quest);};
+  // v0.8.3: a due "Help shape Jane" check-in comes first on app open (a natural break), then any quest reveal
+  if(s.feedback?.pending&&!location.hash)feedbackCard(s.feedback,{then:after});else after();});}));
 if(location.hash==='#quests')document.querySelector('.tab[data-v=quests]').click();
 if(location.hash==='#market')document.querySelector('.tab[data-v=market]').click();
 if(location.hash==='#trophies')document.querySelector('.tab[data-v=trophies]').click();
@@ -468,7 +470,7 @@ function questCelebrate(m,state){document.querySelectorAll('.qcelebrate').forEac
   </div></div>`;
  document.body.appendChild(o);confetti(m.finale?160:120);if(m.finale&&!matchMedia('(prefers-reduced-motion: reduce)').matches)setTimeout(()=>confetti(120),900);
  say(m.finale?`🎓 You graduated to the Big Leagues! "${m.title}" is won!`:`🙌 High five! You finished "${m.title}"!`);
- const close=()=>{o.classList.add('out');setTimeout(()=>o.remove(),400);};
+ const close=()=>{o.classList.add('out');setTimeout(()=>o.remove(),400);if(!m.finale&&state?.feedback?.pending&&m.date!=='preview')setTimeout(()=>feedbackCard(state.feedback),500);};
  // Must pick an option — no silent dismiss by clicking the backdrop.
  $('qc-reinforce').onclick=async()=>{const s=await api('/api/reinforce',{topicIds:m.topicIds||[]});close();
   if(s.error){say(s.error);render(state||window._afterQuest||s);return;}document.querySelector('.tab[data-v=play]').click();render(s);say('🧠 Reinforcement time — quick practice on what you covered!');window._afterQuest=null;};
@@ -492,6 +494,29 @@ if(location.hash==='#graduation-preview'){document.querySelector('.tab[data-v=pl
   questCelebrate({date:'preview',finale:true,title:q?.title||'The Finale',name:q?.medal?.name||'Graduate Medal',emoji:q?.medal?.emoji||'🎓',subjects:['Mathematics'],preferSubject:'Mathematics',topicIds:[],trail:{filled:s.campaign?.filled||0,trailLen:s.campaign?.trailLen||12},stages:q?.stages?.length||5,
    recap:[...h,{name:q?.medal?.name||'Graduate Medal',emoji:q?.medal?.emoji||'🎓',title:q?.title||'',finale:true}],
    graduation:q?.graduation||{title:'You graduated!',message:'(Preview) Jane\'s send-off shows here.',parentMessage:'(Preview) The message from your grown-up shows here once the Finale medal is won.'}},s);});}
+// ---------- "Help shape Jane" check-in (v0.8.3, src/feedback.js) ----------
+// 1-2 open questions on app open (first time) and then after every few finished quests, right after the high-five.
+// "Not now" always works and Jane asks again another day; answers go to /api/feedback (never the progress record).
+function feedbackCard(F,{then,preview}={}){if(!F?.questions?.length||document.querySelector('.fbcheck'))return then?.();
+ const o=document.createElement('div');o.className='fbcheck';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-labelledby','fbtitle');
+ o.innerHTML=`<div class="fbbox"><div class="fbhi" aria-hidden="true">💡</div><h2 id="fbtitle">Help shape Jane!</h2>
+  <p class="fbintro">Quick break! Your ideas help decide what Jane builds next. There are no wrong answers.</p>
+  ${F.questions.map((q,i)=>`<label class="fbq" for="fbq${i}">${esc(q)}</label><textarea id="fbq${i}" rows="3" maxlength="500" placeholder="Type your idea here..."></textarea>`).join('')}
+  <p class="fberr" id="fberr" role="alert" hidden></p>
+  <div class="fbacts"><button type="button" class="bigbtn" id="fbsend">📨 Send my ideas</button><button type="button" class="ghost" id="fblater">Not now</button></div></div>
+  <button type="button" class="qrclose" id="fbx" aria-label="Not now" title="Not now">✕</button>`;
+ document.body.appendChild(o);setTimeout(()=>$('fbq0')?.focus(),200);say('💡 Quick break! Jane wants your ideas.');
+ let busy=false;const onKey=e=>{if(e.key==='Escape')later();};document.addEventListener('keydown',onKey);
+ const close=()=>{document.removeEventListener('keydown',onKey);o.classList.add('out');setTimeout(()=>{o.remove();then?.();},300);};
+ const post=async b=>{if(preview)return{ok:true,saved:!b.skip};try{return await api('/api/feedback',b);}catch(e){return{error:'Oops, the internet hiccuped. Tap again! 🔌'};}};
+ const later=async()=>{if(busy)return;busy=true;await post({skip:true});close();say('No problem! Jane will ask another day. 😊');};
+ $('fblater').onclick=later;$('fbx').onclick=later;
+ $('fbsend').onclick=async()=>{if(busy)return;const ans=F.questions.map((_,i)=>$('fbq'+i).value.trim()),er=$('fberr');
+  if(!ans.some(Boolean)){er.textContent='Type an idea in a box, or tap "Not now"!';er.hidden=false;return;}
+  busy=true;const b=$('fbsend');b.disabled=true;er.hidden=true;const r=await post({answers:ans});
+  if(r.error){busy=false;b.disabled=false;er.textContent=r.error;er.hidden=false;return;}
+  close();confetti(25);say('💜 Thanks! Your ideas help make Jane better.');};}
+if(location.hash==='#feedback-preview')setTimeout(()=>feedbackCard({questions:['What was the most fun part of Jane lately, and why?','If you could add or change one thing in Jane, what would it be?']},{preview:true}),600);
 if(location.hash==='#quest-preview')api('/api/state').then(s=>s.quest&&questReveal(s.quest));
 if(location.hash==='#quest-celebrate-preview'){document.querySelector('.tab[data-v=play]')?.click();
  api('/api/state').then(s=>{campaignHUD(s);questCelebrate({date:'preview',title:(s.quest?.title)||'Captain Comet\'s Lost Treasure',name:(s.quest?.medal?.name)||'Comet Treasure Medal',emoji:(s.quest?.medal?.emoji)||'💎',questEmoji:s.quest?.emoji||'🏴‍☠️',subjects:['Mathematics','Science'],preferSubject:'Mathematics',topicIds:[],trail:{filled:s.campaign?.filled||3,trailLen:s.campaign?.trailLen||12},stages:s.quest?.stages?.length||5},s);});}

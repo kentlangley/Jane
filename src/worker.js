@@ -1,4 +1,4 @@
-import * as E from './engine.js';import * as PR from './parent.js';import {VERSION} from './version.js';import * as PF from './profiles.js';
+import * as E from './engine.js';import * as PR from './parent.js';import {VERSION} from './version.js';import * as PF from './profiles.js';import * as FBK from './feedback.js';
 let G=null;
 async function graph(env){if(!G){const r=await env.ASSETS.fetch(new Request('https://assets.local/tax.json'));G=E.graph(await r.json());}return G;}
 export const ptDate=(ms=Date.now())=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(ms));
@@ -52,7 +52,7 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
  if(P==='/api/sandbox'){const on=u.searchParams.get('on')!=='0';return new Response(null,{status:302,headers:{location:'/','set-cookie':`sbx=${on?1:0}; Path=/; SameSite=Lax${on?'; Max-Age=86400':'; Max-Age=0'}`}});}
  if(sbx&&P==='/api/sandbox/reset'&&req.method==='POST'){const b=await req.json().catch(()=>({}));await KV.put(K('progress'),(await KV.get(LK('progress')))||'null');await KV.put(K('debug:clockOffsetDays'),String(+b.offsetDays||0));return J({ok:true,sandbox:true,offsetDays:+b.offsetDays||0});}
  const off=+(await KV.get(K('debug:clockOffsetDays')))||0;const now=Date.now()+off*864e5,today=ptDate(now);
- const raw=await KV.get(K('progress'),'json');cfg();let S=E.migrate(raw,g);const migrated=raw&&raw.v!==2;
+ const raw=await KV.get(K('progress'),'json');const FB=await KV.get(K('feedback'),'json');cfg();let S=E.migrate(raw,g);const migrated=raw&&raw.v!==2;
  const S0=JSON.stringify(S);
  // ---- quests (v0.5): ONE current quest (E.questLineup). A newer quest pack waits hidden until the current one is finished.
  const todayPack=await KV.get(LK('lessons:')+today,'json');const PC={[today]:todayPack};
@@ -72,7 +72,7 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
    quest:pack?.quest?E.questInfo(S,g,pack):null,newQuest:(()=>{const L=LU();return L.newQuest&&pack?.date===L.current;})(),
    quests:(()=>{const L=LU();return{current:L.current,nextUp:L.queued.length>0,boost:pack?.boost||null};})(),
    terms:pack?.terms||null,mini:S.mini?{topicId:S.mini.topicId,subject:S.mini.ret}:null,
-   campaign:E.campaignState(S,g,E.finaleState(S,Object.fromEntries(recent.map(d=>[d,PC[d]])))),wallet:E.walletState(S,g,now),days:E.dayStreak(S,now),finaleReveal:finaleJust||undefined,profile:{id:LR.id,avatar:LR.avatar||PF.DEFAULT_AVATAR,count:REG.learners.length}};};
+   campaign:E.campaignState(S,g,E.finaleState(S,Object.fromEntries(recent.map(d=>[d,PC[d]])))),wallet:E.walletState(S,g,now),days:E.dayStreak(S,now),finaleReveal:finaleJust||undefined,feedback:(f=>({pending:f.pending,questions:f.questions}))(FBK.feedbackState(FB,S,today)),profile:{id:LR.id,avatar:LR.avatar||PF.DEFAULT_AVATAR,count:REG.learners.length}};};
  const questCheck=r=>{const m=E.completeQuest(S,g,pack,now);if(m){r.questDone=m;ev.push({event:'questDone',date:pack.date,quest:m.title});}};
  if(P==='/parent'){ // read-only: returns before any KV write
    const ds=[...Array(14)].map((_,i)=>ptDate(now-(13-i)*864e5));const logs={};await Promise.all(ds.map(async d=>logs[d]=(await KV.get(K('log:'+d),'json'))||[]));
@@ -81,8 +81,12 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
    const kids=await Promise.all(REG.learners.map(async l=>[l,l.id===LR.id?S:await KV.get(l.prefix+'progress','json')]));cfg();
    const prim=LR.id===REG.primary,actual=prim?{grade:env.LEARNER_GRADE||LR.grade||'',age:env.LEARNER_AGE??LR.age}:{grade:LR.grade||'',age:LR.age};
    const data=PR.parentData({S,g,now,today,logs,packs:qp,tomorrowPack,boosts,actual});data.sandbox=sbx||undefined;
+   data.feedback={...FBK.feedbackState(FB,S,today),every:FBK.EVERY,entries:FBK.feedbackList(FB)};
    data.profiles={current:LR.id,primary:REG.primary,avatars:PF.AVATARS,parentPin:!!env.PARENT_PIN,learners:kids.map(([l,x])=>({...PF.publicProfile(l),grade:l.id===REG.primary?(env.LEARNER_GRADE||l.grade||''):l.grade,interests:l.interests||[],primary:l.id===REG.primary,...PR.kidStats(x&&E.migrate(JSON.parse(JSON.stringify(x)),g),g,now)}))};
    return new Response(PR.parentShell(data),{headers:{'content-type':'text/html; charset=utf-8','cache-control':'no-store'}});}
+ // "Help shape Jane" check-in (src/feedback.js): writes ONLY the feedback key, returns before the progress write below
+ if(P==='/api/feedback'&&req.method==='POST'){const x=FBK.feedbackApply(FB,S,body,{now,today,questTitle:d=>PC[d]?.quest?.title||PC[d]?.title||null});if(x.error)return J({error:x.error},400);
+   await KV.put(K('feedback'),JSON.stringify(x.F));return J({ok:true,skipped:!!x.skipped,saved:!!x.entry,feedback:(f=>({pending:f.pending,questions:f.questions}))(FBK.feedbackState(x.F,S,today))});}
  if(P==='/api/state'){if(!S.current)E.next(S,g,pack,now);out=pub();}
  else if(P==='/api/trophies'){out=E.trophies(S,g);}
  else if(P==='/api/map'){const sm=E.summary(S,g,now);out={codes:sm.codes,focus:S.focus,current:S.current?.topicId,progress:{...sm,codes:undefined}};}
