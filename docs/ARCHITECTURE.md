@@ -9,7 +9,7 @@ through a validator. The bot can get smarter over time without the app changing 
 app, but it doesn't have to.
 
 ## Agent-Orchestrated Software (AOS)
-Kent's name for this way of building and sharing software:
+Kent's name for this way of building and sharing software. He wrote more about the idea in [Agent-Orchestrated Software](https://www.kentlangley.com/blog/agent-orchestrated-software/).
 
 > **Agent-Orchestrated Software (AOS):** software whose adaptation, content, and upkeep are orchestrated by the user's
 > own AI agent, working from outside the app. The agent may host the app, but doesn't have to. The app can include AI
