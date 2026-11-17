@@ -26,3 +26,20 @@ topics, never quote them back word for word in a pack, and pass anything notable
 `feedback.pending` only says whether the app will ask on the next open; the app handles the timing (first open, then
 every 8 finished quests, "Not now" snoozes for the day). Answers live in the learner's `feedback` KV key, not in
 progress, and never change medals, mastery or points.
+
+## Stretch, extra review, and review quests
+
+Learners rarely ask for harder work, so every regular quest includes one small **built-in stretch** stage (about 2-3
+items) about one notch above that subject's working level. Use it only where the learner is on level or ahead, never
+in the boss, and let the result shape the next quest. Skip it in a review quest.
+
+The review gates still run. Also fold **1-2 extra review items** from the oldest overdue mastered topics into every
+regular quest, and trim new-content items so the pack stays at or under 16 graded questions. Mark those items
+`"review": true`.
+
+When the overdue backlog is large, write a fun, openly labeled **review quest** about every 4th quest (then about
+weekly once the backlog is under control). Interleave the review topics, keep the gates, skip the built-in stretch and
+the new-area stage, and stay around 16 graded items. Each review quest gets **exactly one leap item**: a bonus
+challenge that builds on a reviewed topic one step beyond, with no teach step, placed after the reviews it builds on,
+never in the boss. Use the result as planning data. Full rules: LESSONS.md "How to plan tomorrow's quest" and
+"Review quests".

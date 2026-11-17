@@ -10,7 +10,7 @@ container) with file-based storage, and it is built on the open
 [Marble Skill Taxonomy](https://github.com/withmarbleapp/os-taxonomy): 1,930 micro-topics across 9 subjects,
 linked by 4,102 prerequisite edges (the app plays 1,916 of them; 14 are held back with a reason in `data/kid-prompts/PENDING.txt`).
 
-> **v0.8.1.** It's a child's learning app, so all personal data is excluded from the repo, and every path has a clear
+> **v0.8.4.** It's a child's learning app, so all personal data is excluded from the repo, and every path has a clear
 > license (see [LICENSING.md](LICENSING.md)). What's next: [Roadmap](#roadmap). Changes: [CHANGELOG.md](CHANGELOG.md).
 
 ## Set up with an AI bot
@@ -79,8 +79,16 @@ friendly tutor. The name is just a nod to the books: this project has no affilia
   until the current quest is finished, and meanwhile the nightly job *refreshes* the current quest's unreached
   stages instead of starting another one. Quests are short (about 8 minutes, at most
   16 graded questions) and **a finished quest is locked**: its medal and progress never change. Twelve quest medals
-  and four legendaries unlock the **Final Boss**: a one-shot Finale quest (`"finale": true`) with a crown reveal and a
-  graduation screen when its medal is won.
+  and four legendaries unlock the **Final Boss** on the **Campaign Trail**: a one-shot Finale quest (`"finale": true`)
+  with a crown reveal and a graduation screen when its medal is won.
+- **Grind a Trail and the Points Market.** After a quest, Grind a Trail lets the learner keep practicing along a
+  subject path. In the Points Market, earned points buy fun, choice, and peeks (a path or a story theme for the next
+  quest, for example). They never buy mastery or medals.
+- **Money Math and Money Models**, on the Life Skills island. These are Jane's own topics in `data/jane/`, so a Marble
+  refresh does not overwrite them. Money Math covers compound growth, the Rule of 72, inflation and real return,
+  present value, and true average return. The Rule of 72 unlocks once the learner has Calculating Percentages. Money
+  Models is business math for a lemonade stand or snack shop: profit per customer, payback, an offer ladder, price
+  testing, and why a 28-day bill is 13 payments a year.
 - **Nightly lesson packs.** `export-progress.mjs` exports weak spots, strengths, frontier topics and due reviews.
   You (or an AI assistant) write tomorrow's pack following [LESSONS.md](LESSONS.md), then
   `publish-lessons.mjs` validates and publishes it.
@@ -97,10 +105,13 @@ friendly tutor. The name is just a nod to the books: this project has no affilia
   instead of counting it as wrong.
 - **Medals & trophies.** Bronze, silver or gold topic medals (by depth in the graph), earned honestly: 3 first-try
   right answers, never a self-check alone. Streaks, stars and quest medals.
+- **"Help shape Jane" check-in.** Open questions appear on the next app open, then every 8 finished quests. Answers
+  show on the parent report and in the nightly export. They never change medals, mastery, or points.
 - **Parent report (`/parent`).** A calm, read-only report: overall %, time today and this week, wins and struggle spots,
-  words looked up, charts, per-subject progress, quest history, upcoming reviews, a searchable answer log and medals.
-  It also shows review gates per quest and **coverage by area** (which topic areas have been explored). It works on
-  phones and prints cleanly. All times are Pacific Time.
+  words looked up, charts, per-subject progress, **working level** (a read-only age and US grade range per subject,
+  from topics mastered directly), quest history, upcoming reviews, a searchable answer log and medals. It also shows
+  review gates per quest, **coverage by area** (which topic areas have been explored), and **"Help shape Jane"**
+  check-in answers. It works on phones and prints cleanly. All times are Pacific Time.
 - **Sandbox.** `/api/sandbox?on=1` switches your browser to a copy of the progress for testing, so the real record is
   never touched.
 

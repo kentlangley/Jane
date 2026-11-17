@@ -112,8 +112,16 @@ Exit codes to respect (never work around them): **1** invalid pack, **3** a ques
 - **Stuck help is built in:** "I'm stuck 🤔" gives a hint → a worked example → a free skip. Give hard questions their
   own `hint`, `example` and `steps`. `needsSupport` topics get a gentle deep dive a level down and no boss tomorrow.
 - **Size:** about 8 minutes, at most **16 graded** questions over **4-6 stages** (7 max), boss last. The app adds up
-  to 4 review items through the gates.
-- **Spaced review runs through the review gates.** Don't write review stages; watch `reviewHealth`.
+  to 4 review items through the gates. Extra review items folded into the pack count toward the 16, so trim new
+  content to make room.
+- **Built-in stretch.** Learners rarely ask for harder work, so every regular quest includes one small stretch stage
+  (about 2-3 items) about one notch above that subject's working level, only where the learner is on level or ahead,
+  never in the boss. Use the result to plan the next quest. Skip it in a review quest.
+- **Keep the review gates, and fold extra review into the quest.** Fold 1-2 extra review items from the oldest overdue
+  mastered topics into every regular quest (`"review": true`). When the overdue backlog is large, write a fun, openly
+  labeled review quest about every 4th quest (then about weekly), with no stretch stage and exactly one leap bonus
+  item that builds on a reviewed topic one step beyond (no teach step, not in the boss). Watch `reviewHealth`. Full
+  rules: [LESSONS.md](LESSONS.md) "Review quests".
 - **Medals are earned:** 3 first-try right graded answers. Never design packs to hand them out.
 - **Answer format:** if a prompt asks for a percent, decimal or fraction, write the answer in that form (`form`).
 - **One active quest.** Never publish a new quest while one is in progress; refresh it.

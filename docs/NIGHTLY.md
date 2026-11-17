@@ -54,7 +54,7 @@ The export includes:
   was picked (`for`). Anything over the limit is listed in `pointers`. For the full brief, run
   `npm run research -- <topicId>` (LESSONS.md "Research briefs"). Pending and hidden-region topics never get one. Where
   the research file isn't there (the Docker image), the section says `available: false` and the export carries on.
-- **`reviewDue`**: mastered topics whose spaced review is due (the gates serve them; don't write review stages).
+- **`reviewDue`**: mastered topics whose spaced review is due (the gates serve them, and the oldest overdue ones are also the source for the 1-2 extra review items folded into a regular quest, and for review quests).
 - **`coverage`**: per subject, areas (Marble domains) seen out of total; `coverage.untouched` lists the unseen
   areas (math and science first) with up to 3 `starters` near the target age.
 - **`reviewHealth`**: `due`, `overdue` (> 1 day late), `oldestOverdueDays`, `gateItems7d`, `spotChecks7d`,
@@ -85,7 +85,7 @@ There is only one quest at a time. The routine reads `quests.nextStep`:
 ## 4. Write the pack (rules in LESSONS.md)
 - **Visit a new area.** One stretch stage from `coverage.untouched` (a `starters` topic), rotating subjects with math
   and science first. The publisher prints "new areas: N" and warns at 0 while untouched areas are left (a warning,
-  not an error).
+  not an error). Skip this in a review quest.
 - **Teach → guided practice → graded → boss, always.** Every new or shaky skill starts with a `learn` card (idea + one
   worked example), then 1-2 `guided` questions with `steps`, then graded ones. The boss only tests skills taught or
   practised earlier in the quest (`teaches`) or already mastered, and gets a `powerup` recap. The publisher fails a
@@ -95,12 +95,21 @@ There is only one quest at a time. The routine reads `quests.nextStep`:
   `example`/`steps` on its questions. `weakSpots.requeued` lists skipped items the app brings back by itself, guided.
 - **Go deeper on struggles.** For every `goDeeper` topic, add a deep dive: a `learn` card and guided items first, then 3-4 graded
   questions that start one notch easier and climb back up, in at least 3 formats.
-- **Stretch strengths.** Add a new topic next to the strongest domains (`stretchTo`).
+- **Stretch strengths, and build in a stretch.** Add a new topic next to the strongest domains (`stretchTo`). Learners
+  rarely ask for harder work, so every regular quest also includes one small built-in stretch stage (about 2-3 items)
+  about one notch above that subject's working level, only where the learner is on level or ahead, never in the boss.
+  Use the result to plan the next quest. Skip the built-in stretch in a review quest.
 - **Never below level.** Nothing starting more than 2 years below the target age, and no baby wording.
-- **No review stages.** Spaced review runs through the app's review gates, so spend every stage on new learning.
-  A `"review": true` stage still publishes, with a warning. Check `reviewHealth` in the export (below).
+- **Fold extra review into the quest, and keep the gates.** The app's review gates still serve due reviews at runtime.
+  Also fold 1-2 extra review items from the oldest overdue mastered topics into every regular quest, and trim new
+  content so the pack stays at or under 16 graded questions. Mark those items `"review": true`. When the overdue
+  backlog is large, write a fun, openly labeled review quest about every 4th quest (then about weekly once the backlog
+  is under control): almost all review, interleaved, no built-in stretch, no new area, about 16 graded items, plus
+  exactly one leap bonus item that builds on a reviewed topic one step beyond (no teach step, not in the boss, used as
+  planning data). Full rules: LESSONS.md "Review quests". Check `reviewHealth` in the export (below).
 - **Size (enforced).** About 8 minutes: at most 16 graded questions over 4-6 stages (7 at most), ending with a boss
-  stage. The app adds up to 4 review-gate items, so about 20 answers in all. The publisher fails a bigger quest.
+  stage. Extra review items count toward the 16. The app adds up to 4 review-gate items on top, so about 20 answers in
+  all. The publisher fails a bigger quest.
 - **Kid voice.** Talk to the kid as "you", 15 words or fewer, fun, and write `{name}` instead of a real name.
 - **Creative answers.** Open questions use `creative` (any sensible answer is celebrated) or broad `acceptedAnswers`.
 - **Terms.** Define new words in the pack's `terms`, and reuse words the kid looked up.
@@ -145,8 +154,11 @@ kid continues the quest starts with a short 🔥 warm-up of due reviews. Preview
   inferred skill (right: it counts as shown directly; miss: back to learning). Each day the learner continues a
   quest starts with a 🔥 warm-up of 1-2 reviews, and gates serve at most 4 review items per quest per day. See
   LESSONS.md "Review gates".
-- **The nightly author doesn't write review stages.** If `reviewHealth.overdue` or `oldestOverdueDays` keeps growing,
-  the learner isn't reaching the gates (no quest played): mention it in the commit message rather than adding review stages.
+- **Extra review and review quests sit alongside the gates.** Fold 1-2 extra review items into every regular quest,
+  and write a review quest on the cadence in LESSONS.md "Review quests". If `reviewHealth.overdue` or
+  `oldestOverdueDays` keeps growing because the learner isn't reaching the gates (no quest played), say so in the
+  nightly note. A growing backlog after the learner has been playing is the signal to keep the extra items and to
+  schedule the next review quest.
 
 ## When the routine messages the parent
 Usually never. It stays quiet on a normal night. It only reaches out when something **fails** (the export or publish

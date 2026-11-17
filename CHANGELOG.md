@@ -5,6 +5,9 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+### Changed
+- **Docs:** README Features, the parent-guide site, LESSONS.md, NIGHTLY.md, docs/NIGHTLY.md, and BOT-SETUP.md now describe Money Math and Money Models, working level on the parent report, the Help shape Jane check-in, Points Market and Grind a Trail, plus the current teaching methods (built-in stretch, extra review items in every regular quest, periodic review quests, and one leap item per review quest).
+
 ## [0.8.4] - 2026-11-11
 
 ### Changed
