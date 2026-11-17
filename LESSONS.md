@@ -161,13 +161,19 @@ Run `node export-progress.mjs` and read `weakSpots` first. Then:
    setting, then the original hard question last. Use `easierSteps` (hard prerequisites) for ideas. Topics marked
    `needsSupport` (the kid tapped "I'm stuck" or skipped) get the gentle version: start a full level down, and no boss on them
    tomorrow (see "When the kid gets stuck").
-2. **Keep stretching strengths.** For each `weakSpots.strengths` domain, add a **new** topic from `stretchTo` (or the
-   frontier), short (2-3 questions), with a picture/template.
+2. **Keep stretching strengths, and build in a stretch.** For each `weakSpots.strengths` domain, add a **new** topic
+   from `stretchTo` (or the frontier), short (2-3 questions), with a picture/template. Learners rarely ask for harder
+   work, so every regular quest also includes one small **built-in stretch** stage (about 2-3 items) that sits about one
+   notch above that subject's working level. Use it only in subjects where the learner is on level or ahead. Never put
+   the stretch in the boss. Use the result to plan the next quest: if they handle it, that topic can move up; if they
+   miss, stay at the current level. Skip this built-in stretch in a review quest (see "Review quests" below).
 3. **Never below the learner's level.** The target age and grade are settings (`LEARNER_AGE`, `LEARNER_GRADE` in `wrangler.toml`; the app is designed around ages ~8-12, upper elementary). No topics starting more than 2 years below the target age (the publisher warns), no
    baby wording. "Easier" means smaller steps, not younger content.
-4. **Spaced review runs through the gates.** Don't spend quest budget on review stages: the app's review gates
-   (see "Review gates") pull due reviews and spot-checks from the Leitner queue at runtime. `"review": true` stages
-   still publish (for old packs) but get a warning. Watch the export's `reviewHealth` (`due`, `overdue`,
+4. **Keep the review gates, and fold extra review into the quest.** The app's review gates (see "Review gates") still
+   pull due reviews and spot-checks from the Leitner queue at runtime. Also fold **1-2 extra review items** from the
+   oldest overdue mastered topics (`reviewHealth`, `reviewDue`) into every regular quest, and trim new-content items so
+   the pack stays at or under 16 graded questions. Mark those items or stages `"review": true`. The extra review items
+   count toward the 16-graded cap; gate items still sit on top. Watch the export's `reviewHealth` (`due`, `overdue`,
    `oldestOverdueDays`, `gateItems7d`, `spotChecks7d`, `unverifiedInferred`, `reviewsServed7d`, `gatesOpened7d`,
    `gatesAhead`, `lastPlayed`, `daysSinceLastPlay`, `note`) for review that isn't keeping up. `note` says whether the
    learner just hasn't played (`not played since …`) or played without getting reviews (`played but no reviews served`).
@@ -177,10 +183,22 @@ Run `node export-progress.mjs` and read `weakSpots` first. Then:
    (7 at most)**, boss last. The app adds up to 4 review-gate items on top (see "Review gates"), so the learner
    answers about 20 questions. The publisher **fails** a quest above 16 graded questions or 7 stages, prints a time
    estimate (graded × 25 s + cards × 10 s) and warns above 8 minutes. Spread them out: deep dives 3-4, stretch
-   stages 1-3, boss 3-4.
+   stages 1-3, boss 3-4. Extra review items in a regular quest count toward the 16, so trim new content to make room.
 7. **Visit a new area.** Include at least one stretch stage from `coverage.untouched` in the export (see
    "Coverage"), rotating subjects with math and science first, using one of the listed `starters`. The publisher
-   prints "new areas: N" and **warns** (never fails) when a quest adds no untouched area while some are left.
+   prints "new areas: N" and **warns** (never fails) when a quest adds no untouched area while some are left. Skip
+   this in a review quest (the next regular quest picks it back up).
+
+## Review quests
+When the overdue review backlog is large, write a **review quest** about every 4th quest (then about weekly once the
+backlog is under control). Say so in the hook, and make it fun. Almost every item is review, interleaved across
+topics, still about 16 graded questions over 4-6 stages, boss last. Keep the review gates. Do not include a built-in
+stretch stage, and do not start a new area.
+
+Each review quest gets **exactly one leap item**: a bonus question that builds on a reviewed topic one step beyond
+what was just reviewed. Give it no teach step. Place it after the reviews it builds on, never in the boss, and frame
+it as a bonus challenge. Use the result as planning data: a first-try right means that next step is in reach; a miss
+means stay with the reviewed level for now.
 
 ## Research briefs (optional tool)
 Marble's teaching research (`data/marble/teaching-research.json`, Science and Mathematics only) can help when you plan
