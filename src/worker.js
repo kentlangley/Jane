@@ -42,7 +42,8 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
      if(b.avatar!=null){if(!PF.AVATARS.includes(b.avatar))return JC({error:'pick one of the avatars'},400);l.avatar=b.avatar;}
      if('pin' in b){if(b.pin===null||b.pin==='')l.pin=null;else if(PF.PIN_RE.test(String(b.pin)))l.pin=await PF.makePin(String(b.pin));else return JC({error:'PIN = 4 digits'},400);}
      if(b.interests!=null)l.interests=ints(b.interests);
-     if(l.id!==R.primary){if(b.name!=null&&txt(b.name,30))l.name=txt(b.name,30);if(b.grade!=null&&txt(b.grade,20))l.grade=txt(b.grade,20);}
+     if(l.id!==R.primary){if(b.name!=null&&txt(b.name,30))l.name=txt(b.name,30);if(b.grade!=null&&txt(b.grade,20))l.grade=txt(b.grade,20);
+     if('age' in b){if(b.age===null||b.age==='')delete l.age;else{const a=parseFloat(b.age);if(!(a>=4&&a<=18))return JC({error:'age 4-18'},400);l.age=a;}}}
      await KV.put('profiles',JSON.stringify(R));return JC({ok:true,profile:PF.publicProfile(l)},200);}
    return JC({error:'not found'},404);}
  // a PIN-protected learner needs the PIN cookie for the kid APIs (the parent view is separate)
@@ -82,7 +83,7 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
    const prim=LR.id===REG.primary,actual=prim?{grade:env.LEARNER_GRADE||LR.grade||'',age:env.LEARNER_AGE??LR.age}:{grade:LR.grade||'',age:LR.age};
    const data=PR.parentData({S,g,now,today,logs,packs:qp,tomorrowPack,boosts,actual});data.sandbox=sbx||undefined;
    data.feedback={...FBK.feedbackState(FB,S,today),every:FBK.EVERY,entries:FBK.feedbackList(FB)};
-   data.profiles={current:LR.id,primary:REG.primary,avatars:PF.AVATARS,parentPin:!!env.PARENT_PIN,learners:kids.map(([l,x])=>({...PF.publicProfile(l),grade:l.id===REG.primary?(env.LEARNER_GRADE||l.grade||''):l.grade,interests:l.interests||[],primary:l.id===REG.primary,...PR.kidStats(x&&E.migrate(JSON.parse(JSON.stringify(x)),g),g,now)}))};
+   data.profiles={current:LR.id,primary:REG.primary,avatars:PF.AVATARS,parentPin:!!env.PARENT_PIN,learners:kids.map(([l,x])=>({...PF.publicProfile(l),grade:l.id===REG.primary?(env.LEARNER_GRADE||l.grade||''):l.grade,age:l.id===REG.primary?(env.LEARNER_AGE??l.age):l.age,interests:l.interests||[],primary:l.id===REG.primary,...PR.kidStats(x&&E.migrate(JSON.parse(JSON.stringify(x)),g),g,now)}))};
    return new Response(PR.parentShell(data),{headers:{'content-type':'text/html; charset=utf-8','cache-control':'no-store'}});}
  // "Help shape Jane" check-in (src/feedback.js): writes ONLY the feedback key, returns before the progress write below
  if(P==='/api/feedback'&&req.method==='POST'){const x=FBK.feedbackApply(FB,S,body,{now,today,questTitle:d=>PC[d]?.quest?.title||PC[d]?.title||null});if(x.error)return J({error:x.error},400);

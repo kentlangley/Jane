@@ -5,6 +5,9 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+### Fixed
+- **Learner ages 16.5–18 no longer snap back to 10.** The engine only accepted ages 4–16, so a grade 11 profile (age ≈ 16.5) or an explicit age of 17 was treated as 10. It now matches the profile rules and accepts 4–18. The parent Players form can set age and grade for added learners. Progress, medals and points are unchanged (`src/engine.js`, `src/worker.js`, `public/parent.js`).
+
 ### Changed
 - **Docs:** README Features, the parent-guide site, LESSONS.md, NIGHTLY.md, docs/NIGHTLY.md, and BOT-SETUP.md now describe Money Math and Money Models, working level on the parent report, the Help shape Jane check-in, Points Market and Grind a Trail, plus the current teaching methods (built-in stretch, extra review items in every regular quest, periodic review quests, and one leap item per review quest).
 

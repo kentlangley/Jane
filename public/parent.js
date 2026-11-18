@@ -89,12 +89,14 @@ function kidsBar(){const P=D.profiles;if(!P)return'';const L=P.learners;const ag
   const av=(name,cur)=>`<select name="${name}" aria-label="Avatar">${P.avatars.map(a=>`<option${a===cur?' selected':''}>${a}</option>`).join('')}</select>`;
   const pp=P.parentPin?'<input name="parentPin" type="password" inputmode="numeric" placeholder="Parent PIN" aria-label="Parent PIN" required>':'';
   const rows=L.map(k=>`<form class="kidrow" data-id="${esc(k.id)}"><b>${esc(k.avatar)} ${esc(k.name)}</b>${av('avatar',k.avatar)}
+    ${k.primary?'':`<input name="grade" value="${esc(k.grade||'')}" placeholder="Grade (e.g. 11th grade)" maxlength="20" aria-label="Grade"><input name="age" value="${k.age!=null?esc(k.age):''}" placeholder="Age (4-18)" inputmode="decimal" aria-label="Age">`}
     <input name="interests" value="${esc((k.interests||[]).join(', '))}" placeholder="Interests (comma-separated)" aria-label="Interests">
     <input name="pin" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="New 4-digit PIN" aria-label="New PIN for ${esc(k.name)}">${pp}
     <button class="btn" name="save">Save</button>${k.hasPin?'<button class="btn ghost" name="clearpin" type="button">Clear PIN</button>':''}</form>`).join('');
   return`<div class="wrap kids" role="navigation" aria-label="Kids">${L.length>1?cards:''}
   <details class="kidman"><summary>👪 Players${L.length>1?'':': add a learner'}</summary><div class="kidbody">${rows}
    <form class="kidnew"><h3>Add a learner</h3><input name="name" placeholder="Name" required maxlength="30" aria-label="Name"><input name="grade" placeholder="Grade (e.g. 6th grade)" required maxlength="20" aria-label="Grade">
+    <input name="age" placeholder="Age (optional, 4-18)" inputmode="decimal" aria-label="Age">
     <input name="interests" placeholder="Interests (comma-separated)" aria-label="Interests">${av('avatar','⭐')}${pp}<button class="btn">Add</button>
     <p class="muted small">Jane gives a new learner a short placement quest first, so they start at their level. A PIN is optional (a kid-level guard).</p></form>
    <div class="kidmsg small" aria-live="polite"></div></div></details></div>`;}
@@ -102,7 +104,7 @@ async function kidPost(p,b){const r=await fetch(p,{method:'POST',headers:{'conte
   if(!r.ok||j.error){document.querySelector('.kidmsg').textContent='⚠️ '+(j.error||'Something went wrong');return null;}return j;}
 document.addEventListener('submit',async e=>{const f=e.target;if(!f.closest?.('.kidman'))return;e.preventDefault();const v=Object.fromEntries(new FormData(f));
   if(f.classList.contains('kidnew')){const j=await kidPost('/api/parent/profiles',v);if(j)location.href='/parent?learner='+encodeURIComponent(j.profile.id);return;}
-  const b={id:f.dataset.id,avatar:v.avatar,interests:v.interests,parentPin:v.parentPin};if(v.pin)b.pin=v.pin;if(await kidPost('/api/parent/profiles/update',b))location.reload();});
+  const b={id:f.dataset.id,avatar:v.avatar,interests:v.interests,parentPin:v.parentPin};if(v.pin)b.pin=v.pin;if('grade' in v)b.grade=v.grade;if('age' in v)b.age=v.age;if(await kidPost('/api/parent/profiles/update',b))location.reload();});
 document.addEventListener('click',async e=>{const b=e.target.closest?.('button[name=clearpin]');if(!b)return;const f=b.form;const pp=f.querySelector('[name=parentPin]')?.value;
   if(await kidPost('/api/parent/profiles/update',{id:f.dataset.id,pin:null,parentPin:pp}))location.reload();});
 document.getElementById('app').innerHTML=`<header class="top"><div class="wrap"><div class="brand"><div class="logo">🗺️</div><div><h1>${esc(D.name)}'s learning report</h1><div class="muted small">Updated ${fmtDT(D.generated)} PT${D.sandbox?' · <b>sandbox</b>':''} · read-only</div></div></div>
