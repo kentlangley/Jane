@@ -6,7 +6,7 @@ const DAY=864e5, BOXES=[1,3,7,21,60];
 // Learner settings (wrangler.toml [vars]: LEARNER_NAME, LEARNER_AGE, LEARNER_GRADE). Kid-facing strings use the
 // placeholder {name}; the Worker substitutes it in every response, so it is never stored in progress or packs.
 let NAME='Explorer', TARGET_AGE=10, GRADE='upper elementary';
-export function configure(env={}){NAME=String(env.LEARNER_NAME||'Explorer').trim()||'Explorer';const a=parseFloat(env.LEARNER_AGE);TARGET_AGE=a>=4&&a<=16?a:10;GRADE=String(env.LEARNER_GRADE||'upper elementary').trim();}
+export function configure(env={}){NAME=String(env.LEARNER_NAME||'Explorer').trim()||'Explorer';const a=parseFloat(env.LEARNER_AGE);TARGET_AGE=a>=4&&a<=18?a:10;GRADE=String(env.LEARNER_GRADE||'upper elementary').trim();}
 export const learner=()=>({name:NAME,age:TARGET_AGE,grade:GRADE});
 export const withName=(s,name=NAME)=>String(s).replace(/\{\{name\}\}|\{name\}/g,()=>name);
 const PIZZA_ID='mt_e7filQgayF';

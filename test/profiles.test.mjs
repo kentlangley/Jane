@@ -3,7 +3,7 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {ROOT,tmpDir} from './helpers.mjs';import {fileStore} from '../server/file-kv.mjs';import {assets} from '../server/assets.mjs';
-import worker from '../src/worker.js';import * as PF from '../src/profiles.js';
+import worker from '../src/worker.js';import * as PF from '../src/profiles.js';import * as E from '../src/engine.js';
 const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
 const mk=()=>{const dir=tmpDir('jane-prof-');return{dir,env:{ASSETS:assets(path.join(ROOT,'public')),JANE_KV:fileStore(dir),LEARNER_NAME:'Sam',LEARNER_AGE:'10.5',LEARNER_GRADE:'5th grade'}};};
 const call=async(env,p,body,cookie='')=>{const r=await worker.fetch(new Request('http://x'+p,body===undefined?{headers:{cookie}}:{method:'POST',headers:{'content-type':'application/json',cookie},body:JSON.stringify(body)}),env);return{status:r.status,json:await r.json().catch(()=>null),headers:r.headers};};
@@ -14,9 +14,19 @@ const runMig=(dir,...a)=>execFileSync(process.execPath,['migrate-profiles.mjs','
 
 test('profiles helpers: slug, age from grade, synthesised registry, selection',()=>{
   assert.equal(PF.slug('Landon'),'landon');assert.equal(PF.slug('Zoë Ann'),'zoe-ann');assert.equal(PF.ageFor({grade:'5th grade'}),10.5);assert.equal(PF.ageFor({grade:'8'}),13.5);assert.equal(PF.ageFor({grade:'K'}),5.5);
+  assert.equal(PF.ageFor({grade:'11'}),16.5);assert.equal(PF.ageFor({grade:'11th grade',age:17}),17);
   const R=PF.synth({LEARNER_NAME:'Sam'});assert.equal(R.primary,'sam');assert.equal(R.learners[0].prefix,'');
   const R2=PF.registry({v:1,primary:'sam',learners:[{id:'sam',name:'Sam'},{id:'kid',name:'Robin'}]});assert.equal(R2.learners[1].prefix,'L:kid:');assert.equal(R2.learners[0].prefix,'');
   assert.equal(PF.select(R2,{}).l.id,'sam');assert.equal(PF.select(R2,{cookie:'kid'}).l.id,'kid');assert.equal(PF.select(R2,{query:'kid',cookie:'sam'}).l.id,'kid');assert.equal(PF.select(R2,{cookie:'nobody'}).l.id,'sam');});
+
+test('engine configure accepts learner ages 4-18, same range as profiles',()=>{
+  E.configure({LEARNER_NAME:'T',LEARNER_AGE:'17',LEARNER_GRADE:'11th grade'});assert.equal(E.learner().age,17);
+  E.configure({LEARNER_AGE:'16.5'});assert.equal(E.learner().age,16.5);
+  E.configure({LEARNER_AGE:'4'});assert.equal(E.learner().age,4);
+  E.configure({LEARNER_AGE:'18'});assert.equal(E.learner().age,18);
+  E.configure({LEARNER_AGE:'19'});assert.equal(E.learner().age,10);
+  E.configure({LEARNER_AGE:'3'});assert.equal(E.learner().age,10);
+  E.configure({});assert.equal(E.learner().age,10);});
 
 test('PIN: hashed with a salt, token derived from the hash, never public',async()=>{const pin=await PF.makePin('4821');assert.notEqual(pin.hash,'4821');assert.equal(pin.hash.length,64);
   const l={id:'kid',pin};assert.equal(await PF.checkPin(l,'4821'),true);assert.equal(await PF.checkPin(l,'1111'),false);assert.equal(await PF.checkPin(l,'48a1'),false);
@@ -109,6 +119,21 @@ test('parent adds a learner (generic onboarding), sees each kid, sets and clears
   assert.ok(!JSON.stringify(D).includes('"hash"'),'no PIN hashes in the parent page');});
 test('PARENT_PIN (optional) guards the parent writes',async()=>{const {env}=mk();env.PARENT_PIN='9090';
   assert.equal((await call(env,'/api/parent/profiles',{name:'A',grade:'2'})).status,403);assert.equal((await call(env,'/api/parent/profiles',{name:'A',grade:'2',parentPin:'9090'})).status,200);});
+
+test('parent can set age and grade on an added learner; primary settings and progress stay put',async()=>{const {dir,env}=mk();
+  await call(env,'/api/state');const h=sha(path.join(dir,'progress.json'));
+  const c=await call(env,'/api/parent/profiles',{name:'Test Kid',grade:'11',age:10});assert.equal(c.status,200);
+  const bad=await call(env,'/api/parent/profiles/update',{id:'test-kid',age:19});assert.equal(bad.status,400);
+  const ok=await call(env,'/api/parent/profiles/update',{id:'test-kid',age:17,grade:'11th grade'});assert.equal(ok.status,200);
+  const R=env.JANE_KV.getSync('profiles','json');const l=R.learners.find(x=>x.id==='test-kid');
+  assert.equal(l.age,17);assert.equal(l.grade,'11th grade');
+  assert.equal((await call(env,'/api/parent/profiles/update',{id:'sam',age:17,grade:'changed'})).status,200);
+  const prim=env.JANE_KV.getSync('profiles','json').learners.find(x=>x.id==='sam');
+  assert.equal(prim.age,undefined);assert.notEqual(prim.grade,'changed');
+  assert.equal((await call(env,'/api/state')).json.learner.age,10.5);
+  assert.equal(sha(path.join(dir,'progress.json')),h,'updating a profile never touches the primary progress record');
+  const D=await parentData(env,'?learner=test-kid');const row=D.profiles.learners.find(x=>x.id==='test-kid');
+  assert.equal(row.age,17);assert.equal(row.grade,'11th grade');});
 
 // ---- Slice 4: per-learner nightly (export / publish / backup take --learner; default = primary) ----
 const cli=(dir,...a)=>execFileSync(process.execPath,a,{cwd:ROOT,env:{...process.env,DATA_DIR:dir,STORAGE:'file',LEARNER_NAME:'Sam',LEARNER_AGE:'10.5',LEARNER_GRADE:'5th grade'},encoding:'utf8'});
