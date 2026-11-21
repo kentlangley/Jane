@@ -189,6 +189,36 @@ Run `node export-progress.mjs` and read `weakSpots` first. Then:
    prints "new areas: N" and **warns** (never fails) when a quest adds no untouched area while some are left. Skip
    this in a review quest (the next regular quest picks it back up).
 
+## History rotation (world and Your Place)
+World history and local/national history should both appear over time. Jane's History island
+now has Marble civilization paths plus Jane's own paths in `data/jane/`: **Your Place** (the
+United States first, including a California close-up, Kentucky history, and how people have
+moved to California) and **Andes & Peru** (a world-history path for the Americas that can also
+support a Your Place thread). When you write a history stretch:
+
+1. **Cap of 2.** At most two consecutive regular-quest history stretches on the same
+   civilization, world region, or Your Place thread. A review quest does not count, and still
+   has no built-in stretch.
+2. **Match geography.** The geography stage of the quest should use the same setting as that
+   night's history stretch (the Mediterranean with Greece and Rome, a colonies map with the
+   thirteen colonies, the Andes with an Andes & Peru topic, and so on).
+3. **Then switch.** After a two-night mini-arc, change civilization, region, or subject. Over
+   a longer cycle, include both world history and Your Place. Do not run only national history
+   or only world history for weeks at a time.
+4. **Unlock a Marble ladder with pack content.** Some Marble history paths start at ages 5-7
+   and lock later topics behind those rungs. To open them, teach the needed Marble topics in
+   the quest packs, with wording at the learner's level ("easier" means a clear map or a short
+   story, not baby talk). Do not add a `jane_` prerequisite to any Marble topic, and do not
+   edit `data/marble/`. For Ancient Greece & Rome, the short catch-up set is: Ancient Greece
+   and Rome on the Map; Athens Versus Sparta; Marathon and Thermopylae; Roman soldiers and
+   builders; Roman Army and Conquest of Britain. Interleave those in two-night pairs with
+   other subjects or regions.
+5. **Keep private family stories out of git.** Topics in `data/jane/` stay general (Kentucky
+   history, Peru history, moving to California). Do not put "your family," family names, or a
+   household's private origin story into committed topic text, kid prompts, examples, or the
+   public template. Family-specific framing belongs only in a learner's private packs
+   (`packs/` is gitignored).
+
 ## Review quests
 When the overdue review backlog is large, write a **review quest** about every 4th quest (then about weekly once the
 backlog is under control). Say so in the hook, and make it fun. Almost every item is review, interleaved across

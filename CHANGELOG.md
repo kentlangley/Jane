@@ -5,6 +5,9 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+### Added
+- **Your Place and Andes & Peru history paths** on the History island (`data/jane/`). Your Place is 15 topics: ten on the United States (nations already here, a California close-up, contact, alliance and war, the colonies, enslavement, the break with Britain, the Revolutionary War, the Constitution, and the early republic), plus Kentucky history (nations and land first, frontier and statehood, a Civil War border state, Appalachia) and moving to California. Andes & Peru is five world-history topics (Andes geography, early cultures, the Inca, the Spanish conquest, and independent Peru). Curriculum codes use `cde-hss:` and were checked against the official California History-Social Science text; a topic with no fitting code has an empty list. `data/marble/` is unchanged. Medals, mastery and points are unchanged. Topic text is general: family-specific framing stays in private packs. Authoring rules for a two-night history rotation, Greece and Rome catch-up as pack content, and the privacy rule are in LESSONS.md and docs/NIGHTLY.md.
+
 ### Fixed
 - **Learner ages 16.5–18 no longer snap back to 10.** The engine only accepted ages 4–16, so a grade 11 profile (age ≈ 16.5) or an explicit age of 17 was treated as 10. It now matches the profile rules and accepts 4–18. The parent Players form can set age and grade for added learners. Progress, medals and points are unchanged (`src/engine.js`, `src/worker.js`, `public/parent.js`).
 

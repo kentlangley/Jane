@@ -1,5 +1,6 @@
-// Jane's own topics (data/jane/, lib-jane-topics.mjs): the Money Math and Money Models paths on the Life Skills island (2026-11-01).
-// They load into tax.json after every Marble topic, sit on the Life Skills island as their own path (domain), have
+// Jane's own topics (data/jane/, lib-jane-topics.mjs): Money Math and Money Models on the Life Skills island (2026-11-01),
+// plus Your Place and Andes & Peru on the History island (2026-11-21).
+// They load into tax.json after every Marble topic, sit on their own paths (domains), have
 // valid prerequisites, start unmastered, unlock through the normal ready/locked rules, can be quest stages, and never
 // change a Marble topic (position, tier, prerequisites) or campaign state.
 import {test} from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import {spawnSync} from 'node:child_process';
@@ -84,9 +85,9 @@ test('research.mjs knows Jane topics (no Marble research for them)',async()=>{co
   const d=R.briefData(MM.compound);assert.equal(d.known,true);assert.equal(d.status,'playable');assert.equal(d.research,false);assert.equal(d.subject,'Life Skills');});
 
 test('the Money Models path (business math, after FounderOS designing-money-models) sits on Life Skills with valid prerequisites',()=>{
-  const ids=Object.values(MOD);assert.deepEqual(src.slice(5).map(t=>t.id),ids,'source order');
-  assert.deepEqual(src.slice(5).map(t=>[t.ageRangeStart,t.ageRangeEnd]),[[9,12],[9,12],[10,13],[11,14],[11,14]]);
-  for(const t of src.slice(5)){assert.match(t.description,/FounderOS — designing-money-models/,t.id+' credits its source');assert.equal(t.domain,'Money Models');}
+  const ids=Object.values(MOD);assert.deepEqual(src.slice(5,10).map(t=>t.id),ids,'source order');
+  assert.deepEqual(src.slice(5,10).map(t=>[t.ageRangeStart,t.ageRangeEnd]),[[9,12],[9,12],[10,13],[11,14],[11,14]]);
+  for(const t of src.slice(5,10)){assert.match(t.description,/FounderOS — designing-money-models/,t.id+' credits its source');assert.equal(t.domain,'Money Models');}
   for(const id of ids){const t=g.byId[id];assert.equal(t.subject,'Life Skills');assert.equal(t.ic,'🍋');assert.ok(t.kq&&t.ka&&t.kw?.length===2,id);}
   assert.deepEqual(pre(MOD.profit),{[COSTREV]:'hard',[MONEYWP]:'hard',[MKT]:'soft'});
   assert.deepEqual(pre(MOD.payback),{[MOD.profit]:'hard',[MDWP]:'hard'});
@@ -130,11 +131,65 @@ test('money topics carry verified curriculum standards (Common Core math, Jump$t
     [MOD.ladder]:['ccss-math:6.RP.3c'],
     [MOD.price]:['ccss-math:7.EE.3','jumpstart-2021:EarningIncome-4-4c'],
     [MOD.billing]:['ccss-math:6.RP.3b','ccss-math:6.RP.3d','ccss-math:7.RP.3']};
-  for(const t of src)assert.deepEqual(t.standards,want[t.id]||[],t.id);
+  const money=src.filter(t=>t.id in want);
+  for(const t of money)assert.deepEqual(t.standards,want[t.id],t.id);
   // code shapes: CCSS K-8 in Marble's short form (no cluster letter), high school with its cluster; Jump$tart area-grade-standard+outcome
   const CCSS=/^ccss-math:(?:[3-8]\.(?:OA|RP|EE)\.\d+[a-e]?|HS[AF]-(?:SSE|LE)\.[A-B]\.\d+[a-e]?)$/,JS=/^jumpstart-2021:(?:Saving|Investing|EarningIncome|Spending|ManagingCredit|ManagingRisk)-(?:4|8|12)-\d+[a-z]$/;
-  for(const t of src)for(const c of t.standards)assert.ok(CCSS.test(c)||JS.test(c),`${t.id}: ${c}`);
+  for(const t of money)for(const c of t.standards)assert.ok(CCSS.test(c)||JS.test(c),`${t.id}: ${c}`);
   // the Jump$tart outcome's grade matches its standard number (8-4c is a grade 8 outcome)
-  for(const t of src)for(const c of t.standards.filter(c=>c.startsWith('jumpstart-2021:'))){const [,gr,std]=c.match(/-(\d+)-(\d+)[a-z]$/);assert.ok(Number(gr)>=4&&Number(std)>=1,c);}
+  for(const t of money)for(const c of t.standards.filter(c=>c.startsWith('jumpstart-2021:'))){const [,gr,std]=c.match(/-(\d+)-(\d+)[a-z]$/);assert.ok(Number(gr)>=4&&Number(std)>=1,c);}
   // the build still accepts them (Marble's source:code rule)
   assert.equal(loadJaneTopics(ROOT).janeTopics.length,src.length);});
+
+test('Your Place and Andes & Peru load on the History island, with checked cde-hss codes, and never change Marble topics',()=>{
+  const place=src.filter(t=>t.domain==='Your Place'),andes=src.filter(t=>t.domain==='Andes & Peru');
+  assert.equal(place.length,15);assert.equal(andes.length,5);
+  assert.equal(place[0].id,'jane_place_nations_before_contact');
+  assert.equal(andes[0].id,'jane_world_andes_geography');
+  for(const t of [...place,...andes]){
+    assert.equal(t.subject,'History');
+    const gT=g.byId[t.id];assert.ok(gT,t.id+' in graph');
+    assert.ok(gT.kq&&gT.ka&&gT.kw?.length===2,t.id+' has a kid prompt');
+    assert.equal(gT.ic,t.domain==='Your Place'?'📍':'⛰️');
+    assert.ok(['bronze','silver','gold'].includes(gT.tier));
+  }
+  const HSS=/^cde-hss:(?:4|5|7|8)\.\d+(?:\.\d+)?$/;
+  const want={
+    'jane_place_nations_before_contact':['cde-hss:5.1','cde-hss:5.1.1'],
+    'jane_place_california_nations':['cde-hss:4.2.1'],
+    'jane_place_contact_and_claims':['cde-hss:5.2','cde-hss:5.2.2','cde-hss:5.2.4'],
+    'jane_place_alliance_and_war':['cde-hss:5.3','cde-hss:5.3.2','cde-hss:5.3.3'],
+    'jane_place_thirteen_colonies':['cde-hss:5.4','cde-hss:5.4.1','cde-hss:5.4.2'],
+    'jane_place_slavery_in_colonies':['cde-hss:5.4.6'],
+    'jane_place_break_with_britain':['cde-hss:5.5'],
+    'jane_place_revolutionary_war':['cde-hss:5.6'],
+    'jane_place_constitution':['cde-hss:5.7'],
+    'jane_place_early_republic':['cde-hss:5.8','cde-hss:5.3.4'],
+    'jane_place_kentucky_nations':['cde-hss:5.1'],
+    'jane_place_kentucky_frontier':['cde-hss:5.8'],
+    'jane_place_kentucky_border_state':['cde-hss:8.10','cde-hss:8.10.2'],
+    'jane_place_kentucky_appalachia':[],
+    'jane_place_california_migration':['cde-hss:4.4.3','cde-hss:4.4.4'],
+    'jane_world_andes_geography':['cde-hss:7.7.1'],
+    'jane_world_andes_early_cultures':['cde-hss:7.7.1','cde-hss:7.7.4'],
+    'jane_world_inca':['cde-hss:7.7','cde-hss:7.7.1','cde-hss:7.7.2','cde-hss:7.7.3'],
+    'jane_world_peru_spanish_conquest':['cde-hss:7.7.3'],
+    'jane_world_peru_republic':[]
+  };
+  for(const t of [...place,...andes]){
+    assert.deepEqual(t.standards,want[t.id],t.id);
+    for(const c of t.standards)assert.ok(HSS.test(c),`${t.id}: ${c}`);
+  }
+  const hard=id=>Object.fromEntries((g.pre[id]||[]).filter(e=>e.h).map(e=>[e.id,e.h?'hard':'soft']));
+  assert.deepEqual(hard('jane_place_nations_before_contact'),{});
+  assert.deepEqual(hard('jane_place_california_nations'),{'jane_place_nations_before_contact':'hard'});
+  assert.deepEqual(hard('jane_world_inca'),{'jane_world_andes_early_cultures':'hard'});
+  const S=E.blank();
+  assert.equal(E.stateOf(S,g,'jane_place_nations_before_contact',now),'ready');
+  assert.equal(E.stateOf(S,g,'jane_world_andes_geography',now),'ready');
+  assert.equal(E.stateOf(S,g,'jane_world_inca',now),'locked');
+  assert.equal(E.stateOf(S,g,'jane_place_california_nations',now),'locked');
+  const histDomains=new Set(g.topics.filter(t=>t.subject==='History').map(t=>t.domain));
+  for(const d of['Your Place','Andes & Peru','Ancient Egypt','Ancient Greece & Rome'])assert.ok(histDomains.has(d),d);
+  for(const t of g.topics)if(t.id.startsWith('mt_'))assert.ok(!g.pre[t.id].some(e=>e.id.startsWith('jane_')),t.id);
+});

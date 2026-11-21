@@ -89,6 +89,13 @@ friendly tutor. The name is just a nod to the books: this project has no affilia
   present value, and true average return. The Rule of 72 unlocks once the learner has Calculating Percentages. Money
   Models is business math for a lemonade stand or snack shop: profit per customer, payback, an offer ladder, price
   testing, and why a 28-day bill is 13 payments a year.
+- **Your Place and Andes & Peru**, on the History island. These are also Jane's own topics in `data/jane/`. Your Place
+  is local and national history, starting with the United States: Native nations first, a California close-up, the
+  colonies and founding, Kentucky history, and how people have moved to California. Andes & Peru is a world-history
+  path (geography, early cultures, the Inca, the Spanish conquest, and independent Peru) that can also support a
+  Your Place thread. Topic text stays general. Family-specific framing belongs only in a learner's private packs.
+  History stretches rotate: at most two nights on one civilization or region, with geography matched to the setting
+  ([LESSONS.md](LESSONS.md) "History rotation").
 - **Nightly lesson packs.** `export-progress.mjs` exports weak spots, strengths, frontier topics and due reviews.
   You (or an AI assistant) write tomorrow's pack following [LESSONS.md](LESSONS.md), then
   `publish-lessons.mjs` validates and publishes it.
@@ -192,7 +199,7 @@ and Docker, set them as environment variables:
 | `test/` | End-to-end smoke test for the Node server (`npm test`) |
 | `data/marble/` | Marble Skill Taxonomy v1 at a pinned upstream commit (`UPSTREAM`), unchanged, with its LICENSE, LICENSE-CONTENT, PROVENANCE.md, CITATION.cff and the offline teaching research |
 | `data/kid-prompts/`, `data/glossary.txt` | Kid-friendly layer derived from the taxonomy |
-| `data/jane/` | Jane's own topics on top of Marble (same schema, `jane_` ids, appended by `build.mjs`; see [its README](data/jane/README.md)), e.g. Life Skills › Money Math |
+| `data/jane/` | Jane's own topics on top of Marble (same schema, `jane_` ids, appended by `build.mjs`; see [its README](data/jane/README.md)), e.g. Life Skills › Money Math, History › Your Place, History › Andes & Peru |
 | `packs/examples/` | A generic example quest. Real nightly packs (`packs/*.json`) are gitignored |
 | `LESSONS.md`, `docs/` | Lesson-pack rules and the nightly workflow |
 | `prototype/` | Early math-only Node prototype (source of the math generators); not the full app |
