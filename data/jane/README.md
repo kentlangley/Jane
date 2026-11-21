@@ -63,15 +63,60 @@ no text is copied. Topic ideas approved by Kent.
 
 Price testing is the path's boss topic (the deepest end of the path), like boss topics on Marble paths.
 
+
+## History › Your Place (2026-11-21)
+
+Local and national history, so learners study the whole world and their part of it. The first
+implementation is the United States. Topic text is general. Do not put "your family," family
+names, or a household's private origin story in these files or in any committed pack or template.
+Family-specific framing belongs only in a learner's private packs (`packs/` is gitignored).
+
+Hard prerequisites stay inside Jane or on existing Marble topics. Marble topics never depend on
+a `jane_` topic. `data/marble/` is unchanged.
+
+| Id | Topic | Ages | Prerequisites (hard / soft) |
+|---|---|---|---|
+| `jane_place_nations_before_contact` | Nations already here | 9–11 | (none) |
+| `jane_place_california_nations` | People of this place: California nations | 9–11 | hard: Nations already here |
+| `jane_place_contact_and_claims` | Contact, claims, and disease | 9–11 | hard: Nations already here; soft: California nations |
+| `jane_place_alliance_and_war` | Trade, alliance, and war | 10–11 | hard: Contact, claims, and disease |
+| `jane_place_thirteen_colonies` | Thirteen colonies on Native land | 10–11 | hard: Contact, claims, and disease; soft: Trade, alliance, and war |
+| `jane_place_slavery_in_colonies` | Enslavement in colonial America | 10–11 | hard: Thirteen colonies on Native land |
+| `jane_place_break_with_britain` | Why the break with Britain | 10–11 | hard: Thirteen colonies; soft: Enslavement in colonial America |
+| `jane_place_revolutionary_war` | The war for independence, many sides | 10–12 | hard: Why the break with Britain |
+| `jane_place_constitution` | Promises and compromises | 10–12 | hard: The war for independence |
+| `jane_place_early_republic` | A nation still being made | 10–12 | hard: Promises and compromises |
+| `jane_place_kentucky_nations` | Land and nations of Kentucky | 9–11 | soft: Nations already here |
+| `jane_place_kentucky_frontier` | Kentucky frontier and statehood | 9–11 | hard: Land and nations of Kentucky |
+| `jane_place_kentucky_border_state` | Kentucky as a Civil War border state | 10–12 | hard: Kentucky frontier and statehood; soft: Enslavement in colonial America |
+| `jane_place_kentucky_appalachia` | Appalachia and moving on | 10–12 | hard: Kentucky frontier and statehood |
+| `jane_place_california_migration` | Moving to California | 9–12 | hard: California nations; soft: Appalachia and moving on, Independent Peru and its people, A nation still being made |
+
+## History › Andes & Peru (2026-11-21)
+
+A world-history path for the Americas (usable in the world rotation). It can also support a
+Your Place thread when a learner has ties to Peru, but the topics themselves stay general.
+
+| Id | Topic | Ages | Prerequisites (hard / soft) |
+|---|---|---|---|
+| `jane_world_andes_geography` | Andes geography | 9–11 | (none) |
+| `jane_world_andes_early_cultures` | Early Andes cultures | 9–11 | hard: Andes geography |
+| `jane_world_inca` | The Inca | 9–12 | hard: Early Andes cultures |
+| `jane_world_peru_spanish_conquest` | Spanish conquest in the Andes | 10–12 | hard: The Inca |
+| `jane_world_peru_republic` | Independent Peru and its people | 10–12 | hard: Spanish conquest in the Andes |
+
 ## Standards
 
-`standards` codes on the Money Math and Money Models topics (2026-11-01). Each one was checked against the official
-text; a topic only gets a code whose text actually covers what the topic teaches.
+`standards` codes on the Money Math and Money Models topics (2026-11-01) and on the Your Place
+and Andes & Peru topics (2026-11-21). Each one was checked against the official text; a topic
+only gets a code whose text actually covers what the topic teaches. A topic with no fitting
+code has an empty list.
 
 | Source prefix | Standard set | Code form | Official text |
 |---|---|---|---|
 | `ccss-math` | Common Core State Standards for Mathematics (same prefix as Marble) | Grades K–8 in Marble's short form without the cluster letter (`6.RP.3c` = CCSS.Math.Content.6.RP.A.3.c); high school with the cluster letter (`HSF-LE.A.1c` = CCSS.Math.Content.HSF.LE.A.1.c) | https://www.thecorestandards.org/Math/ |
 | `jumpstart-2021` | Jump$tart National Standards for Personal Financial Education (2021) | `<Area>-<grade>-<standard><outcome>`, area without spaces: `Saving-8-4c` = Saving, grade 8, standard 8-4, learning outcome 8-4c; `EarningIncome-4-4c` = Earning Income 4-4c | https://www.jumpstart.org/wp-content/uploads/2023/04/2021_Natl_Standards_Downloadable_final.pdf |
+| `cde-hss` | California History-Social Science Content Standards (1998), same official identifiers as HSS-5.1 | `grade.standard` or `grade.standard.sub` (`5.4.6` = HSS-5.4.6; `7.7.1` = HSS-7.7.1) | https://www.cde.ca.gov/BE/st/ss/documents/histsocscistnd.pdf |
 
 | Topic | Codes |
 |---|---|
@@ -85,3 +130,26 @@ text; a topic only gets a code whose text actually covers what the topic teaches
 | `jane_mmod_offer_ladder` | `ccss-math:6.RP.3c` |
 | `jane_mmod_price_testing` | `ccss-math:7.EE.3`; `jumpstart-2021:EarningIncome-4-4c` |
 | `jane_mmod_billing_math` | `ccss-math:6.RP.3b`, `6.RP.3d`, `7.RP.3` |
+
+| Topic | Codes |
+|---|---|
+| `jane_place_nations_before_contact` | `cde-hss:5.1`, `5.1.1` (pre-Columbian settlements; geography and climate) |
+| `jane_place_california_nations` | `cde-hss:4.2.1` (major nations of California Indians) |
+| `jane_place_contact_and_claims` | `cde-hss:5.2`, `5.2.2`, `5.2.4` (explorations; aims of expeditions; land claimed by European powers) |
+| `jane_place_alliance_and_war` | `cde-hss:5.3`, `5.3.2`, `5.3.3` (cooperation and conflict; alliances; wars before the Revolution) |
+| `jane_place_thirteen_colonies` | `cde-hss:5.4`, `5.4.1`, `5.4.2` (colonial institutions; location and Native nations; reasons for founding) |
+| `jane_place_slavery_in_colonies` | `cde-hss:5.4.6` (introduction of slavery; responses of enslaved families) |
+| `jane_place_break_with_britain` | `cde-hss:5.5` (causes of the American Revolution) |
+| `jane_place_revolutionary_war` | `cde-hss:5.6` (course and consequences of the American Revolution) |
+| `jane_place_constitution` | `cde-hss:5.7` (development and significance of the Constitution) |
+| `jane_place_early_republic` | `cde-hss:5.8`, `5.3.4` (settlement 1789 to the mid-1800s; broken treaties and the Trail of Tears) |
+| `jane_place_kentucky_nations` | `cde-hss:5.1` (pre-Columbian settlements, including woodland peoples east of the Mississippi) |
+| `jane_place_kentucky_frontier` | `cde-hss:5.8` (settlement patterns from 1789 to the mid-1800s; Kentucky statehood is 1792) |
+| `jane_place_kentucky_border_state` | `cde-hss:8.10`, `8.10.2` (causes, events, and consequences of the Civil War; North and South boundaries) |
+| `jane_place_kentucky_appalachia` | (none: no official California standard whose text covers Appalachian life and out-migration) |
+| `jane_place_california_migration` | `cde-hss:4.4.3`, `4.4.4` (immigration and migration to California; internal migration and the growth of towns) |
+| `jane_world_andes_geography` | `cde-hss:7.7.1` (landforms and climates of South America and Andean urban societies) |
+| `jane_world_andes_early_cultures` | `cde-hss:7.7.1`, `7.7.4` (Andean urban societies; artistic traditions and architecture) |
+| `jane_world_inca` | `cde-hss:7.7`, `7.7.1`, `7.7.2`, `7.7.3` (Andean civilizations; geography and urban society; social structure; rise of the empire) |
+| `jane_world_peru_spanish_conquest` | `cde-hss:7.7.3` (how the Incan empire was defeated by the Spanish) |
+| `jane_world_peru_republic` | (none: HSS-10.4.4 covers later imperial-era independence struggles, not Peru in the 1820s) |

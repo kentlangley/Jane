@@ -8,3 +8,23 @@ jane_mmod_payback_period|Winning a customer costs $6. You make $2 a sale. Sales 
 jane_mmod_offer_ladder|Half of 10 customers add a $2 cookie. How much extra cash?|$10|$20|$2
 jane_mmod_price_testing|Profit: $40 at $2, $45 at $3, $35 at $4. Best price?|$3|$4|$2
 jane_mmod_billing_math|You pay every 28 days, not monthly. How many payments a year?|13|12|14
+jane_place_nations_before_contact|In 1400, who lived in North America?|Hundreds of nations|No one yet|Only one nation
+jane_place_california_nations|True or false: California Native nations disappeared after statehood.|False, nations are still here|True, they all left|True, they all vanished
+jane_place_contact_and_claims|Why is 'discovered America' a weak way to describe 1492?|People already lived there|Columbus got lost|The ships were too small
+jane_place_alliance_and_war|A treaty between nations is best described as a...|Promise between nations|Friendly letter|Map of rivers
+jane_place_thirteen_colonies|The thirteen colonies were built on land that was...|Already home to Native nations|Empty and unused|Only forest with no people
+jane_place_slavery_in_colonies|What does enslaved mean in colonial America?|A person treated as property|A hired worker who can leave|A volunteer farm hand
+jane_place_break_with_britain|What did 'no taxation without representation' mean?|No tax without a vote|No tax on tea ever|No tax for farmers
+jane_place_revolutionary_war|Why might an enslaved person join the British side?|A promise of freedom|Free land in Canada|A chance to be king
+jane_place_constitution|What did the Three-Fifths Compromise do?|Counted some enslaved people for seats|Freed enslaved people in five years|Gave everyone the vote
+jane_place_early_republic|How is a treaty different from a forced removal?|A treaty is agreed; removal is forced|They are the same thing|A treaty is a kind of war
+jane_place_kentucky_nations|Before Kentucky was a US state, this land was...|Shawnee and Cherokee land|Empty unused wilderness|A British capital city
+jane_place_kentucky_frontier|Kentucky became a US state in...|1792|1492|1861
+jane_place_kentucky_border_state|In the Civil War, Kentucky was a...|A Union border state|The Confederate capital|A country of its own
+jane_place_kentucky_appalachia|Why have people left the Appalachian mountains for other states?|Work and new chances elsewhere|The mountains disappeared|A law banned living there
+jane_place_california_migration|People have moved to California from...|Other states and other countries|Only one nearby town|Nowhere else
+jane_world_andes_geography|The Andes are...|A mountain range in South America|A river in Egypt|A desert in Australia
+jane_world_andes_early_cultures|Which was an early Andes culture, long before the Inca?|Caral|Rome|Egypt
+jane_world_inca|The Inca empire was held together in part by...|Roads and way stations|Steam trains|Ocean cables
+jane_world_peru_spanish_conquest|The Spanish defeated the Inca after the empire was already...|Weakened by disease and civil war|Empty of people|Allied with Australia
+jane_world_peru_republic|Peru today is a country where people speak...|Spanish and Quechua too|Only Latin today|Only English today

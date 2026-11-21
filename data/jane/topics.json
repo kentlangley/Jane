@@ -1,7 +1,7 @@
 {
   "about": "Jane's own topics: added by this project, not part of the Marble Skill Taxonomy. Same schema as data/marble/topics.json. Ids start with jane_ (never mt_) so they can never collide with Marble ids, and they live outside data/marble/ so a Marble data refresh never touches them. build.mjs appends them after the Marble topics in public/tax.json. centrality is hand-set (Marble computes its own; the app does not use it). See data/jane/README.md.",
   "version": 1,
-  "topicCount": 10,
+  "topicCount": 30,
   "topics": [
     {
       "id": "jane_mm_compound_growth",
@@ -9,17 +9,27 @@
       "subject": "Life Skills",
       "domain": "Money Math",
       "name": "Compound growth",
-      "description": "Money that earns interest on its interest grows by the same percentage each period: future value = present value × (1 + rate)^years (FV = PV × (1+r)^n); why savings and investments grow along a curve that gets steeper over time, unlike simple interest, which adds the same amount each year",
+      "description": "Money that earns interest on its interest grows by the same percentage each period: future value = present value \u00d7 (1 + rate)^years (FV = PV \u00d7 (1+r)^n); why savings and investments grow along a curve that gets steeper over time, unlike simple interest, which adds the same amount each year",
       "ageRangeStart": 11,
       "ageRangeEnd": 14,
       "centrality": 0.01,
       "evidence": [
         "Work out year by year how $100 grows at 10% a year for 3 years, and explain why each year adds more than the last",
-        "Use FV = PV × (1 + r)^n to find the value of a saving after a given number of years",
+        "Use FV = PV \u00d7 (1 + r)^n to find the value of a saving after a given number of years",
         "Compare simple and compound interest on the same amount and explain why the compound total pulls ahead"
       ],
       "assessmentPrompt": "If {{name}} saved $200 at 5% interest a year, could they work out how much it would be worth after 3 years, and explain why it grows faster each year?",
-      "standards": ["ccss-math:7.RP.3", "ccss-math:7.EE.2", "ccss-math:HSA-SSE.A.1b", "ccss-math:HSF-LE.A.1c", "ccss-math:HSF-LE.A.2", "jumpstart-2021:Saving-8-5a", "jumpstart-2021:Saving-8-5b", "jumpstart-2021:Investing-8-7a", "jumpstart-2021:Investing-8-7b"]
+      "standards": [
+        "ccss-math:7.RP.3",
+        "ccss-math:7.EE.2",
+        "ccss-math:HSA-SSE.A.1b",
+        "ccss-math:HSF-LE.A.1c",
+        "ccss-math:HSF-LE.A.2",
+        "jumpstart-2021:Saving-8-5a",
+        "jumpstart-2021:Saving-8-5b",
+        "jumpstart-2021:Investing-8-7a",
+        "jumpstart-2021:Investing-8-7b"
+      ]
     },
     {
       "id": "jane_mm_rule_of_72",
@@ -27,18 +37,20 @@
       "subject": "Life Skills",
       "domain": "Money Math",
       "name": "The Rule of 72",
-      "description": "Doubling money with a mental-math shortcut: when money grows by the same percent every year, it takes about 72 ÷ the yearly rate in percent years to double (at 6% a year, about 12 years); a first taste of how savings grow that needs only percentages, before the full compound growth formula; the same rule estimates how fast inflation halves what money can buy",
+      "description": "Doubling money with a mental-math shortcut: when money grows by the same percent every year, it takes about 72 \u00f7 the yearly rate in percent years to double (at 6% a year, about 12 years); a first taste of how savings grow that needs only percentages, before the full compound growth formula; the same rule estimates how fast inflation halves what money can buy",
       "ageRangeStart": 10,
       "ageRangeEnd": 14,
       "centrality": 0.01,
       "evidence": [
         "Explain what it means for money to double (for example $50 growing to $100) and why a higher yearly rate doubles it sooner",
-        "Estimate how many years it takes money to double at 6%, 8% and 12% a year using 72 ÷ rate",
+        "Estimate how many years it takes money to double at 6%, 8% and 12% a year using 72 \u00f7 rate",
         "Work backwards to find the growth rate needed to double money in a given number of years",
         "Use the rule to estimate how long it takes 4% inflation to halve what a dollar buys"
       ],
       "assessmentPrompt": "If {{name}} heard that a savings account pays 9% a year, could they estimate in their head how many years it would take the money to double?",
-      "standards": ["jumpstart-2021:Saving-8-4c"]
+      "standards": [
+        "jumpstart-2021:Saving-8-4c"
+      ]
     },
     {
       "id": "jane_mm_real_return",
@@ -46,17 +58,23 @@
       "subject": "Life Skills",
       "domain": "Money Math",
       "name": "Real return and inflation",
-      "description": "Inflation means prices rise over time, so the same money buys less; the real return is what savings grow by after inflation: (1 + rate) ÷ (1 + inflation) − 1, roughly the rate minus the inflation rate",
+      "description": "Inflation means prices rise over time, so the same money buys less; the real return is what savings grow by after inflation: (1 + rate) \u00f7 (1 + inflation) \u2212 1, roughly the rate minus the inflation rate",
       "ageRangeStart": 12,
       "ageRangeEnd": 14,
       "centrality": 0.01,
       "evidence": [
         "Explain what inflation is, using a price that has gone up over time",
         "Estimate the real return when savings earn 5% and prices rise 3% (about 2%)",
-        "Use (1 + r) ÷ (1 + i) − 1 to find the exact real return and compare it with the r − i estimate"
+        "Use (1 + r) \u00f7 (1 + i) \u2212 1 to find the exact real return and compare it with the r \u2212 i estimate"
       ],
       "assessmentPrompt": "If {{name}}'s savings earned 4% in a year when prices rose 6%, could they explain whether they can buy more or less than before, and by roughly how much?",
-      "standards": ["ccss-math:7.RP.3", "ccss-math:7.EE.2", "jumpstart-2021:Saving-12-4b", "jumpstart-2021:Investing-12-4a", "jumpstart-2021:Investing-12-4b"]
+      "standards": [
+        "ccss-math:7.RP.3",
+        "ccss-math:7.EE.2",
+        "jumpstart-2021:Saving-12-4b",
+        "jumpstart-2021:Investing-12-4a",
+        "jumpstart-2021:Investing-12-4b"
+      ]
     },
     {
       "id": "jane_mm_present_value",
@@ -64,17 +82,19 @@
       "subject": "Life Skills",
       "domain": "Money Math",
       "name": "Present value",
-      "description": "Money today is worth more than the same amount later, because today's money can grow; present value runs compound growth backwards: PV = FV ÷ (1 + rate)^years, to compare money at different times",
+      "description": "Money today is worth more than the same amount later, because today's money can grow; present value runs compound growth backwards: PV = FV \u00f7 (1 + rate)^years, to compare money at different times",
       "ageRangeStart": 13,
       "ageRangeEnd": 15,
       "centrality": 0.01,
       "evidence": [
         "Explain why $100 today is worth more than $100 in five years",
-        "Use PV = FV ÷ (1 + r)^n to find how much to save now to have a target amount later",
+        "Use PV = FV \u00f7 (1 + r)^n to find how much to save now to have a target amount later",
         "Compare two offers paid at different times (for example $100 now or $110 next year) at a given interest rate"
       ],
       "assessmentPrompt": "If {{name}} were offered $100 now or $120 in three years, could they use present value to decide which is the better deal when savings earn 8% a year?",
-      "standards": ["ccss-math:HSA-SSE.A.1b"]
+      "standards": [
+        "ccss-math:HSA-SSE.A.1b"
+      ]
     },
     {
       "id": "jane_mm_true_average_return",
@@ -82,7 +102,7 @@
       "subject": "Life Skills",
       "domain": "Money Math",
       "name": "True average return (geometric mean)",
-      "description": "The fair average of yearly growth rates is the geometric mean: multiply the growth factors, take the nth root, then subtract 1; why +50% followed by −50% loses money even though the simple average of the rates is 0%",
+      "description": "The fair average of yearly growth rates is the geometric mean: multiply the growth factors, take the nth root, then subtract 1; why +50% followed by \u221250% loses money even though the simple average of the rates is 0%",
       "ageRangeStart": 13,
       "ageRangeEnd": 15,
       "centrality": 0.01,
@@ -92,7 +112,10 @@
         "Find the true average yearly return by taking the nth root of the product of the growth factors and subtracting 1"
       ],
       "assessmentPrompt": "If {{name}} saw an investment go up 20% one year and down 20% the next, could they explain why it did not break even and work out its true average yearly return?",
-      "standards": ["ccss-math:7.EE.2", "ccss-math:HSF-LE.A.1a"]
+      "standards": [
+        "ccss-math:7.EE.2",
+        "ccss-math:HSF-LE.A.1a"
+      ]
     },
     {
       "id": "jane_mmod_profit_per_customer",
@@ -100,7 +123,7 @@
       "subject": "Life Skills",
       "domain": "Money Models",
       "name": "Profit per customer",
-      "description": "What one customer is really worth to a business: the money they pay (revenue) minus what it cost to get them (acquisition cost, like flyers or free samples) and to serve them (delivery cost, like cups, lemons or snacks); a business can only grow when each new customer brings in more than they cost (source: FounderOS — designing-money-models)",
+      "description": "What one customer is really worth to a business: the money they pay (revenue) minus what it cost to get them (acquisition cost, like flyers or free samples) and to serve them (delivery cost, like cups, lemons or snacks); a business can only grow when each new customer brings in more than they cost (source: FounderOS \u2014 designing-money-models)",
       "ageRangeStart": 9,
       "ageRangeEnd": 12,
       "centrality": 0.01,
@@ -110,7 +133,10 @@
         "Explain why selling to more customers loses money if each customer costs more than they pay"
       ],
       "assessmentPrompt": "If {{name}} ran a snack stand, could they work out how much profit one customer brings after the cost of getting and serving them?",
-      "standards": ["ccss-math:4.OA.3", "jumpstart-2021:EarningIncome-4-4c"]
+      "standards": [
+        "ccss-math:4.OA.3",
+        "jumpstart-2021:EarningIncome-4-4c"
+      ]
     },
     {
       "id": "jane_mmod_payback_period",
@@ -118,7 +144,7 @@
       "subject": "Life Skills",
       "domain": "Money Models",
       "name": "Payback period",
-      "description": "How many sales (or days) it takes for a customer to pay back what it cost to win them: payback = acquisition cost ÷ profit per sale; the 30-day payback rule: a healthy money model earns back the cost of getting and serving a new customer, plus some profit, within 30 days (source: FounderOS — designing-money-models)",
+      "description": "How many sales (or days) it takes for a customer to pay back what it cost to win them: payback = acquisition cost \u00f7 profit per sale; the 30-day payback rule: a healthy money model earns back the cost of getting and serving a new customer, plus some profit, within 30 days (source: FounderOS \u2014 designing-money-models)",
       "ageRangeStart": 9,
       "ageRangeEnd": 12,
       "centrality": 0.01,
@@ -128,7 +154,10 @@
         "Check whether a plan passes the 30-day payback rule and suggest a change if it does not"
       ],
       "assessmentPrompt": "If it cost {{name}} $10 in free samples to win a new snack customer who brings $2 profit a week, could they work out the payback period and say whether it passes the 30-day rule?",
-      "standards": ["ccss-math:4.OA.3", "ccss-math:6.RP.3b"]
+      "standards": [
+        "ccss-math:4.OA.3",
+        "ccss-math:6.RP.3b"
+      ]
     },
     {
       "id": "jane_mmod_offer_ladder",
@@ -136,7 +165,7 @@
       "subject": "Life Skills",
       "domain": "Money Models",
       "name": "The offer ladder",
-      "description": "A money model is a planned sequence of offers, not a random pile of products: attract (a first offer that wins new customers), upsell (a bigger or better offer for those who said yes), downsell (a smaller or cheaper option for those who said no) and continuity (something that repeats, like a weekly snack box); the take rate is the percent of customers who say yes, and extra cash per customer = take rate × the offer's profit (source: FounderOS — designing-money-models)",
+      "description": "A money model is a planned sequence of offers, not a random pile of products: attract (a first offer that wins new customers), upsell (a bigger or better offer for those who said yes), downsell (a smaller or cheaper option for those who said no) and continuity (something that repeats, like a weekly snack box); the take rate is the percent of customers who say yes, and extra cash per customer = take rate \u00d7 the offer's profit (source: FounderOS \u2014 designing-money-models)",
       "ageRangeStart": 10,
       "ageRangeEnd": 13,
       "centrality": 0.01,
@@ -146,7 +175,9 @@
         "Explain why a downsell means a customer's 'no' is not the end of the sale"
       ],
       "assessmentPrompt": "If {{name}} offered a cookie with every lemonade and 40% of 30 customers said yes, could they work out how much extra cash the upsell brought in?",
-      "standards": ["ccss-math:6.RP.3c"]
+      "standards": [
+        "ccss-math:6.RP.3c"
+      ]
     },
     {
       "id": "jane_mmod_price_testing",
@@ -154,17 +185,20 @@
       "subject": "Life Skills",
       "domain": "Money Models",
       "name": "Price testing",
-      "description": "Finding a good price by testing: start lower, raise the price in steps, and use a price × number sold table (minus costs) to find the total profit at each step; keep raising while total profit goes up, and when total profit drops, step back one price (source: FounderOS — designing-money-models)",
+      "description": "Finding a good price by testing: start lower, raise the price in steps, and use a price \u00d7 number sold table (minus costs) to find the total profit at each step; keep raising while total profit goes up, and when total profit drops, step back one price (source: FounderOS \u2014 designing-money-models)",
       "ageRangeStart": 11,
       "ageRangeEnd": 14,
       "centrality": 0.01,
       "evidence": [
-        "Fill in a price × number sold table and find the total profit at each price",
+        "Fill in a price \u00d7 number sold table and find the total profit at each price",
         "Pick the best price from a table where profit rises and then falls, and explain why the highest price is not always best",
         "Explain the rule: keep raising the price until total profit goes down, then step back one"
       ],
-      "assessmentPrompt": "If {{name}} sold 40 drinks at $1, 30 at $2 and 15 at $3, with each drink costing 50¢ to make, could they find which price earns the most profit?",
-      "standards": ["ccss-math:7.EE.3", "jumpstart-2021:EarningIncome-4-4c"]
+      "assessmentPrompt": "If {{name}} sold 40 drinks at $1, 30 at $2 and 15 at $3, with each drink costing 50\u00a2 to make, could they find which price earns the most profit?",
+      "standards": [
+        "ccss-math:7.EE.3",
+        "jumpstart-2021:EarningIncome-4-4c"
+      ]
     },
     {
       "id": "jane_mmod_billing_math",
@@ -172,7 +206,7 @@
       "subject": "Life Skills",
       "domain": "Money Models",
       "name": "Billing math",
-      "description": "The maths of repeat payments: prices are often shown in the smallest unit ('$5 a day') and billed over a longer cycle (a month, a term, a year), so check the total; billing every 28 days instead of once a month makes 13 payments a year instead of 12, about 8.3% more (1 ÷ 12); an honest seller makes the yearly total clear (source: FounderOS — designing-money-models)",
+      "description": "The maths of repeat payments: prices are often shown in the smallest unit ('$5 a day') and billed over a longer cycle (a month, a term, a year), so check the total; billing every 28 days instead of once a month makes 13 payments a year instead of 12, about 8.3% more (1 \u00f7 12); an honest seller makes the yearly total clear (source: FounderOS \u2014 designing-money-models)",
       "ageRangeStart": 11,
       "ageRangeEnd": 14,
       "centrality": 0.01,
@@ -182,7 +216,421 @@
         "Compare paying monthly with paying for a whole year up front, and explain why a fair seller shows the yearly total"
       ],
       "assessmentPrompt": "If a snack club cost $5 every 28 days, could {{name}} work out the total for a year and explain why it is more than $5 a month for 12 months?",
-      "standards": ["ccss-math:6.RP.3b", "ccss-math:6.RP.3d", "ccss-math:7.RP.3"]
+      "standards": [
+        "ccss-math:6.RP.3b",
+        "ccss-math:6.RP.3d",
+        "ccss-math:7.RP.3"
+      ]
+    },
+    {
+      "id": "jane_place_nations_before_contact",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Your Place",
+      "name": "Nations already here",
+      "description": "Before 1492, North America was home to hundreds of Native nations with their own languages, governments, trade, and ways of living in different environments (Eastern Woodlands, Great Plains, Southwest, Pacific Northwest, California). There was no single Native culture. Cities such as Cahokia show complex societies already existed. Native nations are still here.",
+      "ageRangeStart": 9,
+      "ageRangeEnd": 11,
+      "centrality": 0.01,
+      "evidence": [
+        "Explain that many nations, not one people, lived in North America before 1492",
+        "Match a culture area (such as the Great Plains or the Pacific Northwest) to a way of living shaped by that place",
+        "Give one reason Cahokia or another large settlement shows this was not empty land"
+      ],
+      "assessmentPrompt": "If {{name}} is asked who lived in North America in 1400, could they explain that hundreds of nations already lived here, with their own languages and governments, and that those nations are still here?",
+      "standards": [
+        "cde-hss:5.1",
+        "cde-hss:5.1.1"
+      ]
+    },
+    {
+      "id": "jane_place_california_nations",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Your Place",
+      "name": "People of this place: California nations",
+      "description": "California was, and is, home to many Native nations and language families, from the coast to the valleys, mountains, and desert, including peoples such as the Chumash, Yurok, Cahuilla, and Ohlone-speaking nations. People fished, gathered, farmed, and traded in ways tied to those places. Later missions, the gold rush, and US statehood cost Native communities land and lives. Nations are still here.",
+      "ageRangeStart": 9,
+      "ageRangeEnd": 11,
+      "centrality": 0.01,
+      "evidence": [
+        "Name at least two California Native nations and say where they lived",
+        "Describe one way a California nation used or cared for the land or sea",
+        "Explain that California Native nations did not disappear after statehood"
+      ],
+      "assessmentPrompt": "If {{name}} looked at a map of California, could they name two Native nations, describe one way people lived with the land or sea, and say that those nations are still here?",
+      "standards": [
+        "cde-hss:4.2.1"
+      ]
+    },
+    {
+      "id": "jane_place_contact_and_claims",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Your Place",
+      "name": "Contact, claims, and disease",
+      "description": "In 1492 Columbus reached Caribbean islands where Ta\u00edno and other peoples already lived. European kingdoms crossed the ocean for trade, rivalry, and religion, then drew claims on maps of land nations already governed. Plants, animals, and goods moved both ways. So did conquest, and diseases that were new to this hemisphere and killed huge numbers of people whose communities had never met those germs.",
+      "ageRangeStart": 9,
+      "ageRangeEnd": 11,
+      "centrality": 0.01,
+      "evidence": [
+        "Explain why 'discovered America' is a weak way to describe 1492",
+        "Say that European map claims were claims on land where nations already lived",
+        "Explain that newly arrived diseases killed many people because those diseases were new here, not because the nations were weak"
+      ],
+      "assessmentPrompt": "If {{name}} heard that Columbus discovered America in 1492, could they explain that people already lived there, that European claims were laid over existing nations, and that new diseases caused great loss of life?",
+      "standards": [
+        "cde-hss:5.2",
+        "cde-hss:5.2.2",
+        "cde-hss:5.2.4"
+      ]
+    },
+    {
+      "id": "jane_place_alliance_and_war",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Your Place",
+      "name": "Trade, alliance, and war",
+      "description": "Native nations traded, made alliances, and fought to protect people and land. Cooperation (trade, military alliances, shared knowledge) and conflict (wars such as the Powhatan wars, Metacom's War, and the French and Indian War) both happened. Treaties are promises between nations. Some were kept for a time. Many were broken, and broken promises are not the same as a misunderstanding.",
+      "ageRangeStart": 10,
+      "ageRangeEnd": 11,
+      "centrality": 0.01,
+      "evidence": [
+        "Give one example of trade or alliance between a Native nation and newcomers",
+        "Give one example of conflict and say what a nation might have been trying to protect",
+        "Explain that a treaty is a promise between nations and that breaking it is a broken promise"
+      ],
+      "assessmentPrompt": "If {{name}} is asked whether contact was only friendship or only fighting, could they give an example of alliance and of conflict, and explain that a treaty is a promise between nations?",
+      "standards": [
+        "cde-hss:5.3",
+        "cde-hss:5.3.2",
+        "cde-hss:5.3.3"
+      ]
+    },
+    {
+      "id": "jane_place_thirteen_colonies",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Your Place",
+      "name": "Thirteen colonies on Native land",
+      "description": "The thirteen British colonies were founded for different reasons (religion, trade, land, empire) and grew into New England, Middle, and Southern regions with different work and climate. They were built on land Native nations already used and governed. Maps should show both the colonies and nations already there. Early self-government, such as town meetings and assemblies, was real, and many people had no say in it.",
+      "ageRangeStart": 10,
+      "ageRangeEnd": 11,
+      "centrality": 0.01,
+      "evidence": [
+        "Locate the thirteen colonies on a map and name a Native nation of one region",
+        "Explain one reason two colonial regions had different economies",
+        "Say who could take part in early colonial self-government and who often could not"
+      ],
+      "assessmentPrompt": "If {{name}} is shown a map of the thirteen colonies, could they name a Native nation already living in one region, explain one regional difference, and say that founding a colony meant claiming land nations already used?",
+      "standards": [
+        "cde-hss:5.4",
+        "cde-hss:5.4.1",
+        "cde-hss:5.4.2"
+      ]
+    },
+    {
+      "id": "jane_place_slavery_in_colonies",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Your Place",
+      "name": "Enslavement in colonial America",
+      "description": "Enslaved means a person was treated as property and forced to work, and their children could be enslaved too. In the lands that became the United States, enslavement of Indigenous people came first, then the forced bringing of Africans from nations that already had their own cultures and skills. The system existed in all the colonies and was central to profit where cash crops grew. Enslaved people resisted in many ways and tried to keep family, skill, and culture.",
+      "ageRangeStart": 10,
+      "ageRangeEnd": 11,
+      "centrality": 0.01,
+      "evidence": [
+        "Define enslaved in contrast to a servant who can leave when a contract ends",
+        "Explain that the system existed to make profit for enslavers and was not rare",
+        "Name one way enslaved people held on to family, skill, or culture, or resisted"
+      ],
+      "assessmentPrompt": "If {{name}} is asked what enslaved meant in the colonies, could they explain that a person was treated as property, that the system made profit for enslavers, and that people resisted and tried to keep family and culture?",
+      "standards": [
+        "cde-hss:5.4.6"
+      ]
+    },
+    {
+      "id": "jane_place_break_with_britain",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Your Place",
+      "name": "Why the break with Britain",
+      "description": "Colonists argued with Britain over taxes, representation, and rights. Not everyone wanted independence. The Declaration said all men are created equal. Some of the men who signed those words enslaved people, and Native nations were defending land at the same time. The words still gave people a standard they could argue with, including people who were left out.",
+      "ageRangeStart": 10,
+      "ageRangeEnd": 11,
+      "centrality": 0.01,
+      "evidence": [
+        "Explain what 'no taxation without representation' meant",
+        "Say that not all colonists agreed on breaking with Britain",
+        "Read a short founding claim and say who it was written for and who was left out"
+      ],
+      "assessmentPrompt": "If {{name}} reads 'all men are created equal,' could they explain the tax-and-representation argument with Britain, and also say who was left out of those rights at the time?",
+      "standards": [
+        "cde-hss:5.5"
+      ]
+    },
+    {
+      "id": "jane_place_revolutionary_war",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Your Place",
+      "name": "The war for independence, many sides",
+      "description": "The Revolutionary War had turning points such as Lexington and Concord, the Declaration, Saratoga, Valley Forge, and Yorktown. It also had more than two sides. Some people fought for independence, some stayed loyal to Britain, some were promised freedom, and some Native nations chose a side to protect their homeland. Freedom promises made to Black soldiers were not always kept.",
+      "ageRangeStart": 10,
+      "ageRangeEnd": 12,
+      "centrality": 0.01,
+      "evidence": [
+        "Put four turning points of the war in order",
+        "Explain why an enslaved person might believe a British or American promise of freedom",
+        "Explain why a Native nation might choose a side to protect its land"
+      ],
+      "assessmentPrompt": "If {{name}} is asked who fought in the Revolutionary War, could they name a turning point and explain that some people were fighting for independence, some for freedom they were promised, and some to protect their homeland?",
+      "standards": [
+        "cde-hss:5.6"
+      ]
+    },
+    {
+      "id": "jane_place_constitution",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Your Place",
+      "name": "Promises and compromises",
+      "description": "The Constitution is a set of rules for running the country, with three branches, a federal system, a Bill of Rights, and a way to amend the document. Some compromises, including the Three-Fifths Compromise, protected slavery and limited who counted in 'We the People.' Understanding those deals is not the same as celebrating every part of them. Later amendments and movements tried to make the promise wider.",
+      "ageRangeStart": 10,
+      "ageRangeEnd": 12,
+      "centrality": 0.01,
+      "evidence": [
+        "Explain one job of the Constitution, such as splitting power or listing rights",
+        "Describe what the Three-Fifths Compromise did and who was left without a vote",
+        "Explain why an amendment process matters"
+      ],
+      "assessmentPrompt": "If {{name}} is asked what the Constitution is, could they explain that it is a set of rules that can be changed, and give one example of a compromise that limited who counted?",
+      "standards": [
+        "cde-hss:5.7"
+      ]
+    },
+    {
+      "id": "jane_place_early_republic",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Your Place",
+      "name": "A nation still being made",
+      "description": "After 1789 the United States was still being made. New states, migration, and expansion changed the map. Expansion put more pressure on Native nations through purchase, treaties, and force. The Trail of Tears was a policy of forced removal in which many people died, not a sad accident. Winning independence did not settle who the land belonged to, or who counted as the people.",
+      "ageRangeStart": 10,
+      "ageRangeEnd": 12,
+      "centrality": 0.01,
+      "evidence": [
+        "Explain that the country's map kept changing after 1789",
+        "Describe the difference between a treaty and a forced removal",
+        "Give one reason a settler move west also meant entering someone's homeland"
+      ],
+      "assessmentPrompt": "If {{name}} compares a map of the United States in 1800 with one in 1840, could they explain that expansion meant pressure on Native nations, and say how a forced removal differs from a treaty?",
+      "standards": [
+        "cde-hss:5.8",
+        "cde-hss:5.3.4"
+      ]
+    },
+    {
+      "id": "jane_place_kentucky_nations",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Your Place",
+      "name": "Land and nations of Kentucky",
+      "description": "The land later called Kentucky was not empty forest. Nations such as the Shawnee and Cherokee used it as homeland and hunting ground, along rivers and woodlands of the Ohio Valley. Different nations had claims and agreements about this place long before it became a US state. Starting the story with those nations is the honest way to begin Kentucky history.",
+      "ageRangeStart": 9,
+      "ageRangeEnd": 11,
+      "centrality": 0.01,
+      "evidence": [
+        "Explain that Kentucky land was already used as homeland and hunting ground",
+        "Name the Shawnee or the Cherokee as a nation with a connection to this land",
+        "Say why calling the land empty wilderness is misleading"
+      ],
+      "assessmentPrompt": "If {{name}} is asked who used the land later called Kentucky, could they name a nation such as the Shawnee or Cherokee and explain that this was not empty wilderness?",
+      "standards": [
+        "cde-hss:5.1"
+      ]
+    },
+    {
+      "id": "jane_place_kentucky_frontier",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Your Place",
+      "name": "Kentucky frontier and statehood",
+      "description": "In the late 1700s, settlers crossed the Appalachian Mountains into Kentucky, built towns, and pushed into land nations already used. Conflict followed. Kentucky became the 15th US state in 1792. Statehood is part of the early growth of the United States. It is also a story of new claims on land that was already known and used.",
+      "ageRangeStart": 9,
+      "ageRangeEnd": 11,
+      "centrality": 0.01,
+      "evidence": [
+        "Say that Kentucky became a US state in 1792",
+        "Explain that settlers moved in after crossing the Appalachian Mountains",
+        "Explain that statehood happened on land nations already used"
+      ],
+      "assessmentPrompt": "If {{name}} is asked how Kentucky became a US state, could they give the year 1792 and explain that settlers were moving onto land nations already used?",
+      "standards": [
+        "cde-hss:5.8"
+      ]
+    },
+    {
+      "id": "jane_place_kentucky_border_state",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Your Place",
+      "name": "Kentucky as a Civil War border state",
+      "description": "In the Civil War, Kentucky was a border state: slavery was legal there, and the state stayed in the Union. Neighbors and even families split. Both Union and Confederate supporters lived in Kentucky, and the Ohio River made the state important to both sides. This is not a simple North-versus-South story.",
+      "ageRangeStart": 10,
+      "ageRangeEnd": 12,
+      "centrality": 0.01,
+      "evidence": [
+        "Define a border state in the Civil War",
+        "Explain that Kentucky stayed in the Union while slavery was still legal there",
+        "Give one reason the war divided people inside the same state"
+      ],
+      "assessmentPrompt": "If {{name}} is asked what a Civil War border state was, could they explain that Kentucky stayed in the Union, that slavery was still legal there, and that people in the state were divided?",
+      "standards": [
+        "cde-hss:8.10",
+        "cde-hss:8.10.2"
+      ]
+    },
+    {
+      "id": "jane_place_kentucky_appalachia",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Your Place",
+      "name": "Appalachia and moving on",
+      "description": "Eastern Kentucky is part of the Appalachian Mountains. People there have farmed, mined coal, and made music and community in steep valleys. When work dried up or new chances opened, many left for other states, heading north, west, or later to places with growing jobs. Moving on from Appalachia is one thread in the larger story of why Americans move.",
+      "ageRangeStart": 10,
+      "ageRangeEnd": 12,
+      "centrality": 0.01,
+      "evidence": [
+        "Locate the Appalachian Mountains and say that part of Kentucky lies in them",
+        "Name farming or coal as work that has shaped the region",
+        "Explain one reason people have left Appalachia for other states"
+      ],
+      "assessmentPrompt": "If {{name}} is asked about Appalachia in Kentucky, could they say where the mountains are and give one reason people have moved away for work or new chances?",
+      "standards": []
+    },
+    {
+      "id": "jane_place_california_migration",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Your Place",
+      "name": "Moving to California",
+      "description": "People have moved to California from other US states and from other countries for work, gold, war, climate, study, and family. Journeys have come from across the United States, from Latin America, from Asia, and from many other places. California's story includes those arrivals, the conflicts and hard laws some newcomers faced, and the communities they built. This topic is about how people move, not about any one household.",
+      "ageRangeStart": 9,
+      "ageRangeEnd": 12,
+      "centrality": 0.01,
+      "evidence": [
+        "Explain that people have moved to California from other states and other countries",
+        "Give two different reasons people have moved (for example work and family)",
+        "Say that some newcomers faced hard laws or conflict, and that many communities still made a home"
+      ],
+      "assessmentPrompt": "If {{name}} is asked why so many people live in California, could they explain that people have arrived from other states and other countries, and give more than one reason they came?",
+      "standards": [
+        "cde-hss:4.4.3",
+        "cde-hss:4.4.4"
+      ]
+    },
+    {
+      "id": "jane_world_andes_geography",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Andes & Peru",
+      "name": "Andes geography",
+      "description": "The Andes are a long mountain range along the west of South America. In the land that is now Peru, three great zones sit close together: a dry Pacific coast, high mountains and valleys, and the Amazon basin to the east. Altitude and climate shape what people can grow, how they travel, and where cities rise. Geography is the first key to Andean history.",
+      "ageRangeStart": 9,
+      "ageRangeEnd": 11,
+      "centrality": 0.01,
+      "evidence": [
+        "Locate the Andes on a map of South America",
+        "Name the coast, the highlands, and the Amazon as three zones of Peru",
+        "Explain one way altitude or climate affects how people live or farm"
+      ],
+      "assessmentPrompt": "If {{name}} is shown a map of South America, could they point to the Andes and explain that Peru has a dry coast, high mountains, and Amazon lowlands, each shaping how people live?",
+      "standards": [
+        "cde-hss:7.7.1"
+      ]
+    },
+    {
+      "id": "jane_world_andes_early_cultures",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Andes & Peru",
+      "name": "Early Andes cultures",
+      "description": "Long before the Inca, Andean peoples built cities and art. Caral is among the earliest cities in the Americas. Chav\u00edn was a shared religious center. The Moche made fine ceramics and irrigated coastal valleys. The Nazca are known for huge line drawings in the desert. The Andes story does not start with the Inca, and these cultures were not one people.",
+      "ageRangeStart": 9,
+      "ageRangeEnd": 11,
+      "centrality": 0.01,
+      "evidence": [
+        "Name Caral, Chav\u00edn, Moche, or Nazca as an Andean culture before the Inca",
+        "Give one achievement of an early Andes culture (a city, irrigation, or desert drawings)",
+        "Explain that the Inca were not the first complex society in the Andes"
+      ],
+      "assessmentPrompt": "If {{name}} is asked whether the Inca were the first great culture of the Andes, could they name an earlier people such as Caral, Moche, or Nazca and give one thing that people made or built?",
+      "standards": [
+        "cde-hss:7.7.1",
+        "cde-hss:7.7.4"
+      ]
+    },
+    {
+      "id": "jane_world_inca",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Andes & Peru",
+      "name": "The Inca",
+      "description": "The Inca built Tawantinsuyu, a large empire along the Andes, with a capital at Cusco. Roads, way stations, terraces, and stored food held the empire together across long distances and high altitudes. Officials used quipu (knotted cords) to keep records. Many peoples lived inside the empire, not only Inca families, under a system of labor and rule.",
+      "ageRangeStart": 9,
+      "ageRangeEnd": 12,
+      "centrality": 0.01,
+      "evidence": [
+        "Name Tawantinsuyu or the Inca empire and locate it along the Andes",
+        "Explain how roads, terraces, or stored food helped the empire work",
+        "Describe quipu as a way of keeping records with knotted cords"
+      ],
+      "assessmentPrompt": "If {{name}} is asked how the Inca held a mountain empire together, could they explain roads or terraces, and say what a quipu is?",
+      "standards": [
+        "cde-hss:7.7",
+        "cde-hss:7.7.1",
+        "cde-hss:7.7.2",
+        "cde-hss:7.7.3"
+      ]
+    },
+    {
+      "id": "jane_world_peru_spanish_conquest",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Andes & Peru",
+      "name": "Spanish conquest in the Andes",
+      "description": "In 1532, Spanish forces seized the Inca ruler Atahualpa. The empire was already weakened by a new disease and by a civil war between Atahualpa and Hu\u00e1scar. Conquest was not a story of a handful of outsiders defeating a healthy empire alone. Colonial rule followed, with forced labor, new religion, and great loss of life. Andean peoples continued, under huge pressure.",
+      "ageRangeStart": 10,
+      "ageRangeEnd": 12,
+      "centrality": 0.01,
+      "evidence": [
+        "Give the year 1532 or name Atahualpa as the Inca ruler seized by the Spanish",
+        "Explain that disease and a civil war had already weakened the empire",
+        "Say that conquest led to colonial rule and heavy costs for Andean peoples, who still continued"
+      ],
+      "assessmentPrompt": "If {{name}} is asked how the Spanish defeated the Inca, could they explain that the empire was already weakened by disease and civil war, and that colonial rule followed?",
+      "standards": [
+        "cde-hss:7.7.3"
+      ]
+    },
+    {
+      "id": "jane_world_peru_republic",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Andes & Peru",
+      "name": "Independent Peru and its people",
+      "description": "Peru declared independence in 1821 and the fighting ended in 1824. It became a country of many peoples, where Spanish, Quechua, Aymara, and other languages are spoken. People have moved inside Peru and to other countries, including the United States, for work, study, safety, and family. Peru today is a living nation with deep Andean roots, not only a story from the past.",
+      "ageRangeStart": 10,
+      "ageRangeEnd": 12,
+      "centrality": 0.01,
+      "evidence": [
+        "Give the early 1820s as the time Peru became independent",
+        "Name Spanish and at least one Indigenous language spoken in Peru",
+        "Explain one reason people have moved from Peru to other countries"
+      ],
+      "assessmentPrompt": "If {{name}} is asked what Peru is today, could they say it is an independent country of many peoples and languages, and give one reason people have moved from Peru to other places?",
+      "standards": []
     }
   ]
 }
