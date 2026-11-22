@@ -77,8 +77,8 @@ friendly tutor. The name is just a nod to the books: this project has no affilia
 - **Quests.** Each daily lesson pack is a quest with a story hook, stages, a boss finale and a quest medal, plus an
   animated "New quest!" reveal and a Quests tab. **One quest at a time**: a newer pack waits hidden ("Next up: ???")
   until the current quest is finished, and meanwhile the nightly job *refreshes* the current quest's unreached
-  stages instead of starting another one. Quests are short (about 8 minutes, at most
-  16 graded questions) and **a finished quest is locked**: its medal and progress never change. Twelve quest medals
+  stages instead of starting another one. Quests take about 8-12 minutes (at most
+  30 graded questions, plus up to 12 quick reviews) and **a finished quest is locked**: its medal and progress never change. Twelve quest medals
   and four legendaries unlock the **Final Boss** on the **Campaign Trail**: a one-shot Finale quest (`"finale": true`)
   with a crown reveal and a graduation screen when its medal is won.
 - **Grind a Trail and the Points Market.** After a quest, Grind a Trail lets the learner keep practicing along a

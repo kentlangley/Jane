@@ -54,7 +54,7 @@ The export includes:
   was picked (`for`). Anything over the limit is listed in `pointers`. For the full brief, run
   `npm run research -- <topicId>` (LESSONS.md "Research briefs"). Pending and hidden-region topics never get one. Where
   the research file isn't there (the Docker image), the section says `available: false` and the export carries on.
-- **`reviewDue`**: mastered topics whose spaced review is due (the gates serve them, and the oldest overdue ones are also the source for the 1-2 extra review items folded into a regular quest, and for review quests).
+- **`reviewDue`**: mastered topics whose spaced review is due (the gates serve them, and the oldest overdue ones are also the source for the 8+ review items folded into a regular quest, and for review quests).
 - **`coverage`**: per subject, areas (Marble domains) seen out of total; `coverage.untouched` lists the unseen
   areas (math and science first) with up to 3 `starters` near the target age.
 - **`reviewHealth`**: `due`, `overdue` (> 1 day late), `oldestOverdueDays`, `gateItems7d`, `spotChecks7d`,
@@ -72,7 +72,7 @@ There is only one quest at a time. The routine reads `quests.nextStep`:
   1. The export wrote the stored pack to `quests.current.packFile` (`exports/quest-<quest date>.json`; with `--local`,
      under `$DATA_DIR/exports/`). Copy it to `packs/quest-<quest date>.json`.
   2. Keep `date`, `quest` and the first `quests.current.reachedStages` topics **byte-for-byte**; rewrite, add or drop
-     only the topics after them (`refreshableStages`), boss last. The budget (16 graded, 7 stages) counts only those.
+     only the topics after them (`refreshableStages`), boss last. The budget (30 graded, 8 stages) counts only those.
   3. `node publish-lessons.mjs packs/quest-<quest date>.json --refresh --date <quest date> --dry-run`, then without
      `--dry-run`. Exit **6** means a reached stage or the quest block changed: nothing was written; copy them unchanged.
 - **`NEW QUEST: …`** (none in progress): write a **new quest** for tomorrow (step 4) and publish it normally. A new
@@ -104,15 +104,15 @@ There is only one quest at a time. The routine reads `quests.nextStep`:
 - **Family stories stay private.** Kentucky, Peru, and moving-to-California topics in `data/jane/` are general. "Your family" framing belongs only in a learner's private packs, never in committed files.
 - **Never below level.** Nothing starting more than 2 years below the target age, and no baby wording.
 - **Fold extra review into the quest, and keep the gates.** The app's review gates still serve due reviews at runtime.
-  Also fold 1-2 extra review items from the oldest overdue mastered topics into every regular quest, and trim new
-  content so the pack stays at or under 16 graded questions. Mark those items `"review": true`. When the overdue
+  Also fold at least 8 review items from the oldest overdue mastered topics into every regular quest, each marked
+  `"review": true` with `"skill": "<topic id>"` so it moves that topic's review box. When the overdue
   backlog is large, write a fun, openly labeled review quest about every 4th quest (then about weekly once the backlog
-  is under control): almost all review, interleaved, no built-in stretch, no new area, about 16 graded items, plus
+  is under control): almost all review, interleaved, no built-in stretch, no new area, about 28-30 graded items, plus
   exactly one leap bonus item that builds on a reviewed topic one step beyond (no teach step, not in the boss, used as
   planning data). Full rules: LESSONS.md "Review quests". Check `reviewHealth` in the export (below).
-- **Size (enforced).** About 8 minutes: at most 16 graded questions over 4-6 stages (7 at most), ending with a boss
-  stage. Extra review items count toward the 16. The app adds up to 4 review-gate items on top, so about 20 answers in
-  all. The publisher fails a bigger quest.
+- **Size (enforced).** About 8-12 minutes: 24-28 graded questions (30 at most) over 5-7 stages (8 at most), ending
+  with a boss stage, at least 8 of them review items. The app adds up to 12 review-gate items on top, so about 36-40
+  answers in all. The publisher fails a bigger quest and warns outside 8-12 minutes.
 - **Kid voice.** Talk to the kid as "you", 15 words or fewer, fun, and write `{name}` instead of a real name.
 - **Creative answers.** Open questions use `creative` (any sensible answer is celebrated) or broad `acceptedAnswers`.
 - **Terms.** Define new words in the pack's `terms`, and reuse words the kid looked up.
@@ -152,12 +152,12 @@ kid continues the quest starts with a short 🔥 warm-up of due reviews. Preview
 - **In normal play** the engine slips one due review into the session every so often: after the first few items, about
   every 9 items or by chance. It prefers topics the kid showed directly.
 - **In a quest** reviews come through **review gates**: before stage 2, the middle stage and the boss, the learner
-  answers 1-2 items the app draws from the due queue at runtime (most overdue first). They count in Leitner exactly
+  answers up to 4 items the app draws from the due queue at runtime (most overdue first). They count in Leitner exactly
   like other reviews, so reviews keep flowing while quests run. About 1 gate item in 3 is a **spot-check** of an
   inferred skill (right: it counts as shown directly; miss: back to learning). Each day the learner continues a
-  quest starts with a 🔥 warm-up of 1-2 reviews, and gates serve at most 4 review items per quest per day. See
+  quest starts with a 🔥 warm-up of 1-2 reviews, and gates serve at most 12 review items per quest per day. See
   LESSONS.md "Review gates".
-- **Extra review and review quests sit alongside the gates.** Fold 1-2 extra review items into every regular quest,
+- **Extra review and review quests sit alongside the gates.** Fold at least 8 review items into every regular quest,
   and write a review quest on the cadence in LESSONS.md "Review quests". If `reviewHealth.overdue` or
   `oldestOverdueDays` keeps growing because the learner isn't reaching the gates (no quest played), say so in the
   nightly note. A growing backlog after the learner has been playing is the signal to keep the extra items and to

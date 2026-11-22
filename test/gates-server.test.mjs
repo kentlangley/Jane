@@ -18,8 +18,9 @@ const rightAnswer=(st,q)=>q.type==='truefalse'?q.statements.map(x=>x[1]?'T':'F')
 test('finish stage 1, meet a locked gate, open it, then stage 2 comes next; the parent report shows the gate',async()=>{
   let s=await api('/api/quest/start',{date:today});const s0=pack.topics[0];
   for(let i=0;i<10&&s.item.topicId===s0.topicId;i++){const q=s0.questions.find(x=>x.prompt===s.item.q);assert.ok(q,s.item.q);s=(await api('/api/answer',{answer:rightAnswer(s,q)})).state;}
-  assert.equal(s.item.format,'gate');assert.equal(s.item.mode,'review');assert.deepEqual([s.item.gate.n,s.item.gate.of],[1,2]);assert.equal(s.quest.gates[0].state,'locked');assert.equal(s.quest.gates[0].before,1);
-  for(let i=0;i<6&&s.item.format==='gate';i++){const a=await api('/api/answer',{answer:s.item.choices?.[0]??'1'});s=a.state;if(!a.done&&a.retry){s=(await api('/api/answer',{answer:s.item.choices?.[1]??'2'})).state;}}
-  assert.equal(s.quest.gates[0].state,'open');assert.equal(s.item.topicId,pack.topics[1].topicId,'stage 2 next');assert.equal(s.quest.gates[0].items,2);
+  assert.equal(s.item.format,'gate');assert.equal(s.item.mode,'review');assert.deepEqual([s.item.gate.n,s.item.gate.of],[1,E.GATE_ITEMS]); // 4 due topics, v0.9: up to 4 per gateassert.equal(s.quest.gates[0].state,'locked');assert.equal(s.quest.gates[0].before,1);
+  for(let i=0;i<12&&s.item?.format==='gate';i++){const a=await api('/api/answer',{answer:s.item.choices?.[0]??'1'});s=a.state;if(!a.done&&a.retry){s=(await api('/api/answer',{answer:s.item.choices?.[1]??'2'})).state;}
+    if(!s.item)s=await api('/api/next',{});} // the every-6-items "keep going?" choice pauses the item; Next carries on
+  assert.equal(s.quest.gates[0].state,'open');assert.equal(s.item.topicId,pack.topics[1].topicId,'stage 2 next');assert.equal(s.quest.gates[0].items,E.GATE_ITEMS);
   const html=await (await fetch(B+'/parent')).text();const data=JSON.parse(html.match(/<script id="data" type="application\/json">([\s\S]*?)<\/script>/)[1].replace(/\\u003c/g,'<'));
-  const q=data.quests.find(x=>x.date===today);assert.equal(q.gates[0].state,'open');assert.equal(q.gates[0].items,2);});
+  const q=data.quests.find(x=>x.date===today);assert.equal(q.gates[0].state,'open');assert.equal(q.gates[0].items,E.GATE_ITEMS);});

@@ -99,7 +99,7 @@ const step=(n,x,y,h,title,lines)=>{add(box(x,y,SW,h,{fill:'#fff',stroke:C.nightL
 step(1,SX[0],560,118,'Back up',['backup-progress.mjs','saves a copy + sha256','of the progress record']);
 step(2,SX[1],560,118,'Export (read-only)',['export-progress.mjs: answers,','weak spots, frontier,','reviews due, coverage']);
 step(3,SX[2],560,118,'Think + write',['the next quest per LESSONS.md','(or refresh the stages your','kid hasn\'t reached yet)']);
-step(4,SX[2],708,134,'Validate',['publish-lessons.mjs: teach first,','≤ 16 graded, boss tests only','what was taught, 1 active quest,','finished quests stay locked']);
+step(4,SX[2],708,134,'Validate',['publish-lessons.mjs: teach first,','≤ 30 graded, boss tests only','what was taught, 1 active quest,','finished quests stay locked']);
 step(5,SX[1],708,134,'Publish',['the content pack goes','to lessons:DATE','(a bad pack: nothing','is written)']);
 step(6,SX[0],708,134,'Verify',['back up again: the','progress sha256 must','be unchanged']);
 add(arrow([[577,619],[594,619]],{color:C.night,sw:2.5,bend:0}));add(arrow([[840,619],[857,619]],{color:C.night,sw:2.5,bend:0}));

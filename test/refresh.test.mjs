@@ -41,7 +41,7 @@ test('republishing the quest in progress without --refresh gets the same protect
   const r=run(t.dir,t.f,'--date',D);assert.equal(r.status,6);t.done();});
 
 test('the budget applies to the remaining stages (a long legacy quest can still be refreshed)',()=>{const stored=example();const mc=stored.topics[4].questions[2];
-  stored.topics[0].questions.push({...mc,prompt:'Extra one?'},{...mc,prompt:'Extra two?'}); // 18 graded in total: over the 16 budget
+  stored.topics[0].questions.push(...Array.from({length:16},(_,i)=>({...mc,prompt:`Extra ${i+1}?`}))); // 32 graded in total: over the 30 budget
   const t=setup({stored:JSON.parse(JSON.stringify(stored))});stored.date=D2;t.write(stored);
   assert.equal(run(t.dir,t.f,'--date',D2,'--dry-run','--offline').status,1,'as a new quest it is too long');
   stored.date=D;t.write(stored);const r=run(t.dir,t.f,'--refresh','--date',D);assert.equal(r.status,0,r.stderr);assert.match(r.stdout,/14 graded/);t.done();});

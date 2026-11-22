@@ -122,7 +122,7 @@ function choiceExtras(q,Qp,ch){const wrong=ch.filter(c=>c!==String(q.answer));(c
     for(const [k,v] of Object.entries(q.feedback)){const P=`${Qp}.feedback[${JSON.stringify(k)}]`;if(!wrong.includes(k))E(P,'keys must be wrong choices of this question');
       if(typeof v!=='string'||!v.trim())E(P,'needs a short reply string');else{if(wc(v)>20)W(P,`${wc(v)} words (feedback ≤ 20)`);if(third(v))W(P,YOU);}}}}
 const taught=new Set();
-const seen=new Set();let nq=0,nGraded=0,nReview=0,nDeep=0,nCards=0;const typesUsed=new Set();
+const seen=new Set();let nq=0,nGraded=0,nReview=0,nRevStages=0,nDeep=0,nCards=0;const typesUsed=new Set();
 (pack.topics||[]).forEach((t,i)=>{const P=`topics[${i}]`,tp=byId[t.topicId];if(!tp)E(P+'.topicId',unknownTopic(t.topicId));if(seen.has(t.topicId))E(P+'.topicId','duplicate');seen.add(t.topicId);
   if(t.format&&!FORMATS.includes(t.format))E(P+'.format','one of '+FORMATS.join('|'));
   if(t.intro){str(t.intro.title,P+'.intro.title');str(t.intro.story,P+'.intro.story');str(t.intro.emoji,P+'.intro.emoji',false);if(wc(t.intro.story)>25)W(P+'.intro.story',`${wc(t.intro.story)} words (aim ≤ 25)`);}
@@ -132,7 +132,9 @@ const seen=new Set();let nq=0,nGraded=0,nReview=0,nDeep=0,nCards=0;const typesUs
   if(!Array.isArray(t.questions)||!t.questions.length)E(P+'.questions','non-empty array required');const qs=t.questions||[];
   const graded=qs.filter(q=>!CARDS.includes(q.type)).length;if(!graded)E(P+'.questions','needs at least one graded question (not only cards)');
   if(Q&&t.format==='boss'&&graded&&graded<3)E(P,`boss stage needs ≥ 3 graded questions (has ${graded}): a legendary medal means a real boss fight`);
-  if(i>=RR){if(t.review)nReview+=graded;nGraded+=graded;nq+=qs.length;nCards+=qs.length-graded;} // refresh: the budget counts the remaining stages
+  qs.forEach((q,j)=>{if(q.review!=null&&typeof q.review!=='boolean')E(`${P}.questions[${j}].review`,'true|false');
+    if(q.review&&!t.review&&!CARDS.includes(q.type)){if(!q.skill)W(`${P}.questions[${j}]`,'review item without "skill": add the reviewed topic id so the answer moves that topic\'s review box');}});
+  if(i>=RR){nReview+=t.review?graded:qs.filter(q=>q.review&&!CARDS.includes(q.type)).length;if(t.review)nRevStages++;nGraded+=graded;nq+=qs.length;nCards+=qs.length-graded;} // refresh: the budget counts the remaining stages
   // two-tier "answer + why" finale (LESSONS.md "Check-understanding items"): a boss may END with an mc answer and an mc
   // reason ("twoTier": "answer" then "why"), e.g. from data/checks (npm run research -- <id> --check). Fair-boss rules still apply.
   {const tt=qs.map((q,j)=>[q.twoTier,j]).filter(([v])=>v!=null);
@@ -208,15 +210,24 @@ if(RS)(pack.topics||[]).forEach((t,i)=>{if(i<RR||!byId[t.topicId])return;const d
   const sp=PROG?.support?.[t.topicId];if(sp&&(sp.stuck||sp.skipped)){const re=[...new Set(d.errorPatterns.map(e=>e.reteach).filter(x=>x&&x.status==='playable').map(x=>x.id))];
     const inPack=new Set((pack.topics||[]).flatMap(x=>[x.topicId,...(x.teaches||[]),...(x.questions||[]).map(q=>q.skill)]));
     if(re.length&&!re.some(id=>inPack.has(id)))W(P,`"${byId[t.topicId].name}" needs support (the learner got stuck): scaffold down to a prerequisite to re-teach first, e.g. ${re.slice(0,2).map(id=>`${id} "${byId[id]?.name||id}"`).join(' or ')} (an earlier stage, "teaches" or a question "skill")`);}});
-// Quest budget (LESSONS.md "Keep it short"): ≤ 16 graded pack questions + ≤ 4 review-gate items the app adds = ~20 answers, ~8 min; 4-6 stages, max 7.
-const MAX_GRADED=16,MAX_STAGES=7,estMin=Math.round((nGraded*25+nCards*10)/6)/10;
-if(Q&&nGraded>MAX_GRADED)E('size',`${nGraded} graded questions: too long (max ${MAX_GRADED}; the app adds up to 4 review-gate items, ~20 answers ≈ 8 min). Trim stages`);
-if(Q&&nGraded&&nGraded<10)W('size',`${nGraded} graded questions: aim for 12-16`);
-if(Q&&(pack.topics||[]).length-RR>MAX_STAGES)E('size',`${pack.topics.length-RR} ${RR?'remaining ':''}stages: too long (max ${MAX_STAGES}, aim 4-6)`);
+// Quest budget (LESSONS.md "Keep it short"), v0.9: a quest is about 8-12 minutes. Regular quests: aim 24-28 graded pack
+// questions over 5-7 stages (max 8), at least 8 of them review items; review quests: 28-30, almost all review. Max 30.
+// The app adds up to 12 review-gate items on top (3 gates × 4, capped at 12 a day). Placement quests keep their budget:
+// ≤ 16 graded, ≤ 7 stages (LESSONS.md "Placement quests"). Pacing from real play: ~12 s per answer (pack or gate), ~8 s per card.
+const PL=!!pack.placement,MAX_GRADED=PL?16:30,MAX_STAGES=PL?7:8,MIN_REVIEW=8,SEC_ANSWER=12,SEC_CARD=8;
+const nStages=(pack.topics||[]).length-RR,gateEst=Q&&!PL?Math.min(EN.GATE_DAY_MAX,EN.gateStages(pack.topics.length).filter(k=>k>=RR).length*EN.GATE_ITEMS):0;
+const estMin=Math.round(((nGraded+gateEst)*SEC_ANSWER+nCards*SEC_CARD)/6)/10;
+if(Q&&nGraded>MAX_GRADED)E('size',PL?`${nGraded} graded questions: too long for a placement quest (max ${MAX_GRADED})`:`${nGraded} graded questions: too long (max ${MAX_GRADED}; aim 24-28, review quests 28-30; the app adds up to ${EN.GATE_DAY_MAX} review-gate items). Trim stages`);
+if(Q&&PL&&nGraded&&nGraded<10)W('size',`${nGraded} graded questions: aim for 12-16`);
+if(Q&&!PL&&!REFRESH&&nGraded&&nGraded<22)W('size',`${nGraded} graded questions: aim for 24-28 (review quests 28-30) so the quest runs 8-12 min`);
+if(Q&&nStages>MAX_STAGES)E('size',`${nStages} ${RR?'remaining ':''}stages: too long (max ${MAX_STAGES}, aim ${PL?'4-7':'5-7'})`);
 if(REFRESH&&(pack.topics||[]).length<=RR)E('refresh',`no stages left after the ${RR} reached ones: add the remaining stages (boss last)`);
-if(Q&&estMin>8)W('size',`about ${estMin} min (aim ≤ 8): trim cards or questions`);
-// spaced review runs through the app's review gates now (LESSONS.md "Review gates"): review stages still publish, but spend quest budget
-const revStages=pack.topics.filter(t=>t.review).length;if(revStages)W('review',`${revStages} review stage${revStages>1?'s':''}: review runs through gates now, so spend the budget on new learning`);
+if(Q&&PL&&estMin>8)W('size',`about ${estMin} min (aim ≤ 8 for a placement quest): trim cards or questions`);
+if(Q&&!PL&&estMin>12)W('size',`about ${estMin} min with review gates (aim 8-12): trim cards or questions`);
+if(Q&&!PL&&!REFRESH&&estMin<8)W('size',`about ${estMin} min with review gates (aim 8-12): add review items or a stage`);
+// review (LESSONS.md "Keep the review gates, and fold extra review into the quest"): every regular quest carries at
+// least MIN_REVIEW review items (items with "review": true and a "skill", or review stages); gates add more at runtime
+if(Q&&!PL&&!REFRESH&&nReview<MIN_REVIEW)W('review',`${nReview} review item${nReview===1?'':'s'}: aim for at least ${MIN_REVIEW} (oldest overdue mastered topics, "review": true with a "skill"), so the backlog shrinks`);
 // Coverage (LESSONS.md "Coverage"): each quest should bring in at least one untouched area (Marble domain).
 // Frozen decision: no new area is a WARNING only, never an error. Uses the read-only progress; --offline skips it.
 let newAreas=null;if(Q&&PROG){const CG=EN.graph(tax),SP=EN.migrate(JSON.parse(JSON.stringify(PROG)),CG),seenA=seenAreas(SP,CG,[]),cov=coverage(SP,CG,[],{age:LRN.age});
@@ -227,6 +238,6 @@ if(warns.length)console.warn(`⚠️  ${warns.length} warning(s) (see LESSONS.md
 if(errs.length){console.error(`❌ ${errs.length} problem(s) in ${file}:\n  `+errs.join('\n  '));process.exit(1);}
 if(Q&&!REFRESH&&!force&&PROG){const A=activeQuests(PROG,pack.date).filter(d=>kvList(lk('lessons:')+d).length);
   if(A.length){console.error(`⛔ quest ${A[0]} is in progress (one quest at a time). Not publishing a new quest: it would only wait hidden.\n   Refresh its unreached stages instead: node publish-lessons.mjs <pack.json> --refresh --date ${A[0]}   (see LESSONS.md "Refreshing the current quest")`);process.exit(3);}}
-const sum=`${REFRESH?`refresh: stages 1-${RR} locked, ${pack.topics.length-RR} remaining, `:''}${pack.topics.length} ${Q?'stages':'topics'}, ${nq} items (~${estMin} min, ${nGraded} graded${nReview?`, ${nReview} in review stages`:''}, review via gates, ${nDeep} deep dive${nDeep===1?'':'s'}${RS?`, ${nResearched} researched stage${nResearched===1?'':'s'}`:''}${newAreas?`, new areas: ${newAreas.length}${newAreas.length?` (${newAreas.map(a=>a.replace('|',' / ')).join(', ')})`:''}`:''}), formats: ${[...typesUsed].join(', ')}`;
+const sum=`${REFRESH?`refresh: stages 1-${RR} locked, ${pack.topics.length-RR} remaining, `:''}${pack.topics.length} ${Q?'stages':'topics'}, ${nq} items (~${estMin} min, ${nGraded} graded${nReview?`, ${nReview} review`:''}${gateEst?`, + up to ${gateEst} gate reviews`:''}, ${nDeep} deep dive${nDeep===1?'':'s'}${RS?`, ${nResearched} researched stage${nResearched===1?'':'s'}`:''}${newAreas?`, new areas: ${newAreas.length}${newAreas.length?` (${newAreas.map(a=>a.replace('|',' / ')).join(', ')})`:''}`:''}), formats: ${[...typesUsed].join(', ')}`;
 if(dry){console.log(`✅ valid${Q?` quest "${Q.title}"`:''}: ${sum} for ${pack.date} (dry run, nothing written)`);process.exit(0);}
 kvPut(lk('lessons:')+pack.date,pack);console.log(`✅ published${LOCAL?' (local)':''} ${lk('lessons:')}${pack.date}${Q?` quest "${Q.title}"`:''}: ${sum}`);
