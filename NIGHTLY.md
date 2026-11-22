@@ -33,13 +33,14 @@ Learners rarely ask for harder work, so every regular quest includes one small *
 items) about one notch above that subject's working level. Use it only where the learner is on level or ahead, never
 in the boss, and let the result shape the next quest. Skip it in a review quest.
 
-The review gates still run. Also fold **1-2 extra review items** from the oldest overdue mastered topics into every
-regular quest, and trim new-content items so the pack stays at or under 16 graded questions. Mark those items
-`"review": true`.
+Quests run **8-12 minutes**: 24-28 graded questions (max 30) over 5-7 stages (max 8), plus up to 12 review-gate items
+the app adds. The review gates still run. Also fold **at least 8 review items** from the oldest overdue mastered topics
+into every regular quest, woven into the stages, each marked `"review": true` with `"skill": "<topic id>"` so the
+answer moves that topic's review box.
 
 When the overdue backlog is large, write a fun, openly labeled **review quest** about every 4th quest (then about
 weekly once the backlog is under control). Interleave the review topics, keep the gates, skip the built-in stretch and
-the new-area stage, and stay around 16 graded items. Each review quest gets **exactly one leap item**: a bonus
+the new-area stage, and use about 28-30 graded items. Each review quest gets **exactly one leap item**: a bonus
 challenge that builds on a reviewed topic one step beyond, with no teach step, placed after the reviews it builds on,
 never in the boss. Use the result as planning data. Full rules: LESSONS.md "How to plan tomorrow's quest" and
 "Review quests".

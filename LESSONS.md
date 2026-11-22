@@ -34,7 +34,7 @@ every stage awards the quest medal (shown in Trophies). Old packs without `quest
 
 ## Review gates (spaced review built into quests)
 *"You have to do something from the past to make it to the future."* In a started quest, a 🗝️ **gate** sits before
-stage 2, before the middle stage and before the boss (at most 3 per quest). To open it, the learner answers 1-2
+stage 2, before the middle stage and before the boss (at most 3 per quest). To open it, the learner answers up to 4
 review items that the app picks **at runtime** from the due Leitner queue (most overdue first, topics shown directly
 before inferred ones; if nothing is due, a recently mastered topic that is due within 2 days; otherwise the gate is
 open for free). Gate answers move Leitner boxes like any review (a first-try right moves the topic up a box, a miss
@@ -43,7 +43,8 @@ don't count toward quest progress. The nightly author doesn't pick gate items.
 
 **Warm-up and daily budget.** The first time the learner continues a started quest each day, a 🔥 **warm-up** of 1-2
 due reviews comes first (after any question already on screen, never in the middle of one). Warm-up and gates
-together serve **at most 4 review items per quest per day**; a gate reached after that opens for free. So reviews
+together serve **at most 12 review items per quest per day** (v0.9; was 4); a gate reached after that opens for free.
+With a big backlog a quest gets 4 items at each of its 3 gates, so 12 review answers on top of the pack. So reviews
 reach the learner every day they play, even when a session stops between gates or a quest runs over several days.
 
 **Spot-checks.** About 1 gate item in 3 (and every gate item when nothing is due) is a quick check of a skill the app
@@ -125,8 +126,9 @@ spots, coverage, stretch) instead of writing a new quest.
 - **The quest block is locked** (`quest`: title, hook, medal, emoji): same story, same medal.
 - **Everything after the reached stages may change**: rewrite, add, drop or reorder those stages, keep a boss last.
   `terms` may change too.
-- **The budget applies to the remaining stages**: at most 16 graded questions and 7 stages after the reached ones
-  (the size warnings count only those). The 4 review-gate items a day come on top, as always.
+- **The budget applies to the remaining stages**: at most 30 graded questions and 8 stages after the reached ones
+  (the size warnings count only those; the "too short" and review-count warnings are skipped in a refresh). The up to
+  12 review-gate items a day come on top, as always.
 - Steps:
 ```bash
 node export-progress.mjs              # nextStep "REFRESH: …"; also writes the stored pack to exports/quest-<quest date>.json
@@ -170,20 +172,26 @@ Run `node export-progress.mjs` and read `weakSpots` first. Then:
 3. **Never below the learner's level.** The target age and grade are settings (`LEARNER_AGE`, `LEARNER_GRADE` in `wrangler.toml`; the app is designed around ages ~8-12, upper elementary). No topics starting more than 2 years below the target age (the publisher warns), no
    baby wording. "Easier" means smaller steps, not younger content.
 4. **Keep the review gates, and fold extra review into the quest.** The app's review gates (see "Review gates") still
-   pull due reviews and spot-checks from the Leitner queue at runtime. Also fold **1-2 extra review items** from the
-   oldest overdue mastered topics (`reviewHealth`, `reviewDue`) into every regular quest, and trim new-content items so
-   the pack stays at or under 16 graded questions. Mark those items or stages `"review": true`. The extra review items
-   count toward the 16-graded cap; gate items still sit on top. Watch the export's `reviewHealth` (`due`, `overdue`,
+   pull due reviews and spot-checks from the Leitner queue at runtime. Also fold **at least 8 review items** from the
+   oldest overdue mastered topics (`reviewHealth`, `reviewDue`, most overdue first, one item per topic) into every
+   regular quest, woven into the stages (not the boss). Mark each one `"review": true` **with `"skill": "<that topic's
+   id>"`**: a first-try right moves that topic up a Leitner box, a miss brings it due tomorrow (no mastery, medal or
+   points change). A review item without `"skill"` only counts for its stage topic and doesn't drain the backlog, so the
+   publisher warns. A whole stage can be `"review": true` instead (its own topic is the one reviewed). The publisher
+   warns when a regular quest has fewer than 8 review items. They count toward the graded budget; gate items sit on
+   top. Watch the export's `reviewHealth` (`due`, `overdue`,
    `oldestOverdueDays`, `gateItems7d`, `spotChecks7d`, `unverifiedInferred`, `reviewsServed7d`, `gatesOpened7d`,
    `gatesAhead`, `lastPlayed`, `daysSinceLastPlay`, `note`) for review that isn't keeping up. `note` says whether the
    learner just hasn't played (`not played since …`) or played without getting reviews (`played but no reviews served`).
 5. **Make it interactive and illustrated.** Mix formats (the publisher warns if fewer than 3 interactive ones), add a
    `scene` or `template` to most stages, and drop in a **fun-fact** card or two.
-6. **Keep it short (enforced):** a quest is about **8 minutes**: **at most 16 graded questions** over **4-6 stages
-   (7 at most)**, boss last. The app adds up to 4 review-gate items on top (see "Review gates"), so the learner
-   answers about 20 questions. The publisher **fails** a quest above 16 graded questions or 7 stages, prints a time
-   estimate (graded × 25 s + cards × 10 s) and warns above 8 minutes. Spread them out: deep dives 3-4, stretch
-   stages 1-3, boss 3-4. Extra review items in a regular quest count toward the 16, so trim new content to make room.
+6. **Keep it 8-12 minutes (enforced):** a regular quest has **24-28 graded questions** (at most **30**) over **5-7
+   stages (8 at most)**, boss last, and at least 8 of those graded questions are review items (rule 4). The app adds
+   up to 12 review-gate items on top (see "Review gates"), so the learner answers about 36-40 questions. Real play runs
+   about 11-12 seconds an answer, so that lands in 8-12 minutes. The publisher **fails** a quest above 30 graded
+   questions or 8 stages, prints a time estimate ((graded + gate items) × 12 s + cards × 8 s, gate items = 4 per gate,
+   at most 12) and warns outside 8-12 minutes or under 22 graded questions. Spread them out: deep dives 3-4, stretch
+   stages 2-3, boss 3-4, about 4-5 graded per regular stage. Placement quests keep their own, smaller budget (below).
 7. **Visit a new area.** Include at least one stretch stage from `coverage.untouched` in the export (see
    "Coverage"), rotating subjects with math and science first, using one of the listed `starters`. The publisher
    prints "new areas: N" and **warns** (never fails) when a quest adds no untouched area while some are left. Skip
@@ -222,7 +230,8 @@ support a Your Place thread). When you write a history stretch:
 ## Review quests
 When the overdue review backlog is large, write a **review quest** about every 4th quest (then about weekly once the
 backlog is under control). Say so in the hook, and make it fun. Almost every item is review, interleaved across
-topics, still about 16 graded questions over 4-6 stages, boss last. Keep the review gates. Do not include a built-in
+topics, about 28-30 graded questions over 5-7 stages (one reviewed topic per item, each with `"review": true` and
+ `"skill"`, or whole review stages), boss last. Keep the review gates. Do not include a built-in
 stretch stage, and do not start a new area.
 
 Each review quest gets **exactly one leap item**: a bonus question that builds on a reviewed topic one step beyond

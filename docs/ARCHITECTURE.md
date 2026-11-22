@@ -52,7 +52,7 @@ Around 1 AM a scheduled routine on the bot's own computer runs the cycle in [NIG
 3. **Think and write.** The bot reads the export and writes the next quest following [LESSONS.md](../LESSONS.md),
    or, if a quest is in progress, rewrites only the stages the kid hasn't reached yet.
 4. **Validate** with [`publish-lessons.mjs`](../publish-lessons.mjs). It fails a pack that breaks the rules: teach
-   before testing, at most 16 graded questions, a boss that only tests what the quest taught, one active quest at a
+   before testing, at most 30 graded questions, a boss that only tests what the quest taught, one active quest at a
    time, finished quests locked. An invalid pack writes nothing.
 5. **Publish** the content pack to `lessons:DATE`. In the morning the kid finds a new quest, or fresh stages ahead.
 6. **Verify** with a second backup: the progress sha256 must be unchanged.

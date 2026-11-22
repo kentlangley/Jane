@@ -420,7 +420,7 @@ function choiceFeedback(q){const f=q.feedback,ch=q.type==='picture'?(q.choices||
   return Object.keys(o).length?o:undefined;}
 const fbFor=(it,a)=>it.feedback?.[String(a??'').trim()];
 function packItem(pq,q){const graded=pq.t.questions.filter(x=>!CARD.includes(x.type)&&!x._skip).length;
-  const it={kind:'pack',packN:graded,deep:!!pq.t.deepDive,packReview:!!pq.t.review,ptype:q.type,q:q.prompt,hint:q.hint,explain:q.explanation,feedback:choiceFeedback(q),packKey:pq.key,format:q.format||pq.t.format,scene:q.scene,tpl:q.template,stage:'main',guided:q.guided||undefined,steps:q.steps,example:q.example,misconception:q.misconception};
+  const it={kind:'pack',packN:graded,deep:!!pq.t.deepDive,packReview:!!pq.t.review,reviewOf:q.review&&q.skill&&q.skill!==pq.t.topicId?q.skill:undefined,ptype:q.type,q:q.prompt,hint:q.hint,explain:q.explanation,feedback:choiceFeedback(q),packKey:pq.key,format:q.format||pq.t.format,scene:q.scene,tpl:q.template,stage:'main',guided:q.guided||undefined,steps:q.steps,example:q.example,misconception:q.misconception};
   if(q.guided&&!q.format)it.format='guided';
   switch(q.type){
    case 'mc':return{...it,type:'mc',choices:q.choices,answer:q.answer};
@@ -546,9 +546,11 @@ export function next(S,g,pack,now){
 // Spot-checks: about 1 gate item in 3 (and every gate item when nothing is due) checks a skill that was only inferred
 // and never verified, picked by most dependents, then lowest confidence. Right -> shown directly; miss -> learning,
 // and the guesses built on it are withdrawn (failUp). A spot-check never awards a medal.
-// v0.5: at most GATE_DAY_MAX gate items per quest per Pacific day (the frozen "≤ 4 gate items" budget, per sitting), and a
-// warm-up gate (1-2 due reviews) at the first item boundary of each day when the learner resumes a started quest.
-export const GATE_MAX=3,GATE_ITEMS=2,GATE_DAY_MAX=4;
+// v0.5: at most GATE_DAY_MAX gate items per quest per Pacific day, and a warm-up gate (WARM_ITEMS due reviews) at the
+// first item boundary of each day when the learner resumes a started quest.
+// v0.9: longer quests (about 8-12 minutes) drain the review backlog faster: up to GATE_ITEMS per stage gate and
+// GATE_DAY_MAX a day (was 2 and 4). Same picking rules; a gate still always opens.
+export const GATE_MAX=3,GATE_ITEMS=4,GATE_DAY_MAX=12,WARM_ITEMS=2;
 const gateDay=(S,pack,now)=>{const q=S.quests[pack.date],d=ptDay(now);if(q.gateDay?.day!==d)q.gateDay={day:d,n:0,warm:false};return q.gateDay;};
 const resumed=(S,pack)=>pack.topics.some(t=>t.questions.some((q,j)=>S.packSeen[`${pack.date}:${t.topicId}:${j}`]));
 export function gateStages(n){return[...new Set([1,Math.floor(n/2),n-1])].filter(k=>k>0&&k<n).sort((a,b)=>a-b).slice(0,GATE_MAX);}
@@ -567,10 +569,10 @@ function gateItem(S,g,pack,due,now){if(!pack?.quest||pack.placement||!S.quests?.
   const nSpot=g.topics.filter(t=>unverified(S,t.id)&&!used.has(t.id)).length,avail=due.filter(t=>!used.has(t.id)).length;
   let key,gk;const wk='w:'+day.day;
   if(G[wk]&&!G[wk].open){key=wk;gk=G[wk];}
-  else if(!day.warm&&left>0&&resumed(S,pack)&&(avail||nSpot)){day.warm=true;key=wk;gk=G[wk]={before:'warm',warm:true,day:day.day,items:[],right:0,n:0,open:false,of:Math.min(left,avail>1||(avail&&nSpot)?GATE_ITEMS:1)};}
+  else if(!day.warm&&left>0&&resumed(S,pack)&&(avail||nSpot)){day.warm=true;key=wk;gk=G[wk]={before:'warm',warm:true,day:day.day,items:[],right:0,n:0,open:false,of:Math.min(left,avail>1||(avail&&nSpot)?WARM_ITEMS:1)};}
   else{day.warm=true;if(k<1)return null;const st=pack.topics[k];if(!gateStages(pack.topics.length).includes(k))return null;if(st.questions.some((q,j)=>S.packSeen[`${pack.date}:${st.topicId}:${j}`]))return null;
     key=k;gk=G[k]??={before:k,items:[],right:0,n:0,open:false};if(gk.open)return null;
-    if(gk.of==null)gk.of=Math.min(Math.max(0,left),avail>2||(avail>0&&nSpot)?GATE_ITEMS:avail>0?1:nSpot?Math.min(GATE_ITEMS,nSpot):(gatePick(S,g,pack,[],now,used)?1:0));}
+    if(gk.of==null)gk.of=Math.min(Math.max(0,left),avail>2||(avail>0&&nSpot)?Math.min(GATE_ITEMS,avail+nSpot):avail>0?1:nSpot?Math.min(GATE_ITEMS,nSpot):(gatePick(S,g,pack,[],now,used)?1:0));}
   if(gk.n>=gk.of||GATE_DAY_MAX-day.n<=0){gk.open=true;gk.of=gk.n;return null;}
   const served=Object.values(G).reduce((a,x)=>a+(x.items?.length||0),0),dueLeft=due.some(t=>!used.has(t.id));
   let id=nSpot&&(!dueLeft||served%3===2)?spotPick(S,g,used):null;if(!id)id=gatePick(S,g,pack,due,now,used);if(!id){gk.open=true;gk.of=gk.n;return null;}
@@ -581,6 +583,12 @@ function spotDone(S,g,it,x,now){const rec=S.ts[it.topicId],t=g.byId[it.topicId];
     x.ev.push({event:'verified',topicId:it.topicId,topic:t.name,subject:t.subject});}
   else{rec.st='learning';rec.how='direct';rec.box=0;delete rec.box0;const n=failUp(S,g,it.topicId);x.ev.push({event:'spotMiss',topicId:it.topicId,topic:t.name,subject:t.subject,withdrawn:n});}
   x.r.spot={verified:!!x.r.correct};}
+// v0.9: a pack item marked "review": true with a "skill" (a mastered topic other than its stage's) is a review of that
+// skill: a first-try right on a due (or due within a day) skill moves its Leitner box up; a miss brings it due tomorrow.
+// Only the review schedule moves: no mastery, medal or points change (the stage topic is graded as before).
+function reviewOfDone(S,g,it,right,r,ev,now){const rr=S.ts[it.reviewOf];if(!rr||rr.st!=='mastered'||it.guided)return;
+  if(right){if(!it.tries&&rr.due<=now+DAY){rr.box=Math.min(4,(rr.box||0)+1);rr.due=now+BOXES[rr.box]*DAY;if(!/Memory check passed/.test(r.jane||''))r.jane+=' Memory check passed! 🧠';}}
+  else{rr.due=Math.min(rr.due,now+DAY);ev.push({event:'reviewMiss',topicId:it.reviewOf,topic:g.byId[it.reviewOf]?.name||it.reviewOf});}}
 function gateDone(S,it,r){const q=S.quests?.[it.gate.date];const gk=q?.gates?.[it.gate.k];if(!gk)return;gk.n++;if(q.gateDay)q.gateDay.n++;if(r.correct&&!it.tries)gk.right++;if(gk.n>=gk.of)gk.open=true;r.gate={k:it.gate.k,n:gk.n,of:gk.of,open:gk.open};
   if(gk.open)r.jane=(r.jane?r.jane+' ':'')+(gk.warm?'🔥 Warm-up done! Back to your quest!':'🗝️ Gate open! On to the next stop!');}
 // ---------- grading ----------
@@ -651,6 +659,7 @@ function submit0(S,g,answer,now){const it=S.current;if(!it)return{error:'no item
     S.points+=pts;S.streak++;S.bestStreak=Math.max(S.bestStreak,S.streak);S.solved++;S.starRun=(S.starRun??S.streak-1)+1;if(S.starRun%3===0)S.stars++;r.correct=true;
     r.jane=`${pick(praise)} +${pts} points${fast?' (speed bonus ⚡)':''}${S.streak>=3?` — ${S.streak} in a row!`:''}`;
     if(ok==='creative'){const g0=String(answer).trim();r.creative=true;r.jane=(it.celebrate||'Nice! "{given}" works! "{answer}" is the classic one, but your idea is great too. 🎨').replace(/\{given\}/g,g0).replace(/\{answer\}/g,it.answer)+` +${pts} points`;}
+    if(it.reviewOf)reviewOfDone(S,g,it,true,r,ev,now);
     if(it.guided){guidedDone(S,it);r.guided=true;r.jane+=' Practice done! ✅';}
     else if(it.packReview&&rec.st==='mastered'){if(!it.tries&&rec.due<=now+DAY){rec.box=Math.min(4,(rec.box||0)+1);rec.due=now+BOXES[rec.box]*DAY;r.jane+=' Memory check passed! 🧠';}}
     else if(it.mode==='review'){if(it.practice){}else if(!it.tries){rec.box=Math.min(4,(rec.box||0)+1);rec.due=now+BOXES[rec.box]*DAY;r.jane+=` Memory check passed — see you in ${BOXES[rec.box]} days, "${t.sn||t.name}"! 🧠`;}else rec.due=now+DAY;}
@@ -677,6 +686,7 @@ function submit0(S,g,answer,now){const it=S.current;if(!it)return{error:'no item
   else{rec.w++;r.jane=`Let me show you how: ${it.explain} You'll get the next one! 💪`;}
   const sp=sup(S,it.topicId);if(it.kind==='math'){(sp.avoid??=[]).push({q:it.q,until:now+DAY});sp.avoid=sp.avoid.filter(x=>x.until>now).slice(-8);} // no same-question loops
   if(it.guided){guidedDone(S,it);r.guided=true;}
+  if(it.reviewOf&&!it.guided)reviewOfDone(S,g,it,false,r,ev,now);
   else if(it.packReview&&rec.st==='mastered'){rec.due=Math.min(rec.due,now+DAY);ev.push({event:'reviewMiss',topicId:it.topicId,topic:t.name});}
   else if(it.mode==='review'&&it.practice){}
   else if(it.mode==='review'){rec.st='learning';rec.how='direct';rec.box=0;r.jane+=` We'll practise "${t.sn||t.name}" again soon.`;ev.push({event:'demoted',topicId:it.topicId,topic:t.name});}
