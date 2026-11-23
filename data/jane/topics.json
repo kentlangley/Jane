@@ -1,7 +1,7 @@
 {
   "about": "Jane's own topics: added by this project, not part of the Marble Skill Taxonomy. Same schema as data/marble/topics.json. Ids start with jane_ (never mt_) so they can never collide with Marble ids, and they live outside data/marble/ so a Marble data refresh never touches them. build.mjs appends them after the Marble topics in public/tax.json. centrality is hand-set (Marble computes its own; the app does not use it). See data/jane/README.md.",
   "version": 1,
-  "topicCount": 30,
+  "topicCount": 34,
   "topics": [
     {
       "id": "jane_mm_compound_growth",
@@ -9,13 +9,13 @@
       "subject": "Life Skills",
       "domain": "Money Math",
       "name": "Compound growth",
-      "description": "Money that earns interest on its interest grows by the same percentage each period: future value = present value \u00d7 (1 + rate)^years (FV = PV \u00d7 (1+r)^n); why savings and investments grow along a curve that gets steeper over time, unlike simple interest, which adds the same amount each year",
+      "description": "Money that earns interest on its interest grows by the same percentage each period: future value = present value × (1 + rate)^years (FV = PV × (1+r)^n); why savings and investments grow along a curve that gets steeper over time, unlike simple interest, which adds the same amount each year",
       "ageRangeStart": 11,
       "ageRangeEnd": 14,
       "centrality": 0.01,
       "evidence": [
         "Work out year by year how $100 grows at 10% a year for 3 years, and explain why each year adds more than the last",
-        "Use FV = PV \u00d7 (1 + r)^n to find the value of a saving after a given number of years",
+        "Use FV = PV × (1 + r)^n to find the value of a saving after a given number of years",
         "Compare simple and compound interest on the same amount and explain why the compound total pulls ahead"
       ],
       "assessmentPrompt": "If {{name}} saved $200 at 5% interest a year, could they work out how much it would be worth after 3 years, and explain why it grows faster each year?",
@@ -37,13 +37,13 @@
       "subject": "Life Skills",
       "domain": "Money Math",
       "name": "The Rule of 72",
-      "description": "Doubling money with a mental-math shortcut: when money grows by the same percent every year, it takes about 72 \u00f7 the yearly rate in percent years to double (at 6% a year, about 12 years); a first taste of how savings grow that needs only percentages, before the full compound growth formula; the same rule estimates how fast inflation halves what money can buy",
+      "description": "Doubling money with a mental-math shortcut: when money grows by the same percent every year, it takes about 72 ÷ the yearly rate in percent years to double (at 6% a year, about 12 years); a first taste of how savings grow that needs only percentages, before the full compound growth formula; the same rule estimates how fast inflation halves what money can buy",
       "ageRangeStart": 10,
       "ageRangeEnd": 14,
       "centrality": 0.01,
       "evidence": [
         "Explain what it means for money to double (for example $50 growing to $100) and why a higher yearly rate doubles it sooner",
-        "Estimate how many years it takes money to double at 6%, 8% and 12% a year using 72 \u00f7 rate",
+        "Estimate how many years it takes money to double at 6%, 8% and 12% a year using 72 ÷ rate",
         "Work backwards to find the growth rate needed to double money in a given number of years",
         "Use the rule to estimate how long it takes 4% inflation to halve what a dollar buys"
       ],
@@ -58,14 +58,14 @@
       "subject": "Life Skills",
       "domain": "Money Math",
       "name": "Real return and inflation",
-      "description": "Inflation means prices rise over time, so the same money buys less; the real return is what savings grow by after inflation: (1 + rate) \u00f7 (1 + inflation) \u2212 1, roughly the rate minus the inflation rate",
+      "description": "Inflation means prices rise over time, so the same money buys less; the real return is what savings grow by after inflation: (1 + rate) ÷ (1 + inflation) − 1, roughly the rate minus the inflation rate",
       "ageRangeStart": 12,
       "ageRangeEnd": 14,
       "centrality": 0.01,
       "evidence": [
         "Explain what inflation is, using a price that has gone up over time",
         "Estimate the real return when savings earn 5% and prices rise 3% (about 2%)",
-        "Use (1 + r) \u00f7 (1 + i) \u2212 1 to find the exact real return and compare it with the r \u2212 i estimate"
+        "Use (1 + r) ÷ (1 + i) − 1 to find the exact real return and compare it with the r − i estimate"
       ],
       "assessmentPrompt": "If {{name}}'s savings earned 4% in a year when prices rose 6%, could they explain whether they can buy more or less than before, and by roughly how much?",
       "standards": [
@@ -82,13 +82,13 @@
       "subject": "Life Skills",
       "domain": "Money Math",
       "name": "Present value",
-      "description": "Money today is worth more than the same amount later, because today's money can grow; present value runs compound growth backwards: PV = FV \u00f7 (1 + rate)^years, to compare money at different times",
+      "description": "Money today is worth more than the same amount later, because today's money can grow; present value runs compound growth backwards: PV = FV ÷ (1 + rate)^years, to compare money at different times",
       "ageRangeStart": 13,
       "ageRangeEnd": 15,
       "centrality": 0.01,
       "evidence": [
         "Explain why $100 today is worth more than $100 in five years",
-        "Use PV = FV \u00f7 (1 + r)^n to find how much to save now to have a target amount later",
+        "Use PV = FV ÷ (1 + r)^n to find how much to save now to have a target amount later",
         "Compare two offers paid at different times (for example $100 now or $110 next year) at a given interest rate"
       ],
       "assessmentPrompt": "If {{name}} were offered $100 now or $120 in three years, could they use present value to decide which is the better deal when savings earn 8% a year?",
@@ -102,7 +102,7 @@
       "subject": "Life Skills",
       "domain": "Money Math",
       "name": "True average return (geometric mean)",
-      "description": "The fair average of yearly growth rates is the geometric mean: multiply the growth factors, take the nth root, then subtract 1; why +50% followed by \u221250% loses money even though the simple average of the rates is 0%",
+      "description": "The fair average of yearly growth rates is the geometric mean: multiply the growth factors, take the nth root, then subtract 1; why +50% followed by −50% loses money even though the simple average of the rates is 0%",
       "ageRangeStart": 13,
       "ageRangeEnd": 15,
       "centrality": 0.01,
@@ -123,7 +123,7 @@
       "subject": "Life Skills",
       "domain": "Money Models",
       "name": "Profit per customer",
-      "description": "What one customer is really worth to a business: the money they pay (revenue) minus what it cost to get them (acquisition cost, like flyers or free samples) and to serve them (delivery cost, like cups, lemons or snacks); a business can only grow when each new customer brings in more than they cost (source: FounderOS \u2014 designing-money-models)",
+      "description": "What one customer is really worth to a business: the money they pay (revenue) minus what it cost to get them (acquisition cost, like flyers or free samples) and to serve them (delivery cost, like cups, lemons or snacks); a business can only grow when each new customer brings in more than they cost (source: FounderOS — designing-money-models)",
       "ageRangeStart": 9,
       "ageRangeEnd": 12,
       "centrality": 0.01,
@@ -144,7 +144,7 @@
       "subject": "Life Skills",
       "domain": "Money Models",
       "name": "Payback period",
-      "description": "How many sales (or days) it takes for a customer to pay back what it cost to win them: payback = acquisition cost \u00f7 profit per sale; the 30-day payback rule: a healthy money model earns back the cost of getting and serving a new customer, plus some profit, within 30 days (source: FounderOS \u2014 designing-money-models)",
+      "description": "How many sales (or days) it takes for a customer to pay back what it cost to win them: payback = acquisition cost ÷ profit per sale; the 30-day payback rule: a healthy money model earns back the cost of getting and serving a new customer, plus some profit, within 30 days (source: FounderOS — designing-money-models)",
       "ageRangeStart": 9,
       "ageRangeEnd": 12,
       "centrality": 0.01,
@@ -165,7 +165,7 @@
       "subject": "Life Skills",
       "domain": "Money Models",
       "name": "The offer ladder",
-      "description": "A money model is a planned sequence of offers, not a random pile of products: attract (a first offer that wins new customers), upsell (a bigger or better offer for those who said yes), downsell (a smaller or cheaper option for those who said no) and continuity (something that repeats, like a weekly snack box); the take rate is the percent of customers who say yes, and extra cash per customer = take rate \u00d7 the offer's profit (source: FounderOS \u2014 designing-money-models)",
+      "description": "A money model is a planned sequence of offers, not a random pile of products: attract (a first offer that wins new customers), upsell (a bigger or better offer for those who said yes), downsell (a smaller or cheaper option for those who said no) and continuity (something that repeats, like a weekly snack box); the take rate is the percent of customers who say yes, and extra cash per customer = take rate × the offer's profit (source: FounderOS — designing-money-models)",
       "ageRangeStart": 10,
       "ageRangeEnd": 13,
       "centrality": 0.01,
@@ -185,16 +185,16 @@
       "subject": "Life Skills",
       "domain": "Money Models",
       "name": "Price testing",
-      "description": "Finding a good price by testing: start lower, raise the price in steps, and use a price \u00d7 number sold table (minus costs) to find the total profit at each step; keep raising while total profit goes up, and when total profit drops, step back one price (source: FounderOS \u2014 designing-money-models)",
+      "description": "Finding a good price by testing: start lower, raise the price in steps, and use a price × number sold table (minus costs) to find the total profit at each step; keep raising while total profit goes up, and when total profit drops, step back one price (source: FounderOS — designing-money-models)",
       "ageRangeStart": 11,
       "ageRangeEnd": 14,
       "centrality": 0.01,
       "evidence": [
-        "Fill in a price \u00d7 number sold table and find the total profit at each price",
+        "Fill in a price × number sold table and find the total profit at each price",
         "Pick the best price from a table where profit rises and then falls, and explain why the highest price is not always best",
         "Explain the rule: keep raising the price until total profit goes down, then step back one"
       ],
-      "assessmentPrompt": "If {{name}} sold 40 drinks at $1, 30 at $2 and 15 at $3, with each drink costing 50\u00a2 to make, could they find which price earns the most profit?",
+      "assessmentPrompt": "If {{name}} sold 40 drinks at $1, 30 at $2 and 15 at $3, with each drink costing 50¢ to make, could they find which price earns the most profit?",
       "standards": [
         "ccss-math:7.EE.3",
         "jumpstart-2021:EarningIncome-4-4c"
@@ -206,7 +206,7 @@
       "subject": "Life Skills",
       "domain": "Money Models",
       "name": "Billing math",
-      "description": "The maths of repeat payments: prices are often shown in the smallest unit ('$5 a day') and billed over a longer cycle (a month, a term, a year), so check the total; billing every 28 days instead of once a month makes 13 payments a year instead of 12, about 8.3% more (1 \u00f7 12); an honest seller makes the yearly total clear (source: FounderOS \u2014 designing-money-models)",
+      "description": "The maths of repeat payments: prices are often shown in the smallest unit ('$5 a day') and billed over a longer cycle (a month, a term, a year), so check the total; billing every 28 days instead of once a month makes 13 payments a year instead of 12, about 8.3% more (1 ÷ 12); an honest seller makes the yearly total clear (source: FounderOS — designing-money-models)",
       "ageRangeStart": 11,
       "ageRangeEnd": 14,
       "centrality": 0.01,
@@ -269,7 +269,7 @@
       "subject": "History",
       "domain": "Your Place",
       "name": "Contact, claims, and disease",
-      "description": "In 1492 Columbus reached Caribbean islands where Ta\u00edno and other peoples already lived. European kingdoms crossed the ocean for trade, rivalry, and religion, then drew claims on maps of land nations already governed. Plants, animals, and goods moved both ways. So did conquest, and diseases that were new to this hemisphere and killed huge numbers of people whose communities had never met those germs.",
+      "description": "In 1492 Columbus reached Caribbean islands where Taíno and other peoples already lived. European kingdoms crossed the ocean for trade, rivalry, and religion, then drew claims on maps of land nations already governed. Plants, animals, and goods moved both ways. So did conquest, and diseases that were new to this hemisphere and killed huge numbers of people whose communities had never met those germs.",
       "ageRangeStart": 9,
       "ageRangeEnd": 11,
       "centrality": 0.01,
@@ -551,24 +551,107 @@
       ]
     },
     {
+      "id": "jane_world_andes_first_peoples",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Andes & Peru",
+      "name": "First peoples of the Andes",
+      "description": "People reached the Andes many thousands of years ago, long before cities or the Inca. Hunters and gatherers used high mountain caves such as Lauricocha, and sites such as Guitarrero Cave in a mountain valley, where early plant remains and some of the oldest textiles in the Americas have been found. Over time, people began to farm and live in small settlements on the coast and in the highlands. This long early chapter is the Lithic and Archaic periods taught in Peruvian schools.",
+      "ageRangeStart": 9,
+      "ageRangeEnd": 11,
+      "centrality": 0.01,
+      "evidence": [
+        "Explain that people lived in the Andes many thousands of years before the Inca",
+        "Name Lauricocha or Guitarrero as an early site, or say that people used high mountain caves",
+        "Describe the shift from hunting and gathering toward farming and small settlements"
+      ],
+      "assessmentPrompt": "If {{name}} is asked who lived in the Andes before cities rose, could they say that hunters and early farmers were there many thousands of years earlier, and name a site such as Guitarrero or Lauricocha?",
+      "standards": [
+        "cde-hss:7.7.1"
+      ]
+    },
+    {
+      "id": "jane_world_andes_caral",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Andes & Peru",
+      "name": "Caral and the first cities",
+      "description": "About 5,000 years ago, people in the Supe Valley on Peru's desert coast built Caral, one of the earliest cities in the Americas. Caral and nearby settlements had large platform mounds, plazas, and trade between the coast and the highlands, but no pottery. The city's main life dates to about 3000 to 1800 BCE, in the Late Archaic period. Andean city life began here, long before the Inca.",
+      "ageRangeStart": 9,
+      "ageRangeEnd": 11,
+      "centrality": 0.01,
+      "evidence": [
+        "Locate Caral on the desert coast of what is now Peru, or in the Supe Valley",
+        "Give about 5,000 years ago, or 3000 to 1800 BCE, as the time of Caral",
+        "Explain that Caral had monumental buildings and trade, and that city life in the Andes began before the Inca"
+      ],
+      "assessmentPrompt": "If {{name}} is asked where city life in the Andes began, could they name Caral, place it on Peru's coast, and say it rose thousands of years before the Inca?",
+      "standards": [
+        "cde-hss:7.7.1",
+        "cde-hss:7.7.4"
+      ]
+    },
+    {
       "id": "jane_world_andes_early_cultures",
       "type": "CONCEPTUAL",
       "subject": "History",
       "domain": "Andes & Peru",
       "name": "Early Andes cultures",
-      "description": "Long before the Inca, Andean peoples built cities and art. Caral is among the earliest cities in the Americas. Chav\u00edn was a shared religious center. The Moche made fine ceramics and irrigated coastal valleys. The Nazca are known for huge line drawings in the desert. The Andes story does not start with the Inca, and these cultures were not one people.",
+      "description": "After the first cities, new centers rose in the highlands and on the coast. Chavín de Huántar, in a mountain valley, was a shared religious center (about 1000 to 200 BCE). On the south coast, Paracas weavers made extraordinary textiles. The Moche irrigated north-coast valleys and made fine ceramics. The Nazca are known for huge line drawings in the desert, and for underground water channels. Other regional cultures, such as Lima, Recuay, and Vicús, flourished too. Julio C. Tello, a Peruvian archaeologist, excavated Chavín and Paracas and showed that Andean civilization grew in the Andes itself. Peruvian schools teach this as the Formative period and the time of regional development. These cultures were not one people, and they all came long before the Inca.",
       "ageRangeStart": 9,
       "ageRangeEnd": 11,
       "centrality": 0.01,
       "evidence": [
-        "Name Caral, Chav\u00edn, Moche, or Nazca as an Andean culture before the Inca",
-        "Give one achievement of an early Andes culture (a city, irrigation, or desert drawings)",
-        "Explain that the Inca were not the first complex society in the Andes"
+        "Name Chavín, Paracas, Moche, or Nazca as a culture before the Inca",
+        "Give one achievement of one of these cultures (a temple center, textiles, irrigation, or desert drawings)",
+        "Name Julio C. Tello as a Peruvian archaeologist, or explain that Andean civilization grew in the Andes itself"
       ],
-      "assessmentPrompt": "If {{name}} is asked whether the Inca were the first great culture of the Andes, could they name an earlier people such as Caral, Moche, or Nazca and give one thing that people made or built?",
+      "assessmentPrompt": "If {{name}} is asked whether the Inca were the first great culture of the Andes, could they name an earlier people such as Chavín, Paracas, Moche, or Nazca and give one thing that people made or built?",
       "standards": [
         "cde-hss:7.7.1",
         "cde-hss:7.7.4"
+      ]
+    },
+    {
+      "id": "jane_world_andes_wari_tiwanaku",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Andes & Peru",
+      "name": "Wari and Tiwanaku",
+      "description": "Later, two highland powers linked much of the Andes. The Wari, based near Ayacucho, built administrative centers, terraces, and roads that later empires could use. Many Peruvian schools call Wari the first Andean empire (about 600 to 1000 CE). Around Lake Titicaca, Tiwanaku (also called Tiahuanaco) raised stone gateways and farmed with raised fields beside the lake. This Middle Horizon, or Wari period, came after the regional cultures and before the later coastal and mountain kingdoms.",
+      "ageRangeStart": 9,
+      "ageRangeEnd": 12,
+      "centrality": 0.01,
+      "evidence": [
+        "Name Wari or Tiwanaku as a highland power before the Inca",
+        "Place Tiwanaku at Lake Titicaca, or Wari in the highlands near Ayacucho",
+        "Explain that Wari roads, terraces, or administration came before the Inca empire"
+      ],
+      "assessmentPrompt": "If {{name}} is asked what came between the earlier coastal cultures and the Inca, could they name Wari or Tiwanaku and say that highland roads or lake-side farming helped tie the Andes together?",
+      "standards": [
+        "cde-hss:7.7.1",
+        "cde-hss:7.7.4"
+      ]
+    },
+    {
+      "id": "jane_world_andes_regional_kingdoms",
+      "type": "CONCEPTUAL",
+      "subject": "History",
+      "domain": "Andes & Peru",
+      "name": "Kingdoms before the Inca",
+      "description": "After Wari and Tiwanaku faded, many kingdoms shared the Andes (about 1000 to 1470 CE), in the Late Intermediate period, or the time of regional states. On the north coast, the Chimú built Chan Chan, a huge adobe capital in the desert, and took in earlier Lambayeque (Sicán) gold-working lands. Chincha traders worked the south-central coast. In the cloud forest toward the Amazon, the Chachapoyas built the stone fortress of Kuelap. The Chanka of the highlands were rivals of early Cusco. The Inca later brought many of these lands into Tawantinsuyu, including Chimor around 1470.",
+      "ageRangeStart": 9,
+      "ageRangeEnd": 12,
+      "centrality": 0.01,
+      "evidence": [
+        "Name Chimú, Chan Chan, Chachapoyas, or Kuelap as a kingdom or place before Inca rule",
+        "Describe Chan Chan as a large adobe city on the desert coast, or Kuelap as a stone fortress in the cloud forest",
+        "Explain that the Inca built their empire in a land already full of kingdoms"
+      ],
+      "assessmentPrompt": "If {{name}} is asked what the Andes looked like just before the Inca empire, could they name a kingdom such as the Chimú or the Chachapoyas and describe Chan Chan or Kuelap?",
+      "standards": [
+        "cde-hss:7.7.1",
+        "cde-hss:7.7.3"
       ]
     },
     {
@@ -577,7 +660,7 @@
       "subject": "History",
       "domain": "Andes & Peru",
       "name": "The Inca",
-      "description": "The Inca built Tawantinsuyu, a large empire along the Andes, with a capital at Cusco. Roads, way stations, terraces, and stored food held the empire together across long distances and high altitudes. Officials used quipu (knotted cords) to keep records. Many peoples lived inside the empire, not only Inca families, under a system of labor and rule.",
+      "description": "The Inca built Tawantinsuyu, a large empire along the Andes, with a capital at Cusco. Roads, way stations, terraces, and stored food held the empire together across long distances and high altitudes. Officials used quipu (knotted cords) to keep records. Many peoples lived inside the empire, not only Inca families, under a system of labor and rule. They built on earlier Andean skills, including roads and terraces, and brought many peoples and kingdoms into the empire.",
       "ageRangeStart": 9,
       "ageRangeEnd": 12,
       "centrality": 0.01,
@@ -600,7 +683,7 @@
       "subject": "History",
       "domain": "Andes & Peru",
       "name": "Spanish conquest in the Andes",
-      "description": "In 1532, Spanish forces seized the Inca ruler Atahualpa. The empire was already weakened by a new disease and by a civil war between Atahualpa and Hu\u00e1scar. Conquest was not a story of a handful of outsiders defeating a healthy empire alone. Colonial rule followed, with forced labor, new religion, and great loss of life. Andean peoples continued, under huge pressure.",
+      "description": "In 1532, Spanish forces seized the Inca ruler Atahualpa. The empire was already weakened by a new disease and by a civil war between Atahualpa and Huáscar. Conquest was not a story of a handful of outsiders defeating a healthy empire alone. Colonial rule followed, with forced labor, new religion, and great loss of life. Andean peoples continued, under huge pressure.",
       "ageRangeStart": 10,
       "ageRangeEnd": 12,
       "centrality": 0.01,

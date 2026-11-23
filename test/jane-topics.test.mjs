@@ -1,5 +1,5 @@
 // Jane's own topics (data/jane/, lib-jane-topics.mjs): Money Math and Money Models on the Life Skills island (2026-11-01),
-// plus Your Place and Andes & Peru on the History island (2026-11-21).
+// plus Your Place and Andes & Peru on the History island (2026-11-21, pre-Inca periods expanded 2026-11-23).
 // They load into tax.json after every Marble topic, sit on their own paths (domains), have
 // valid prerequisites, start unmastered, unlock through the normal ready/locked rules, can be quest stages, and never
 // change a Marble topic (position, tier, prerequisites) or campaign state.
@@ -143,9 +143,10 @@ test('money topics carry verified curriculum standards (Common Core math, Jump$t
 
 test('Your Place and Andes & Peru load on the History island, with checked cde-hss codes, and never change Marble topics',()=>{
   const place=src.filter(t=>t.domain==='Your Place'),andes=src.filter(t=>t.domain==='Andes & Peru');
-  assert.equal(place.length,15);assert.equal(andes.length,5);
+  assert.equal(place.length,15);assert.equal(andes.length,9);
   assert.equal(place[0].id,'jane_place_nations_before_contact');
   assert.equal(andes[0].id,'jane_world_andes_geography');
+  assert.deepEqual(andes.map(x=>x.id),['jane_world_andes_geography','jane_world_andes_first_peoples','jane_world_andes_caral','jane_world_andes_early_cultures','jane_world_andes_wari_tiwanaku','jane_world_andes_regional_kingdoms','jane_world_inca','jane_world_peru_spanish_conquest','jane_world_peru_republic']);
   for(const t of [...place,...andes]){
     assert.equal(t.subject,'History');
     const gT=g.byId[t.id];assert.ok(gT,t.id+' in graph');
@@ -171,7 +172,11 @@ test('Your Place and Andes & Peru load on the History island, with checked cde-h
     'jane_place_kentucky_appalachia':[],
     'jane_place_california_migration':['cde-hss:4.4.3','cde-hss:4.4.4'],
     'jane_world_andes_geography':['cde-hss:7.7.1'],
+    'jane_world_andes_first_peoples':['cde-hss:7.7.1'],
+    'jane_world_andes_caral':['cde-hss:7.7.1','cde-hss:7.7.4'],
     'jane_world_andes_early_cultures':['cde-hss:7.7.1','cde-hss:7.7.4'],
+    'jane_world_andes_wari_tiwanaku':['cde-hss:7.7.1','cde-hss:7.7.4'],
+    'jane_world_andes_regional_kingdoms':['cde-hss:7.7.1','cde-hss:7.7.3'],
     'jane_world_inca':['cde-hss:7.7','cde-hss:7.7.1','cde-hss:7.7.2','cde-hss:7.7.3'],
     'jane_world_peru_spanish_conquest':['cde-hss:7.7.3'],
     'jane_world_peru_republic':[]
@@ -183,11 +188,20 @@ test('Your Place and Andes & Peru load on the History island, with checked cde-h
   const hard=id=>Object.fromEntries((g.pre[id]||[]).filter(e=>e.h).map(e=>[e.id,e.h?'hard':'soft']));
   assert.deepEqual(hard('jane_place_nations_before_contact'),{});
   assert.deepEqual(hard('jane_place_california_nations'),{'jane_place_nations_before_contact':'hard'});
-  assert.deepEqual(hard('jane_world_inca'),{'jane_world_andes_early_cultures':'hard'});
+  assert.deepEqual(hard('jane_world_andes_first_peoples'),{'jane_world_andes_geography':'hard'});
+  assert.deepEqual(hard('jane_world_andes_caral'),{'jane_world_andes_first_peoples':'hard'});
+  assert.deepEqual(hard('jane_world_andes_early_cultures'),{'jane_world_andes_caral':'hard'});
+  assert.deepEqual(hard('jane_world_andes_wari_tiwanaku'),{'jane_world_andes_early_cultures':'hard'});
+  assert.deepEqual(hard('jane_world_andes_regional_kingdoms'),{'jane_world_andes_wari_tiwanaku':'hard'});
+  assert.deepEqual(hard('jane_world_inca'),{'jane_world_andes_regional_kingdoms':'hard'});
   const S=E.blank();
   assert.equal(E.stateOf(S,g,'jane_place_nations_before_contact',now),'ready');
   assert.equal(E.stateOf(S,g,'jane_world_andes_geography',now),'ready');
+  assert.equal(E.stateOf(S,g,'jane_world_andes_first_peoples',now),'locked');
   assert.equal(E.stateOf(S,g,'jane_world_inca',now),'locked');
+  master(S,'jane_world_andes_geography');
+  assert.equal(E.stateOf(S,g,'jane_world_andes_first_peoples',now),'ready');
+  assert.equal(E.stateOf(S,g,'jane_world_andes_caral',now),'locked');
   assert.equal(E.stateOf(S,g,'jane_place_california_nations',now),'locked');
   const histDomains=new Set(g.topics.filter(t=>t.subject==='History').map(t=>t.domain));
   for(const d of['Your Place','Andes & Peru','Ancient Egypt','Ancient Greece & Rome'])assert.ok(histDomains.has(d),d);

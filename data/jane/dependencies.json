@@ -1,7 +1,7 @@
 {
   "about": "Prerequisite edges for Jane's own topics (data/jane/topics.json), same shape as data/marble/dependencies.json: topicId needs prerequisiteId. topicId is always a jane_ topic; prerequisiteId is a jane_ or Marble mt_ topic. Marble topics never depend on jane_ topics here, so adding Jane topics never locks or re-scores a Marble topic. The app builds both directions (prerequisites and unlocks) from these edges.",
   "version": 1,
-  "edgeCount": 49,
+  "edgeCount": 53,
   "dependencies": [
     {
       "topicId": "jane_mm_compound_growth",
@@ -133,7 +133,7 @@
       "topicId": "jane_mmod_billing_math",
       "prerequisiteId": "mt_Zdv-b-iW5K",
       "strength": "hard",
-      "reason": "Cross-domain: price per day to per year, and 364 \u00f7 28 = 13, are multiplication and division problems"
+      "reason": "Cross-domain: price per day to per year, and 364 ÷ 28 = 13, are multiplication and division problems"
     },
     {
       "topicId": "jane_mmod_billing_math",
@@ -274,16 +274,40 @@
       "reason": "The early republic's expansion helps explain later US internal migration"
     },
     {
-      "topicId": "jane_world_andes_early_cultures",
+      "topicId": "jane_world_andes_first_peoples",
       "prerequisiteId": "jane_world_andes_geography",
       "strength": "hard",
-      "reason": "Early Andes cultures are easier to place after coast, highlands, and Amazon"
+      "reason": "Early hunters and farmers are easier to place after coast, highlands, and Amazon"
+    },
+    {
+      "topicId": "jane_world_andes_caral",
+      "prerequisiteId": "jane_world_andes_first_peoples",
+      "strength": "hard",
+      "reason": "The first cities come after the long chapter of hunters and early farmers"
+    },
+    {
+      "topicId": "jane_world_andes_early_cultures",
+      "prerequisiteId": "jane_world_andes_caral",
+      "strength": "hard",
+      "reason": "Chavín, Paracas, Moche, and Nazca come after the first cities at Caral"
+    },
+    {
+      "topicId": "jane_world_andes_wari_tiwanaku",
+      "prerequisiteId": "jane_world_andes_early_cultures",
+      "strength": "hard",
+      "reason": "The Wari and Tiwanaku horizon follows the earlier regional cultures"
+    },
+    {
+      "topicId": "jane_world_andes_regional_kingdoms",
+      "prerequisiteId": "jane_world_andes_wari_tiwanaku",
+      "strength": "hard",
+      "reason": "Chimú, Chachapoyas, and the other kingdoms come after Wari and Tiwanaku faded"
     },
     {
       "topicId": "jane_world_inca",
-      "prerequisiteId": "jane_world_andes_early_cultures",
+      "prerequisiteId": "jane_world_andes_regional_kingdoms",
       "strength": "hard",
-      "reason": "The Inca come after earlier Andes cultures, so the empire is not treated as the start"
+      "reason": "The Inca empire is taught after the kingdoms that already shared the Andes"
     },
     {
       "topicId": "jane_world_peru_spanish_conquest",
