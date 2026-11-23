@@ -5,6 +5,11 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+## [0.9.2] - 2026-11-23
+
+### Changed
+- **"Help shape Jane" asks what the learner has been into lately, and mixes up the wording** ([#129](https://github.com/kentlangley/Jane/issues/129)). The check-in no longer asks anyone to design a quest, or what they would love to learn about next. One question is now a casual, open-ended prompt about recent interests (what they've been wondering about, watched or read, a job that looks cool, a place they would explore, and similar). The other is about the app, including the original "Is anything in Jane confusing or annoying? What should we fix?" plus varied phrasings of that fix question, and the other existing app questions (what was fun, what to add or change, too easy or too hard, and so on). Each learner gets a rotating pool (22 interest prompts, 13 app prompts) so the same wording is not reused until that pool is mostly used, and back-to-back questions avoid the same angle when another unused angle is available. Saved answers keep their original question text. New entries also store a question id. The parent report and the export still show what was asked. The cadence is unchanged (every 8 finished quests, still skippable, still right after the high-five). Nightly authoring treats interest answers as signals for upcoming quests and as seeds for a future earned-island path (NIGHTLY.md, LESSONS.md). Medals, mastery, and points are unchanged (`src/feedback.js`).
+
 ## [0.9.1] - 2026-11-23
 
 ### Added
@@ -410,7 +415,8 @@ First public release.
 - Runs on Cloudflare Workers (or `npm run dev` locally) only; the standalone Node server is planned for v0.2.
   `prototype/` is the early math-only version, not the full app.
 
-[Unreleased]: https://github.com/kentlangley/Jane/compare/v0.9.1...HEAD
+[Unreleased]: https://github.com/kentlangley/Jane/compare/v0.9.2...HEAD
+[0.9.2]: https://github.com/kentlangley/Jane/releases/tag/v0.9.2
 [0.9.1]: https://github.com/kentlangley/Jane/releases/tag/v0.9.1
 [0.9.0]: https://github.com/kentlangley/Jane/releases/tag/v0.9.0
 [0.8.4]: https://github.com/kentlangley/Jane/releases/tag/v0.8.4

@@ -10,7 +10,7 @@ container) with file-based storage, and it is built on the open
 [Marble Skill Taxonomy](https://github.com/withmarbleapp/os-taxonomy): 1,930 micro-topics across 9 subjects,
 linked by 4,102 prerequisite edges (the app plays 1,916 of them; 14 are held back with a reason in `data/kid-prompts/PENDING.txt`).
 
-> **v0.9.1.** It's a child's learning app, so all personal data is excluded from the repo, and every path has a clear
+> **v0.9.2.** It's a child's learning app, so all personal data is excluded from the repo, and every path has a clear
 > license (see [LICENSING.md](LICENSING.md)). What's next: [Roadmap](#roadmap). Changes: [CHANGELOG.md](CHANGELOG.md).
 
 ## Set up with an AI bot
@@ -113,8 +113,11 @@ friendly tutor. The name is just a nod to the books: this project has no affilia
 - **Medals & trophies.** Bronze, silver or gold topic medals (by depth in the graph), earned honestly: 3 first-try
   right answers, never a self-check alone. Streaks, stars and quest medals.
 - **"Help shape Jane" check-in.** Open questions appear right after a finished quest (every 8 quests), on top of the
-  high-five. If they leave before answering, the same due check-in shows on the next app open. Answers show on the
-  parent report and in the nightly export. They never change medals, mastery, or points.
+  high-five. One question is a casual prompt about what the learner has been into lately (not "design a quest"). The
+  other is about the app, including what's confusing or annoying. The wording rotates so the same prompt is not
+  reused until that pool is mostly used. If they leave before answering, the same due check-in shows on the next app
+  open. Answers show on the parent report and in the nightly export, and they help shape upcoming quests. They never
+  change medals, mastery, or points.
 - **Parent report (`/parent`).** A calm, read-only report: overall %, time today and this week, wins and struggle spots,
   words looked up, charts, per-subject progress, **working level** (a read-only age and US grade range per subject,
   from topics mastered directly), quest history, upcoming reviews, a searchable answer log and medals. It also shows

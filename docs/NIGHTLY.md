@@ -63,6 +63,11 @@ The export includes:
   `daysSinceLastPlay` and a plain **`note`**: `ok`; `not played since <date>: gates not reached yet` (nothing is
   broken, the learner hasn't played); or `played but no reviews served: check the gates` (a real problem: tell the
   parent). Is spaced review keeping up?
+- **`feedback`**: `pending`, `new` (answers from the last `--days` days) and `all`. Some answers are interest
+  signals (what the learner has been wondering about or curious about lately). Use them to shape themes and topics,
+  mention them in the morning note, and keep them as seeds for a future earned-island path. Other answers flag what
+  was fun, too easy or too hard, or confusing in the app. Never quote an answer word for word in a pack. Details:
+  NIGHTLY.md "Feedback check-ins" and LESSONS.md "Learner check-in answers."
 - **`summary`**, **`stats`** and the raw **`progress`** record.
 
 ## 3. One quest at a time: refresh or new quest?
@@ -123,6 +128,10 @@ There is only one quest at a time. The routine reads `quests.nextStep`:
   best practice, one wrong choice per mc is a tagged `"misconception"` with its next move in the explanation (optional
   per-choice `"feedback"`), and needsSupport topics drop to the re-teach prerequisite. Rules in LESSONS.md "Researched
   stages". The publisher warns about these; it doesn't fail. Adapt, never paste.
+- **Interest signals.** Read `feedback.new` before you pick a theme. Casual check-in answers (what the learner has
+  been wondering about, watching, or curious about) should shape upcoming quests and be mentioned in the morning
+  note. They are also seeds for a future earned-island path. Never quote an answer word for word in a pack. Rules:
+  LESSONS.md "Learner check-in answers" and NIGHTLY.md "Feedback check-ins."
 - Start from [`packs/examples/example-quest.json`](../packs/examples/example-quest.json). Real packs
   (`packs/*.json`) are gitignored because they are written from a real child's answers.
 
