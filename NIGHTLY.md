@@ -20,12 +20,21 @@ If the export has `market.openChoices` (the learner spent points on **Pick Your 
 ## Feedback check-ins ("Help shape Jane")
 
 The export's `feedback.new` holds the learner's check-in answers from the last `--days` days (all of them are in
-`feedback.all`, newest first), and the console prints them under 💬. Read them before authoring: they say what was
-fun, what felt too easy or too hard, and what the learner wants to learn next. Use them as direction for themes and
-topics, never quote them back word for word in a pack, and pass anything notable to the grown-up in the nightly note.
+`feedback.all`, newest first), and the console prints them under 💬. Read them before authoring.
+
+Some answers are **interest signals**: what the learner has been wondering about, watching, or curious about lately
+(cosmology, architecture, law, and so on). They come from casual, indirect questions, not "design a quest." Use them
+to shape upcoming quest themes and topics (a setting, a reading passage, a worked example), and mention them in the
+nightly note so the grown-up can see what Jane picked up. Keep a short running list of these interests; they are also
+seeds for a future earned-island path (a later island the learner unlocks by being ready for it). Other answers are
+about the app itself (what was fun, what felt too easy or too hard, what was confusing or annoying). Use those to
+adjust difficulty and flag fixes in the nightly note. Never quote an answer back word for word in a pack, and never
+put a child's personal details in a public file.
+
 `feedback.pending` only says whether the app will ask on the next open; the app handles the timing (first open, then
-every 8 finished quests, "Not now" snoozes for the day). Answers live in the learner's `feedback` KV key, not in
-progress, and never change medals, mastery or points.
+every 8 finished quests, "Not now" snoozes for the day). Questions rotate from a large pool so the same wording is
+not reused until that pool is mostly used. Answers live in the learner's `feedback` KV key, not in progress, and never
+change medals, mastery or points.
 
 ## Stretch, extra review, and review quests
 

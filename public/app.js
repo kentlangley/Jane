@@ -521,7 +521,7 @@ function feedbackCard(F,{then,preview}={}){if(!F?.questions?.length||document.qu
   busy=true;const b=$('fbsend');b.disabled=true;er.hidden=true;const r=await post({answers:ans});
   if(r.error){busy=false;b.disabled=false;er.textContent=r.error;er.hidden=false;return;}
   close();confetti(25);say('💜 Thanks! Your ideas help make Jane better.');};}
-if(location.hash==='#feedback-preview')setTimeout(()=>feedbackCard({questions:['What was the most fun part of Jane lately, and why?','If you could add or change one thing in Jane, what would it be?']},{preview:true}),600);
+if(location.hash==='#feedback-preview')setTimeout(()=>feedbackCard({questions:["What's something you've been wondering about lately?","What was the most fun part of Jane lately, and why?"]},{preview:true}),600);
 if(location.hash==='#quest-preview')api('/api/state').then(s=>s.quest&&questReveal(s.quest));
 if(location.hash==='#quest-celebrate-preview'){document.querySelector('.tab[data-v=play]')?.click();
  api('/api/state').then(s=>{campaignHUD(s);questCelebrate({date:'preview',title:(s.quest?.title)||'Captain Comet\'s Lost Treasure',name:(s.quest?.medal?.name)||'Comet Treasure Medal',emoji:(s.quest?.medal?.emoji)||'💎',questEmoji:s.quest?.emoji||'🏴‍☠️',subjects:['Mathematics','Science'],preferSubject:'Mathematics',topicIds:[],trail:{filled:s.campaign?.filled||3,trailLen:s.campaign?.trailLen||12},stages:s.quest?.stages?.length||5},s);});}

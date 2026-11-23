@@ -155,7 +155,8 @@ quest can only be refreshed after its reached stages (see "Refreshing the curren
 ## How to plan tomorrow's quest (rules)
 0. Check `quests.nextStep` first: `REFRESH: …` means rewrite the current quest's unreached stages (above) with the
    rules below, not a new quest. `NEW QUEST: …` means write tomorrow's quest.
-Run `node export-progress.mjs` and read `weakSpots` first. Then:
+Run `node export-progress.mjs` and read `weakSpots` first. Also read `feedback.new` (see "Learner check-in answers"
+below) before you pick themes and topics. Then:
 1. **Go deeper where the learner struggles.** Every topic in `weakSpots.goDeeper` (misses, hints, slow answers, failed
    reviews, "not yet / sort of" self-checks, "I'm stuck" taps and skips) gets a **deep dive** stage (`"deepDive": true`): a `learn`
    (or "Why it works") card first, then 1-2 guided items, then **3-4 graded questions** in all that start one notch easier and climb back to the level they missed, using at
@@ -196,6 +197,17 @@ Run `node export-progress.mjs` and read `weakSpots` first. Then:
    "Coverage"), rotating subjects with math and science first, using one of the listed `starters`. The publisher
    prints "new areas: N" and **warns** (never fails) when a quest adds no untouched area while some are left. Skip
    this in a review quest (the next regular quest picks it back up).
+
+## Learner check-in answers (interest signals)
+The export's `feedback.new` (and `feedback.all`) holds answers from the "Help shape Jane" check-in. Read them before
+you plan the quest. Some answers are interest signals: what the learner has been wondering about, watching, or
+curious about lately. Use those to shape themes and topics in upcoming quests (a setting, a reading passage, a worked
+example). Mention anything notable in the nightly note so the grown-up can see what Jane picked up, and keep a short
+running list. Those interests are also seeds for a future earned-island path (a later island the learner unlocks by
+being ready for it). Other answers are about the app itself (what was fun, what felt too easy or too hard, what was
+confusing or annoying). Use those to adjust difficulty and flag fixes in the nightly note. Never quote an answer back
+word for word in a pack, and never put a child's personal details in a public file. The app rotates the questions so
+the same wording is not reused until that pool is mostly used. Details: NIGHTLY.md "Feedback check-ins."
 
 ## History rotation (world and Your Place)
 World history and local/national history should both appear over time. Jane's History island
@@ -502,7 +514,7 @@ needed a `hints`, final `misses`, `slow` answers > 30 s, `failedReviews`, `unsur
 `inferred` and `demoted` events), `learnedToday`, `frontier` (ready and learning topics, closest to the target age (`LEARNER_AGE`) first,
 with full topic details, prerequisites and unlocks; `research: true` when a research brief exists), `research` (compact briefs for
 the needsSupport, goDeeper, quest-refresh, stretch and top frontier topics; see "Research briefs"), `reviewDue`, `reviewHealth` (see rule 4), and the raw `progress` record.
-Write tomorrow's quest from `weakSpots` and `frontier` (the gates handle `reviewDue`) using the rules above, dry-run, fix every warning, then publish it.
+Write tomorrow's quest from `weakSpots`, `frontier`, and `feedback.new` interest signals (the gates handle `reviewDue`) using the rules above, dry-run, fix every warning, then publish it.
 
 Both scripts call the repo's `wrangler` (Node 22; a portable Node in `~/.local/node-v22.20.0-linux-x64` is used if present), read the account and KV ids from `wrangler.toml`, and need `CLOUDFLARE_API_TOKEN` set in the environment (never commit it).
 
