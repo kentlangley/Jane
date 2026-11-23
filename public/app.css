@@ -392,7 +392,7 @@ body.theme-lava .q,body.theme-lava .small,body.theme-lava .ord .ot,body.theme-la
 @media (max-height:620px){.qreveal .crownrev,.qreveal .chest,.qreveal .paper .qemo{display:none}.qreveal .fbnew,.qreveal .qrnew{font-size:1.4rem}}
 @media (max-height:450px){.qreveal .qpath,.qreveal .paper .small,.qreveal .fbsub{display:none}}
 /* v0.8.3 "Help shape Jane" check-in: scrolls on short screens like the quest reveal (v0.8.1), never traps the learner */
-.fbcheck{position:fixed;inset:0;z-index:62;display:flex;align-items:flex-start;justify-content:center;padding:16px;background:radial-gradient(circle,#1a237ecc,#000d);overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;animation:fadein .25s}
+.fbcheck{position:fixed;inset:0;z-index:80;display:flex;align-items:flex-start;justify-content:center;padding:16px;background:radial-gradient(circle,#1a237ecc,#000d);overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;animation:fadein .25s}
 .fbcheck.out{animation:fadeout .3s forwards}
 .fbcheck .fbbox{margin:auto;width:100%;max-width:520px;background:#fffdf5;color:#263238;border-radius:22px;padding:20px 22px;box-shadow:0 10px 40px #0008;border:4px solid #ffd54f;text-align:left}
 .fbcheck .fbhi{font-size:2.6rem;text-align:center;line-height:1}

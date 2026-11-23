@@ -218,7 +218,7 @@ $('zoomout').onclick=()=>{zoomed=null;drawMap();};
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{const sw=()=>{document.querySelectorAll('.tab').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-selected',x===b);x.tabIndex=x===b?0:-1;});for(const v of['play','map','trophies','quests','market'])$(v).hidden=b.dataset.v!==v;};window.FX?FX.view(sw):sw();if(b.dataset.v==='map')loadMap();if(b.dataset.v==='market')loadMarket();if(b.dataset.v==='trophies')loadTrophies();if(b.dataset.v==='quests')loadQuests();});
 // learner profiles: wait for picker.js; while "Who's playing?" shows, nothing loads (the pick reloads the page)
 loadGloss().finally(()=>Promise.resolve(window.janeWho).then(w=>{if(w?.picker)return;return api('/api/state').then(s=>{render(s);questDot(s);const after=()=>{if(s.finaleReveal)finaleReveal(s.campaign);else if(s.newQuest&&!location.hash&&s.quest)questReveal(s.quest);};
-  // v0.8.3: a due "Help shape Jane" check-in comes first on app open (a natural break), then any quest reveal
+  // Fallback: a due check-in still shows on app open if it was not answered after the last quest
   if(s.feedback?.pending&&!location.hash)feedbackCard(s.feedback,{then:after});else after();});}));
 if(location.hash==='#quests')document.querySelector('.tab[data-v=quests]').click();
 if(location.hash==='#market')document.querySelector('.tab[data-v=market]').click();
@@ -470,12 +470,16 @@ function questCelebrate(m,state){document.querySelectorAll('.qcelebrate').forEac
   </div></div>`;
  document.body.appendChild(o);confetti(m.finale?160:120);if(m.finale&&!matchMedia('(prefers-reduced-motion: reduce)').matches)setTimeout(()=>confetti(120),900);
  say(m.finale?`🎓 You graduated to the Big Leagues! "${m.title}" is won!`:`🙌 High five! You finished "${m.title}"!`);
- const close=()=>{o.classList.add('out');setTimeout(()=>o.remove(),400);if(!m.finale&&state?.feedback?.pending&&m.date!=='preview')setTimeout(()=>feedbackCard(state.feedback),500);};
+ const close=()=>{o.classList.add('out');setTimeout(()=>o.remove(),400);};
  // Must pick an option — no silent dismiss by clicking the backdrop.
  $('qc-reinforce').onclick=async()=>{const s=await api('/api/reinforce',{topicIds:m.topicIds||[]});close();
   if(s.error){say(s.error);render(state||window._afterQuest||s);return;}document.querySelector('.tab[data-v=play]').click();render(s);say('🧠 Reinforcement time — quick practice on what you covered!');window._afterQuest=null;};
  $('qc-grind').onclick=()=>{close();window._afterQuest=null;trailDone=new Set();goMap(sub||undefined);say(`🛤️ Grind time — pick a stone on ${subLbl}!`);};
  $('qc-play').onclick=async()=>{close();window._afterQuest=null;document.querySelector('.tab[data-v=play]').click();const s=await api('/api/next',{});render(s);say('🎲 Mini-games! Have fun!');};
+ // Due check-in: ask right after the high-five, before the next-step buttons, so it does not greet them on the next open.
+ const ask=!m.finale&&state?.feedback?.pending&&m.date!=='preview'&&state.feedback.questions?.length;
+ const acts=o.querySelector('.qcacts'),qask=o.querySelector('.qcask');
+ if(ask){if(acts)acts.hidden=true;if(qask)qask.hidden=true;setTimeout(()=>feedbackCard(state.feedback,{then:()=>{if(acts)acts.hidden=false;if(qask)qask.hidden=false;$('qc-reinforce')?.focus();}}),600);}
 }
 // Finale graduation screen: cap toss + confetti, banner, Jane's send-off, a recap of every quest medal, the grown-up's message.
 // Reduced motion: no cap toss (the caps are not drawn) and the CSS turns the animations off.
@@ -495,7 +499,8 @@ if(location.hash==='#graduation-preview'){document.querySelector('.tab[data-v=pl
    recap:[...h,{name:q?.medal?.name||'Graduate Medal',emoji:q?.medal?.emoji||'🎓',title:q?.title||'',finale:true}],
    graduation:q?.graduation||{title:'You graduated!',message:'(Preview) Jane\'s send-off shows here.',parentMessage:'(Preview) The message from your grown-up shows here once the Finale medal is won.'}},s);});}
 // ---------- "Help shape Jane" check-in (v0.8.3, src/feedback.js) ----------
-// 1-2 open questions on app open (first time) and then after every few finished quests, right after the high-five.
+// 1-2 open questions every 8 finished quests, right after the high-five in the same session.
+// If they leave before answering, the same due check-in shows on the next app open (then any quest reveal).
 // "Not now" always works and Jane asks again another day; answers go to /api/feedback (never the progress record).
 function feedbackCard(F,{then,preview}={}){if(!F?.questions?.length||document.querySelector('.fbcheck'))return then?.();
  const o=document.createElement('div');o.className='fbcheck';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-labelledby','fbtitle');
