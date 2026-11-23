@@ -1,6 +1,6 @@
 # Andes & Peru: pre-Inca periods
 
-Status: in progress (2026-11-23). Slice 1 done (issue #126). Slice 2 implementing.
+Status: done (2026-11-23). Merged as f6869a7 (PR #127), released v0.9.1, deployed 1aa22167-f2c1-41d5-97d4-b392e8d77b32. /healthz reports 0.9.1.
 Issue: https://github.com/kentlangley/Jane/issues/126
 
 Kent (11-23, 12:01 PM PT): expand the time before the Incas, the pre-Inca periods, as Peruvian schools teach them, so every Jane student can have that too (public template, not only Landon).
@@ -89,4 +89,4 @@ Done. Four new topics, enriched early cultures, hard chain into the Inca, kid pr
 Done test: `npm test` (285 passed, 1 skipped) and `node build.mjs` (jane 34 topics) passed on 2026-11-23.
 
 ### Slice 3
-In progress: PR, merge, backup, deploy.
+Done. PR https://github.com/kentlangley/Jane/pull/127 merged as f6869a7d34f611be1a1e547ad38c3e6619bb4f3d at 12:11 PM PT. Tagged v0.9.1. Backups: backups/2026-11-23/progress-121150.json and progress-121200.json (Landon, 11257 points, sha256 0354bd56417375cf593d8d598dd03c2a1dd355d978b5844e2a2af55f50dcfe24); backups/2026-11-23/christopher/progress-121153.json (3771 points, sha256 e5f49939cb2c716ae6e129af956969f4f79d8655a6a27588cb702b360d75bfb2). Deploy id 1aa22167-f2c1-41d5-97d4-b392e8d77b32. Done test: `curl https://landon-math.kent-71a.workers.dev/healthz` returns {"ok":true,"version":"0.9.1"}.
