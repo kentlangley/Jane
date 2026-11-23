@@ -99,7 +99,7 @@ There is only one quest at a time. The routine reads `quests.nextStep`:
   rarely ask for harder work, so every regular quest also includes one small built-in stretch stage (about 2-3 items)
   about one notch above that subject's working level, only where the learner is on level or ahead, never in the boss.
   Use the result to plan the next quest. Skip the built-in stretch in a review quest.
-- **History rotation.** At most two consecutive regular-quest history stretches on one civilization, world region, or Your Place thread. Match the geography stage to that setting, then switch. Over a longer cycle, include both world history and Your Place. Full rule: LESSONS.md "History rotation (world and Your Place)."
+- **History rotation.** At most two consecutive regular-quest history stretches on one civilization, world region, or Your Place thread. Match the geography stage to that setting, then switch. Over a longer cycle, include both world history and Your Place. On Andes & Peru nights, walk the pre-Inca periods in order (geography and first peoples, then Caral and early cultures, then Wari and Tiwanaku and the later kingdoms, then the Inca). Full rule: LESSONS.md "History rotation (world and Your Place)."
 - **Greece and Rome catch-up is pack content.** Teach the needed Marble topics (see LESSONS.md) with wording at the learner's level. Do not edit `data/marble/` or give a Marble topic a `jane_` prerequisite.
 - **Family stories stay private.** Kentucky, Peru, and moving-to-California topics in `data/jane/` are general. "Your family" framing belongs only in a learner's private packs, never in committed files.
 - **Never below level.** Nothing starting more than 2 years below the target age, and no baby wording.

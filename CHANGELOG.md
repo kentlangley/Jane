@@ -5,6 +5,11 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+## [0.9.1] - 2026-11-23
+
+### Added
+- **Pre-Inca periods on the Andes & Peru path** ([#126](https://github.com/kentlangley/Jane/issues/126)). Four new topics cover the Lithic and Archaic first peoples (Lauricocha, Guitarrero), Caral and the first cities, the Wari and Tiwanaku horizon, and the kingdoms just before the Inca (Chimú / Chan Chan, Lambayeque / Sicán, Chincha, Chachapoyas / Kuelap, Chanka). The existing Early Andes cultures topic stays on the same id and now includes Paracas, Julio C. Tello, and a brief mention of Lima, Recuay, and Vicús. The hard prereq chain runs from geography through these periods into the Inca, so the empire is not treated as the start. Periodization follows what Peruvian schools commonly teach. Topic text stays general. `data/marble/` is unchanged. Medals, mastery, and points are unchanged. Nightly two-night bursts and matching geography are in LESSONS.md.
+
 ## [0.9.0] - 2026-11-23
 
 ### Added
@@ -405,7 +410,8 @@ First public release.
 - Runs on Cloudflare Workers (or `npm run dev` locally) only; the standalone Node server is planned for v0.2.
   `prototype/` is the early math-only version, not the full app.
 
-[Unreleased]: https://github.com/kentlangley/Jane/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/kentlangley/Jane/compare/v0.9.1...HEAD
+[0.9.1]: https://github.com/kentlangley/Jane/releases/tag/v0.9.1
 [0.9.0]: https://github.com/kentlangley/Jane/releases/tag/v0.9.0
 [0.8.4]: https://github.com/kentlangley/Jane/releases/tag/v0.8.4
 [0.8.3]: https://github.com/kentlangley/Jane/releases/tag/v0.8.3

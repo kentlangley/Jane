@@ -92,23 +92,30 @@ a `jane_` topic. `data/marble/` is unchanged.
 | `jane_place_kentucky_appalachia` | Appalachia and moving on | 10–12 | hard: Kentucky frontier and statehood |
 | `jane_place_california_migration` | Moving to California | 9–12 | hard: California nations; soft: Appalachia and moving on, Independent Peru and its people, A nation still being made |
 
-## History › Andes & Peru (2026-11-21)
+## History › Andes & Peru (2026-11-21, pre-Inca periods expanded 2026-11-23)
 
 A world-history path for the Americas (usable in the world rotation). It can also support a
 Your Place thread when a learner has ties to Peru, but the topics themselves stay general.
+The pre-Inca stretch follows the periods commonly taught in Peruvian schools (Lithic and
+Archaic, Caral and the first cities, Formative and regional cultures, Wari and Tiwanaku,
+then the kingdoms that came just before the Inca).
 
 | Id | Topic | Ages | Prerequisites (hard / soft) |
 |---|---|---|---|
 | `jane_world_andes_geography` | Andes geography | 9–11 | (none) |
-| `jane_world_andes_early_cultures` | Early Andes cultures | 9–11 | hard: Andes geography |
-| `jane_world_inca` | The Inca | 9–12 | hard: Early Andes cultures |
+| `jane_world_andes_first_peoples` | First peoples of the Andes | 9–11 | hard: Andes geography |
+| `jane_world_andes_caral` | Caral and the first cities | 9–11 | hard: First peoples of the Andes |
+| `jane_world_andes_early_cultures` | Early Andes cultures | 9–11 | hard: Caral and the first cities |
+| `jane_world_andes_wari_tiwanaku` | Wari and Tiwanaku | 9–12 | hard: Early Andes cultures |
+| `jane_world_andes_regional_kingdoms` | Kingdoms before the Inca | 9–12 | hard: Wari and Tiwanaku |
+| `jane_world_inca` | The Inca | 9–12 | hard: Kingdoms before the Inca |
 | `jane_world_peru_spanish_conquest` | Spanish conquest in the Andes | 10–12 | hard: The Inca |
 | `jane_world_peru_republic` | Independent Peru and its people | 10–12 | hard: Spanish conquest in the Andes |
 
 ## Standards
 
 `standards` codes on the Money Math and Money Models topics (2026-11-01) and on the Your Place
-and Andes & Peru topics (2026-11-21). Each one was checked against the official text; a topic
+and Andes & Peru topics (2026-11-21, pre-Inca topics 2026-11-23). Each one was checked against the official text; a topic
 only gets a code whose text actually covers what the topic teaches. A topic with no fitting
 code has an empty list.
 
@@ -149,7 +156,11 @@ code has an empty list.
 | `jane_place_kentucky_appalachia` | (none: no official California standard whose text covers Appalachian life and out-migration) |
 | `jane_place_california_migration` | `cde-hss:4.4.3`, `4.4.4` (immigration and migration to California; internal migration and the growth of towns) |
 | `jane_world_andes_geography` | `cde-hss:7.7.1` (landforms and climates of South America and Andean urban societies) |
+| `jane_world_andes_first_peoples` | `cde-hss:7.7.1` (landforms and climates and how they shaped early ways of living) |
+| `jane_world_andes_caral` | `cde-hss:7.7.1`, `7.7.4` (Andean urban societies; early monumental architecture) |
 | `jane_world_andes_early_cultures` | `cde-hss:7.7.1`, `7.7.4` (Andean urban societies; artistic traditions and architecture) |
+| `jane_world_andes_wari_tiwanaku` | `cde-hss:7.7.1`, `7.7.4` (highland urban societies; architecture and public works) |
+| `jane_world_andes_regional_kingdoms` | `cde-hss:7.7.1`, `7.7.3` (coastal and highland urban societies; how the later Incan empire arose among existing kingdoms) |
 | `jane_world_inca` | `cde-hss:7.7`, `7.7.1`, `7.7.2`, `7.7.3` (Andean civilizations; geography and urban society; social structure; rise of the empire) |
 | `jane_world_peru_spanish_conquest` | `cde-hss:7.7.3` (how the Incan empire was defeated by the Spanish) |
 | `jane_world_peru_republic` | (none: HSS-10.4.4 covers later imperial-era independence struggles, not Peru in the 1820s) |

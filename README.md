@@ -10,7 +10,7 @@ container) with file-based storage, and it is built on the open
 [Marble Skill Taxonomy](https://github.com/withmarbleapp/os-taxonomy): 1,930 micro-topics across 9 subjects,
 linked by 4,102 prerequisite edges (the app plays 1,916 of them; 14 are held back with a reason in `data/kid-prompts/PENDING.txt`).
 
-> **v0.9.0.** It's a child's learning app, so all personal data is excluded from the repo, and every path has a clear
+> **v0.9.1.** It's a child's learning app, so all personal data is excluded from the repo, and every path has a clear
 > license (see [LICENSING.md](LICENSING.md)). What's next: [Roadmap](#roadmap). Changes: [CHANGELOG.md](CHANGELOG.md).
 
 ## Set up with an AI bot
@@ -92,7 +92,7 @@ friendly tutor. The name is just a nod to the books: this project has no affilia
 - **Your Place and Andes & Peru**, on the History island. These are also Jane's own topics in `data/jane/`. Your Place
   is local and national history, starting with the United States: Native nations first, a California close-up, the
   colonies and founding, Kentucky history, and how people have moved to California. Andes & Peru is a world-history
-  path (geography, early cultures, the Inca, the Spanish conquest, and independent Peru) that can also support a
+  path (geography, first peoples, Caral, early cultures, Wari and Tiwanaku, kingdoms before the Inca, the Inca, the Spanish conquest, and independent Peru) that can also support a
   Your Place thread. Topic text stays general. Family-specific framing belongs only in a learner's private packs.
   History stretches rotate: at most two nights on one civilization or region, with geography matched to the setting
   ([LESSONS.md](LESSONS.md) "History rotation").

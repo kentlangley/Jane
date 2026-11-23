@@ -24,7 +24,11 @@ jane_place_kentucky_border_state|In the Civil War, Kentucky was a...|A Union bor
 jane_place_kentucky_appalachia|Why have people left the Appalachian mountains for other states?|Work and new chances elsewhere|The mountains disappeared|A law banned living there
 jane_place_california_migration|People have moved to California from...|Other states and other countries|Only one nearby town|Nowhere else
 jane_world_andes_geography|The Andes are...|A mountain range in South America|A river in Egypt|A desert in Australia
+jane_world_andes_first_peoples|Before the first Andean cities, people...|Hunted, gathered, then began to farm|Waited for the Inca to arrive|Lived only in Spanish towns
+jane_world_andes_caral|Caral is known as...|One of the earliest cities in the Americas|The Inca capital in the mountains|A Spanish colonial port
 jane_world_andes_early_cultures|Which was an early Andes culture, long before the Inca?|Caral|Rome|Egypt
+jane_world_andes_wari_tiwanaku|The Wari are known for...|Highland roads and administrative centers|Building the first Spanish church|Inventing steam ships
+jane_world_andes_regional_kingdoms|Chan Chan was...|The adobe capital of the Chimú|The Inca palace in Cusco|A port built by Spain
 jane_world_inca|The Inca empire was held together in part by...|Roads and way stations|Steam trains|Ocean cables
 jane_world_peru_spanish_conquest|The Spanish defeated the Inca after the empire was already...|Weakened by disease and civil war|Empty of people|Allied with Australia
 jane_world_peru_republic|Peru today is a country where people speak...|Spanish and Quechua too|Only Latin today|Only English today

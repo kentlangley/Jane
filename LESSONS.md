@@ -201,8 +201,8 @@ Run `node export-progress.mjs` and read `weakSpots` first. Then:
 World history and local/national history should both appear over time. Jane's History island
 now has Marble civilization paths plus Jane's own paths in `data/jane/`: **Your Place** (the
 United States first, including a California close-up, Kentucky history, and how people have
-moved to California) and **Andes & Peru** (a world-history path for the Americas that can also
-support a Your Place thread). When you write a history stretch:
+moved to California) and **Andes & Peru** (a world-history path for the Americas, including the
+pre-Inca periods taught in Peruvian schools, that can also support a Your Place thread). When you write a history stretch:
 
 1. **Cap of 2.** At most two consecutive regular-quest history stretches on the same
    civilization, world region, or Your Place thread. A review quest does not count, and still
@@ -226,6 +226,15 @@ support a Your Place thread). When you write a history stretch:
    household's private origin story into committed topic text, kid prompts, examples, or the
    public template. Family-specific framing belongs only in a learner's private packs
    (`packs/` is gitignored).
+
+6. **Andes & Peru sequence.** When a history stretch is on this path, walk the pre-Inca
+   periods in order, in two-night bursts, and match the geography stage to that burst. Then
+   switch, and return later:
+   - Burst 1: Andes geography, then First peoples of the Andes (three zones; high caves and the coast).
+   - Burst 2: Caral and the first cities, then Early Andes cultures (desert coast and the Supe Valley; then highland Chavín, the south-coast desert, and north-coast valleys).
+   - Burst 3: Wari and Tiwanaku, then Kingdoms before the Inca (Ayacucho highlands and Lake Titicaca; then Chan Chan on the desert coast and Kuelap in the cloud forest toward the Amazon).
+   - Burst 4: The Inca, then Spanish conquest (Cusco and the Andean roads).
+   - Later: Independent Peru and its people.
 
 ## Review quests
 When the overdue review backlog is large, write a **review quest** about every 4th quest (then about weekly once the
