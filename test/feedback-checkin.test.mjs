@@ -1,6 +1,7 @@
-// "Help shape Jane" check-in (v0.8.3, src/feedback.js): 1-2 open questions on the next app open, then every 8 finished
-// quests; "Not now" snoozes for the day. Answers live in their own per-learner "feedback" key, never in progress,
-// so medals, mastery and points can't change. /parent lists them newest first; the export prints the new ones.
+// "Help shape Jane" check-in (v0.8.3, src/feedback.js): 1-2 open questions every 8 finished quests, right after
+// the high-five in the same session (app open is the fallback if still due); "Not now" snoozes for the day.
+// Answers live in their own per-learner "feedback" key, never in progress, so medals, mastery and points can't
+// change. /parent lists them newest first; the export prints the new ones.
 import {test} from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';
 import {ROOT,tmpDir} from './helpers.mjs';import {fileStore} from '../server/file-kv.mjs';import {assets} from '../server/assets.mjs';
 import worker from '../src/worker.js';import * as FB from '../src/feedback.js';import * as PF from '../src/profiles.js';import * as LV from '../src/level.js';
@@ -76,10 +77,22 @@ test('/parent lists answers newest first; every 8 quests it comes back',async()=
   const s=await call(env,'/api/state');assert.equal(s.j.feedback.pending,true,'8 more quests finished');assert.deepEqual(s.j.feedback.questions,FB.POOL[1]);
   await call(env,'/api/feedback',{answers:['second','']});const D=await page(env);assert.deepEqual(D.feedback.entries.map(e=>e.answers[0]),['second','first']);});
 
-test('the app shows the check-in at a break (app open, after the high-five) and it fits short screens',()=>{
+test('the app shows the check-in after the high-five (app open is the fallback) and it fits short screens',()=>{
   const js=fs.readFileSync(path.join(ROOT,'public/app.js'),'utf8'),css=fs.readFileSync(path.join(ROOT,'public/app.css'),'utf8'),pj=fs.readFileSync(path.join(ROOT,'public/parent.js'),'utf8');
-  assert.match(js,/Help shape Jane!/);assert.match(js,/s\.feedback\?\.pending&&!location\.hash\)feedbackCard/);assert.match(js,/state\?\.feedback\?\.pending.*feedbackCard\(state\.feedback\)/);
-  assert.match(js,/id="fblater">Not now/);assert.match(css,/\.fbcheck\{[^}]*overflow-y:auto/);assert.match(pj,/Feedback from/);});
+  assert.match(js,/Help shape Jane!/);
+  // Fallback: still due on the next app open if they left before answering
+  assert.match(js,/s\.feedback\?\.pending&&!location\.hash\)feedbackCard/);
+  // After a quest: show the card on top of the high-five, then reveal the next-step buttons
+  assert.match(js,/function questCelebrate\(/);
+  assert.match(js,/feedbackCard\(state\.feedback,\{then:/);
+  assert.match(js,/if\(ask\)\{if\(acts\)acts\.hidden=true/);
+  // Must not wait until they pick Reinforcement / Grind / Mini-games (that missed the same-session prompt)
+  assert.doesNotMatch(js,/close=\(\)=>\{o\.classList\.add\('out'\);setTimeout\(\(\)=>o\.remove\(\),400\);if\(!m\.finale&&state\?\.feedback\?\.pending/);
+  assert.match(js,/id="fblater">Not now/);
+  assert.match(css,/\.fbcheck\{[^}]*overflow-y:auto/);
+  const z=+(css.match(/\.fbcheck\{[^}]*z-index:(\d+)/)||[])[1],zq=+(css.match(/\.qcelebrate\{[^}]*z-index:(\d+)/)||[])[1];
+  assert.ok(z>zq,'check-in must stack above the high-five overlay');
+  assert.match(pj,/Feedback from/);});
 
 test('working level says kindergarten, not "K grade"',()=>{assert.equal(LV.ageLabel(5,5),'about age 5, roughly kindergarten');
   assert.equal(LV.ageLabel(5,6),'about age 5-6, roughly kindergarten-1st grade');assert.equal(LV.ageLabel(10,11),'about age 10-11, roughly 5th-6th grade');});

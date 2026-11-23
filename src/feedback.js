@@ -5,9 +5,10 @@
 //
 // Record: {v:1, asks:n, baseline:<quests done when last answered/closed>, skipDay:"YYYY-MM-DD"|null, skips:n,
 //          entries:[{at, day, questions:[...], answers:[...], quests:<done count>, quest:{date,title}|null}]}
-// A learner with no record yet gets the check-in on the next app open. After answering it comes back once
-// EVERY quests more are finished. "Not now" hides it for the rest of that Pacific day; after SNOOZES "not now"s
-// in a row it counts as asked, so it waits for the next EVERY quests instead of nagging.
+// A due check-in shows right after a quest's high-five in the same session (and on the next app open if they
+// left before answering). After answering it comes back once EVERY quests more are finished. "Not now" hides it
+// for the rest of that Pacific day; after SNOOZES "not now"s in a row it counts as asked, so it waits for the
+// next EVERY quests instead of nagging.
 export const EVERY=8,SNOOZES=2,MAX_ANSWER=500,MAX_ENTRIES=200;
 // question pairs, asked in turn (the first pair is the default first check-in)
 export const POOL=[

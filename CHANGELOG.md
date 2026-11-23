@@ -5,6 +5,8 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-11-23
+
 ### Added
 - **Your Place and Andes & Peru history paths** on the History island (`data/jane/`). Your Place is 15 topics: ten on the United States (nations already here, a California close-up, contact, alliance and war, the colonies, enslavement, the break with Britain, the Revolutionary War, the Constitution, and the early republic), plus Kentucky history (nations and land first, frontier and statehood, a Civil War border state, Appalachia) and moving to California. Andes & Peru is five world-history topics (Andes geography, early cultures, the Inca, the Spanish conquest, and independent Peru). Curriculum codes use `cde-hss:` and were checked against the official California History-Social Science text; a topic with no fitting code has an empty list. `data/marble/` is unchanged. Medals, mastery and points are unchanged. Topic text is general: family-specific framing stays in private packs. Authoring rules for a two-night history rotation, Greece and Rome catch-up as pack content, and the privacy rule are in LESSONS.md and docs/NIGHTLY.md.
 
@@ -12,6 +14,7 @@ Dates are Pacific Time.
 - **Learner ages 16.5–18 no longer snap back to 10.** The engine only accepted ages 4–16, so a grade 11 profile (age ≈ 16.5) or an explicit age of 17 was treated as 10. It now matches the profile rules and accepts 4–18. The parent Players form can set age and grade for added learners. Progress, medals and points are unchanged (`src/engine.js`, `src/worker.js`, `public/parent.js`).
 
 ### Changed
+- **"Help shape Jane" now asks right after a quest.** The check-in was already due when a quest crossed the 8-quest mark, but the card waited until the learner picked Reinforcement, Grind a Trail, or Mini-games, or until the next time they opened the app. If they left at the high-five, the questions greeted them at the start of the next session. It now appears on top of the high-five in the same session, then the next-step buttons. The cadence is unchanged (every 8 finished quests, still skippable). If they leave before answering, the same due check-in still shows on the next app open. (`public/app.js`)
 - **Longer quests with more review (about 8-12 minutes).** Quests ran about 4-5 minutes and the review backlog kept growing. Regular quests now aim for 24-28 graded questions (the publisher fails above 30, was 16) over 5-7 stages (fails above 8, was 7), with at least 8 review items woven in (a warning below that). Review quests use about 28-30 graded items. Review gates serve up to 4 items each (was 2) and up to 12 a day per quest (was 4); the daily warm-up stays at 1-2. The publisher's time estimate now counts gate items and real pacing ((graded + gate items) × 12 s + cards × 8 s) and warns outside 8-12 minutes. Placement quests keep their budget (16 graded, 7 stages). LESSONS.md, NIGHTLY.md, docs/NIGHTLY.md, BOT-SETUP.md, README and the parent-guide site describe the new sizes (`publish-lessons.mjs`, `src/engine.js`).
 - **Review items in a quest now drain the backlog.** A pack question marked `"review": true` with `"skill": "<topic id>"` now counts as a review of that topic: a first-try right moves its Leitner box up, a miss brings it due tomorrow. Before, such items only counted for their stage topic. Mastery, medals and points are unchanged. The publisher warns about a review item with no `"skill"`, and no longer warns that review stages should be spent on new learning.
 - **Docs:** README Features, the parent-guide site, LESSONS.md, NIGHTLY.md, docs/NIGHTLY.md, and BOT-SETUP.md now describe Money Math and Money Models, working level on the parent report, the Help shape Jane check-in, Points Market and Grind a Trail, plus the current teaching methods (built-in stretch, extra review items in every regular quest, periodic review quests, and one leap item per review quest).
@@ -402,7 +405,8 @@ First public release.
 - Runs on Cloudflare Workers (or `npm run dev` locally) only; the standalone Node server is planned for v0.2.
   `prototype/` is the early math-only version, not the full app.
 
-[Unreleased]: https://github.com/kentlangley/Jane/compare/v0.8.4...HEAD
+[Unreleased]: https://github.com/kentlangley/Jane/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/kentlangley/Jane/releases/tag/v0.9.0
 [0.8.4]: https://github.com/kentlangley/Jane/releases/tag/v0.8.4
 [0.8.3]: https://github.com/kentlangley/Jane/releases/tag/v0.8.3
 [0.8.2]: https://github.com/kentlangley/Jane/releases/tag/v0.8.2
