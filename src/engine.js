@@ -5,9 +5,12 @@ export {isStuck,scaffold};
 const DAY=864e5, BOXES=[1,3,7,21,60];
 // Learner settings (wrangler.toml [vars]: LEARNER_NAME, LEARNER_AGE, LEARNER_GRADE). Kid-facing strings use the
 // placeholder {name}; the Worker substitutes it in every response, so it is never stored in progress or packs.
-let NAME='Explorer', TARGET_AGE=10, GRADE='upper elementary';
-export function configure(env={}){NAME=String(env.LEARNER_NAME||'Explorer').trim()||'Explorer';const a=parseFloat(env.LEARNER_AGE);TARGET_AGE=a>=4&&a<=18?a:10;GRADE=String(env.LEARNER_GRADE||'upper elementary').trim();}
+let NAME='Explorer', TARGET_AGE=10, GRADE='upper elementary', AGE_KNOWN=false;
+export function configure(env={}){NAME=String(env.LEARNER_NAME||'Explorer').trim()||'Explorer';const a=parseFloat(env.LEARNER_AGE);AGE_KNOWN=a>=4&&a<=18;TARGET_AGE=AGE_KNOWN?a:10;GRADE=String(env.LEARNER_GRADE||'upper elementary').trim();}
 export const learner=()=>({name:NAME,age:TARGET_AGE,grade:GRADE});
+// Runtime review floor (gates, spot-checks, map grind): max(9, floor(age)-3) when age is known. No floor if age is unset, so default installs stay unchanged. Authored pack items are not filtered.
+export function reviewAgeFloor(){return AGE_KNOWN?Math.max(9,Math.floor(TARGET_AGE)-3):null;}
+export function inReviewBand(t){const f=reviewAgeFloor();return f==null||!t||(t.ageRangeStart??0)>=f;}
 export const withName=(s,name=NAME)=>String(s).replace(/\{\{name\}\}|\{name\}/g,()=>name);
 const PIZZA_ID='mt_e7filQgayF';
 const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1)), pick=a=>a[Math.floor(Math.random()*a.length)];
@@ -441,7 +444,8 @@ export const CARD=['why','fact','learn'];
 export const BOSS_MAX_LVL=4;
 export function bossFair(p){const a=String(p?.a??p?.answer??'');return !/\.\d{4,}/.test(a)&&!(/%$/.test(a)&&/\./.test(a));}
 const avoided=(sp,q,now)=>!!sp?.avoid?.some(x=>x.q===q&&x.until>now);
-function genFair(k,lvl,sp,boss,now){let p;for(let n=0;n<25;n++){p=G[k](lvl);if(avoided(sp,p.q,now))continue;if(boss&&!bossFair(p))continue;return p;}return p;}
+const singleDigitFact=q=>{const m=String(q||'').match(/^What is (\d+)\s*[×+\-−÷]\s*(\d+)\s*\??$/);return !!(m&&+m[1]<10&&+m[2]<10);};
+function genFair(k,lvl,sp,boss,now){const bump=AGE_KNOWN&&TARGET_AGE>=11&&(k==='muldiv'||k==='addsub');let p;for(let n=0;n<25;n++){p=G[k](bump?Math.max(lvl,3):lvl);if(bump&&singleDigitFact(p.q))continue;if(avoided(sp,p.q,now))continue;if(boss&&!bossFair(p))continue;return p;}return p;}
 // a Play boss only tests a skill that was taught or practised first (2+ right answers), and pauses after repeated misses
 function bossReady(S,r,id,now){return (r?.c||0)>=2&&!(S.support?.[id]?.bossOff>now);}
 function powerText(pack,t){if(t.powerup)return t.powerup;const src=pack.topics.find(x=>x!==t&&(x.teaches||[]).includes(t.topicId));
@@ -513,7 +517,7 @@ export function next(S,g,pack,now){
   const rq=(S.requeue||[]).findIndex(x=>x.notBefore<=now&&g.byId[x.item?.topicId]);
   if(rq>=0&&!questActive(S,pack)&&!S.mini){const x=S.requeue.splice(rq,1)[0],so=solve(x.item.q);S.itemsServed++;S.recent=[...S.recent.slice(-9),x.item.topicId];
     S.current={...x.item,id:now+'-rq',mode:'learn',tries:0,stage:'main',issued:now,guided:true,steps:x.item.steps?.length?x.item.steps:(so?so.start:[x.item.hint].filter(Boolean)),format:'guided',boss:null,timed:null,bonus:null,requeued:x.n,packKey:undefined,intro:undefined};return S.current;}
-  const due=g.topics.filter(t=>stateOf(S,g,t.id,now)==='review').sort((a,b)=>S.ts[a.id].due-S.ts[b.id].due);
+  const dueAll=g.topics.filter(t=>stateOf(S,g,t.id,now)==='review').sort((a,b)=>S.ts[a.id].due-S.ts[b.id].due);const due=dueAll.filter(inReviewBand);
   let id,mode;
   const qa=questActive(S,pack);
   // review gates: before some later quest stages, 1-2 due reviews open the way (LESSONS.md "Review gates")
@@ -549,24 +553,26 @@ export function next(S,g,pack,now){
 // v0.5: at most GATE_DAY_MAX gate items per quest per Pacific day, and a warm-up gate (WARM_ITEMS due reviews) at the
 // first item boundary of each day when the learner resumes a started quest.
 // v0.9: longer quests (about 8-12 minutes) drain the review backlog faster: up to GATE_ITEMS per stage gate and
-// GATE_DAY_MAX a day (was 2 and 4). Same picking rules; a gate still always opens.
+// GATE_DAY_MAX a day (was 2 and 4). A gate still always opens.
+// v0.9.3: runtime picks stay at or above reviewAgeFloor() when age is known. If nothing in band is due, the gate
+// serves fewer items or an in-band inferred spot-check. It never fills with below-floor topics. Pack items are unchanged.
 export const GATE_MAX=3,GATE_ITEMS=4,GATE_DAY_MAX=12,WARM_ITEMS=2;
 const gateDay=(S,pack,now)=>{const q=S.quests[pack.date],d=ptDay(now);if(q.gateDay?.day!==d)q.gateDay={day:d,n:0,warm:false};return q.gateDay;};
 const resumed=(S,pack)=>pack.topics.some(t=>t.questions.some((q,j)=>S.packSeen[`${pack.date}:${t.topicId}:${j}`]));
 export function gateStages(n){return[...new Set([1,Math.floor(n/2),n-1])].filter(k=>k>0&&k<n).sort((a,b)=>a-b).slice(0,GATE_MAX);}
 const gateRec=(S,pack)=>{const q=(S.quests??={})[pack.date]??={};return q.gates??={};};
 export const unverified=(S,id)=>{const r=S.ts[id];return !!r&&r.st==='mastered'&&r.how==='inferred'&&!r.verified;};
-export function spotPick(S,g,used=new Set()){return g.topics.filter(t=>unverified(S,t.id)&&!used.has(t.id))
+export function spotPick(S,g,used=new Set()){return g.topics.filter(t=>unverified(S,t.id)&&!used.has(t.id)&&inReviewBand(t))
   .sort((a,b)=>(g.post[b.id]?.length||0)-(g.post[a.id]?.length||0)||(S.ts[a.id].conf??1)-(S.ts[b.id].conf??1)||a.id.localeCompare(b.id))[0]?.id||null;}
 function gatePick(S,g,pack,due,now,used){const inf=id=>S.ts[id].how==='inferred'?1:0,recent=new Set(S.recent.slice(-3)),sub=S.recent.slice(-1).map(x=>g.byId[x]?.subject)[0];
-  const c=due.filter(t=>!used.has(t.id)).sort((a,b)=>inf(a.id)-inf(b.id)||(recent.has(a.id)-recent.has(b.id))||((g.byId[a.id]?.subject===sub)-(g.byId[b.id]?.subject===sub))||S.ts[a.id].due-S.ts[b.id].due);if(c.length)return c[0].id;
-  // soon-due fallback: a directly mastered topic in box 0-1 due within 2 days
-  const soon=g.topics.filter(t=>{const r=S.ts[t.id];return r?.st==='mastered'&&r.how!=='inferred'&&(r.box||0)<=1&&r.due<=now+2*DAY&&!used.has(t.id);}).sort((a,b)=>S.ts[a.id].due-S.ts[b.id].due);
+  const c=due.filter(t=>!used.has(t.id)&&inReviewBand(t)).sort((a,b)=>inf(a.id)-inf(b.id)||(recent.has(a.id)-recent.has(b.id))||((g.byId[a.id]?.subject===sub)-(g.byId[b.id]?.subject===sub))||S.ts[a.id].due-S.ts[b.id].due);if(c.length)return c[0].id;
+  // soon-due fallback: a directly mastered topic in box 0-1 due within 2 days, still in band
+  const soon=g.topics.filter(t=>{const r=S.ts[t.id];return r?.st==='mastered'&&r.how!=='inferred'&&(r.box||0)<=1&&r.due<=now+2*DAY&&!used.has(t.id)&&inReviewBand(t);}).sort((a,b)=>S.ts[a.id].due-S.ts[b.id].due);
   return soon[0]?.id||null;}
 function gateItem(S,g,pack,due,now){if(!pack?.quest||pack.placement||!S.quests?.[pack.date]?.started)return null;const k=pack.topics.findIndex(t=>g.byId[t.topicId]&&packQ(S,pack,t.topicId));if(k<0)return null;
   const G=gateRec(S,pack),day=gateDay(S,pack,now),left=GATE_DAY_MAX-day.n;
   const used=new Set(Object.values(G).flatMap(x=>x.items||[]));
-  const nSpot=g.topics.filter(t=>unverified(S,t.id)&&!used.has(t.id)).length,avail=due.filter(t=>!used.has(t.id)).length;
+  const nSpot=g.topics.filter(t=>unverified(S,t.id)&&!used.has(t.id)&&inReviewBand(t)).length,avail=due.filter(t=>!used.has(t.id)&&inReviewBand(t)).length;
   let key,gk;const wk='w:'+day.day;
   if(G[wk]&&!G[wk].open){key=wk;gk=G[wk];}
   else if(!day.warm&&left>0&&resumed(S,pack)&&(avail||nSpot)){day.warm=true;key=wk;gk=G[wk]={before:'warm',warm:true,day:day.day,items:[],right:0,n:0,open:false,of:Math.min(left,avail>1||(avail&&nSpot)?WARM_ITEMS:1)};}
@@ -574,7 +580,7 @@ function gateItem(S,g,pack,due,now){if(!pack?.quest||pack.placement||!S.quests?.
     key=k;gk=G[k]??={before:k,items:[],right:0,n:0,open:false};if(gk.open)return null;
     if(gk.of==null)gk.of=Math.min(Math.max(0,left),avail>2||(avail>0&&nSpot)?Math.min(GATE_ITEMS,avail+nSpot):avail>0?1:nSpot?Math.min(GATE_ITEMS,nSpot):(gatePick(S,g,pack,[],now,used)?1:0));}
   if(gk.n>=gk.of||GATE_DAY_MAX-day.n<=0){gk.open=true;gk.of=gk.n;return null;}
-  const served=Object.values(G).reduce((a,x)=>a+(x.items?.length||0),0),dueLeft=due.some(t=>!used.has(t.id));
+  const served=Object.values(G).reduce((a,x)=>a+(x.items?.length||0),0),dueLeft=due.some(t=>!used.has(t.id)&&inReviewBand(t));
   let id=nSpot&&(!dueLeft||served%3===2)?spotPick(S,g,used):null;if(!id)id=gatePick(S,g,pack,due,now,used);if(!id){gk.open=true;gk.of=gk.n;return null;}
   const it=buildItem(S,g,id,'review',null,now);gk.items.push(id);
   return{...it,format:'gate',timed:null,boss:null,bonus:null,spot:unverified(S,id)||undefined,gate:{k:key,n:gk.n+1,of:gk.of,date:pack.date,warm:gk.warm||undefined}};}
@@ -795,6 +801,19 @@ export function startReinforce(S,g,topicIds,now){const ids=(topicIds||[]).filter
   S.reinforce={queue:[...queue],n:0,of:queue.length};S.current=null;return{ok:true,of:queue.length};}
 // ---------- map mini-sessions ("Explore now!" on green/blue stones, "Practice now" on orange ones) ----------
 export function clearGrind(S){if(S)S.grindTrail=null;}
+// A leftover minigame or free-play item from a previous Pacific day should not open the next session or start a grind.
+// Quest pack items (packKey / placement) are left alone so an in-progress quest can resume. Clearing never touches
+// medals, mastery, points, or review boxes.
+const isQuestItem=it=>!!(it&&(it.packKey||it.place));
+export function playStamp(it){if(!it||typeof it!=='object')return null;if(typeof it.issued==='number'&&it.issued>0)return it.issued;if(typeof it.startedAt==='number'&&it.startedAt>0)return it.startedAt;const m=String(it.id||'').match(/^(\d{12,13})/);return m?+m[1]:null;}
+export function isStalePlay(it,now){const ts=playStamp(it);return ts!=null&&ptDay(ts)<ptDay(now);}
+export function clearStalePlay(S,now){if(!S)return false;let changed=false;const today=ptDay(now);
+  const miniDay=S.mini&&(typeof S.mini.startedAt==='number'?ptDay(S.mini.startedAt):(S.current&&!isQuestItem(S.current)&&playStamp(S.current)!=null?ptDay(playStamp(S.current)):null));
+  if(S.mini&&miniDay&&miniDay<today){const hold=S.miniHold;S.mini=null;clearGrind(S);S.miniHold=null;
+    if(hold&&isQuestItem(hold)&&!isStalePlay(hold,now))S.current=hold;else if(S.current&&!isQuestItem(S.current))S.current=null;changed=true;}
+  if(S.current&&!isQuestItem(S.current)&&isStalePlay(S.current,now)){S.current=null;changed=true;}
+  if(S.miniHold&&!isQuestItem(S.miniHold)&&isStalePlay(S.miniHold,now)){S.miniHold=null;changed=true;}
+  return changed;}
 // Map free-play grind: keep a session list of stones just finished so Continue never re-offers them
 // (a stone left in "learning" is still "open" by stateOf, which would otherwise wrap back).
 export function startMini(S,g,id,pack,now,opts={}){const s=stateOf(S,g,id,now);if(!['ready','learning','review'].includes(s))return{error:'That stone is not open yet!'};
@@ -812,7 +831,7 @@ function miniItem(S,g,pack,now){const M=S.mini;let mode=M.mode,it;
 // Free-play grind: after a map mini-session, the UI offers "Continue on this trail".
 export function nextTrailTopic(S,g,subject,afterId,now,exclude){const skip=new Set(exclude||S.grindTrail?.done||[]);
   if(afterId)skip.add(afterId);
-  const open=id=>!skip.has(id)&&['ready','learning','review'].includes(stateOf(S,g,id,now));
+  const open=id=>!skip.has(id)&&['ready','learning','review'].includes(stateOf(S,g,id,now))&&inReviewBand(g.byId[id]);
   const pack=t=>({topicId:t.id,name:t.sn||t.name,subject:t.subject,domain:t.domain,state:stateOf(S,g,t.id,now)});
   const all=g.topics.filter(t=>t.subject===subject).sort((a,b)=>a.domain.localeCompare(b.domain)||a.ageRangeStart-b.ageRangeStart||a.id.localeCompare(b.id));
   if(!all.length)return null;const cur=g.byId[afterId];const i=all.findIndex(t=>t.id===afterId);

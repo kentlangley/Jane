@@ -41,6 +41,12 @@ open for free). Gate answers move Leitner boxes like any review (a first-try rig
 demotes it), and a gate opens once its items are answered, right or wrong, so it never strands the learner. Gates
 don't count toward quest progress. The nightly author doesn't pick gate items.
 
+**Age floor (v0.9.3).** When the app knows the learner's age, runtime gate, spot-check, and map-trail picks stay at
+or above `max(9, floor(age) - 3)`. A learner around 10-11 has a floor of 9, so age 9-10 reviews still appear. An
+8th-grade learner has a higher floor. If nothing in band is due, the gate serves fewer items or an in-band inferred
+spot-check. It never fills with below-floor topics. Authored pack items are not filtered, including short unlock probes
+below the floor. If age is not configured, there is no floor.
+
 **Warm-up and daily budget.** The first time the learner continues a started quest each day, a 🔥 **warm-up** of 1-2
 due reviews comes first (after any question already on screen, never in the middle of one). Warm-up and gates
 together serve **at most 12 review items per quest per day** (v0.9; was 4); a gate reached after that opens for free.
