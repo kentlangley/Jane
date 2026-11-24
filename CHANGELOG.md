@@ -5,6 +5,11 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+## [0.9.3] - 2026-11-24
+
+### Fixed
+- **Review gates and map grind no longer serve items far below the learner's age** ([#131](https://github.com/kentlangley/Jane/issues/131)). When the app knows the learner's age, runtime picks in review gates, inferred-skill spot-checks, and the map "keep going" trail stay at or above `max(9, floor(age) - 3)`. In-band due reviews come first. If nothing in band is due, the gate serves fewer items or an in-band unverified inferred topic, and never fills with elementary work. A leftover minigame or free-play item from a previous Pacific day is cleared when a new quest starts or on the first open of the day, so it cannot run before the quest or start a grind. An in-progress quest item is left alone. Clearing does not change medals, mastery, points, or review boxes. Authored pack items are not filtered, including short unlock probes below the floor. If age is not configured, there is no floor. For learners aged 11 and up, the procedural review generator also skips single-digit facts such as 2×2. `data/marble/` is unchanged.
+
 ## [0.9.2] - 2026-11-23
 
 ### Changed

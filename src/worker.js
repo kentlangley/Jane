@@ -62,7 +62,9 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
  const qrec=d=>S.quests?.[d]||{};const LU=()=>E.questLineup(S,Object.fromEntries(recent.map(d=>[d,PC[d]])),today);
  const withBoost=async p=>{if(!p?.quest)return p;const b=await KV.get(LK('boost:')+p.date,'json');return b?E.applyBoost(p,b):p;};
  const choosePack=async()=>{const d=LU().current;return d?withBoost(PC[d]):todayPack;};
- let pack=await choosePack();cfg();E.refresh(S,g,pack,now);
+ let pack=await choosePack();cfg();
+ if(P!=='/parent'&&P!=='/api/feedback')E.clearStalePlay(S,now);
+ E.refresh(S,g,pack,now);
  // Points Market picks: a newer quest pack that declares "honors" marks the learner's pick used (LESSONS.md "Market choices")
  const honored=E.honorChoices(S,Object.fromEntries(recent.map(d=>[d,PC[d]])),now);
  const body=req.method==='POST'?await req.json().catch(()=>({})):{};cfg();let out,ev=[];for(const h of honored)ev.push({event:'choiceHonored',...h});
