@@ -1,4 +1,4 @@
-import * as E from './engine.js';import * as PR from './parent.js';import {VERSION} from './version.js';import * as PF from './profiles.js';import * as FBK from './feedback.js';
+import * as E from './engine.js';import * as PR from './parent.js';import {VERSION} from './version.js';import * as PF from './profiles.js';import * as FBK from './feedback.js';import * as Sync from './sync.js';
 let G=null;
 async function graph(env){if(!G){const r=await env.ASSETS.fetch(new Request('https://assets.local/tax.json'));G=E.graph(await r.json());}return G;}
 export const ptDate=(ms=Date.now())=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(ms));
@@ -75,8 +75,11 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
    quest:pack?.quest?E.questInfo(S,g,pack):null,newQuest:(()=>{const L=LU();return L.newQuest&&pack?.date===L.current;})(),
    quests:(()=>{const L=LU();return{current:L.current,nextUp:L.queued.length>0,boost:pack?.boost||null};})(),
    terms:pack?.terms||null,mini:S.mini?{topicId:S.mini.topicId,subject:S.mini.ret}:null,
-   campaign:E.campaignState(S,g,E.finaleState(S,Object.fromEntries(recent.map(d=>[d,PC[d]])))),wallet:E.walletState(S,g,now),days:E.dayStreak(S,now),finaleReveal:finaleJust||undefined,feedback:(f=>({pending:f.pending,questions:f.questions}))(FBK.feedbackState(FB,S,today)),profile:{id:LR.id,avatar:LR.avatar||PF.DEFAULT_AVATAR,count:REG.learners.length}};};
+   campaign:E.campaignState(S,g,E.finaleState(S,Object.fromEntries(recent.map(d=>[d,PC[d]])))),wallet:E.walletState(S,g,now),days:E.dayStreak(S,now),finaleReveal:finaleJust||undefined,feedback:(f=>({pending:f.pending,questions:f.questions}))(FBK.feedbackState(FB,S,today)),profile:{id:LR.id,avatar:LR.avatar||PF.DEFAULT_AVATAR,count:REG.learners.length},rev:S.rev||0};};
  const questCheck=r=>{const m=E.completeQuest(S,g,pack,now);if(m){r.questDone=m;ev.push({event:'questDone',date:pack.date,quest:m.title});}};
+ // Stale KV snapshot or itemId mismatch: never grade, never persist this in-memory copy (#135).
+ const rejectWrite=(bindItem)=>{const g=Sync.writeGuard(S,{rev:body.rev,itemId:bindItem?body.itemId:undefined});if(!g)return null;
+  const o={...g,error:g.stale?'stale':'mismatch'};if(!g.stale)o.state=pub();return J(o);};
  if(P==='/parent'){ // read-only: returns before any KV write
    const ds=[...Array(14)].map((_,i)=>ptDate(now-(13-i)*864e5));const logs={};await Promise.all(ds.map(async d=>logs[d]=(await KV.get(K('log:'+d),'json'))||[]));
    const qp={};for(const d of recent)if(PC[d]?.quest)qp[d]=PC[d];const boosts={};await Promise.all(Object.keys(qp).map(async d=>boosts[d]=await KV.get(LK('boost:')+d,'json')));
@@ -93,17 +96,17 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
  if(P==='/api/state'){if(!S.current)E.next(S,g,pack,now);out=pub();}
  else if(P==='/api/trophies'){out=E.trophies(S,g);}
  else if(P==='/api/map'){const sm=E.summary(S,g,now);out={codes:sm.codes,focus:S.focus,current:S.current?.topicId,progress:{...sm,codes:undefined}};}
- else if(P==='/api/answer'&&req.method==='POST'){if(!S.current)return J({error:'no item',jane:'Pick what to do next after your quest — then answer! 🙌'},409);
+ else if(P==='/api/answer'&&req.method==='POST'){if(!S.current)return J({error:'no item',jane:'Pick what to do next after your quest — then answer! 🙌'},409);const blocked=rejectWrite(true);if(blocked)return blocked;
    const x=E.submit(S,g,body.answer??'',now);ev=x.ev;if(x.r.medal)x.r.medal=E.medalInfo(x.r.medal,g);
    if(x.r.done){const md=E.miniAfter(S,g,pack,now,x.r);if(md){x.r.miniDone=md;x.r.map=E.mapPayload(S,g,now);x.r.askChoice=false;}questCheck(x.r);// Hold next item until post-quest celebrate (#106): a late/double answer must not grade against free-play/review.
    if(!S.current&&!x.r.askChoice&&!x.r.questDone)E.next(S,g,pack,now);}out={...x.r,state:pub()};}
- else if(P==='/api/stuck'&&req.method==='POST'){if(!S.current)return J({error:'no item'},409);const x=E.stuck(S,g,now);if(x.error)return J(x,400);ev=x.ev;out={...x.r,state:pub()};}
- else if(P==='/api/skip'&&req.method==='POST'){if(!S.current)return J({error:'no item'},409);const x=E.skip(S,g,pack,now);if(x.error)return J(x,400);ev=x.ev;
+ else if(P==='/api/stuck'&&req.method==='POST'){if(!S.current)return J({error:'no item'},409);const blocked=rejectWrite(true);if(blocked)return blocked;const x=E.stuck(S,g,now);if(x.error)return J(x,400);ev=x.ev;out={...x.r,state:pub()};}
+ else if(P==='/api/skip'&&req.method==='POST'){if(!S.current)return J({error:'no item'},409);const blocked=rejectWrite(true);if(blocked)return blocked;const x=E.skip(S,g,pack,now);if(x.error)return J(x,400);ev=x.ev;
    const md=E.miniAfter(S,g,pack,now,x.r);if(md){x.r.miniDone=md;x.r.map=E.mapPayload(S,g,now);}questCheck(x.r);if(!S.current&&!x.r.questDone)E.next(S,g,pack,now);out={...x.r,state:pub()};}
- else if(P==='/api/explore'&&req.method==='POST'){if(!g.byId[body.topicId])return J({error:'unknown topic'},400);const it=E.startMini(S,g,body.topicId,pack,now,{continue:!!body.continue});if(it.error)return J(it,400);out=pub();}
- else if(P==='/api/mini/quit'&&req.method==='POST'){if(S.mini){S.mini=null;S.current=S.miniHold||null;S.miniHold=null;}E.clearGrind(S);if(!S.current)E.next(S,g,pack,now);out=pub();}
- else if(P==='/api/reinforce'&&req.method==='POST'){const x=E.startReinforce(S,g,body.topicIds||[],now);if(x.error)return J(x,400);if(!S.current)E.next(S,g,pack,now);out=pub();}
- else if(P==='/api/quest/start'&&req.method==='POST'){const d=body.date||LU().current||today;const qp=PC[d];
+ else if(P==='/api/explore'&&req.method==='POST'){const blocked=rejectWrite(false);if(blocked)return blocked;if(!g.byId[body.topicId])return J({error:'unknown topic'},400);const it=E.startMini(S,g,body.topicId,pack,now,{continue:!!body.continue});if(it.error)return J(it,400);out=pub();}
+ else if(P==='/api/mini/quit'&&req.method==='POST'){const blocked=rejectWrite(false);if(blocked)return blocked;if(S.mini){S.mini=null;S.current=S.miniHold||null;S.miniHold=null;}E.clearGrind(S);if(!S.current)E.next(S,g,pack,now);out=pub();}
+ else if(P==='/api/reinforce'&&req.method==='POST'){const blocked=rejectWrite(false);if(blocked)return blocked;const x=E.startReinforce(S,g,body.topicIds||[],now);if(x.error)return J(x,400);if(!S.current)E.next(S,g,pack,now);out=pub();}
+ else if(P==='/api/quest/start'&&req.method==='POST'){const blocked=rejectWrite(false);if(blocked)return blocked;const d=body.date||LU().current||today;const qp=PC[d];
    if(qp?.quest&&!qrec(d).done){if(d!==LU().current)return J({error:'Finish your quest to unlock the next one! 🗝️',queued:true},409);
      S.quests??={};const q=S.quests[d]??={};q.started??=now;S.questFocus=d;pack=await withBoost(qp);cfg();if(!S.mini&&S.current&&!String(S.current.packKey||'').startsWith(d+':'))S.current=null;}
    if(!S.current)E.next(S,g,pack,now);out=pub();}
@@ -112,18 +115,18 @@ export default{async fetch(req,env){E.configure(env);const u=new URL(req.url),P=
    const L=LU(),fin=await Promise.all(L.finished.map(d=>withBoost(PC[d])));cfg();
    // the queued quests stay a secret ("Next up: ???"): only whether one is waiting goes out
    out={today,current:pack?{...E.questInfo(S,g,pack),today:pack.date===today,boost:pack.boost||null}:null,nextUp:L.queued.length>0,finished:fin.filter(Boolean).map(p=>E.questInfo(S,g,p))};}
- else if(P==='/api/next'&&req.method==='POST'){if(!S.current)E.next(S,g,pack,now);out=pub();}
- else if(P==='/api/skipbonus'&&req.method==='POST'){S.current=null;E.next(S,g,pack,now);out=pub();}
- else if(P==='/api/choice'&&req.method==='POST'){const r=E.choose(S,g,body.choice,pack,now);E.next(S,g,pack,now);out={...r,state:pub()};}
+ else if(P==='/api/next'&&req.method==='POST'){const blocked=rejectWrite(false);if(blocked)return blocked;if(!S.current)E.next(S,g,pack,now);out=pub();}
+ else if(P==='/api/skipbonus'&&req.method==='POST'){const blocked=rejectWrite(true);if(blocked)return blocked;S.current=null;E.next(S,g,pack,now);out=pub();}
+ else if(P==='/api/choice'&&req.method==='POST'){const blocked=rejectWrite(false);if(blocked)return blocked;const r=E.choose(S,g,body.choice,pack,now);E.next(S,g,pack,now);out={...r,state:pub()};}
  // Points Market (plans/archive/points-market.md): balance = earned − spent, server-side; idempotent by purchase id
  else if(P==='/api/market'){out={wallet:E.walletState(S,g,now),items:E.marketItems(S,g,now),prove:E.proveOffers(S,g,now),path:{offers:E.pathOffers(S,g,now),themes:E.QUEST_THEMES},hidden:E.hiddenCount(S,g)};}
- else if((P==='/api/market/buy'||P==='/api/market/prove')&&req.method==='POST'){const x=P==='/api/market/prove'?E.buy(S,g,{pid:body.pid,item:'prove-it',meta:{topicId:body.topicId}},now):E.buy(S,g,{pid:body.pid,item:String(body.item||''),meta:body.meta},now);if(x.error)return J(x,400);
+ else if((P==='/api/market/buy'||P==='/api/market/prove')&&req.method==='POST'){const blocked=rejectWrite(false);if(blocked)return blocked;const x=P==='/api/market/prove'?E.buy(S,g,{pid:body.pid,item:'prove-it',meta:{topicId:body.topicId}},now):E.buy(S,g,{pid:body.pid,item:String(body.item||''),meta:body.meta},now);if(x.error)return J(x,400);
    if(!x.already)ev.push({event:'purchase',pid:x.row.id,item:x.row.item,kind:x.row.kind,price:x.row.price,meta:x.row.meta});out={...x,wallet:E.walletState(S,g,now),items:E.marketItems(S,g,now),prove:E.proveOffers(S,g,now),path:{offers:E.pathOffers(S,g,now),themes:E.QUEST_THEMES},state:pub()};}
- else if(P==='/api/whisper'&&req.method==='POST'){const x=E.whisper(S,g,now);if(x.error)return J(x,400);if(x.ev)ev.push(...x.ev);out={ok:true,already:x.already,whisper:x.whisper,tokens:x.tokens,state:pub()};}
- else if(P==='/api/market/equip'&&req.method==='POST'){const x=E.equip(S,g,String(body.slot||''),body.item?String(body.item):null);if(x.error)return J(x,400);out={...x,wallet:E.walletState(S,g,now),items:E.marketItems(S,g,now),prove:E.proveOffers(S,g,now),path:{offers:E.pathOffers(S,g,now),themes:E.QUEST_THEMES},state:pub()};}
+ else if(P==='/api/whisper'&&req.method==='POST'){const blocked=rejectWrite(true);if(blocked)return blocked;const x=E.whisper(S,g,now);if(x.error)return J(x,400);if(x.ev)ev.push(...x.ev);out={ok:true,already:x.already,whisper:x.whisper,tokens:x.tokens,state:pub()};}
+ else if(P==='/api/market/equip'&&req.method==='POST'){const blocked=rejectWrite(false);if(blocked)return blocked;const x=E.equip(S,g,String(body.slot||''),body.item?String(body.item):null);if(x.error)return J(x,400);out={...x,wallet:E.walletState(S,g,now),items:E.marketItems(S,g,now),prove:E.proveOffers(S,g,now),path:{offers:E.pathOffers(S,g,now),themes:E.QUEST_THEMES},state:pub()};}
  else return J({error:'not found'},404);
  E.snapDay(S,today);
  if(migrated&&raw?.topics&&!sbx){/* keep a copy of the pre-v2 record */await KV.put(LK('progress:v1-backup'),JSON.stringify(raw));}
- if(JSON.stringify(S)!==S0)await KV.put(K('progress'),JSON.stringify(S));
+ if(JSON.stringify(S)!==S0){S.rev=(S.rev||0)+1;if(out){if(out.state)out.state.rev=S.rev;if('rev' in out)out.rev=S.rev;}await KV.put(K('progress'),JSON.stringify(S));}
  if(ev.length){const k=K('log:'+today);const log=(await KV.get(k,'json'))||[];const ts=new Date(now).toISOString();log.push(...ev.map(e=>({ts,...e})));await KV.put(k,JSON.stringify(log));}
  return J(out);}};

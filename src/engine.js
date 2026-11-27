@@ -25,14 +25,14 @@ export function graph(TAX){const byId={},pre={},post={};for(const t of TAX.topic
   const hidden={};for(const t of TAX.hidden?.topics||[])if(!byId[t.id])hidden[t.id]=t;
   return{topics:TAX.topics,byId,pre,post,boss,aliases:TAX.aliases||{},hidden};}
 export const blank=()=>({v:2,name:NAME,points:0,stars:0,streak:0,bestStreak:0,solved:0,badges:[],medals:[],firstDone:false,ts:{},current:null,
-  focus:null,placement:{done:false,asked:0,per:{},queue:[]},sinceReview:0,sinceChoice:0,recent:[],packSeen:{},itemsServed:0});
+  focus:null,placement:{done:false,asked:0,per:{},queue:[]},sinceReview:0,sinceChoice:0,recent:[],packSeen:{},itemsServed:0,rev:0});
 export function migrate(old,g){if(old&&old.v===2){if(!old.medals)backfillMedals(old,g);upgrade(old,g);return old;}const S=blank();if(!old)return S;
   for(const k of['points','stars','streak','bestStreak','solved','badges'])if(old[k]!=null)S[k]=old[k];
   S.firstDone=!!old.firstDone&&old.solved>0;
   for(const [id0,t] of Object.entries(old.topics||{})){const id=g.aliases?.[id0]||id0;if(g.byId[id]&&!S.ts[id])S.ts[id]=t.mastered?{st:'mastered',how:'direct',conf:.9,box:0,due:Date.now()+DAY,c:t.correct,w:t.incorrect}:{st:'learning',how:'direct',c:t.correct,w:t.incorrect,lvl:old.level||3};}
   backfillMedals(S,g);return S;}
 // additive schema upgrades for v2 records (idempotent): finished quests from before completion snapshots are marked legacy
-function upgrade(S,g){for(const q of Object.values(S.quests||{}))if(q?.done&&!q.snap&&!q.legacy)q.legacy=true;if(g)foldAliases(S,g.aliases);dedupeMedals(S);
+function upgrade(S,g){for(const q of Object.values(S.quests||{}))if(q?.done&&!q.snap&&!q.legacy)q.legacy=true;if(g)foldAliases(S,g.aliases);dedupeMedals(S);if(S.rev==null||S.rev<0)S.rev=0;
   // Fog purge: move Jane-whisper tokens off S.fog, then drop fog + scout-flare blobs so old KV progress never keeps them.
   const ht=S.fog?.buffs?.hintToken|0;if(ht>0){S.wallet??={};S.wallet.active??={};S.wallet.active.hintToken=(S.wallet.active.hintToken||0)+ht;}
   if(S.fog)delete S.fog;if(S.wallet?.active?.flares)delete S.wallet.active.flares;return S;}
