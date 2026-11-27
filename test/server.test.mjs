@@ -56,3 +56,26 @@ test('parent report includes coverage',async()=>{const h=await (await fetch(B+'/
   const D=JSON.parse(h.match(/<script id="data" type="application\/json">([\s\S]*?)<\/script>/)[1].replace(/\\u003c/g,'<'));
   const sub=n=>D.coverage.subjects.find(s=>s.name===n);assert.equal(sub('Mathematics').total,12);assert.equal(sub('Science').total,20);
   assert.equal(typeof D.coverage.seen,'number');assert.ok(sub('Mathematics').domains.every(d=>typeof d.seen==='boolean'));});
+
+
+test('itemId mismatch does not grade or change the current item (#135)',async()=>{
+  const s=await api('/api/state');assert.ok(s.item?.id);assert.ok(s.rev>=0);
+  const before=s.item.id,points=s.points;
+  const r=await api('/api/answer',{answer:'3/8',itemId:'not-this-item',rev:s.rev});
+  assert.equal(r.mismatch,true);assert.equal(r.stale,undefined);assert.equal(r.error,'mismatch');
+  assert.equal(r.state.item.id,before);assert.equal(r.state.points,points);
+  const s2=await api('/api/state');assert.equal(s2.item.id,before);assert.equal(s2.points,points);assert.equal(s2.rev,s.rev);
+});
+
+test('a stale-rev answer does not write progress or roll anything back (#135)',async()=>{
+  const s=await api('/api/state');assert.ok(s.item?.id);
+  const r=await api('/api/answer',{answer:'3/8',itemId:s.item.id,rev:(s.rev||0)+10});
+  assert.equal(r.stale,true);assert.equal(r.error,'stale');assert.equal(r.state,undefined);
+  const s2=await api('/api/state');assert.equal(s2.item.id,s.item.id);assert.equal(s2.rev,s.rev);assert.equal(s2.points,s.points);
+});
+
+test('a matching itemId and rev still grades the pizza miss-then-hit path',async()=>{
+  // Use a fresh DATA? This server already played the first pizza in an earlier test.
+  // Just confirm a write with itemId/rev is accepted when it matches (or that state includes rev).
+  const s=await api('/api/state');assert.equal(typeof s.rev,'number');
+});

@@ -5,6 +5,11 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+## [0.9.5] - 2026-11-27
+
+### Fixed
+- **Stale or late answers can no longer show the previous hint on the next question or roll back progress** ([#135](https://github.com/kentlangley/Jane/issues/135)). The client sends the on-screen item `id` and a monotonic progress `rev` with `/api/answer`, `/api/stuck`, `/api/skip`, and other writes that touch the current item. If `itemId` does not match `S.current.id`, or if the KV read is behind the client (`S.rev < req.rev`, a stale Cloudflare KV snapshot), the worker does not grade and does not `KV.put`, so a later write cannot clobber `packSeen` or restore an old question. The client retries a `stale` response, and on any response (including a first-miss retry) redraws the card when the item id changed. `render()` clears Jane's speech bubble whenever the item id changes, so a previous hint cannot stick to the next question. Missing `itemId` / `rev` stays compatible with older sessions. Durable Objects were not added: nightly export, publish, and backups read KV directly. Medals, mastery, and points are unchanged. `data/marble/` is unchanged.
+
 ## [0.9.4] - 2026-11-27
 
 ### Fixed

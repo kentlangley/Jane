@@ -26,7 +26,10 @@ function bossHTML(b,topicId){if(!b)return'';const BL=st?.wallet?.looks?.boss,BS=
  const msg=hp?`Hit it ${hp} more time${hp>1?'s':''} in a row!`:'Boss defeated! 💥';
  return`<div class="hp${BL?.frame?' bskin-'+esc(BL.frame):''}" aria-label="Boss: ${hp} of ${max} hearts left"><span class="boss">${BS[String(topicId||'').charCodeAt(4)%BS.length||0]}</span>${'❤️'.repeat(hp)}${'🖤'.repeat(max-hp)}<span class="small">${msg}</span></div>`;}
 function bossBar(p){$('bossbar').innerHTML=p?.boss?bossHTML(p.boss,p.topicId):'';}
-function render(s){answerLock=false;st=s;if(s?.learner)setLearner(s.learner);chips(s);const p=s.item;clearInterval(timerInt);$('timer').innerHTML='';if(!p)return;
+let shownItemId;
+function clearJane(){const b=$('jane');if(!b)return;b.innerHTML='';b.classList.remove('pop');}
+function writeBody(extra={}){return {rev:st?.rev,itemId:st?.item?.id,...extra};}
+function render(s){answerLock=false;const nextId=s?.item?.id;if(shownItemId!==undefined&&nextId!==shownItemId)clearJane();shownItemId=nextId;st=s;if(s?.learner)setLearner(s.learner);chips(s);const p=s.item;clearInterval(timerInt);$('timer').innerHTML='';if(!p)return;
  const f=p.format||'quest';$('frame').className='framebar f-'+f;$('frame').textContent=p.gate?(p.gate.warm?`🔥 Warm-up! A quick one you learned before (${p.gate.n}/${p.gate.of})`:p.gate.spot?`🗝️ Gate! Quick check: show me you know this one (${p.gate.n}/${p.gate.of})`:`🗝️ Gate! Unlock it with something you learned before (${p.gate.n}/${p.gate.of})`):FRAMES[f]||'🗡️ Quest';$('pcard').className='card '+f;
  $('topic').textContent=`${ISL[p.topic.subject]?.e||'📚'} ${p.topic.name}${p.level?` · Lv ${p.level}`:''}`;
  PACKT=s.terms||{};glReset();if(p.blank)$('q').innerHTML=gl(p.q).replace(/_{2,}/,'<span class="blank" id="blankslot">❓</span>');else $('q').innerHTML=p.type==='card'?'':gl(p.q);$('ev').innerHTML='';
@@ -50,9 +53,13 @@ function render(s){answerLock=false;st=s;if(s?.learner)setLearner(s.learner);chi
 // refuse further /api/answer calls so a late boss tap cannot land on free-play/review.
 let answerLock=false;
 function lockAnswers(){answerLock=true;$('f').style.display='none';$('mc').innerHTML='';$('extra').innerHTML='';$('a').value='';$('pcard').classList.remove('busy');}
-async function send(v){if(answerLock||!v||$('pcard').classList.contains('busy'))return;$('pcard').classList.add('busy');let r;try{r=await api('/api/answer',{answer:v});}catch(e){$('pcard').classList.remove('busy');say('Oops, the internet hiccuped. Try again! 🔌');return;}$('pcard').classList.remove('busy');
- if(r.error){say(r.jane||'Oops — try the next question! 🙌');return;}say(r.jane);
- if(r.stuck){if(r.state)st=r.state;showHelp(r.stuck);return;}
+async function postWrite(path,body){let r,n=0;for(;;){r=await api(path,body);if(!r?.stale||++n>=3)return r;await new Promise(ok=>setTimeout(ok,400));}}
+function syncCard(r){const id=r?.state?.item?.id;if(id&&id!==shownItemId){render(r.state);return 'rendered';}if(r?.state)st=r.state;return 'same';}
+async function send(v){if(answerLock||!v||$('pcard').classList.contains('busy'))return;$('pcard').classList.add('busy');let r;try{r=await postWrite('/api/answer',writeBody({answer:v}));}catch(e){$('pcard').classList.remove('busy');say('Oops, the internet hiccuped. Try again! 🔌');return;}$('pcard').classList.remove('busy');
+ if(r.stale){say(r.jane||'Hang on, that answer was a moment behind. Try it once more? 🔄');return;}
+ if(r.mismatch){syncCard(r);say(r.jane||'This question already moved on! Here is the one on your screen. 🙌');return;}
+ if(r.error){say(r.jane||'Oops — try the next question! 🙌');return;}
+ if(r.stuck){syncCard(r);say(r.jane);showHelp(r.stuck);return;}
  if(r.shielded)setTimeout(()=>banner(`🛡️ Shield up!<br><small>Your 🔥 ${r.shielded} streak is safe</small>`),300);
  if(r.proveIt?.passed)setTimeout(()=>banner(`🎟️ Proved it!<br><small>${esc(r.proveIt.topic||'')} +${r.proveIt.bonus} bonus</small>`),r.medal?2600:500);
  if(r.miniDone&&!r.reveal){chips(r.state);return miniEnd(r);}
@@ -61,22 +68,22 @@ async function send(v){if(answerLock||!v||$('pcard').classList.contains('busy'))
  else if(window.FX&&!FX.reduced()){FX.bad($('pcard'));}else{$('pcard').classList.remove('shake');void $('pcard').offsetWidth;$('pcard').classList.add('shake');}
  if(r.boss){if(st?.item)st.item.boss=r.boss;$('bossbar').innerHTML=bossHTML(r.boss,st?.item?.topicId);$('bossbar').querySelector('.boss')?.classList.add('shake');}
  // Quest complete: celebratory high-five BEFORE free play — hold state until they pick an option.
- if(r.questDone){lockAnswers();chips(r.state);window._afterQuest=r.state;const go=()=>questCelebrate(r.questDone,r.state);
+ if(r.questDone){lockAnswers();chips(r.state);window._afterQuest=r.state;say(r.jane);const go=()=>questCelebrate(r.questDone,r.state);
   if(r.reveal){$('extra').innerHTML=`<p style="font-size:1.3rem">✅ Answer: <b>${esc(String(r.reveal).replace(/\|/g,' → '))}</b></p><button onclick="next()">Next ➡</button>`;window._next=r.state;window._questDone=r.questDone;window._mini=null;return;}
   if(r.medal){reveal(r.medal,r.inferred,go);return;}setTimeout(go,400);return;}
  if(r.askChoice){chips(r.state);return ask(r.jane);}
- if(r.reveal){$('f').style.display='none';$('mc').innerHTML='';$('extra').innerHTML=`<p style="font-size:1.3rem">✅ Answer: <b>${esc(String(r.reveal).replace(/\|/g,' → '))}</b></p><button onclick="next()">Next ➡</button>`;window._next=r.state;window._mini=r.miniDone?r:null;chips(r.state);return;}
- if(r.retry){if(st.item.type==='input')$('a').select();else if(INTER[st.item.type])setTimeout(()=>render(st),900);return;}
- render(r.state);}
+ if(r.reveal){say(r.jane);$('f').style.display='none';$('mc').innerHTML='';$('extra').innerHTML=`<p style="font-size:1.3rem">✅ Answer: <b>${esc(String(r.reveal).replace(/\|/g,' → '))}</b></p><button onclick="next()">Next ➡</button>`;window._next=r.state;window._mini=r.miniDone?r:null;chips(r.state);return;}
+ if(r.retry){const how=syncCard(r);say(r.jane);if(how==='same'){if(st.item.type==='input')$('a').select();else if(INTER[st.item.type])setTimeout(()=>render(st),900);}return;}
+ if(r.state)render(r.state);say(r.jane);}
 function ask(prev){$('f').style.display='none';$('mc').innerHTML='';$('extra').innerHTML='<div class="choices">'+[['harder','🚀 Harder!'],['same','👍 Keep going'],['easier','🐢 Easier'],['different','🎨 New subject'],['fractions','🍕 Fractions']].map(([c,l])=>`<button onclick="choose('${c}')">${l}</button>`).join('')+'</div>';
  say(prev+` Hey ${LN}, what would you like to do next?`);}
-async function choose(c){const r=await api('/api/choice',{choice:c});say(r.jane);render(r.state);}
-async function skip(){render(await api('/api/skipbonus',{}));say('No problem! Here\'s a new one. 😊');}
+async function choose(c){const r=await api('/api/choice',writeBody({choice:c}));say(r.jane);render(r.state);}
+async function skip(){const r=await postWrite('/api/skipbonus',writeBody());if(r.stale||r.mismatch){if(r.state)render(r.state);say(r.jane||(r.stale?'Hang on, that answer was a moment behind. Try it once more? 🔄':'This question already moved on! Here is the one on your screen. 🙌'));return;}render(r);say('No problem! Here\'s a new one. 😊');}
 // ---------- "I'm stuck 🤔": hint → worked example → skip for now (never costs a heart, a point or the boss) ----------
-async function stuckTap(){if($('pcard').classList.contains('busy'))return;$('pcard').classList.add('busy');let r;try{r=await api('/api/stuck',{});}finally{$('pcard').classList.remove('busy');}
- if(!r||r.error)return;say(r.jane);if(r.state)st=r.state;showHelp(r.stuck);}
-async function skipNow(){if($('pcard').classList.contains('busy'))return;$('pcard').classList.add('busy');let r;try{r=await api('/api/skip',{});}finally{$('pcard').classList.remove('busy');}
- if(!r||r.error)return;say(r.jane);if(r.questDone){lockAnswers();chips(r.state);window._afterQuest=r.state;setTimeout(()=>questCelebrate(r.questDone,r.state),300);return;}if(r.miniDone){chips(r.state);return miniEnd(r);}render(r.state);}
+async function stuckTap(){if($('pcard').classList.contains('busy'))return;$('pcard').classList.add('busy');let r;try{r=await postWrite('/api/stuck',writeBody());}finally{$('pcard').classList.remove('busy');}
+ if(!r||(r.error&&!r.mismatch&&!r.stale))return;if(r.stale){say(r.jane||'Hang on, that answer was a moment behind. Try it once more? 🔄');return;}if(r.mismatch){syncCard(r);say(r.jane||'This question already moved on! Here is the one on your screen. 🙌');return;}syncCard(r);say(r.jane);showHelp(r.stuck);}
+async function skipNow(){if($('pcard').classList.contains('busy'))return;$('pcard').classList.add('busy');let r;try{r=await postWrite('/api/skip',writeBody());}finally{$('pcard').classList.remove('busy');}
+ if(!r||(r.error&&!r.mismatch&&!r.stale))return;if(r.stale){say(r.jane||'Hang on, that answer was a moment behind. Try it once more? 🔄');return;}if(r.mismatch){syncCard(r);say(r.jane||'This question already moved on! Here is the one on your screen. 🙌');return;}if(r.questDone){lockAnswers();chips(r.state);window._afterQuest=r.state;setTimeout(()=>questCelebrate(r.questDone,r.state),300);say(r.jane);return;}if(r.miniDone){chips(r.state);return miniEnd(r);}if(r.state)render(r.state);say(r.jane);}
 function tryAgain(){if(st?.item?.type==='input'){$('a').focus();$('a').select();}else $('mc').scrollIntoView({behavior:'smooth',block:'center'});}
 function showHelp(h){const el=$('help');if(!h){el.hidden=true;el.innerHTML='';return;}el.hidden=false;const li=a=>(a||[]).map(x=>`<li>${esc(x)}</li>`).join('');
  el.innerHTML=h.step<2?`<div class="help"><div class="hl">💡 Hint</div><p>${gl(h.hint,new Set())}</p><div class="hb"><button type="button" class="ghost" onclick="tryAgain()">✏️ I'll try</button><button type="button" class="stuckb" onclick="stuckTap()">Still stuck 🤔</button></div></div>`
@@ -84,7 +91,7 @@ function showHelp(h){const el=$('help');if(!h){el.hidden=true;el.innerHTML='';re
   <div class="hb"><button type="button" onclick="tryAgain()">✏️ I'll try!</button><button type="button" class="skipb" onclick="skipNow()">⏭️ Skip for now</button></div><div class="small">Skipping is OK! No hearts lost. We'll come back to it later.</div></div>`;
  if(window.FX)FX.enter(el);}
 $('stuckf').onclick=()=>stuckTap();
-async function next(){if(window._questDone){const q=window._questDone;window._questDone=null;const s=window._next;window._next=null;chips(s);return questCelebrate(q,s);}if(window._mini){const m=window._mini;window._mini=null;return miniEnd(m);}render(window._next||await api('/api/next',{}));window._next=null;}
+async function next(){if(window._questDone){const q=window._questDone;window._questDone=null;const s=window._next;window._next=null;chips(s);return questCelebrate(q,s);}if(window._mini){const m=window._mini;window._mini=null;return miniEnd(m);}render(window._next||await api('/api/next',writeBody()));window._next=null;}
 $('f').onsubmit=e=>{e.preventDefault();send($('a').value.trim());};
 // ---------- world map ----------
 const ISL={Science:{x:290,y:540,r:250,e:'🔬',c:'#66bb6a'},Mathematics:{x:950,y:340,r:240,e:'🔢',c:'#42a5f5'},English:{x:1280,y:740,r:180,e:'📚',c:'#ab47bc'},History:{x:680,y:860,r:105,e:'🏛️',c:'#8d6e63'},
@@ -640,6 +647,6 @@ function chestReveal(p){const o=document.createElement('div');o.className='freve
 // Jane whisper: spends one hint token on the question on screen (ungraded: never costs a try, a heart or the streak)
 function showWhisper(text){const h=$('help');if(!h)return;h.hidden=false;let box=h.querySelector('.whisper-box');if(!box){box=document.createElement('div');box.className='whisper-box';h.prepend(box);}
  box.innerHTML=`<span class="wlbl">💡 Jane whisper (not the free pep talk above)</span>${esc(text)}`;}
-async function whisperTap(){if($('pcard').classList.contains('busy'))return;let r;try{r=await api('/api/whisper',{});}catch{return;}if(r.error){say(r.error);return;}
+async function whisperTap(){if($('pcard').classList.contains('busy'))return;let r;try{r=await postWrite('/api/whisper',writeBody());}catch{return;}if(r.stale||r.mismatch){if(r.state)syncCard(r);say(r.jane||r.error||'');return;}if(r.error){say(r.error);return;}
  showWhisper(r.whisper);say('💡 That was a Jane whisper — a trap tip for THIS question (not just a pep talk).');if(r.state){st=r.state;if(st.item)st.item.whisper=r.whisper;chips(st);}
  const b=document.querySelector('.whisperb');if(b){b.textContent=r.tokens?`💡 Jane whisper (${r.tokens})`:'💡 Whisper used';b.disabled=true;}}
