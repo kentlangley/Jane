@@ -8,7 +8,7 @@ const DAY=864e5, BOXES=[1,3,7,21,60];
 let NAME='Explorer', TARGET_AGE=10, GRADE='upper elementary', AGE_KNOWN=false;
 export function configure(env={}){NAME=String(env.LEARNER_NAME||'Explorer').trim()||'Explorer';const a=parseFloat(env.LEARNER_AGE);AGE_KNOWN=a>=4&&a<=18;TARGET_AGE=AGE_KNOWN?a:10;GRADE=String(env.LEARNER_GRADE||'upper elementary').trim();}
 export const learner=()=>({name:NAME,age:TARGET_AGE,grade:GRADE});
-// Runtime review floor (gates, spot-checks, map grind): max(9, floor(age)-3) when age is known. No floor if age is unset, so default installs stay unchanged. Authored pack items are not filtered.
+// Runtime review floor (gates, spot-checks, map grind, post-quest practice): max(9, floor(age)-3) when age is known. No floor if age is unset, so default installs stay unchanged. Authored pack items are not filtered.
 export function reviewAgeFloor(){return AGE_KNOWN?Math.max(9,Math.floor(TARGET_AGE)-3):null;}
 export function inReviewBand(t){const f=reviewAgeFloor();return f==null||!t||(t.ageRangeStart??0)>=f;}
 export const withName=(s,name=NAME)=>String(s).replace(/\{\{name\}\}|\{name\}/g,()=>name);
@@ -792,7 +792,8 @@ export function completeQuest(S,g,pack,now){if(!pack?.quest)return null;S.quests
   return out;}
 // After a quest win: short light practice (quest topics + due reviews), not a new quest.
 export function startReinforce(S,g,topicIds,now){const ids=(topicIds||[]).filter(id=>g.byId[id]);
-  const due=g.topics.filter(t=>stateOf(S,g,t.id,now)==='review').sort((a,b)=>S.ts[a.id].due-S.ts[b.id].due).map(t=>t.id);
+  // Due-review fillers use the same age floor as gates and the map trail. Quest topics stay even if one is below the floor.
+  const due=g.topics.filter(t=>stateOf(S,g,t.id,now)==='review'&&inReviewBand(t)).sort((a,b)=>S.ts[a.id].due-S.ts[b.id].due).map(t=>t.id);
   const open=id=>{const s=stateOf(S,g,id,now);return s==='review'||s==='learning'||s==='ready';};
   const fromQ=ids.filter(open);
   const queue=[...fromQ.filter(id=>stateOf(S,g,id,now)==='review'),...due.filter(id=>!fromQ.includes(id)).slice(0,2),

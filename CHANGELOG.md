@@ -5,6 +5,11 @@ Dates are Pacific Time.
 
 ## [Unreleased]
 
+## [0.9.4] - 2026-11-27
+
+### Fixed
+- **Post-quest free-play review no longer serves items far below the learner's age** ([#133](https://github.com/kentlangley/Jane/issues/133)). The v0.9.3 age floor, `max(9, floor(age) - 3)` when age is known, now also applies to due-review fillers in post-quest Reinforcement practice (`startReinforce`). In-band due reviews come first. If nothing in band is due, practice queues fewer fillers, or only the just-finished quest topics, and never fills with elementary work. Authored quest topics stay in the queue even if one is below the floor. The periodic free-play review path in `next()` already used the floor and is covered by tests. If age is not configured, there is no floor. Medals, mastery, and points are unchanged. `data/marble/` is unchanged.
+
 ## [0.9.3] - 2026-11-24
 
 ### Fixed

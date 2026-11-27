@@ -1,5 +1,5 @@
-// v0.9.3: runtime review picks (gates, spot-checks, map grind) stay at or above the learner's age floor;
-// a leftover minigame from a previous Pacific day is cleared without touching medals, mastery or points.
+// v0.9.3–v0.9.4: runtime review picks (gates, spot-checks, map grind, post-quest practice) stay at or above
+// the learner's age floor; a leftover minigame from a previous Pacific day is cleared without touching medals, mastery or points.
 import {test,after} from 'node:test';import assert from 'node:assert/strict';
 import fs from 'node:fs';import path from 'node:path';
 import {loadEngine,ROOT,tmpDir} from './helpers.mjs';
@@ -200,4 +200,67 @@ test('/api/state on a new Pacific day clears a leftover minigame and starts noth
   assert.equal(JSON.stringify(P.medals),JSON.stringify(S.medals));
   assert.deepEqual(P.ts[tid],S.ts[tid]);
   fs.rmSync(dir,{recursive:true,force:true});
+});
+
+test('startReinforce does not queue below-floor due reviews for a ~10.5 year-old learner',()=>{
+  E.configure({LEARNER_AGE:'10.5'});
+  const S=E.blank();S.firstDone=true;S.placement.done=true;
+  // Older overdue topics are below the floor; in-band reviews are less overdue.
+  for(const [i,t] of [young[0],young[1],mid[0],mid[1]].entries())
+    S.ts[t.id]={st:'mastered',how:'direct',conf:.8,box:1,due:now-(20-i)*DAY,at:now-30*DAY,c:3,ft:3};
+  const questIds=[older[0].id,older[1].id];
+  const r=E.startReinforce(S,g,questIds,now);
+  assert.ok(r.ok);const q=S.reinforce.queue;
+  assert.ok(!q.includes(young[0].id)&&!q.includes(young[1].id),'must not fill practice with a below-floor due review');
+  assert.ok(q.includes(mid[0].id),'in-band due review should be queued as a filler');
+});
+
+test('startReinforce still queues an authored quest topic below the floor',()=>{
+  E.configure({LEARNER_AGE:'13.5'});
+  const S=E.blank();S.firstDone=true;S.placement.done=true;
+  S.ts[young[0].id]={st:'mastered',how:'direct',conf:.8,box:1,due:now-20*DAY,at:now-30*DAY,c:3,ft:3};
+  S.ts[young[1].id]={st:'mastered',how:'direct',conf:.8,box:1,due:now-19*DAY,at:now-30*DAY,c:3,ft:3};
+  S.ts[older[0].id]={st:'mastered',how:'direct',conf:.8,box:1,due:now-2*DAY,at:now-30*DAY,c:3,ft:3};
+  // Quest included a below-floor topic (unlock probe) plus an in-band one. The other below-floor topic is only a due filler.
+  const r=E.startReinforce(S,g,[young[0].id,older[0].id],now);
+  assert.ok(r.ok);const q=S.reinforce.queue;
+  assert.ok(q.includes(young[0].id),'authored quest topic below the floor stays in the queue');
+  assert.ok(q.includes(older[0].id));
+  assert.ok(!q.includes(young[1].id),'below-floor due filler must not be queued');
+  const it=E.next(S,g,null,now);
+  assert.ok(it.reinforce);assert.ok([young[0].id,older[0].id].includes(it.topicId));
+});
+
+test('when age is unset, startReinforce can still queue a below-floor due review',()=>{
+  E.configure({});
+  const S=E.blank();S.firstDone=true;S.placement.done=true;
+  S.ts[young[0].id]={st:'mastered',how:'direct',conf:.8,box:1,due:now-20*DAY,at:now-30*DAY,c:3,ft:3};
+  const r=E.startReinforce(S,g,[older[0].id],now);
+  assert.ok(r.ok);assert.ok(S.reinforce.queue.includes(young[0].id));
+});
+
+test('if only below-floor reviews are due, startReinforce queues quest topics and no elementary fillers',()=>{
+  E.configure({LEARNER_AGE:'13.5'});
+  const S=E.blank();S.firstDone=true;S.placement.done=true;
+  S.ts[young[0].id]={st:'mastered',how:'direct',conf:.8,box:1,due:now-20*DAY,at:now-30*DAY,c:3,ft:3};
+  S.ts[young[1].id]={st:'mastered',how:'direct',conf:.8,box:1,due:now-19*DAY,at:now-30*DAY,c:3,ft:3};
+  // Quest topics are in-band and still open (learning), not reviews.
+  S.ts[older[0].id]={st:'learning',how:'direct',c:1,w:0,lvl:3,at:now};
+  S.ts[older[1].id]={st:'learning',how:'direct',c:1,w:0,lvl:3,at:now};
+  const r=E.startReinforce(S,g,[older[0].id,older[1].id],now);
+  assert.ok(r.ok);const q=S.reinforce.queue;
+  assert.ok(q.includes(older[0].id)&&q.includes(older[1].id));
+  assert.ok(!q.includes(young[0].id)&&!q.includes(young[1].id));
+  assert.equal(q.length,2,'no below-floor fillers when nothing in band is due');
+});
+
+test('next() free-play review (no reinforce queue) stays in band for a ~10.5 year-old learner',()=>{
+  E.configure({LEARNER_AGE:'10.5'});
+  const S=E.blank();S.firstDone=true;S.placement.done=true;S.itemsServed=10;S.sinceReview=9;
+  S.ts[young[0].id]={st:'mastered',how:'direct',conf:.8,box:1,due:now-20*DAY,at:now-30*DAY,c:3,ft:3};
+  S.ts[mid[0].id]={st:'mastered',how:'direct',conf:.8,box:1,due:now-5*DAY,at:now-30*DAY,c:3,ft:3};
+  const it=E.next(S,g,null,now);
+  assert.equal(it.mode,'review');
+  assert.equal(it.topicId,mid[0].id,'periodic free-play review must stay in band');
+  assert.notEqual(it.topicId,young[0].id);
 });
